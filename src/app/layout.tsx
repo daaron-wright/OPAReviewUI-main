@@ -8,7 +8,7 @@ import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { ToastProvider } from '@/components/toast-provider';
-import { Providers } from './providers';
+import { ClientProviders } from '@/components/client-providers';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -38,9 +38,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <Providers>
+        <ClientProviders>
           {children}
-        </Providers>
+        </ClientProviders>
         <ToastProvider />
       </body>
     </html>
