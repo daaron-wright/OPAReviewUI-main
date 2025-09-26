@@ -24,25 +24,97 @@ interface RegoRule {
   };
 }
 
-// Mock BRD references - because you need to feel the styling
+// Mock BRD references - with actual-looking content because Master Jedi demands it
 const getMockBRDReferences = (nodeId: string): any => ({
   documentVersion: 'v2.3.1',
   lastUpdated: '2024-01-15',
+  approvedBy: 'Director of Digital Transformation',
   sections: [
     {
-      page: Math.floor(Math.random() * 50) + 10,
+      page: Math.floor(Math.random() * 20) + 10,
       section: '4.2.1',
-      title: 'Eligibility Requirements',
-      location: 'Chapter 4: Core Business Rules'
+      title: 'Digital Identity Verification Requirements',
+      location: 'Chapter 4: Core Business Rules',
+      content: `The system SHALL verify the digital identity level of all applicants prior to processing any beneficiary declaration. Acceptable verification levels include SOP2 (Smart Pass Level 2) and SOP3 (Smart Pass Level 3) as defined by the UAE Digital Identity Authority.
+
+Key Requirements:
+• Applicants with SOP1 verification SHALL be rejected with appropriate messaging
+• Business entities MUST have at least one authorized signatory with SOP3 level
+• Individual applicants MAY proceed with SOP2 if they have completed additional KYC verification
+• System SHALL log all verification attempts with timestamps and outcomes
+
+Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
+      tags: ['Compliance', 'Security', 'Mandatory']
     },
     {
-      page: Math.floor(Math.random() * 50) + 60,
+      page: Math.floor(Math.random() * 20) + 35,
+      section: '5.1.2',
+      title: 'Beneficiary Ownership Thresholds',
+      location: 'Chapter 5: Declaration Requirements',
+      content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
+
+Calculation Rules:
+• Direct ownership: Shares held in the person's own name
+• Indirect ownership: Shares held through intermediate entities (calculated proportionally)
+• Control assessment: Voting rights, veto powers, or appointment rights
+• Special consideration for trust structures and nominee arrangements
+
+Example Calculation:
+If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
+Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
+
+Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
+      tags: ['Legal', 'Calculation', 'Critical']
+    },
+    {
+      page: Math.floor(Math.random() * 20) + 60,
       section: '7.1.3',
-      title: 'Validation Procedures',
-      location: 'Chapter 7: Operational Guidelines'
+      title: 'Risk-Based Validation Procedures',
+      location: 'Chapter 7: Operational Guidelines',
+      content: `The validation process SHALL implement a risk-based approach with differentiated procedures based on calculated risk scores.
+
+Risk Categories and Actions:
+• LOW RISK (0-25 points): Automated approval with periodic review
+• MEDIUM RISK (26-50 points): Standard due diligence by operations team
+• MEDIUM-HIGH RISK (51-75 points): Enhanced due diligence required
+• HIGH RISK (76-100 points): Senior management approval required
+• PROHIBITED (>100 points): Automatic rejection with escalation
+
+Validation Steps:
+1. Automated screening against local and international sanctions lists
+2. PEP (Politically Exposed Person) identification and classification
+3. Adverse media screening for reputational risks
+4. Source of wealth/funds verification for high-value transactions
+5. Documentation authenticity verification using AI-powered tools
+
+Timeline: All validations MUST be completed within 48 business hours unless additional documentation is required.`,
+      tags: ['Risk Management', 'Process', 'SLA']
+    },
+    {
+      page: Math.floor(Math.random() * 20) + 85,
+      section: '8.3.1',
+      title: 'Exemption Criteria and Special Cases',
+      location: 'Chapter 8: Exemptions and Edge Cases',
+      content: `Certain entity types are exempt from beneficial ownership declaration requirements:
+
+Exempt Entities:
+• Public Joint Stock Companies listed on regulated markets
+• Government entities and state-owned enterprises (>50% government ownership)
+• Regulated financial institutions under Central Bank supervision
+• International organizations with diplomatic status
+
+Partial Exemptions:
+• Subsidiaries of exempt entities: Only immediate parent needs declaration
+• Investment funds: Declaration required only for controlling parties
+• Dormant companies: Simplified declaration with annual confirmation
+
+Special Handling:
+Complex ownership structures involving multiple jurisdictions SHALL be referred to the Legal Advisory Committee for case-by-case determination. Documentation in languages other than Arabic or English MUST be accompanied by certified translations.`,
+      tags: ['Exemptions', 'Legal', 'Edge Cases']
     }
   ],
-  stakeholders: ['Legal Team', 'Compliance Officer', 'Product Owner']
+  stakeholders: ['Legal Team', 'Compliance Officer', 'Product Owner', 'Risk Management Head'],
+  complianceFrameworks: ['UAE AML/CFT Regulations', 'FATF Recommendations', 'Basel III Framework']
 });
 
 // Mock Rego rules - because Master Jedi needs to see the styling
@@ -144,6 +216,7 @@ export function NodeDetailModal({
   const [testWorkflows, setTestWorkflows] = useState<Record<string, TestWorkflow>>({});
   const [chatContext, setChatContext] = useState<any>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [expandedBRDSections, setExpandedBRDSections] = useState<Record<number, boolean>>({});
   
   // Close on escape key
   useEffect(() => {
@@ -412,66 +485,141 @@ export function NodeDetailModal({
           {activeTab === 'brd' && (
             <div className="space-y-6">
               <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                  <h3 className="font-semibold text-amber-900 dark:text-amber-200">Business Requirements Document</h3>
-                </div>
-                <div className="text-sm text-amber-800 dark:text-amber-300">
-                  Version {brdReferences.documentVersion} • Last Updated: {brdReferences.lastUpdated}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                      </svg>
+                      <h3 className="font-semibold text-amber-900 dark:text-amber-200">Business Requirements Document</h3>
+                    </div>
+                    <div className="text-sm text-amber-800 dark:text-amber-300">
+                      Version {brdReferences.documentVersion} • Last Updated: {brdReferences.lastUpdated}
+                    </div>
+                    <div className="text-xs text-amber-700 dark:text-amber-400 mt-1">
+                      Approved by: {brdReferences.approvedBy}
+                    </div>
+                  </div>
                 </div>
               </div>
               
               <div>
                 <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3">
-                  Document References
+                  Relevant BRD Sections
                 </h3>
                 <div className="space-y-3">
                   {brdReferences.sections.map((ref: any, idx: number) => (
                     <div 
                       key={idx}
-                      className="p-4 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/20 dark:to-blue-950/20 rounded-lg border border-indigo-200 dark:border-indigo-800 hover:shadow-md transition-shadow cursor-pointer"
+                      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:border-indigo-400 dark:hover:border-indigo-600 transition-colors"
                     >
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <div className="flex items-center gap-3">
-                            <span className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded text-xs font-bold">
-                              Page {ref.page}
-                            </span>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              Section {ref.section}
-                            </span>
+                      <button
+                        onClick={() => setExpandedBRDSections(prev => ({
+                          ...prev,
+                          [idx]: !prev[idx]
+                        }))}
+                        className="w-full p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <span className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded text-xs font-bold">
+                                Page {ref.page}
+                              </span>
+                              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                Section {ref.section}
+                              </span>
+                              <div className="flex gap-1">
+                                {ref.tags?.map((tag: string, tagIdx: number) => (
+                                  <span
+                                    key={tagIdx}
+                                    className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded text-xs"
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            <h4 className="font-medium text-gray-800 dark:text-gray-200">
+                              {ref.title}
+                            </h4>
+                            <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                              📍 {ref.location}
+                            </div>
                           </div>
-                          <h4 className="mt-2 font-medium text-gray-800 dark:text-gray-200">
-                            {ref.title}
-                          </h4>
+                          <svg 
+                            className={`w-5 h-5 text-gray-400 transform transition-transform ${expandedBRDSections[idx] ? 'rotate-90' : ''}`} 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
                         </div>
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-                        📍 {ref.location}
-                      </div>
+                      </button>
+                      
+                      {expandedBRDSections[idx] && (
+                          <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-700 animate-slide-up">
+                            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
+                              <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                Requirement Details:
+                              </h5>
+                              <div className="prose prose-sm max-w-none text-gray-600 dark:text-gray-400">
+                                <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
+                                  {ref.content}
+                                </pre>
+                              </div>
+                            </div>
+                            
+                            <div className="mt-3 flex gap-2">
+                              <button className="px-3 py-1.5 text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-md hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors">
+                                📋 Copy Text
+                              </button>
+                              <button className="px-3 py-1.5 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-md hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors">
+                                🔗 Link to Policy
+                              </button>
+                              <button className="px-3 py-1.5 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-md hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors">
+                                ✓ Mark as Validated
+                              </button>
+                            </div>
+                          </div>
+                      )}
                     </div>
                   ))}
                 </div>
               </div>
               
-              <div>
-                <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3">
-                  Stakeholders for Validation
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {brdReferences.stakeholders.map((stakeholder: string, idx: number) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1.5 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-950/20 dark:to-cyan-950/20 border border-teal-200 dark:border-teal-700 rounded-lg text-sm font-medium text-teal-800 dark:text-teal-200"
-                    >
-                      {stakeholder}
-                    </span>
-                  ))}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3">
+                    Stakeholders
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {brdReferences.stakeholders.map((stakeholder: string, idx: number) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1.5 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-950/20 dark:to-cyan-950/20 border border-teal-200 dark:border-teal-700 rounded-lg text-sm font-medium text-teal-800 dark:text-teal-200"
+                      >
+                        {stakeholder}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-3">
+                    Compliance Frameworks
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {brdReferences.complianceFrameworks?.map((framework: string, idx: number) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1.5 bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-950/20 dark:to-pink-950/20 border border-rose-200 dark:border-rose-700 rounded-lg text-sm font-medium text-rose-800 dark:text-rose-200"
+                      >
+                        {framework}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
