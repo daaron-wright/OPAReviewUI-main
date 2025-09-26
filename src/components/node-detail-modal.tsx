@@ -203,7 +203,7 @@ export function NodeDetailModal({
   // Close on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape' && !isChatOpen) onClose();
+      if (e.key === 'Escape' && !isChatOpen) onClose(false);
     };
     
     if (node) {
@@ -219,7 +219,7 @@ export function NodeDetailModal({
   
   const handleBackdropClick = useCallback((e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      onClose(false);
     }
   }, [onClose]);
   
@@ -391,7 +391,9 @@ export function NodeDetailModal({
       position: 'bottom-right',
       autoClose: 2000,
     });
-  }, [node, setNodeReviewed]);
+    // Don't move forward on rejection
+    onClose(false);
+  }, [node, setNodeReviewed, onClose]);
   
   if (!node) return null;
   
@@ -528,7 +530,7 @@ export function NodeDetailModal({
               </div>
               
               <button
-                onClick={onClose}
+                onClick={() => onClose(false)}
                 className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 aria-label="Close modal"
               >
