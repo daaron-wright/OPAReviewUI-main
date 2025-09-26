@@ -56,7 +56,8 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     resetReviews,
     approveAllNodes,
     canPublish,
-    getPublishStats
+    getPublishStats,
+    isNodeApproved
   } = useReview();
   
   // Convert processed nodes to ReactFlow nodes
@@ -153,21 +154,12 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     });
   }, [resetReviews, startWalkthrough]);
   
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  
   const handlePublish = useCallback(() => {
     const stats = getPublishStats();
     if (canPublish()) {
-      toast.promise(
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve('Published');
-          }, 2000);
-        }),
-        {
-          pending: 'Publishing all reviewed rules...',
-          success: `🎉 Published ${stats.approved} approved rules successfully!`,
-          error: 'Failed to publish rules'
-        }
-      );
+      setShowPublishModal(true);
     } else {
       toast.warning(`⚠️ Cannot publish: ${stats.total - stats.reviewed} nodes not reviewed`, {
         position: 'top-center',
@@ -175,6 +167,48 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
       });
     }
   }, [canPublish, getPublishStats]);
+  
+  const confirmPublish = useCallback(() => {
+    const stats = getPublishStats();
+    setShowPublishModal(false);
+    toast.promise(
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('Published');
+        }, 3000);
+      }),
+      {
+        pending: {
+          render() {
+            return (
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div>
+                  <div className="font-semibold">Publishing State Machine...</div>
+                  <div className="text-xs opacity-90">Deploying {stats.approved} approved states to production</div>
+                </div>
+              </div>
+            );
+          },
+          icon: false,
+        },
+        success: {
+          render() {
+            return (
+              <div>
+                <div className="font-semibold">🎉 State Machine Published Successfully!</div>
+                <div className="text-xs opacity-90 mt-1">
+                  {stats.approved} states deployed • {stats.total} rules activated • Version v2.4.0
+                </div>
+              </div>
+            );
+          },
+          icon: '✅',
+        },
+        error: 'Failed to publish state machine',
+      }
+    );
+  }, [getPublishStats]);
   
   const handleApproveAll = useCallback(() => {
     approveAllNodes();
@@ -302,6 +336,177 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
         onClose={() => setSelectedNode(null)}
         rawStateData={rawStates}
       />
+      
+      {/* Publish Confirmation Modal */}
+      {showPublishModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-3xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl animate-slide-up">
+            {/* Header */}
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-500 to-emerald-500">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
+                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">Confirm State Machine Publication</h2>
+                    <p className="text-sm text-white/80 mt-1">Review the deployment summary before publishing to production</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowPublishModal(false)}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            {/* Content */}
+            <div className="p-6 max-h-[60vh] overflow-y-auto">
+              {/* Stats Grid */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <div className="text-3xl font-bold text-blue-700 dark:text-blue-300">
+                    {getPublishStats().total}
+                  </div>
+                  <div className="text-sm text-blue-600 dark:text-blue-400 mt-1">
+                    Total States
+                  </div>
+                </div>
+                
+                <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                  <div className="text-3xl font-bold text-green-700 dark:text-green-300">
+                    {getPublishStats().approved}
+                  </div>
+                  <div className="text-sm text-green-600 dark:text-green-400 mt-1">
+                    Approved States
+                  </div>
+                </div>
+                
+                <div className="bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                  <div className="text-3xl font-bold text-purple-700 dark:text-purple-300">
+                    {stateMachine.edges.length}
+                  </div>
+                  <div className="text-sm text-purple-600 dark:text-purple-400 mt-1">
+                    Transitions
+                  </div>
+                </div>
+              </div>
+              
+              {/* States List */}
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-6">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  States Being Published
+                </h3>
+                <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+                  {stateMachine.nodes.map(node => {
+                    const isApproved = isNodeApproved(node.id);
+                    return (
+                      <div 
+                        key={node.id}
+                        className={`flex items-center gap-2 p-2 rounded-lg ${
+                          isApproved 
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' 
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                        }`}
+                      >
+                        {isApproved ? (
+                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        )}
+                        <div className="flex-1 truncate">
+                          <div className="font-medium text-sm truncate">{node.label}</div>
+                          <div className="text-xs opacity-75">Type: {node.type}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              
+              {/* Deployment Details */}
+              <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-6">
+                <h3 className="font-semibold text-amber-900 dark:text-amber-200 mb-3">Deployment Configuration</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-amber-700 dark:text-amber-300">Environment</span>
+                    <span className="font-medium text-amber-900 dark:text-amber-100">Production (UAE-PROD-01)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-amber-700 dark:text-amber-300">State Machine ID</span>
+                    <span className="font-mono text-amber-900 dark:text-amber-100">SM-2024-BENF-001</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-amber-700 dark:text-amber-300">Version</span>
+                    <span className="font-medium text-amber-900 dark:text-amber-100">v2.4.0 → v2.5.0</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-amber-700 dark:text-amber-300">Rollback Strategy</span>
+                    <span className="font-medium text-amber-900 dark:text-amber-100">Automatic on failure</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-amber-700 dark:text-amber-300">Compliance Check</span>
+                    <span className="font-medium text-green-700 dark:text-green-300">✓ Passed</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Warning if any rejected */}
+              {getPublishStats().rejected > 0 && (
+                <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span className="text-sm font-medium text-red-800 dark:text-red-300">
+                      Warning: {getPublishStats().rejected} state(s) were rejected and will not be published
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Footer */}
+            <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Publishing will deploy {getPublishStats().approved} states to production immediately
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowPublishModal(false)}
+                    className="px-5 py-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmPublish}
+                    className="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium rounded-lg transition-all flex items-center gap-2 shadow-md"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Confirm & Publish
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
