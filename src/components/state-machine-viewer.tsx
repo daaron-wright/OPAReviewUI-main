@@ -12,7 +12,7 @@ import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
 import { toast } from 'react-toastify';
 import { EpicPublishCelebration } from '@/components/epic-publish-celebration';
-import { OPADashboard } from '@/components/opa-dashboard';
+import { useRouter } from 'next/navigation';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -49,7 +49,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   const [modalAnimation, setModalAnimation] = useState<'entering' | 'exiting' | 'none'>('none');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showEpicCelebration, setShowEpicCelebration] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
+  const router = useRouter();
   
   const {
     isWalkthroughMode,
@@ -332,8 +332,17 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
             </div>
           </div>
           
-          {/* Right side - Approve All & Publish buttons */}
-          <div className="flex items-center gap-3">
+                 {/* Right side - Dashboard link, Approve All & Publish buttons */}
+                 <div className="flex items-center gap-3">
+                   <button
+                     onClick={() => router.push('/dashboard')}
+                     className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all flex items-center gap-2 shadow-md"
+                   >
+                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                     </svg>
+                     Dashboard
+                   </button>
             <button
               onClick={handleApproveAll}
               className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg transition-all flex items-center gap-2 shadow-md"
@@ -611,17 +620,12 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
       <EpicPublishCelebration 
         trigger={showEpicCelebration} 
         onComplete={() => {
-          console.log('🚀 CELEBRATION COMPLETE - SHOWING DASHBOARD!');
+          console.log('🚀 CELEBRATION COMPLETE - REDIRECTING TO DASHBOARD!');
           setShowEpicCelebration(false);
-          setShowDashboard(true); // Show dashboard after celebration
+          router.push('/dashboard'); // Redirect to dashboard page
         }}
       />
 
-      {/* OPA DASHBOARD - THE COMMAND CENTER! */}
-      <OPADashboard 
-        show={showDashboard}
-        onClose={() => setShowDashboard(false)}
-      />
     </div>
   );
 }
