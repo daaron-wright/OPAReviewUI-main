@@ -11,8 +11,7 @@ import { CustomNode, CustomNodeData } from './graph/custom-node';
 import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
 import { toast } from 'react-toastify';
-import { ConfettiCelebration } from '@/components/confetti-celebration';
-import { epicFinale } from '@/utils/confetti-presets';
+import { EpicPublishCelebration } from '@/components/epic-publish-celebration';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -48,7 +47,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   const [selectedNode, setSelectedNode] = useState<ProcessedNode | null>(null);
   const [modalAnimation, setModalAnimation] = useState<'entering' | 'exiting' | 'none'>('none');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [showEpicCelebration, setShowEpicCelebration] = useState(false);
   
   const {
     isWalkthroughMode,
@@ -251,10 +250,9 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
         },
         success: {
           render() {
-            // PARTY TIME! Trigger the EPIC celebration!
-            setShowConfetti(true);
-            // Also trigger the EPIC FINALE for maximum celebration
-            setTimeout(() => epicFinale(), 100);
+            // FUCKING PARTY TIME! MARIO AND LUIGI ARE COMING!
+            console.log('🎉🎉🎉 TRIGGERING EPIC CELEBRATION!!!');
+            setShowEpicCelebration(true);
             
             return (
               <div>
@@ -607,10 +605,10 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
         </div>
       )}
       
-      {/* Confetti Celebration - Modular party component! */}
-      <ConfettiCelebration 
-        trigger={showConfetti} 
-        onComplete={() => setShowConfetti(false)}
+      {/* EPIC FUCKING CELEBRATION WITH MARIO AND LUIGI! */}
+      <EpicPublishCelebration 
+        trigger={showEpicCelebration} 
+        onComplete={() => setShowEpicCelebration(false)}
       />
     </div>
   );
