@@ -177,7 +177,7 @@ export function NodeDetailModal({
   const [testWorkflows, setTestWorkflows] = useState<Record<string, TestWorkflow>>({});
   const [chatContext, setChatContext] = useState<any>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [expandedBRDSections, setExpandedBRDSections] = useState<Record<number, boolean>>({});
+  const [expandedBRDSection, setExpandedBRDSection] = useState<number | null>(null);
   const [language, setLanguage] = useState<'ar' | 'en'>('ar'); // Arabic default as requested
   const [showPublishConfirm, setShowPublishConfirm] = useState(false);
   
@@ -394,26 +394,21 @@ export function NodeDetailModal({
                   <div 
                     key={idx}
                     className={`bg-white dark:bg-gray-800 rounded-lg border overflow-hidden transition-all ${
-                      expandedBRDSections[idx] 
+                      expandedBRDSection === idx 
                         ? 'border-indigo-400 dark:border-indigo-600 shadow-md' 
                         : 'border-gray-200 dark:border-gray-700'
                     }`}
                   >
                       <button
                         onClick={() => {
-                          // ONLY ONE SECTION AT A TIME, YOU GENIUS!
-                          const isCurrentlyExpanded = expandedBRDSections[idx];
+                          // Toggle BRD section (only one at a time)
+                          const newExpanded = expandedBRDSection === idx ? null : idx;
+                          setExpandedBRDSection(newExpanded);
                           
-                          // Close ALL other sections first
-                          setExpandedBRDSections({
-                            [idx]: !isCurrentlyExpanded
-                          });
-                          
-                          // If we're opening this section, also open corresponding Rego rule
-                          if (!isCurrentlyExpanded && regoRules[idx]) {
+                          // Also sync with corresponding Rego rule
+                          if (newExpanded !== null && regoRules[idx]) {
                             setExpandedRule(regoRules[idx].id);
-                          } else if (isCurrentlyExpanded) {
-                            // If closing, close the Rego rule too
+                          } else if (newExpanded === null) {
                             setExpandedRule(null);
                           }
                         }}
@@ -428,7 +423,7 @@ export function NodeDetailModal({
                               <span className="text-xs font-semibold text-gray-900 dark:text-gray-100">
                                 {language === 'ar' ? 'القسم' : 'Section'} {ref.section}
                               </span>
-                              {expandedBRDSections[idx] && expandedRule === regoRules[idx]?.id && (
+                              {expandedBRDSection === idx && expandedRule === regoRules[idx]?.id && (
                                 <span className="px-1.5 py-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded text-xs font-bold animate-pulse">
                                   🔗 Synced
                                 </span>
@@ -442,7 +437,7 @@ export function NodeDetailModal({
                             </div>
                           </div>
                           <svg 
-                            className={`w-4 h-4 text-gray-400 transform transition-transform ${expandedBRDSections[idx] ? 'rotate-90' : ''}`} 
+                            className={`w-4 h-4 text-gray-400 transform transition-transform ${expandedBRDSection === idx ? 'rotate-90' : ''}`} 
                             fill="none" 
                             stroke="currentColor" 
                             viewBox="0 0 24 24"
@@ -452,7 +447,7 @@ export function NodeDetailModal({
                         </div>
                       </button>
                       
-                      {expandedBRDSections[idx] && (
+                      {expandedBRDSection === idx && (
                         <div className="px-3 pb-3 border-t border-gray-200 dark:border-gray-700 animate-slide-up">
                           <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                             <div className="prose prose-sm max-w-none text-gray-600 dark:text-gray-400">
@@ -497,21 +492,15 @@ export function NodeDetailModal({
                   >
                     <button
                       onClick={() => {
-                        const isExpanding = expandedRule !== rule.id;
+                        const newExpanded = expandedRule === rule.id ? null : rule.id;
+                        setExpandedRule(newExpanded);
                         
-                        // Set this rule as the ONLY expanded rule (or null if closing)
-                        setExpandedRule(isExpanding ? rule.id : null);
-                        
-                        // Sync with BRD panel - ONLY ONE SECTION THERE TOO!
+                        // Also sync with BRD section (only one at a time)
                         const ruleIndex = regoRules.findIndex(r => r.id === rule.id);
-                        if (ruleIndex >= 0) {
-                          if (isExpanding && brdReferences.sections[ruleIndex]) {
-                            // Open ONLY the corresponding BRD section
-                            setExpandedBRDSections({ [ruleIndex]: true });
-                          } else {
-                            // Close all BRD sections when closing Rego
-                            setExpandedBRDSections({});
-                          }
+                        if (newExpanded && ruleIndex >= 0 && brdReferences.sections[ruleIndex]) {
+                          setExpandedBRDSection(ruleIndex);
+                        } else if (!newExpanded) {
+                          setExpandedBRDSection(null);
                         }
                       }}
                       className="w-full p-3 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
@@ -580,16 +569,16 @@ export function NodeDetailModal({
                           </div>
                           
                           {/* Test Results */}
-                          {testResults[rule.id] && testResults[rule.id].status !== 'idle' && (
+                            {testResults[rule.id] && testResults[rule.id]?.status !== 'idle' && (
                             <div className="p-3 rounded-lg border animate-slide-up">
-                              {testResults[rule.id].status === 'running' && (
+                              {testResults[rule.id]?.status === 'running' && (
                                 <div className="flex items-center gap-2">
                                   <div className="w-4 h-4 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
                                   <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Running test case...</span>
                                 </div>
                               )}
                               
-                              {testResults[rule.id].status === 'pass' && (
+                              {testResults[rule.id]?.status === 'pass' && (
                                 <div className="space-y-2">
                                   <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -600,7 +589,7 @@ export function NodeDetailModal({
                                 </div>
                               )}
                               
-                              {testResults[rule.id].status === 'fail' && (
+                              {testResults[rule.id]?.status === 'fail' && (
                                 <div className="space-y-2">
                                   <div className="flex items-center gap-2 text-red-700 dark:text-red-400">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -612,7 +601,7 @@ export function NodeDetailModal({
                               )}
                               
                               {/* Workflow Actions */}
-                              {testWorkflows[rule.id] && testWorkflows[rule.id].status === 'reviewing' && (
+                              {testWorkflows[rule.id] && testWorkflows[rule.id]?.status === 'reviewing' && (
                                 <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                                   <div className="flex gap-1">
                                     <button
@@ -640,7 +629,7 @@ export function NodeDetailModal({
                           )}
                           
                           {/* Run Test Button */}
-                          {(!testResults[rule.id] || testResults[rule.id].status === 'idle') && (
+                          {(!testResults[rule.id] || testResults[rule.id]?.status === 'idle') && (
                             <button 
                               onClick={() => runTestCase(rule)}
                               className="w-full py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all text-xs"
