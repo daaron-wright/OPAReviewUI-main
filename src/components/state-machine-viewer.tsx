@@ -45,6 +45,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<ProcessedNode | null>(null);
   const [modalAnimation, setModalAnimation] = useState<'entering' | 'exiting' | 'none'>('none');
+  const [isTransitioning, setIsTransitioning] = useState(false);
   
   const {
     isWalkthroughMode,
@@ -161,30 +162,38 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const onInit = useCallback((instance: any) => setReactFlowInstance(instance), []);
   
-  // Handle walkthrough node selection with animation
+  // Handle walkthrough node selection with cinematic animation
   useEffect(() => {
     if (isWalkthroughMode && currentNodeId && reactFlowInstance) {
       const flowNode = nodes.find(n => n.id === currentNodeId);
       const processedNode = stateMachine.nodes.find(n => n.id === currentNodeId);
       
       if (flowNode && processedNode) {
-        // Center on the node with smooth animation
-        reactFlowInstance.setCenter(
-          flowNode.position.x + 110,
-          flowNode.position.y + 60,
-          {
-            duration: 800,
-            zoom: 1.5,
-          }
-        );
+        setIsTransitioning(true);
         
-        // Open modal after centering
+        // First zoom out to show context
+        reactFlowInstance.zoomTo(0.6, { duration: 600 });
+        
+        // Then pan and zoom to the new node
         setTimeout(() => {
+          reactFlowInstance.setCenter(
+            flowNode.position.x + 110,
+            flowNode.position.y + 60,
+            {
+              duration: 1200,
+              zoom: 1.8,
+            }
+          );
+        }, 700);
+        
+        // Open modal after full animation
+        setTimeout(() => {
+          setIsTransitioning(false);
           const pos = getNodeDOMPosition(currentNodeId);
           setNodePosition(pos);
           setModalAnimation('entering');
           setSelectedNode(processedNode);
-        }, 900);
+        }, 2000);
       }
     }
   }, [isWalkthroughMode, currentNodeId, stateMachine.nodes, nodes, reactFlowInstance, getNodeDOMPosition]);
@@ -379,6 +388,22 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
           />
         </ReactFlow>
       </ReactFlowProvider>
+      
+      {/* Transition Overlay */}
+      {isTransitioning && isWalkthroughMode && (
+        <>
+          {/* Dimming overlay */}
+          <div className="fixed inset-0 bg-black/20 z-40 pointer-events-none animate-fade-in" />
+          
+          {/* Transition Indicator */}
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
+            <div className="bg-purple-600/90 backdrop-blur-sm text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-pulse">
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <span className="font-medium">Moving to next state...</span>
+            </div>
+          </div>
+        </>
+      )}
       
       <NodeDetailModal 
         node={selectedNode}
