@@ -401,14 +401,20 @@ export function NodeDetailModal({
                   >
                       <button
                         onClick={() => {
-                          // Toggle BRD section
-                          setExpandedBRDSections(prev => ({
-                            ...prev,
-                            [idx]: !prev[idx]
-                          }));
-                          // Also expand corresponding Rego rule (map by index for demo)
-                          if (!expandedBRDSections[idx] && regoRules[idx]) {
+                          // ONLY ONE SECTION AT A TIME, YOU GENIUS!
+                          const isCurrentlyExpanded = expandedBRDSections[idx];
+                          
+                          // Close ALL other sections first
+                          setExpandedBRDSections({
+                            [idx]: !isCurrentlyExpanded
+                          });
+                          
+                          // If we're opening this section, also open corresponding Rego rule
+                          if (!isCurrentlyExpanded && regoRules[idx]) {
                             setExpandedRule(regoRules[idx].id);
+                          } else if (isCurrentlyExpanded) {
+                            // If closing, close the Rego rule too
+                            setExpandedRule(null);
                           }
                         }}
                         className="w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
@@ -491,15 +497,21 @@ export function NodeDetailModal({
                   >
                     <button
                       onClick={() => {
-                        const newExpanded = expandedRule === rule.id ? null : rule.id;
-                        setExpandedRule(newExpanded);
-                        // Also expand corresponding BRD section
+                        const isExpanding = expandedRule !== rule.id;
+                        
+                        // Set this rule as the ONLY expanded rule (or null if closing)
+                        setExpandedRule(isExpanding ? rule.id : null);
+                        
+                        // Sync with BRD panel - ONLY ONE SECTION THERE TOO!
                         const ruleIndex = regoRules.findIndex(r => r.id === rule.id);
-                        if (newExpanded && ruleIndex >= 0 && brdReferences.sections[ruleIndex]) {
-                          setExpandedBRDSections(prev => ({
-                            ...prev,
-                            [ruleIndex]: true
-                          }));
+                        if (ruleIndex >= 0) {
+                          if (isExpanding && brdReferences.sections[ruleIndex]) {
+                            // Open ONLY the corresponding BRD section
+                            setExpandedBRDSections({ [ruleIndex]: true });
+                          } else {
+                            // Close all BRD sections when closing Rego
+                            setExpandedBRDSections({});
+                          }
                         }
                       }}
                       className="w-full p-3 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
