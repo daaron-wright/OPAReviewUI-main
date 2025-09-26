@@ -439,8 +439,6 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
             }
           }, 500);
         }}
-        rawStateData={rawStates}
-        isWalkthrough={isWalkthroughMode}
         animationState={modalAnimation}
         originPosition={nodePosition}
       />

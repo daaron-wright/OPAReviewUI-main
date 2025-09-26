@@ -12,10 +12,8 @@ import { toast } from 'react-toastify';
 interface NodeDetailModalProps {
   node: ProcessedNode | null;
   onClose: (approved?: boolean) => void;
-  rawStateData?: Record<string, any>;
   animationState?: 'entering' | 'exiting' | 'none';
   originPosition?: { x: number; y: number } | null;
-  isWalkthrough?: boolean;
 }
 
 interface RegoRule {
@@ -30,7 +28,7 @@ interface RegoRule {
 }
 
 // Mock BRD references - with bilingual content for our international Master Jedi
-const getMockBRDReferences = (nodeId: string): any => ({
+const getMockBRDReferences = (): any => ({
   documentVersion: 'v2.3.1',
   lastUpdated: '2024-01-15',
   approvedBy: 'Director of Digital Transformation',
@@ -104,7 +102,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 });
 
 // Mock Rego rules - because Master Jedi needs to see the styling
-const getMockRegoRules = (nodeId: string): RegoRule[] => [
+const getMockRegoRules = (): RegoRule[] => [
   {
     id: 'rule_1',
     name: 'validate_digital_id_level',
@@ -171,13 +169,11 @@ interface TestWorkflow {
  * Expandable modal with side-by-side BRD and Rego layout
  * Because tabs are apparently too 2023
  */
-export function NodeDetailModal({ 
-  node, 
-  onClose, 
-  rawStateData,
+export function NodeDetailModal({
+  node,
+  onClose,
   animationState = 'none',
-  originPosition,
-  isWalkthrough = false
+  originPosition
 }: NodeDetailModalProps): JSX.Element | null {
   const [expandedRule, setExpandedRule] = useState<string | null>(null);
   const [copiedRule, setCopiedRule] = useState<string | null>(null);
@@ -187,17 +183,12 @@ export function NodeDetailModal({
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [expandedBRDSection, setExpandedBRDSection] = useState<number | null>(null);
   const [language, setLanguage] = useState<'ar' | 'en'>('ar'); // Arabic default as requested
-  const [regoRules, setRegoRules] = useState(() => getMockRegoRules(node?.id || ''));
+  const [regoRules, setRegoRules] = useState(() => getMockRegoRules());
   
-  const { 
-    isWalkthroughMode,
+  const {
     setNodeReviewed,
     isNodeReviewed,
-    isNodeApproved,
-    nextNode,
-    previousNode,
-    currentNodeId,
-    nodeSequence
+    isNodeApproved
   } = useReview();
   
   // Close on escape key
@@ -235,14 +226,15 @@ export function NodeDetailModal({
   
   const runTestCase = useCallback((rule: RegoRule) => {
     // Start running with detailed status
-    setTestResults(prev => ({
-      ...prev,
-      [rule.id]: { 
-        ruleId: rule.id, 
-        status: 'running',
-        message: 'Initializing test environment...'
-      }
-    }));
+            setTestResults(prev => ({
+              ...prev,
+              [rule.id]: { 
+                ruleId: rule.id, 
+                status: 'running', 
+                message: 'Initializing test environment...',
+                actual: ''
+              }
+            }));
     
     setTestWorkflows(prev => ({
       ...prev,
@@ -254,8 +246,10 @@ export function NodeDetailModal({
       setTestResults(prev => ({
         ...prev,
         [rule.id]: { 
-          ...prev[rule.id],
-          message: 'Loading rule definitions...'
+          ruleId: rule.id,
+          status: 'running',
+          message: 'Loading rule definitions...',
+          actual: ''
         }
       }));
     }, 500);
@@ -264,8 +258,10 @@ export function NodeDetailModal({
       setTestResults(prev => ({
         ...prev,
         [rule.id]: { 
-          ...prev[rule.id],
-          message: 'Executing test cases...'
+          ruleId: rule.id,
+          status: 'running',
+          message: 'Executing test cases...',
+          actual: ''
         }
       }));
     }, 1000);
@@ -274,8 +270,10 @@ export function NodeDetailModal({
       setTestResults(prev => ({
         ...prev,
         [rule.id]: { 
-          ...prev[rule.id],
-          message: 'Validating output against expectations...'
+          ruleId: rule.id,
+          status: 'running',
+          message: 'Validating output against expectations...',
+          actual: ''
         }
       }));
     }, 1500);
@@ -397,8 +395,7 @@ export function NodeDetailModal({
   
   if (!node) return null;
   
-  const stateDetails = rawStateData?.[node.id] || {};
-  const brdReferences = getMockBRDReferences(node.id);
+  const brdReferences = getMockBRDReferences();
   
   // Calculate animation styles
   const getModalStyle = () => {
@@ -479,31 +476,6 @@ export function NodeDetailModal({
                 </div>
               )}
               
-              {/* Navigation buttons for walkthrough mode */}
-              {isWalkthroughMode && (
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={previousNode}
-                    disabled={nodeSequence.indexOf(node.id) === 0}
-                    className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all flex items-center gap-1 text-sm"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Previous
-                  </button>
-                  <button
-                    onClick={nextNode}
-                    disabled={nodeSequence.indexOf(node.id) === nodeSequence.length - 1}
-                    className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all flex items-center gap-1 text-sm"
-                  >
-                    Next
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                </div>
-              )}
               
               <div className="flex rounded-lg border-2 border-gray-300 dark:border-gray-600 overflow-hidden">
                 <button
@@ -874,36 +846,62 @@ export function NodeDetailModal({
           </div>
         </div>
         
-        {/* Review Actions Bar - Only show if not already reviewed */}
-        {!isNodeReviewed(node.id) && (
-          <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                Have you completed reviewing this node?
-              </div>
-              <div className="flex gap-3">
-                <button
-                  onClick={handleRejectNode}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  Reject Node
-                </button>
-                <button
-                  onClick={handleApproveNode}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-all flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Review Actions Bar - Always show, adapt based on current status */}
+        <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {!isNodeReviewed(node.id) ? (
+                'Have you completed reviewing this node?'
+              ) : isNodeApproved(node.id) ? (
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  Approve Node
-                </button>
-              </div>
+                  <span className="text-green-600 dark:text-green-400 font-medium">Node Approved</span>
+                  <span className="text-gray-500">- Change your decision?</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  <span className="text-red-600 dark:text-red-400 font-medium">Node Rejected</span>
+                  <span className="text-gray-500">- Ready to approve after rework?</span>
+                </div>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={handleRejectNode}
+                className={`px-4 py-2 font-medium rounded-lg transition-all flex items-center gap-2 ${
+                  isNodeReviewed(node.id) && !isNodeApproved(node.id)
+                    ? 'bg-red-600 text-white cursor-default'
+                    : 'bg-red-600 hover:bg-red-700 text-white'
+                }`}
+                disabled={isNodeReviewed(node.id) && !isNodeApproved(node.id)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                {isNodeReviewed(node.id) && !isNodeApproved(node.id) ? 'Rejected' : 'Reject Node'}
+              </button>
+              <button
+                onClick={handleApproveNode}
+                className={`px-4 py-2 font-medium rounded-lg transition-all flex items-center gap-2 ${
+                  isNodeReviewed(node.id) && isNodeApproved(node.id)
+                    ? 'bg-green-600 text-white cursor-default'
+                    : 'bg-green-600 hover:bg-green-700 text-white'
+                }`}
+                disabled={isNodeReviewed(node.id) && isNodeApproved(node.id)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                {isNodeReviewed(node.id) && isNodeApproved(node.id) ? 'Approved' : 'Approve Node'}
+              </button>
             </div>
           </div>
-        )}
+        </div>
       </div>
       
       {/* Policy Chat Interface */}
