@@ -18,6 +18,7 @@ interface PolicyChatInterfaceProps {
     };
     testResult?: 'pass' | 'fail';
   } | null;
+  onAcceptChanges?: (newRule: string, newTestCase: any) => void;
 }
 
 interface ChatMessage {
@@ -34,11 +35,14 @@ interface ChatMessage {
 export function PolicyChatInterface({ 
   isOpen, 
   onClose, 
-  ruleContext 
+  ruleContext,
+  onAcceptChanges 
 }: PolicyChatInterfaceProps): JSX.Element | null {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [suggestedRule, setSuggestedRule] = useState<string | null>(null);
+  const [suggestedTestCase, setSuggestedTestCase] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
@@ -98,6 +102,46 @@ export function PolicyChatInterface({
     // Simulate AI response
     setTimeout(() => {
       const aiResponse = generateMockResponse(inputMessage, ruleContext);
+      
+      // Check if the response includes a suggested rule
+      if (inputMessage.toLowerCase().includes('fix') || 
+          inputMessage.toLowerCase().includes('change') || 
+          inputMessage.toLowerCase().includes('update')) {
+        // Generate a suggested rule
+        const newRule = `package beneficiary.verification
+
+# Enhanced rule with additional checks
+allow {
+  input.digital_id_level == "SOP3"
+}
+
+allow {
+  input.digital_id_level == "SOP2"
+  input.user_type == "verified_business"
+  input.additional_kyc == true  # Added requirement
+}
+
+# New condition for special cases
+allow {
+  input.digital_id_level == "SOP2"
+  input.exemption_approved == true
+  input.approver_level >= 3
+}
+
+deny {
+  input.digital_id_level == "SOP1"
+  reason := "Insufficient verification level"
+}`;
+        
+        const newTestCase = {
+          input: '{"digital_id_level": "SOP2", "user_type": "verified_business", "additional_kyc": true}',
+          expected: '{"allow": true, "deny": false}'
+        };
+        
+        setSuggestedRule(newRule);
+        setSuggestedTestCase(newTestCase);
+      }
+      
       const assistantMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -206,6 +250,34 @@ export function PolicyChatInterface({
           
           <div ref={messagesEndRef} />
         </div>
+        
+        {/* Suggested Rule Display */}
+        {suggestedRule && (
+          <div className="p-4 bg-green-50 dark:bg-green-950/20 border-y border-green-200 dark:border-green-800">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold text-green-800 dark:text-green-200">
+                💡 Suggested Rule Update
+              </h3>
+              <button
+                onClick={() => {
+                  if (onAcceptChanges) {
+                    onAcceptChanges(suggestedRule, suggestedTestCase);
+                    onClose();
+                  }
+                }}
+                className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg text-sm transition-colors flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Accept Changes
+              </button>
+            </div>
+            <pre className="p-2 bg-gray-900 text-green-400 rounded-lg text-xs font-mono overflow-x-auto max-h-32">
+              <code>{suggestedRule.split('\n').slice(0, 5).join('\n')}...</code>
+            </pre>
+          </div>
+        )}
         
         {/* Input Area */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">

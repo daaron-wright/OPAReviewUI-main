@@ -181,7 +181,6 @@ export function NodeDetailModal({
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [expandedBRDSection, setExpandedBRDSection] = useState<number | null>(null);
   const [language, setLanguage] = useState<'ar' | 'en'>('ar'); // Arabic default as requested
-  const [regoRules, setRegoRules] = useState(() => getMockRegoRules(node?.id || ''));
   
   const { 
     isWalkthroughMode,
@@ -228,51 +227,15 @@ export function NodeDetailModal({
   }, []);
   
   const runTestCase = useCallback((rule: RegoRule) => {
-    // Start running with detailed status
     setTestResults(prev => ({
       ...prev,
-      [rule.id]: { 
-        ruleId: rule.id, 
-        status: 'running',
-        message: 'Initializing test environment...'
-      }
+      [rule.id]: { ruleId: rule.id, status: 'running' }
     }));
     
     setTestWorkflows(prev => ({
       ...prev,
       [rule.id]: { ruleId: rule.id, status: 'testing' }
     }));
-    
-    // Simulate progressive test execution
-    setTimeout(() => {
-      setTestResults(prev => ({
-        ...prev,
-        [rule.id]: { 
-          ...prev[rule.id],
-          message: 'Loading rule definitions...'
-        }
-      }));
-    }, 500);
-    
-    setTimeout(() => {
-      setTestResults(prev => ({
-        ...prev,
-        [rule.id]: { 
-          ...prev[rule.id],
-          message: 'Executing test cases...'
-        }
-      }));
-    }, 1000);
-    
-    setTimeout(() => {
-      setTestResults(prev => ({
-        ...prev,
-        [rule.id]: { 
-          ...prev[rule.id],
-          message: 'Validating output against expectations...'
-        }
-      }));
-    }, 1500);
     
     setTimeout(() => {
       const passed = Math.random() > 0.3;
@@ -324,7 +287,6 @@ export function NodeDetailModal({
   const openReworkChat = useCallback((rule: RegoRule) => {
     const testResult = testResults[rule.id];
     setChatContext({
-      ruleId: rule.id,
       ruleName: rule.name,
       currentRule: rule.rule,
       testCase: {
@@ -339,33 +301,6 @@ export function NodeDetailModal({
       autoClose: 2000,
     });
   }, [testResults]);
-  
-  const handleAcceptChanges = useCallback((newRule: string, newTestCase: any) => {
-    if (chatContext?.ruleId) {
-      // Update the rule with the new content
-      setRegoRules(prev => prev.map(rule => 
-        rule.id === chatContext.ruleId
-          ? { ...rule, rule: newRule, testCase: newTestCase || rule.testCase }
-          : rule
-      ));
-      
-      // Clear test results for re-testing
-      setTestResults(prev => ({
-        ...prev,
-        [chatContext.ruleId]: { ruleId: chatContext.ruleId, status: 'idle' }
-      }));
-      
-      setTestWorkflows(prev => ({
-        ...prev,
-        [chatContext.ruleId]: { ruleId: chatContext.ruleId, status: 'testing' }
-      }));
-      
-      toast.success('✨ Rule updated successfully! Ready for re-testing.', {
-        position: 'bottom-right',
-        autoClose: 3000,
-      });
-    }
-  }, [chatContext]);
   
   const handleApproveNode = useCallback(() => {
     if (!node) return;
@@ -394,6 +329,7 @@ export function NodeDetailModal({
   
   const stateDetails = rawStateData?.[node.id] || {};
   const brdReferences = getMockBRDReferences(node.id);
+  const regoRules = getMockRegoRules(node.id);
   
   return (
     <div 
@@ -711,37 +647,12 @@ export function NodeDetailModal({
                           </div>
                           
                           {/* Test Results */}
-                          {testResults[rule.id] && testResults[rule.id]?.status !== 'idle' && (
+                            {testResults[rule.id] && testResults[rule.id]?.status !== 'idle' && (
                             <div className="p-3 rounded-lg border animate-slide-up">
                               {testResults[rule.id]?.status === 'running' && (
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-4 h-4 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-                                    <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
-                                      {testResults[rule.id]?.message || 'Running test case...'}
-                                    </span>
-                                  </div>
-                                  
-                                  {/* Show test case being executed */}
-                                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-2 space-y-2">
-                                    <div className="text-xs text-gray-600 dark:text-gray-400 font-semibold">
-                                      Executing Test Case:
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-2 text-xs">
-                                      <div>
-                                        <span className="text-gray-500">Input:</span>
-                                        <pre className="mt-1 p-1 bg-blue-50 dark:bg-blue-950/30 rounded font-mono text-blue-700 dark:text-blue-300">
-                                          {rule.testCase.input}
-                                        </pre>
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-500">Expected:</span>
-                                        <pre className="mt-1 p-1 bg-green-50 dark:bg-green-950/30 rounded font-mono text-green-700 dark:text-green-300">
-                                          {rule.testCase.expected}
-                                        </pre>
-                                      </div>
-                                    </div>
-                                  </div>
+                                <div className="flex items-center gap-2">
+                                  <div className="w-4 h-4 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                                  <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Running test case...</span>
                                 </div>
                               )}
                               
@@ -753,14 +664,6 @@ export function NodeDetailModal({
                                     </svg>
                                     <span className="font-semibold text-sm">Test Passed!</span>
                                   </div>
-                                  <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-2 text-xs">
-                                    <div className="text-green-600 dark:text-green-400 font-semibold mb-1">
-                                      ✓ {testResults[rule.id]?.message}
-                                    </div>
-                                    <div className="font-mono text-green-700 dark:text-green-300">
-                                      Output: {testResults[rule.id]?.actual}
-                                    </div>
-                                  </div>
                                 </div>
                               )}
                               
@@ -771,23 +674,6 @@ export function NodeDetailModal({
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                     <span className="font-semibold text-sm">Test Failed</span>
-                                  </div>
-                                  <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-2 text-xs space-y-2">
-                                    <div className="text-red-600 dark:text-red-400 font-semibold">
-                                      ✗ {testResults[rule.id]?.message}
-                                    </div>
-                                    <div>
-                                      <span className="text-red-500 dark:text-red-400">Actual Output:</span>
-                                      <pre className="mt-1 p-1 bg-red-100 dark:bg-red-900/30 rounded font-mono text-red-700 dark:text-red-300">
-                                        {testResults[rule.id]?.actual}
-                                      </pre>
-                                    </div>
-                                    <div>
-                                      <span className="text-gray-500">Expected:</span>
-                                      <pre className="mt-1 p-1 bg-gray-100 dark:bg-gray-800 rounded font-mono text-gray-600 dark:text-gray-400">
-                                        {rule.testCase.expected}
-                                      </pre>
-                                    </div>
                                   </div>
                                 </div>
                               )}
@@ -876,7 +762,6 @@ export function NodeDetailModal({
         isOpen={isChatOpen}
         onClose={() => setIsChatOpen(false)}
         ruleContext={chatContext}
-        onAcceptChanges={handleAcceptChanges}
       />
     </div>
   );
