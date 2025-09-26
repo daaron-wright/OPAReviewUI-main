@@ -4,6 +4,7 @@
  */
 
 import { ProcessedNode } from '@/domain/state-machine/processor';
+import { PolicyChatInterface } from './policy-chat-interface';
 import { useCallback, useEffect, useState } from 'react';
 
 interface NodeDetailModalProps {
@@ -115,6 +116,18 @@ ultimate_beneficiary {
   }
 ];
 
+interface TestResult {
+  ruleId: string;
+  status: 'idle' | 'running' | 'pass' | 'fail';
+  actual?: string;
+  message?: string;
+}
+
+interface TestWorkflow {
+  ruleId: string;
+  status: 'testing' | 'reviewing' | 'confirmed' | 'rejected';
+}
+
 /**
  * Expandable modal showing comprehensive node details with BRD and Rego rules
  * Because apparently basic information isn't enough anymore
@@ -127,6 +140,10 @@ export function NodeDetailModal({
   const [activeTab, setActiveTab] = useState<'details' | 'brd' | 'rego'>('details');
   const [expandedRule, setExpandedRule] = useState<string | null>(null);
   const [copiedRule, setCopiedRule] = useState<string | null>(null);
+  const [testResults, setTestResults] = useState<Record<string, TestResult>>({});
+  const [testWorkflows, setTestWorkflows] = useState<Record<string, TestWorkflow>>({});
+  const [chatContext, setChatContext] = useState<any>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   // Close on escape key
   useEffect(() => {
@@ -156,6 +173,73 @@ export function NodeDetailModal({
     setCopiedRule(ruleId);
     setTimeout(() => setCopiedRule(null), 2000);
   }, []);
+  
+  const runTestCase = useCallback((rule: RegoRule) => {
+    // Set test as running
+    setTestResults(prev => ({
+      ...prev,
+      [rule.id]: { ruleId: rule.id, status: 'running' }
+    }));
+    
+    setTestWorkflows(prev => ({
+      ...prev,
+      [rule.id]: { ruleId: rule.id, status: 'testing' }
+    }));
+    
+    // Simulate test execution
+    setTimeout(() => {
+      // Mock: 70% pass rate
+      const passed = Math.random() > 0.3;
+      const result: TestResult = {
+        ruleId: rule.id,
+        status: passed ? 'pass' : 'fail',
+        actual: passed 
+          ? rule.testCase.expected 
+          : '{"allow": false, "reason": "Verification level insufficient"}',
+        message: passed 
+          ? 'All assertions passed successfully' 
+          : 'Test failed: Output does not match expected result'
+      };
+      
+      setTestResults(prev => ({
+        ...prev,
+        [rule.id]: result
+      }));
+      
+      setTestWorkflows(prev => ({
+        ...prev,
+        [rule.id]: { ruleId: rule.id, status: 'reviewing' }
+      }));
+    }, 2000);
+  }, []);
+  
+  const confirmRule = useCallback((ruleId: string) => {
+    setTestWorkflows(prev => ({
+      ...prev,
+      [ruleId]: { ruleId, status: 'confirmed' }
+    }));
+  }, []);
+  
+  const rejectRule = useCallback((ruleId: string) => {
+    setTestWorkflows(prev => ({
+      ...prev,
+      [ruleId]: { ruleId, status: 'rejected' }
+    }));
+  }, []);
+  
+  const openReworkChat = useCallback((rule: RegoRule) => {
+    const testResult = testResults[rule.id];
+    setChatContext({
+      ruleName: rule.name,
+      currentRule: rule.rule,
+      testCase: {
+        ...rule.testCase,
+        actual: testResult?.actual
+      },
+      testResult: testResult?.status
+    });
+    setIsChatOpen(true);
+  }, [testResults]);
   
   if (!node) return null;
   
@@ -490,10 +574,131 @@ export function NodeDetailModal({
                             </div>
                           </div>
                           
+                          {/* Test Results Display */}
+                          {testResults[rule.id] && testResults[rule.id].status !== 'idle' && (
+                            <div className="mt-4 p-4 rounded-lg border-2 animate-slide-up">
+                              {/* Test Status */}
+                              {testResults[rule.id].status === 'running' && (
+                                <div className="flex items-center gap-3">
+                                  <div className="w-6 h-6 border-3 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Running test case...
+                                  </span>
+                                </div>
+                              )}
+                              
+                              {testResults[rule.id].status === 'pass' && (
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span className="font-semibold">Test Passed!</span>
+                                  </div>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {testResults[rule.id].message}
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {testResults[rule.id].status === 'fail' && (
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2 text-red-700 dark:text-red-400">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    <span className="font-semibold">Test Failed</span>
+                                  </div>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    {testResults[rule.id].message}
+                                  </p>
+                                  <div>
+                                    <h6 className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                                      Actual Output:
+                                    </h6>
+                                    <pre className="p-2 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded text-xs font-mono text-red-800 dark:text-red-300 overflow-x-auto">
+                                      <code>{testResults[rule.id].actual}</code>
+                                    </pre>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Workflow Actions */}
+                              {testWorkflows[rule.id] && testWorkflows[rule.id].status === 'reviewing' && (
+                                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                    What would you like to do with this test result?
+                                  </p>
+                                  <div className="flex gap-2">
+                                    <button
+                                      onClick={() => confirmRule(rule.id)}
+                                      className="flex-1 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                      Confirm
+                                    </button>
+                                    <button
+                                      onClick={() => rejectRule(rule.id)}
+                                      className="flex-1 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                      </svg>
+                                      Reject
+                                    </button>
+                                    <button
+                                      onClick={() => openReworkChat(rule)}
+                                      className="flex-1 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-4l-4 4z" />
+                                      </svg>
+                                      Rework
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Status Badges */}
+                              {testWorkflows[rule.id] && testWorkflows[rule.id].status === 'confirmed' && (
+                                <div className="mt-4 p-3 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-2">
+                                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                  </svg>
+                                  <span className="text-green-800 dark:text-green-300 font-medium">
+                                    Rule Confirmed and Approved
+                                  </span>
+                                </div>
+                              )}
+                              
+                              {testWorkflows[rule.id] && testWorkflows[rule.id].status === 'rejected' && (
+                                <div className="mt-4 p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-2">
+                                  <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  <span className="text-red-800 dark:text-red-300 font-medium">
+                                    Rule Rejected - Requires Revision
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          
                           {/* Run Test Button */}
-                          <button className="w-full py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all transform hover:scale-[1.02]">
-                            Run Test Case →
-                          </button>
+                          {(!testResults[rule.id] || testResults[rule.id].status === 'idle') && (
+                            <button 
+                              onClick={() => runTestCase(rule)}
+                              className="w-full py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              Run Test Case
+                            </button>
+                          )}
                         </div>
                       </div>
                     )}
@@ -504,6 +709,13 @@ export function NodeDetailModal({
           )}
         </div>
       </div>
+      
+      {/* Policy Chat Interface */}
+      <PolicyChatInterface 
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        ruleContext={chatContext}
+      />
     </div>
   );
 }
