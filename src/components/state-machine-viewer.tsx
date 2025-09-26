@@ -164,7 +164,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   
   // Handle walkthrough node selection with cinematic animation
   useEffect(() => {
-    if (isWalkthroughMode && currentNodeId && reactFlowInstance && !isTransitioning) {
+    if (isWalkthroughMode && currentNodeId && reactFlowInstance) {
       const flowNode = nodes.find(n => n.id === currentNodeId);
       const processedNode = stateMachine.nodes.find(n => n.id === currentNodeId);
       
@@ -176,33 +176,27 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
         
         // Then pan and zoom to the new node
         setTimeout(() => {
-          // Check if still in walkthrough mode (in case it was exited)
-          if (isWalkthroughMode) {
-            reactFlowInstance.setCenter(
-              flowNode.position.x + 110,
-              flowNode.position.y + 60,
-              {
-                duration: 1200,
-                zoom: 1.8,
-              }
-            );
-          }
+          reactFlowInstance.setCenter(
+            flowNode.position.x + 110,
+            flowNode.position.y + 60,
+            {
+              duration: 1200,
+              zoom: 1.8,
+            }
+          );
         }, 700);
         
         // Open modal after full animation
         setTimeout(() => {
           setIsTransitioning(false);
-          // Only open modal if still in walkthrough mode
-          if (isWalkthroughMode) {
-            const pos = getNodeDOMPosition(currentNodeId);
-            setNodePosition(pos);
-            setModalAnimation('entering');
-            setSelectedNode(processedNode);
-          }
+          const pos = getNodeDOMPosition(currentNodeId);
+          setNodePosition(pos);
+          setModalAnimation('entering');
+          setSelectedNode(processedNode);
         }, 2000);
       }
     }
-  }, [isWalkthroughMode, currentNodeId, stateMachine.nodes, nodes, reactFlowInstance, getNodeDOMPosition, isTransitioning]);
+  }, [isWalkthroughMode, currentNodeId, stateMachine.nodes, nodes, reactFlowInstance, getNodeDOMPosition]);
   
   const handleStartWalkthrough = useCallback(() => {
     resetReviews();
@@ -270,16 +264,12 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   }, [getPublishStats]);
   
   const handleApproveAll = useCallback(() => {
-    // Exit walkthrough mode if active to prevent animations
-    if (isWalkthroughMode) {
-      endWalkthrough();
-    }
     approveAllNodes();
     toast.success(`✅ All ${getTotalNodes()} nodes approved!`, {
       position: 'top-center',
       autoClose: 3000,
     });
-  }, [approveAllNodes, getTotalNodes, isWalkthroughMode, endWalkthrough]);
+  }, [approveAllNodes, getTotalNodes]);
   
   return (
     <div className="w-full h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 relative">
@@ -403,7 +393,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
       {isTransitioning && isWalkthroughMode && (
         <>
           {/* Dimming overlay */}
-          <div className="fixed inset-0 bg-black/20 z-40 pointer-events-none transition-opacity duration-300" />
+          <div className="fixed inset-0 bg-black/20 z-40 pointer-events-none animate-fade-in" />
           
           {/* Transition Indicator */}
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
@@ -439,7 +429,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
       
       {/* Publish Confirmation Modal */}
       {showPublishModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-300">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
           <div className="relative w-full max-w-3xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl animate-slide-up">
             {/* Header */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-500 to-emerald-500">
