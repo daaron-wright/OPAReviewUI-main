@@ -22,6 +22,7 @@ import ReactFlow, {
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
+  useReactFlow,
 } from 'reactflow';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import 'reactflow/dist/style.css';
@@ -43,6 +44,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<ProcessedNode | null>(null);
+  const [modalAnimation, setModalAnimation] = useState<'entering' | 'exiting' | 'none'>('none');
   
   const {
     isWalkthroughMode,
@@ -101,13 +103,32 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     }));
   }, [stateMachine]);
   
+  // Track node position for animation
+  const [nodePosition, setNodePosition] = useState<{ x: number; y: number } | null>(null);
+  
+  // Get DOM position of a node
+  const getNodeDOMPosition = useCallback((nodeId: string) => {
+    const nodeElement = document.querySelector(`[data-id="${nodeId}"]`);
+    if (nodeElement) {
+      const rect = nodeElement.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
+      };
+    }
+    return null;
+  }, []);
+  
   // Handle node click to show details
   const handleNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
     const processedNode = stateMachine.nodes.find(n => n.id === node.id);
     if (processedNode) {
+      const pos = getNodeDOMPosition(node.id);
+      setNodePosition(pos);
+      setModalAnimation('entering');
       setSelectedNode(processedNode);
     }
-  }, [stateMachine.nodes]);
+  }, [stateMachine.nodes, getNodeDOMPosition]);
   
   // Apply automatic layout (always top-bottom, fuck the options)
   const applyLayout = useCallback(() => {
@@ -135,15 +156,37 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     setNodeSequence(sequence);
   }, [applyLayout, stateMachine.nodes, setNodeSequence]);
   
-  // Handle walkthrough node selection
+  // Store ReactFlow instance
+  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const onInit = useCallback((instance: any) => setReactFlowInstance(instance), []);
+  
+  // Handle walkthrough node selection with animation
   useEffect(() => {
-    if (isWalkthroughMode && currentNodeId) {
-      const node = stateMachine.nodes.find(n => n.id === currentNodeId);
-      if (node) {
-        setSelectedNode(node);
+    if (isWalkthroughMode && currentNodeId && reactFlowInstance) {
+      const flowNode = nodes.find(n => n.id === currentNodeId);
+      const processedNode = stateMachine.nodes.find(n => n.id === currentNodeId);
+      
+      if (flowNode && processedNode) {
+        // Center on the node with smooth animation
+        reactFlowInstance.setCenter(
+          flowNode.position.x + 110,
+          flowNode.position.y + 60,
+          {
+            duration: 800,
+            zoom: 1.5,
+          }
+        );
+        
+        // Open modal after centering
+        setTimeout(() => {
+          const pos = getNodeDOMPosition(currentNodeId);
+          setNodePosition(pos);
+          setModalAnimation('entering');
+          setSelectedNode(processedNode);
+        }, 900);
       }
     }
-  }, [isWalkthroughMode, currentNodeId, stateMachine.nodes]);
+  }, [isWalkthroughMode, currentNodeId, stateMachine.nodes, nodes, reactFlowInstance, getNodeDOMPosition]);
   
   const handleStartWalkthrough = useCallback(() => {
     resetReviews();
@@ -308,7 +351,12 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
           nodeTypes={nodeTypes}
+          onInit={onInit}
           fitView
+          fitViewOptions={{
+            padding: 0.2,
+            duration: 800,
+          }}
           attributionPosition="bottom-left"
           className="transition-all duration-300"
         >
@@ -333,8 +381,24 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
       
       <NodeDetailModal 
         node={selectedNode}
-        onClose={() => setSelectedNode(null)}
+        onClose={(approved?: boolean) => {
+          setModalAnimation('exiting');
+          // Wait for animation to complete
+          setTimeout(() => {
+            setSelectedNode(null);
+            setModalAnimation('none');
+            // If approved during walkthrough, move to next node
+            if (isWalkthroughMode && approved) {
+              setTimeout(() => {
+                nextNode();
+              }, 300);
+            }
+          }, 500);
+        }}
         rawStateData={rawStates}
+        isWalkthrough={isWalkthroughMode}
+        animationState={modalAnimation}
+        originPosition={nodePosition}
       />
       
       {/* Publish Confirmation Modal */}

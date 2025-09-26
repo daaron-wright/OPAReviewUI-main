@@ -33,7 +33,7 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
         className="!bg-gray-500"
       />
       
-      <div className={`${nodeStyles.container} ${isCurrentNode ? 'ring-4 ring-purple-500 ring-opacity-50 animate-pulse' : ''}`}>
+      <div className={`${nodeStyles.container} ${isCurrentNode ? 'walkthrough-current-node' : ''}`}>
         {/* Review Status Indicator */}
         {isNodeReviewed(id) && (
           <div className="absolute -top-2 -right-2 z-10">

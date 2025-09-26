@@ -11,8 +11,11 @@ import { toast } from 'react-toastify';
 
 interface NodeDetailModalProps {
   node: ProcessedNode | null;
-  onClose: () => void;
+  onClose: (approved?: boolean) => void;
   rawStateData?: Record<string, any>;
+  animationState?: 'entering' | 'exiting' | 'none';
+  originPosition?: { x: number; y: number } | null;
+  isWalkthrough?: boolean;
 }
 
 interface RegoRule {
@@ -171,7 +174,10 @@ interface TestWorkflow {
 export function NodeDetailModal({ 
   node, 
   onClose, 
-  rawStateData 
+  rawStateData,
+  animationState = 'none',
+  originPosition,
+  isWalkthrough = false
 }: NodeDetailModalProps): JSX.Element | null {
   const [expandedRule, setExpandedRule] = useState<string | null>(null);
   const [copiedRule, setCopiedRule] = useState<string | null>(null);
@@ -374,12 +380,9 @@ export function NodeDetailModal({
       position: 'bottom-right',
       autoClose: 2000,
     });
-    if (isWalkthroughMode) {
-      setTimeout(() => {
-        nextNode();
-      }, 1000);
-    }
-  }, [node, setNodeReviewed, isWalkthroughMode, nextNode]);
+    // Close with approved flag for animation
+    onClose(true);
+  }, [node, setNodeReviewed, onClose]);
   
   const handleRejectNode = useCallback(() => {
     if (!node) return;
@@ -395,15 +398,45 @@ export function NodeDetailModal({
   const stateDetails = rawStateData?.[node.id] || {};
   const brdReferences = getMockBRDReferences(node.id);
   
+  // Calculate animation styles
+  const getModalStyle = () => {
+    if (!originPosition) return {};
+    
+    if (animationState === 'entering') {
+      return {
+        animation: 'modal-expand 0.5s ease-out forwards',
+        transformOrigin: `${originPosition.x}px ${originPosition.y}px`,
+      };
+    } else if (animationState === 'exiting') {
+      return {
+        animation: 'modal-collapse 0.5s ease-in forwards',
+        transformOrigin: `${originPosition.x}px ${originPosition.y}px`,
+      };
+    }
+    return {};
+  };
+  
+  const getBackdropStyle = () => {
+    if (animationState === 'entering') {
+      return 'animate-fade-in';
+    } else if (animationState === 'exiting') {
+      return 'animate-fade-out';
+    }
+    return '';
+  };
+  
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm ${getBackdropStyle()}`}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className="relative w-full max-w-[90rem] max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl animate-slide-up flex flex-col">
+      <div 
+        className="relative w-full max-w-[90rem] max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col"
+        style={getModalStyle()}
+      >
         {/* Header - Fixed at top */}
         <div className={`flex-shrink-0 p-4 border-b ${getHeaderStyle(node)}`}>
           <div className="flex items-center justify-between">
