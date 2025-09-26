@@ -59,7 +59,8 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     approveAllNodes,
     canPublish,
     getPublishStats,
-    isNodeApproved
+    isNodeApproved,
+    nextNode
   } = useReview();
   
   // Convert processed nodes to ReactFlow nodes
