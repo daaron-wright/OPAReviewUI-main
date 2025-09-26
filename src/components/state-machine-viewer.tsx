@@ -12,6 +12,7 @@ import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
 import { toast } from 'react-toastify';
 import { EpicPublishCelebration } from '@/components/epic-publish-celebration';
+import { OPADashboard } from '@/components/opa-dashboard';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -48,6 +49,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   const [modalAnimation, setModalAnimation] = useState<'entering' | 'exiting' | 'none'>('none');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showEpicCelebration, setShowEpicCelebration] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
   
   const {
     isWalkthroughMode,
@@ -608,7 +610,17 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
       {/* EPIC FUCKING CELEBRATION WITH MARIO AND LUIGI! */}
       <EpicPublishCelebration 
         trigger={showEpicCelebration} 
-        onComplete={() => setShowEpicCelebration(false)}
+        onComplete={() => {
+          console.log('🚀 CELEBRATION COMPLETE - SHOWING DASHBOARD!');
+          setShowEpicCelebration(false);
+          setShowDashboard(true); // Show dashboard after celebration
+        }}
+      />
+
+      {/* OPA DASHBOARD - THE COMMAND CENTER! */}
+      <OPADashboard 
+        show={showDashboard}
+        onClose={() => setShowDashboard(false)}
       />
     </div>
   );

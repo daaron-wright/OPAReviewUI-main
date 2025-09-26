@@ -106,6 +106,7 @@ export function EpicPublishCelebration({ trigger, onComplete }: EpicPublishCeleb
     
     // Clean up after 10 seconds
     const cleanup = setTimeout(() => {
+      console.log('🎉 CELEBRATION COMPLETE - TRIGGERING DASHBOARD!');
       setShowMario(false);
       setShowLuigi(false);
       setFlashColors(false);
