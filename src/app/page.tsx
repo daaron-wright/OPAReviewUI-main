@@ -19,7 +19,10 @@ export default async function HomePage(): Promise<JSX.Element> {
     // Process into graph-renderable format
     const processedStateMachine = processStateMachine(stateMachine);
     
-    return <StateMachineViewer stateMachine={processedStateMachine} />;
+    return <StateMachineViewer 
+      stateMachine={processedStateMachine} 
+      rawStates={stateMachine.states}
+    />;
   } catch (error) {
     return <ErrorDisplay error={error} />;
   }

@@ -1,0 +1,85 @@
+I'll analyze the issue and provide a step-by-step plan to fix the loading spinner deadlock.
+
+## Root Cause Analysis
+
+The issue is in `src/app/page.tsx` where the useEffect has an early return when `containerRef.current` is null. In React 19 + StrictMode, the effect may run before the ref is attached to the DOM element, causing the effect to return early and never re-run, leaving `loading=true` forever.
+
+## Prioritized Fix Plan
+
+### 1. Gate rendering until container exists (Minimal change)
+**File**: `src/app/page.tsx`
+**Change**: Add a conditional render that ensures the container div exists before running the effect:
+```tsx
+// Add a state to track if DOM is ready
+const [isDOMReady, setIsDOMReady] = useState(false);
+
+// In useEffect after component mounts
+useEffect(() => {
+  setIsDOMReady(true);
+}, []);
+
+// Then in the render, only show the visualization when DOM is ready
+{isDOMReady && (
+  <div ref={containerRef} className={styles.stateMachineContainer} />
+)}
+```
+
+### 2. Add retry mechanism for container ref
+**File**: `src/app/page.tsx`
+**Change**: Instead of early return, use requestAnimationFrame to retry until container is available:
+```tsx
+// Replace the early return with a retry mechanism
+if (!containerRef.current) {
+  const retryTimer = setTimeout(() => {
+    // Re-trigger the effect logic
+  }, 100);
+  return () => clearTimeout(retryTimer);
+}
+```
+
+### 3. Harden fetch with timeout and proper cleanup
+**File**: `src/app/page.tsx`
+**Change**: Add timeout and ensure setLoading(false) in all paths:
+```tsx
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+try {
+  // fetch logic with signal
+  const response = await fetch('/api/state-machine', { signal: controller.signal });
+  // process response
+} catch (error) {
+  setError(error.message);
+  setLoading(false);
+} finally {
+  clearTimeout(timeoutId);
+  setLoading(false);
+}
+```
+
+### 4. Separate loading states for better UX
+**File**: `src/app/page.tsx`
+**Change**: Create separate loading flags:
+```tsx
+const [dataLoading, setDataLoading] = useState(true);
+const [graphLoading, setGraphLoading] = useState(false);
+```
+
+## Code Touch Points
+- `src/app/page.tsx`: Main landing page with useEffect and loading logic
+- `src/app/api/state-machine/route.ts`: API route (minimal changes for timeout if needed)
+
+## Verification Steps
+1. Run `npm run dev` and visit `/`
+2. Watch network tab and console for errors
+3. Verify spinner disappears and state machine renders
+4. Check alternative view at `/state-machine`
+5. Build with `npm run build && npm start` to ensure no hydration/SSR issues
+6. Test with different viewport sizes and network conditions
+
+## Risks and Rollback
+- Risk: Timing changes might cause new race conditions
+- Rollback: Revert changes to useEffect and loading state management in `src/app/page.tsx`
+- The changes are minimal and surgical, maintaining existing styling and functionality
+
+The analysis and plan are complete. The root cause has been identified as an early return in the useEffect when the container ref is not yet attached, causing the loading state to remain true permanently. The planned fixes include gating the render until the DOM is ready, adding retry mechanisms, and hardening the fetch with timeouts. The verification steps will ensure the fix works properly across different scenarios.

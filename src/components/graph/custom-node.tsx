@@ -103,6 +103,7 @@ function getNodeStyles(data: CustomNodeData): {
     min-w-[200px] max-w-[250px]
     transition-all duration-200
     hover:shadow-xl hover:scale-[1.02]
+    cursor-pointer
   `;
   
   const baseHeader = `

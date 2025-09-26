@@ -1,0 +1,58 @@
+Of course. Here is a plan to address the loading deadlock and improve the robustness of the state machine visualization.
+
+### 1. Root-Cause Hypothesis
+
+The primary issue is a race condition in `src/app/page.tsx`. The `useEffect` hook, which fetches data and initializes the Cytoscape graph, has an empty dependency array (`[]`), meaning it runs only once after the initial render. If `containerRef.current` is `null` during that single run (a possibility with React 19's rendering optimizations), the effect's early `return` statement is executed. This permanently stalls the component in a loading state because `setLoading(false)` is never called, and the effect never re-runs.
+
+### 2. Prioritized Fix & Refactoring Plan
+
+This plan applies minimal, surgical changes to `src/app/page.tsx`.
+
+**Step 1: Guarantee Loading State Resolution**
+
+*   **File:** `src/app/page.tsx`
+*   **Location:** The main `useEffect` hook.
+*   **Action:** Modify the asynchronous logic within the effect. Wrap the `fetch` call and subsequent graph initialization in a `try...catch...finally` block. Move the `setLoading(false)` call into the `finally` block. This ensures the spinner is always dismissed, regardless of success or failure.
+
+**Step 2: Remove the Dead-End Early Return**
+
+*   **File:** `src/app/page.tsx`
+*   **Location:** The main `useEffect` hook.
+*   **Action:** Delete the `if (!containerRef.current) { return; }` guard. Allowing the `cytoscape({ container: containerRef.current })` call to proceed even if the ref is `null` will cause a catchable error. This error will be handled by the `try...catch` block, making the failure explicit (e.g., logging an error and showing an error message) instead of causing a silent deadlock.
+
+**Step 3: Harden the Fetch Request**
+
+*   **File:** `src/app/page.tsx`
+*   **Location:** The main `useEffect` hook.
+*   **Action:** Introduce an `AbortController` to manage the fetch request.
+    1.  Create an `AbortController` instance inside the effect.
+    2.  Pass its `signal` to the `fetch` options.
+    3.  Call `controller.abort()` in the effect's cleanup function (`return () => { controller.abort(); }`). This prevents memory leaks and errors from state updates on unmounted components.
+
+**Step 4: Implement a User-Facing Error State**
+
+*   **File:** `src/app/page.tsx`
+*   **Location:** The component's JSX return.
+*   **Action:** Use the existing `error` state. If `error` is not null, render a simple and clear error message to the user (e.g., a Material-UI `<Alert>` component stating, "Failed to load the state machine visualization."). This provides necessary feedback when things go wrong.
+
+### 3. Verification Steps
+
+**Development Mode:**
+1.  Run `npm run dev`.
+2.  Navigate to `/`. The spinner should disappear, and the graph should render.
+3.  Check the browser's developer console and network tab to ensure no errors and a successful API call to `/api/state-machine`.
+4.  Visit `/state-machine` to confirm the alternative ReactFlow view is unaffected.
+
+**Production Mode:**
+1.  Run `npm run build` and then `npm start`.
+2.  Access the application. Verify the page loads without hydration errors and the graph renders correctly.
+
+**Failure Test:**
+1.  Temporarily modify `src/app/api/state-machine/route.ts` to throw an error.
+2.  Restart the dev server and visit `/`.
+3.  **Expected:** The spinner should disappear, and the user-facing error message from Step 4 should be displayed.
+
+### 4. Risks and Rollback
+
+*   **Risk:** The plan assumes that `cytoscape()` throws a standard, catchable error when its container is `null`. This is a safe assumption for a mature library, but if it doesn't, the page could still crash.
+*   **Rollback:** All changes are localized to the `useEffect` hook and JSX in `src/app/page.tsx`. Reverting the file to its previous state via `git` will undo the changes completely.

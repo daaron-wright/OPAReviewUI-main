@@ -1,0 +1,1 @@
+The analysis is complete. The core issue is the race condition where the useEffect's early return prevents the loading spinner from ever being cleared. The recommended fix is Option B (separate data/UI loading states) as it provides the cleanest separation and is most resilient to timing issues.

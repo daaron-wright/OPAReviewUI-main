@@ -5,9 +5,10 @@
 
 'use client';
 
-import { ProcessedStateMachine } from '@/domain/state-machine/processor';
+import { ProcessedStateMachine, ProcessedNode } from '@/domain/state-machine/processor';
 import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
 import { CustomNode, CustomNodeData } from './graph/custom-node';
+import { NodeDetailModal } from './node-detail-modal';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -16,7 +17,6 @@ import ReactFlow, {
   MiniMap,
   Node,
   NodeTypes,
-  Panel,
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
@@ -26,6 +26,7 @@ import 'reactflow/dist/style.css';
 
 interface StateMachineViewerProps {
   stateMachine: ProcessedStateMachine;
+  rawStates?: Record<string, any>;
 }
 
 const nodeTypes: NodeTypes = {
@@ -33,12 +34,13 @@ const nodeTypes: NodeTypes = {
 };
 
 /**
- * Interactive state machine graph viewer with pan, zoom, and layout controls
+ * Interactive state machine graph viewer with clickable nodes
+ * Because Master Jedi Barney is the only legend that matters
  */
-export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): JSX.Element {
+export function StateMachineViewer({ stateMachine, rawStates }: StateMachineViewerProps): JSX.Element {
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [layoutDirection, setLayoutDirection] = useState<'TB' | 'LR'>('TB');
+  const [selectedNode, setSelectedNode] = useState<ProcessedNode | null>(null);
   
   // Convert processed nodes to ReactFlow nodes
   const initialNodes = useMemo(() => {
@@ -81,16 +83,24 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     }));
   }, [stateMachine]);
   
-  // Apply automatic layout
-  const applyLayout = useCallback((direction: 'TB' | 'LR') => {
+  // Handle node click to show details
+  const handleNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
+    const processedNode = stateMachine.nodes.find(n => n.id === node.id);
+    if (processedNode) {
+      setSelectedNode(processedNode);
+    }
+  }, [stateMachine.nodes]);
+  
+  // Apply automatic layout (always top-bottom, fuck the options)
+  const applyLayout = useCallback(() => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = calculateLayout(
       initialNodes as Node[],
       initialEdges as Edge[],
       {
-        direction,
+        direction: 'TB',
         nodeWidth: 220,
         nodeHeight: 120,
-        rankSeparation: direction === 'TB' ? 120 : 150,
+        rankSeparation: 120,
         nodeSeparation: 80,
       }
     );
@@ -101,12 +111,8 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   
   // Apply initial layout
   useEffect(() => {
-    applyLayout(layoutDirection);
-  }, [applyLayout, layoutDirection]);
-  
-  const handleLayoutChange = useCallback((direction: 'TB' | 'LR') => {
-    setLayoutDirection(direction);
-  }, []);
+    applyLayout();
+  }, [applyLayout]);
   
   return (
     <div className="w-full h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -116,6 +122,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          onNodeClick={handleNodeClick}
           nodeTypes={nodeTypes}
           fitView
           attributionPosition="bottom-left"
@@ -137,85 +144,14 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             className="!bg-white dark:!bg-gray-800 !border-gray-200 dark:!border-gray-700 !shadow-lg"
             maskColor="rgba(0, 0, 0, 0.1)"
           />
-          
-          <Panel position="top-left" className="flex flex-col gap-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 animate-slide-up">
-              <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                {stateMachine.metadata.name}
-              </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                {stateMachine.metadata.description}
-              </p>
-              <div className="flex gap-4 text-xs">
-                <span className="text-gray-500 dark:text-gray-400">
-                  States: <strong>{stateMachine.metadata.totalStates}</strong>
-                </span>
-                <span className="text-gray-500 dark:text-gray-400">
-                  Transitions: <strong>{stateMachine.metadata.totalTransitions}</strong>
-                </span>
-              </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 animate-slide-up animation-delay-100">
-              <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Layout Direction
-              </h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={(): void => handleLayoutChange('TB')}
-                  className={`px-3 py-1.5 text-xs rounded-md transition-all ${
-                    layoutDirection === 'TB'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                  }`}
-                  aria-label="Top to Bottom layout"
-                >
-                  Top-Bottom
-                </button>
-                <button
-                  onClick={(): void => handleLayoutChange('LR')}
-                  className={`px-3 py-1.5 text-xs rounded-md transition-all ${
-                    layoutDirection === 'LR'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                  }`}
-                  aria-label="Left to Right layout"
-                >
-                  Left-Right
-                </button>
-              </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 animate-slide-up animation-delay-200">
-              <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Legend
-              </h2>
-              <div className="space-y-1.5">
-                <LegendItem color="green" label="Initial State" />
-                <LegendItem color="blue" label="Process" />
-                <LegendItem color="yellow" label="Decision" />
-                <LegendItem color="red" label="Final State" />
-              </div>
-            </div>
-          </Panel>
         </ReactFlow>
       </ReactFlowProvider>
-    </div>
-  );
-}
-
-function LegendItem({ color, label }: { color: string; label: string }): JSX.Element {
-  const colorClasses: Record<string, string> = {
-    green: 'bg-green-400',
-    blue: 'bg-blue-400',
-    yellow: 'bg-yellow-400',
-    red: 'bg-red-400',
-  };
-  
-  return (
-    <div className="flex items-center gap-2">
-      <div className={`w-3 h-3 rounded-sm ${colorClasses[color]}`} />
-      <span className="text-xs text-gray-600 dark:text-gray-400">{label}</span>
+      
+      <NodeDetailModal 
+        node={selectedNode}
+        onClose={() => setSelectedNode(null)}
+        rawStateData={rawStates}
+      />
     </div>
   );
 }
