@@ -403,7 +403,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
       {isTransitioning && isWalkthroughMode && (
         <>
           {/* Dimming overlay */}
-          <div className="fixed inset-0 bg-black/20 z-40 pointer-events-none animate-fade-in" />
+          <div className="fixed inset-0 bg-black/20 z-40 pointer-events-none transition-opacity duration-300" />
           
           {/* Transition Indicator */}
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
@@ -439,7 +439,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
       
       {/* Publish Confirmation Modal */}
       {showPublishModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-300">
           <div className="relative w-full max-w-3xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl animate-slide-up">
             {/* Header */}
             <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-500 to-emerald-500">

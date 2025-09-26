@@ -418,18 +418,9 @@ export function NodeDetailModal({
     return {};
   };
   
-  const getBackdropStyle = () => {
-    if (animationState === 'entering') {
-      return 'animate-fade-in';
-    } else if (animationState === 'exiting') {
-      return 'animate-fade-out';
-    }
-    return '';
-  };
-  
   return (
     <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm ${getBackdropStyle()}`}
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${animationState === 'exiting' ? 'opacity-0' : 'opacity-100'}`}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"

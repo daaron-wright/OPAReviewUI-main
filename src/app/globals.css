@@ -50,6 +50,22 @@
   border-width: 4px !important;
 }
 
+/* Slide up animation for modals */
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
