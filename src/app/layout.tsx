@@ -3,9 +3,11 @@
  */
 
 import './globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { ToastProvider } from '@/components/toast-provider';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -36,6 +38,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         {children}
+        <ToastProvider />
       </body>
     </html>
   );

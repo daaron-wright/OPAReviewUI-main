@@ -6,6 +6,7 @@
 import { ProcessedNode } from '@/domain/state-machine/processor';
 import { PolicyChatInterface } from './policy-chat-interface';
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface NodeDetailModalProps {
   node: ProcessedNode | null;
@@ -208,6 +209,10 @@ export function NodeDetailModal({
     navigator.clipboard.writeText(text);
     setCopiedRule(ruleId);
     setTimeout(() => setCopiedRule(null), 2000);
+    toast.success('📋 Copied to clipboard!', {
+      position: 'bottom-center',
+      autoClose: 1500,
+    });
   }, []);
   
   const runTestCase = useCallback((rule: RegoRule) => {
@@ -251,6 +256,10 @@ export function NodeDetailModal({
       ...prev,
       [ruleId]: { ruleId, status: 'confirmed' }
     }));
+    toast.success('✅ Rule confirmed and approved!', {
+      position: 'bottom-right',
+      autoClose: 3000,
+    });
   }, []);
   
   const rejectRule = useCallback((ruleId: string) => {
@@ -258,6 +267,10 @@ export function NodeDetailModal({
       ...prev,
       [ruleId]: { ruleId, status: 'rejected' }
     }));
+    toast.error('❌ Rule rejected - requires revision', {
+      position: 'bottom-right',
+      autoClose: 3000,
+    });
   }, []);
   
   const openReworkChat = useCallback((rule: RegoRule) => {
@@ -272,6 +285,10 @@ export function NodeDetailModal({
       testResult: testResult?.status
     });
     setIsChatOpen(true);
+    toast.info('💬 Opening AI Chat Assistant...', {
+      position: 'top-center',
+      autoClose: 2000,
+    });
   }, [testResults]);
   
   if (!node) return null;
@@ -750,10 +767,44 @@ export function NodeDetailModal({
               <button
                 onClick={() => {
                   setShowPublishConfirm(false);
-                  // Here you would actually publish the rules
-                  setTimeout(() => {
-                    alert('Rules published successfully! 🎉');
-                  }, 500);
+                  // Simulate publishing with fancy toast notifications
+                  toast.promise(
+                    new Promise((resolve) => {
+                      setTimeout(() => {
+                        resolve('Published');
+                      }, 2000);
+                    }),
+                    {
+                      pending: {
+                        render() {
+                          return (
+                            <div className="flex items-center gap-3">
+                              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              <div>
+                                <div className="font-semibold">Publishing Rules...</div>
+                                <div className="text-xs opacity-90">Deploying to production environment</div>
+                              </div>
+                            </div>
+                          );
+                        },
+                        icon: false,
+                      },
+                      success: {
+                        render() {
+                          return (
+                            <div>
+                              <div className="font-semibold">🎉 Rules Published Successfully!</div>
+                              <div className="text-xs opacity-90 mt-1">
+                                {regoRules.length} rules deployed to production • Version v2.4.0
+                              </div>
+                            </div>
+                          );
+                        },
+                        icon: '✅',
+                      },
+                      error: 'Failed to publish rules',
+                    }
+                  );
                 }}
                 className="flex-1 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2"
               >
