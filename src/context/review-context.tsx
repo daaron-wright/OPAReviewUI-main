@@ -24,6 +24,7 @@ interface ReviewContextType {
   getReviewedCount: () => number;
   getTotalNodes: () => number;
   resetReviews: () => void;
+  approveAllNodes: () => void;
   
   // Walkthrough mode
   isWalkthroughMode: boolean;
@@ -92,6 +93,21 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     setIsWalkthroughMode(false);
   }, []);
   
+  const approveAllNodes = useCallback(() => {
+    const allApproved: Record<string, NodeReviewStatus> = {};
+    nodeSequence.forEach(nodeId => {
+      allApproved[nodeId] = {
+        nodeId,
+        reviewed: true,
+        approved: true,
+        notes: 'Bulk approved',
+        reviewedAt: new Date(),
+        reviewedBy: 'Master Jedi Barney'
+      };
+    });
+    setReviewStatus(allApproved);
+  }, [nodeSequence]);
+  
   const startWalkthrough = useCallback(() => {
     setIsWalkthroughMode(true);
     if (nodeSequence.length > 0) {
@@ -154,6 +170,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     getReviewedCount,
     getTotalNodes,
     resetReviews,
+    approveAllNodes,
     isWalkthroughMode,
     startWalkthrough,
     endWalkthrough,

@@ -54,6 +54,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     getReviewedCount,
     getTotalNodes,
     resetReviews,
+    approveAllNodes,
     canPublish,
     getPublishStats
   } = useReview();
@@ -175,6 +176,14 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     }
   }, [canPublish, getPublishStats]);
   
+  const handleApproveAll = useCallback(() => {
+    approveAllNodes();
+    toast.success(`✅ All ${getTotalNodes()} nodes approved!`, {
+      position: 'top-center',
+      autoClose: 3000,
+    });
+  }, [approveAllNodes, getTotalNodes]);
+  
   return (
     <div className="w-full h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 relative">
       {/* Walkthrough Control Bar */}
@@ -227,21 +236,33 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
             </div>
           </div>
           
-          {/* Right side - Global publish button */}
-          <button
-            onClick={handlePublish}
-            disabled={!canPublish()}
-            className={`px-6 py-2 font-medium rounded-lg transition-all flex items-center gap-2 shadow-md ${
-              canPublish() 
-                ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white' 
-                : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-            }`}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
-            Publish All Rules ({getPublishStats().approved} approved)
-          </button>
+          {/* Right side - Approve All & Publish buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleApproveAll}
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg transition-all flex items-center gap-2 shadow-md"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Approve All ({getTotalNodes()} nodes)
+            </button>
+            
+            <button
+              onClick={handlePublish}
+              disabled={!canPublish()}
+              className={`px-6 py-2 font-medium rounded-lg transition-all flex items-center gap-2 shadow-md ${
+                canPublish() 
+                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white' 
+                  : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              Publish All Rules ({getPublishStats().approved} approved)
+            </button>
+          </div>
         </div>
       </div>
       
