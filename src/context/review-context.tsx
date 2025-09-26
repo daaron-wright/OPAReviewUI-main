@@ -1,0 +1,183 @@
+/**
+ * Review workflow context for tracking node review status
+ * Because Master Jedi wants a proper walkthrough experience
+ */
+'use client';
+
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+
+export interface NodeReviewStatus {
+  nodeId: string;
+  reviewed: boolean;
+  approved: boolean;
+  notes?: string;
+  reviewedAt?: Date;
+  reviewedBy?: string;
+}
+
+interface ReviewContextType {
+  // Review status tracking
+  reviewStatus: Record<string, NodeReviewStatus>;
+  setNodeReviewed: (nodeId: string, approved: boolean, notes?: string) => void;
+  isNodeReviewed: (nodeId: string) => boolean;
+  isNodeApproved: (nodeId: string) => boolean;
+  getReviewedCount: () => number;
+  getTotalNodes: () => number;
+  resetReviews: () => void;
+  
+  // Walkthrough mode
+  isWalkthroughMode: boolean;
+  startWalkthrough: () => void;
+  endWalkthrough: () => void;
+  currentNodeId: string | null;
+  setCurrentNode: (nodeId: string | null) => void;
+  
+  // Navigation
+  nextNode: () => void;
+  previousNode: () => void;
+  nodeSequence: string[];
+  setNodeSequence: (sequence: string[]) => void;
+  
+  // Publishing
+  canPublish: () => boolean;
+  getPublishStats: () => {
+    total: number;
+    reviewed: number;
+    approved: number;
+    rejected: number;
+  };
+}
+
+const ReviewContext = createContext<ReviewContextType | undefined>(undefined);
+
+export function ReviewProvider({ children }: { children: ReactNode }) {
+  const [reviewStatus, setReviewStatus] = useState<Record<string, NodeReviewStatus>>({});
+  const [isWalkthroughMode, setIsWalkthroughMode] = useState(false);
+  const [currentNodeId, setCurrentNodeId] = useState<string | null>(null);
+  const [nodeSequence, setNodeSequence] = useState<string[]>([]);
+  
+  const setNodeReviewed = useCallback((nodeId: string, approved: boolean, notes?: string) => {
+    setReviewStatus(prev => ({
+      ...prev,
+      [nodeId]: {
+        nodeId,
+        reviewed: true,
+        approved,
+        notes,
+        reviewedAt: new Date(),
+        reviewedBy: 'Master Jedi Barney' // Would come from auth in real app
+      }
+    }));
+  }, []);
+  
+  const isNodeReviewed = useCallback((nodeId: string) => {
+    return reviewStatus[nodeId]?.reviewed || false;
+  }, [reviewStatus]);
+  
+  const isNodeApproved = useCallback((nodeId: string) => {
+    return reviewStatus[nodeId]?.approved || false;
+  }, [reviewStatus]);
+  
+  const getReviewedCount = useCallback(() => {
+    return Object.values(reviewStatus).filter(s => s.reviewed).length;
+  }, [reviewStatus]);
+  
+  const getTotalNodes = useCallback(() => {
+    return nodeSequence.length;
+  }, [nodeSequence]);
+  
+  const resetReviews = useCallback(() => {
+    setReviewStatus({});
+    setCurrentNodeId(null);
+    setIsWalkthroughMode(false);
+  }, []);
+  
+  const startWalkthrough = useCallback(() => {
+    setIsWalkthroughMode(true);
+    if (nodeSequence.length > 0) {
+      setCurrentNodeId(nodeSequence[0]);
+    }
+  }, [nodeSequence]);
+  
+  const endWalkthrough = useCallback(() => {
+    setIsWalkthroughMode(false);
+    setCurrentNodeId(null);
+  }, []);
+  
+  const setCurrentNode = useCallback((nodeId: string | null) => {
+    setCurrentNodeId(nodeId);
+  }, []);
+  
+  const nextNode = useCallback(() => {
+    if (!currentNodeId || nodeSequence.length === 0) return;
+    
+    const currentIndex = nodeSequence.indexOf(currentNodeId);
+    if (currentIndex < nodeSequence.length - 1) {
+      setCurrentNodeId(nodeSequence[currentIndex + 1]);
+    }
+  }, [currentNodeId, nodeSequence]);
+  
+  const previousNode = useCallback(() => {
+    if (!currentNodeId || nodeSequence.length === 0) return;
+    
+    const currentIndex = nodeSequence.indexOf(currentNodeId);
+    if (currentIndex > 0) {
+      setCurrentNodeId(nodeSequence[currentIndex - 1]);
+    }
+  }, [currentNodeId, nodeSequence]);
+  
+  const canPublish = useCallback(() => {
+    // All nodes must be reviewed and approved
+    if (nodeSequence.length === 0) return false;
+    
+    return nodeSequence.every(nodeId => {
+      const status = reviewStatus[nodeId];
+      return status?.reviewed && status?.approved;
+    });
+  }, [reviewStatus, nodeSequence]);
+  
+  const getPublishStats = useCallback(() => {
+    const reviewed = Object.values(reviewStatus).filter(s => s.reviewed);
+    return {
+      total: nodeSequence.length,
+      reviewed: reviewed.length,
+      approved: reviewed.filter(s => s.approved).length,
+      rejected: reviewed.filter(s => !s.approved).length
+    };
+  }, [reviewStatus, nodeSequence]);
+  
+  const value: ReviewContextType = {
+    reviewStatus,
+    setNodeReviewed,
+    isNodeReviewed,
+    isNodeApproved,
+    getReviewedCount,
+    getTotalNodes,
+    resetReviews,
+    isWalkthroughMode,
+    startWalkthrough,
+    endWalkthrough,
+    currentNodeId,
+    setCurrentNode,
+    nextNode,
+    previousNode,
+    nodeSequence,
+    setNodeSequence,
+    canPublish,
+    getPublishStats
+  };
+  
+  return (
+    <ReviewContext.Provider value={value}>
+      {children}
+    </ReviewContext.Provider>
+  );
+}
+
+export function useReview() {
+  const context = useContext(ReviewContext);
+  if (context === undefined) {
+    throw new Error('useReview must be used within a ReviewProvider');
+  }
+  return context;
+}

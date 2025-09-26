@@ -1,10 +1,12 @@
 /**
  * Custom node component for ReactFlow
- * Renders state machine nodes with beautiful styling
+ * Renders state machine nodes with beautiful styling and review status
  */
+'use client';
 
 import { Handle, NodeProps, Position } from 'reactflow';
 import { memo } from 'react';
+import { useReview } from '@/context/review-context';
 
 export interface CustomNodeData {
   label: string;
@@ -18,8 +20,10 @@ export interface CustomNodeData {
 /**
  * Custom node component with type-specific styling
  */
-export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePosition = Position.Bottom }: NodeProps<CustomNodeData>) => {
-  const nodeStyles = getNodeStyles(data);
+export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePosition = Position.Bottom, id }: NodeProps<CustomNodeData>) => {
+  const { isNodeReviewed, isNodeApproved, currentNodeId, isWalkthroughMode } = useReview();
+  const nodeStyles = getNodeStyles(data, isNodeReviewed(id), isNodeApproved(id));
+  const isCurrentNode = currentNodeId === id && isWalkthroughMode;
   
   return (
     <>
@@ -29,7 +33,26 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
         className="!bg-gray-500"
       />
       
-      <div className={nodeStyles.container}>
+      <div className={`${nodeStyles.container} ${isCurrentNode ? 'ring-4 ring-purple-500 ring-opacity-50 animate-pulse' : ''}`}>
+        {/* Review Status Indicator */}
+        {isNodeReviewed(id) && (
+          <div className="absolute -top-2 -right-2 z-10">
+            {isNodeApproved(id) ? (
+              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            ) : (
+              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
+                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+            )}
+          </div>
+        )}
+        
         {data.isInitial && (
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
             <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">
@@ -92,18 +115,24 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
 
 CustomNode.displayName = 'CustomNode';
 
-function getNodeStyles(data: CustomNodeData): {
+function getNodeStyles(data: CustomNodeData, isReviewed: boolean, isApproved: boolean): {
   container: string;
   header: string;
   typeBadge: string;
 } {
+  let reviewBorderClass = '';
+  if (isReviewed) {
+    reviewBorderClass = isApproved ? 'border-green-500' : 'border-red-500';
+  }
+  
   const baseContainer = `
     bg-white dark:bg-gray-800 
-    border-2 rounded-lg shadow-lg
+    ${isReviewed ? 'border-4' : 'border-2'} ${reviewBorderClass} rounded-lg shadow-lg
     min-w-[200px] max-w-[250px]
     transition-all duration-200
     hover:shadow-xl hover:scale-[1.02]
     cursor-pointer
+    ${isReviewed ? 'opacity-90' : ''}
   `;
   
   const baseHeader = `

@@ -9,6 +9,8 @@ import { ProcessedStateMachine, ProcessedNode } from '@/domain/state-machine/pro
 import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
 import { CustomNode, CustomNodeData } from './graph/custom-node';
 import { NodeDetailModal } from './node-detail-modal';
+import { useReview } from '@/context/review-context';
+import { toast } from 'react-toastify';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -41,6 +43,20 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<ProcessedNode | null>(null);
+  
+  const {
+    isWalkthroughMode,
+    startWalkthrough,
+    endWalkthrough,
+    currentNodeId,
+    setCurrentNode,
+    setNodeSequence,
+    getReviewedCount,
+    getTotalNodes,
+    resetReviews,
+    canPublish,
+    getPublishStats
+  } = useReview();
   
   // Convert processed nodes to ReactFlow nodes
   const initialNodes = useMemo(() => {
@@ -109,13 +125,126 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     setEdges(layoutedEdges);
   }, [initialNodes, initialEdges, setNodes, setEdges]);
   
-  // Apply initial layout
+  // Apply initial layout and set node sequence
   useEffect(() => {
     applyLayout();
-  }, [applyLayout]);
+    // Set up the node sequence for walkthrough (follow the graph from initial)
+    const sequence = stateMachine.nodes.map(n => n.id);
+    setNodeSequence(sequence);
+  }, [applyLayout, stateMachine.nodes, setNodeSequence]);
+  
+  // Handle walkthrough node selection
+  useEffect(() => {
+    if (isWalkthroughMode && currentNodeId) {
+      const node = stateMachine.nodes.find(n => n.id === currentNodeId);
+      if (node) {
+        setSelectedNode(node);
+      }
+    }
+  }, [isWalkthroughMode, currentNodeId, stateMachine.nodes]);
+  
+  const handleStartWalkthrough = useCallback(() => {
+    resetReviews();
+    startWalkthrough();
+    toast.info('🚀 Starting walkthrough from the initial state', {
+      position: 'top-center',
+      autoClose: 3000,
+    });
+  }, [resetReviews, startWalkthrough]);
+  
+  const handlePublish = useCallback(() => {
+    const stats = getPublishStats();
+    if (canPublish()) {
+      toast.promise(
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve('Published');
+          }, 2000);
+        }),
+        {
+          pending: 'Publishing all reviewed rules...',
+          success: `🎉 Published ${stats.approved} approved rules successfully!`,
+          error: 'Failed to publish rules'
+        }
+      );
+    } else {
+      toast.warning(`⚠️ Cannot publish: ${stats.total - stats.reviewed} nodes not reviewed`, {
+        position: 'top-center',
+        autoClose: 4000,
+      });
+    }
+  }, [canPublish, getPublishStats]);
   
   return (
-    <div className="w-full h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="w-full h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 relative">
+      {/* Walkthrough Control Bar */}
+      <div className="absolute top-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-lg">
+        <div className="flex items-center justify-between px-6 py-3">
+          {/* Left side - Walkthrough controls */}
+          <div className="flex items-center gap-4">
+            {!isWalkthroughMode ? (
+              <button
+                onClick={handleStartWalkthrough}
+                className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all flex items-center gap-2 shadow-md"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Start Walkthrough
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={endWalkthrough}
+                  className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-all flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Exit Walkthrough
+                </button>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Reviewing: <span className="font-semibold text-gray-900 dark:text-gray-100">{currentNodeId}</span>
+                </div>
+              </>
+            )}
+            
+            {/* Progress indicator */}
+            <div className="flex items-center gap-3">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Progress: 
+                <span className="ml-2 font-semibold text-gray-900 dark:text-gray-100">
+                  {getReviewedCount()} / {getTotalNodes()}
+                </span>
+              </div>
+              <div className="w-32 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all"
+                  style={{ width: `${(getReviewedCount() / Math.max(getTotalNodes(), 1)) * 100}%` }}
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* Right side - Global publish button */}
+          <button
+            onClick={handlePublish}
+            disabled={!canPublish()}
+            className={`px-6 py-2 font-medium rounded-lg transition-all flex items-center gap-2 shadow-md ${
+              canPublish() 
+                ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white' 
+                : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            Publish All Rules ({getPublishStats().approved} approved)
+          </button>
+        </div>
+      </div>
+      
       <ReactFlowProvider>
         <ReactFlow
           nodes={nodes}
