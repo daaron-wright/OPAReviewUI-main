@@ -11,6 +11,8 @@ import { CustomNode, CustomNodeData } from './graph/custom-node';
 import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
 import { toast } from 'react-toastify';
+import { ConfettiCelebration } from '@/components/confetti-celebration';
+import { epicFinale } from '@/utils/confetti-presets';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -25,7 +27,6 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import Confetti from 'react-confetti';
 import 'reactflow/dist/style.css';
 
 interface StateMachineViewerProps {
@@ -48,7 +49,6 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   const [modalAnimation, setModalAnimation] = useState<'entering' | 'exiting' | 'none'>('none');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
   
   const {
     isWalkthroughMode,
@@ -161,17 +161,6 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     setNodeSequence(sequence);
   }, [applyLayout, stateMachine.nodes, setNodeSequence]);
   
-  // Track window dimensions for confetti
-  useEffect(() => {
-    const updateDimensions = () => {
-      setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
-    };
-    
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
-  
   // Store ReactFlow instance
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
   const onInit = useCallback((instance: any) => setReactFlowInstance(instance), []);
@@ -239,10 +228,6 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
     const stats = getPublishStats();
     setShowPublishModal(false);
     
-    // PARTY TIME! 🎉
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 7000); // Stop confetti after 7 seconds
-    
     toast.promise(
       new Promise((resolve) => {
         setTimeout(() => {
@@ -266,6 +251,11 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
         },
         success: {
           render() {
+            // PARTY TIME! Trigger the EPIC celebration!
+            setShowConfetti(true);
+            // Also trigger the EPIC FINALE for maximum celebration
+            setTimeout(() => epicFinale(), 100);
+            
             return (
               <div>
                 <div className="font-semibold">🎉 State Machine Published Successfully!</div>
@@ -292,19 +282,6 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   
   return (
     <div className="w-full h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 relative">
-      {/* Confetti Party! 🎉 */}
-      {showConfetti && (
-        <Confetti
-          width={windowDimensions.width}
-          height={windowDimensions.height}
-          recycle={false}
-          numberOfPieces={500}
-          gravity={0.15}
-          colors={['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722']}
-          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100 }}
-        />
-      )}
-      
       {/* Walkthrough Control Bar */}
       <div className="absolute top-0 left-0 right-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-lg">
         <div className="flex items-center justify-between px-6 py-3">
@@ -629,6 +606,12 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
           </div>
         </div>
       )}
+      
+      {/* Confetti Celebration - Modular party component! */}
+      <ConfettiCelebration 
+        trigger={showConfetti} 
+        onComplete={() => setShowConfetti(false)}
+      />
     </div>
   );
 }

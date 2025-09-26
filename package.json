@@ -10,17 +10,18 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "canvas-confetti": "^1.9.3",
     "clsx": "^2.1.1",
     "dagre": "^0.8.5",
     "next": "^14.2.15",
     "react": "^18.3.1",
-    "react-confetti": "^6.4.0",
     "react-dom": "^18.3.1",
     "react-toastify": "^11.0.5",
     "reactflow": "^11.11.4",
     "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/dagre": "^0.7.52",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.5",
