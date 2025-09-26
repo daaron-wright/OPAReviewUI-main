@@ -403,9 +403,9 @@ export function NodeDetailModal({
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className="relative w-full max-w-[90rem] max-h-[95vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl animate-slide-up overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className={`p-4 border-b ${getHeaderStyle(node)}`}>
+      <div className="relative w-full max-w-[90rem] max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl animate-slide-up flex flex-col">
+        {/* Header - Fixed at top */}
+        <div className={`flex-shrink-0 p-4 border-b ${getHeaderStyle(node)}`}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <h2 id="modal-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">
@@ -507,10 +507,10 @@ export function NodeDetailModal({
           </div>
         </div>
         
-        {/* Side-by-Side Content */}
-        <div className="flex-1 grid grid-cols-2 divide-x divide-gray-200 dark:divide-gray-700 overflow-hidden">
-          {/* Left Panel - BRD References */}
-          <div className="overflow-y-auto p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        {/* Side-by-Side Content - Scrollable area */}
+        <div className="flex-1 grid grid-cols-2 divide-x divide-gray-200 dark:divide-gray-700 min-h-0">
+          {/* Left Panel - BRD References - Independent scroll */}
+          <div className="overflow-y-auto p-6 max-h-full" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="space-y-4">
               <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
                 <div className="flex items-center gap-2 mb-1">
@@ -607,8 +607,8 @@ export function NodeDetailModal({
             </div>
           </div>
           
-          {/* Right Panel - Policy Rules */}
-          <div className="overflow-y-auto p-6">
+          {/* Right Panel - Policy Rules - Independent scroll */}
+          <div className="overflow-y-auto p-6 max-h-full">
             <div className="space-y-4">
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border border-purple-200 dark:border-purple-800 rounded-lg p-3">
                 <div className="flex items-center gap-2">
@@ -841,7 +841,7 @@ export function NodeDetailModal({
         
         {/* Review Actions Bar - Only show if not already reviewed */}
         {!isNodeReviewed(node.id) && (
-          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4">
+          <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Have you completed reviewing this node?
