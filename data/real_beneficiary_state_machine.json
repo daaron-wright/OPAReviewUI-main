@@ -1,0 +1,1151 @@
+{
+  "stateMachine": {
+    "name": "RealBeneficiaryDeclarationService",
+    "version": "1.0",
+    "description": "Comprehensive state machine for Abu Dhabi DED Real Beneficiary Declaration Service covering all 9 routines",
+    "initialState": "entry_point",
+    "finalStates": [
+      "application_approved",
+      "application_rejected",
+      "application_blocked",
+      "permission_denied",
+      "ineligible",
+      "duplicate_declaration",
+      "license_not_found",
+      "exit_pending_customer"
+    ],
+    "states": {
+      "entry_point": {
+        "type": "decision",
+        "description": "Determine entry path - customer portal or employee portal",
+        "transitions": [
+          {
+            "condition": "entry_type == 'customer'",
+            "target": "customer_application_type_selection",
+            "action": "log_customer_entry"
+          },
+          {
+            "condition": "entry_type == 'employee'",
+            "target": "employee_permission_check",
+            "action": "log_employee_entry"
+          }
+        ]
+      },
+      
+      "customer_application_type_selection": {
+        "type": "decision",
+        "description": "Customer selects type of application",
+        "transitions": [
+          {
+            "condition": "application_type == 'new_trade_name'",
+            "target": "routine1_digital_id_verification",
+            "action": "start_routine1"
+          },
+          {
+            "condition": "application_type == 'existing_trade_name'",
+            "target": "routine2_digital_id_verification",
+            "action": "start_routine2"
+          },
+          {
+            "condition": "application_type == 'existing_license'",
+            "target": "routine3_digital_id_verification",
+            "action": "start_routine3"
+          }
+        ]
+      },
+
+      "routine1_digital_id_verification": {
+        "type": "process",
+        "description": "Verify Digital ID level (SOP2/SOP3)",
+        "function": "verify_digital_id_login_level",
+        "transitions": [
+          {
+            "condition": "digital_id_level in ['SOP2', 'SOP3']",
+            "target": "routine1_eligibility_check",
+            "action": "proceed_with_verification"
+          },
+          {
+            "condition": "digital_id_level not in ['SOP2', 'SOP3']",
+            "target": "ineligible",
+            "action": "notify_insufficient_digital_id"
+          }
+        ]
+      },
+
+      "routine1_eligibility_check": {
+        "type": "process",
+        "description": "Check eligibility requirements",
+        "function": "check_eligibility_requirements",
+        "transitions": [
+          {
+            "condition": "eligibility_check == true",
+            "target": "routine1_trade_name_check",
+            "action": "proceed_to_trade_name_check"
+          },
+          {
+            "condition": "eligibility_check == false",
+            "target": "ineligible",
+            "action": "notify_eligibility_failure"
+          }
+        ]
+      },
+
+      "routine1_trade_name_check": {
+        "type": "process",
+        "description": "Check for existing reserved trade names",
+        "function": "fetch_available_trade_names",
+        "transitions": [
+          {
+            "condition": "has_reserved_trade_names == true AND user_selects_existing == true",
+            "target": "routine2_digital_id_verification",
+            "action": "redirect_to_routine2"
+          },
+          {
+            "condition": "has_reserved_trade_names == false OR user_selects_new == true",
+            "target": "routine1_collect_trade_name_data",
+            "action": "proceed_with_new_trade_name"
+          }
+        ]
+      },
+
+      "routine1_collect_trade_name_data": {
+        "type": "process",
+        "description": "Collect new trade name data",
+        "function": "invoke_trade_name_reservation_service",
+        "transitions": [
+          {
+            "condition": "trade_name_data_collected == true",
+            "target": "routine1_exemption_check",
+            "action": "proceed_to_exemption_check"
+          }
+        ]
+      },
+
+      "routine1_exemption_check": {
+        "type": "decision",
+        "description": "Check if legal form is exempt from beneficiary declaration",
+        "function": "check_exemption_rules",
+        "transitions": [
+          {
+            "condition": "is_exempt == true",
+            "target": "routine1_blacklist_precheck",
+            "action": "skip_beneficiary_collection"
+          },
+          {
+            "condition": "is_exempt == false",
+            "target": "routine1_collect_beneficiary_data",
+            "action": "proceed_to_beneficiary_collection"
+          }
+        ]
+      },
+
+      "routine1_collect_beneficiary_data": {
+        "type": "process",
+        "description": "Collect partnership structure and beneficiary data",
+        "functions": [
+          "pull_partner_data_from_ded",
+          "retrieve_partner_data_from_NER",
+          "determine_ultimate_beneficiaries",
+          "validate_screen_fields"
+        ],
+        "transitions": [
+          {
+            "condition": "beneficiary_data_collected == true",
+            "target": "routine1_blacklist_precheck",
+            "action": "proceed_to_precheck"
+          }
+        ]
+      },
+
+      "routine1_blacklist_precheck": {
+        "type": "process",
+        "description": "Screen against blacklists and calculate preliminary risk",
+        "functions": [
+          "screen_against_blacklists",
+          "calculate_risk_score"
+        ],
+        "transitions": [
+          {
+            "condition": "blacklist_hit == true",
+            "target": "application_blocked",
+            "action": "block_application"
+          },
+          {
+            "condition": "blacklist_hit == false",
+            "target": "routine1_submit_application",
+            "action": "proceed_to_submission"
+          }
+        ]
+      },
+
+      "routine1_submit_application": {
+        "type": "process",
+        "description": "Submit application and assign to team",
+        "functions": [
+          "submit_application_to_internal_system",
+          "assign_application_to_employee",
+          "notify_user"
+        ],
+        "transitions": [
+          {
+            "condition": "application_submitted == true",
+            "target": "internal_review_start",
+            "action": "proceed_to_internal_review"
+          }
+        ]
+      },
+
+      "routine2_digital_id_verification": {
+        "type": "process",
+        "description": "Verify Digital ID level for existing trade name",
+        "function": "verify_digital_id_login_level",
+        "transitions": [
+          {
+            "condition": "digital_id_level in ['SOP2', 'SOP3']",
+            "target": "routine2_eligibility_check",
+            "action": "proceed_with_verification"
+          },
+          {
+            "condition": "digital_id_level not in ['SOP2', 'SOP3']",
+            "target": "ineligible",
+            "action": "notify_insufficient_digital_id"
+          }
+        ]
+      },
+
+      "routine2_eligibility_check": {
+        "type": "process",
+        "description": "Check eligibility requirements for existing trade name",
+        "function": "check_eligibility_requirements",
+        "transitions": [
+          {
+            "condition": "eligibility_check == true",
+            "target": "routine2_check_issued_names",
+            "action": "proceed_to_name_check"
+          },
+          {
+            "condition": "eligibility_check == false",
+            "target": "ineligible",
+            "action": "notify_eligibility_failure"
+          }
+        ]
+      },
+
+      "routine2_check_issued_names": {
+        "type": "process",
+        "description": "Check for issued trade names without license",
+        "function": "fetch_issued_trade_names_without_license",
+        "transitions": [
+          {
+            "condition": "has_issued_names == false",
+            "target": "routine1_digital_id_verification",
+            "action": "redirect_to_routine1"
+          },
+          {
+            "condition": "has_issued_names == true",
+            "target": "routine2_select_trade_name",
+            "action": "proceed_to_name_selection"
+          }
+        ]
+      },
+
+      "routine2_select_trade_name": {
+        "type": "process",
+        "description": "User selects trade name and system retrieves data",
+        "function": "pull_trade_name_data",
+        "transitions": [
+          {
+            "condition": "trade_name_selected == true",
+            "target": "routine2_exemption_check",
+            "action": "proceed_to_exemption_check"
+          }
+        ]
+      },
+
+      "routine2_exemption_check": {
+        "type": "decision",
+        "description": "Check exemption for selected trade name",
+        "function": "check_exemption_rules",
+        "transitions": [
+          {
+            "condition": "is_exempt == true",
+            "target": "routine2_blacklist_precheck",
+            "action": "skip_beneficiary_collection"
+          },
+          {
+            "condition": "is_exempt == false",
+            "target": "routine2_collect_beneficiary_extras",
+            "action": "proceed_to_beneficiary_collection"
+          }
+        ]
+      },
+
+      "routine2_collect_beneficiary_extras": {
+        "type": "process",
+        "description": "Collect only missing beneficiary details (structure locked)",
+        "transitions": [
+          {
+            "condition": "beneficiary_extras_collected == true",
+            "target": "routine2_partner_companies_check",
+            "action": "proceed_to_partner_check"
+          }
+        ]
+      },
+
+      "routine2_partner_companies_check": {
+        "type": "process",
+        "description": "Handle partner companies and natural person identification",
+        "transitions": [
+          {
+            "condition": "partner_companies_handled == true",
+            "target": "routine2_blacklist_precheck",
+            "action": "proceed_to_precheck"
+          }
+        ]
+      },
+
+      "routine2_blacklist_precheck": {
+        "type": "process",
+        "description": "Screen against blacklists and calculate risk",
+        "functions": [
+          "screen_against_blacklists",
+          "calculate_risk_score"
+        ],
+        "transitions": [
+          {
+            "condition": "blacklist_hit == true",
+            "target": "application_blocked",
+            "action": "block_application"
+          },
+          {
+            "condition": "blacklist_hit == false",
+            "target": "routine2_submit_application",
+            "action": "proceed_to_submission"
+          }
+        ]
+      },
+
+      "routine2_submit_application": {
+        "type": "process",
+        "description": "Submit application with due diligence team assignment",
+        "functions": [
+          "submit_application_to_internal_system",
+          "assign_application_to_employee",
+          "notify_user"
+        ],
+        "transitions": [
+          {
+            "condition": "application_submitted == true",
+            "target": "internal_review_start",
+            "action": "proceed_to_internal_review"
+          }
+        ]
+      },
+
+      "routine3_digital_id_verification": {
+        "type": "process",
+        "description": "Verify Digital ID for existing license",
+        "function": "verify_digital_id_login_level",
+        "transitions": [
+          {
+            "condition": "digital_id_level in ['SOP2', 'SOP3']",
+            "target": "routine3_eligibility_check",
+            "action": "proceed_with_verification"
+          },
+          {
+            "condition": "digital_id_level not in ['SOP2', 'SOP3']",
+            "target": "ineligible",
+            "action": "notify_insufficient_digital_id"
+          }
+        ]
+      },
+
+      "routine3_eligibility_check": {
+        "type": "process",
+        "description": "Check eligibility for existing license",
+        "function": "check_eligibility_requirements",
+        "transitions": [
+          {
+            "condition": "eligibility_check == true",
+            "target": "routine3_license_prompt",
+            "action": "proceed_to_license_prompt"
+          },
+          {
+            "condition": "eligibility_check == false",
+            "target": "ineligible",
+            "action": "notify_eligibility_failure"
+          }
+        ]
+      },
+
+      "routine3_license_prompt": {
+        "type": "process",
+        "description": "Prompt for license number and emirate",
+        "function": "retrieve_license_data",
+        "transitions": [
+          {
+            "condition": "license_found == true",
+            "target": "routine3_declaration_check",
+            "action": "proceed_to_declaration_check"
+          },
+          {
+            "condition": "license_found == false",
+            "target": "license_not_found",
+            "action": "notify_license_not_found"
+          }
+        ]
+      },
+
+      "routine3_declaration_check": {
+        "type": "process",
+        "description": "Check if declaration already exists for license",
+        "function": "check_existing_declaration",
+        "transitions": [
+          {
+            "condition": "declaration_exists == true",
+            "target": "duplicate_declaration",
+            "action": "notify_duplicate_declaration"
+          },
+          {
+            "condition": "declaration_exists == false",
+            "target": "routine3_collect_beneficiary_data",
+            "action": "proceed_to_data_collection"
+          }
+        ]
+      },
+
+      "routine3_collect_beneficiary_data": {
+        "type": "process",
+        "description": "Auto-populate known data and collect missing beneficiary info",
+        "transitions": [
+          {
+            "condition": "beneficiary_data_collected == true",
+            "target": "routine3_submit_application",
+            "action": "proceed_to_submission"
+          }
+        ]
+      },
+
+      "routine3_submit_application": {
+        "type": "process",
+        "description": "Submit to due diligence team",
+        "functions": [
+          "submit_application_to_internal_system",
+          "assign_application_to_employee",
+          "notify_user"
+        ],
+        "transitions": [
+          {
+            "condition": "application_submitted == true",
+            "target": "internal_review_start",
+            "action": "proceed_to_internal_review"
+          }
+        ]
+      },
+
+      "employee_permission_check": {
+        "type": "process",
+        "description": "Verify employee permission to submit on behalf",
+        "function": "verify_employee_permission",
+        "transitions": [
+          {
+            "condition": "has_permission == true",
+            "target": "employee_authorization_upload",
+            "action": "proceed_to_authorization"
+          },
+          {
+            "condition": "has_permission == false",
+            "target": "permission_denied",
+            "action": "deny_permission"
+          }
+        ]
+      },
+
+      "employee_authorization_upload": {
+        "type": "process",
+        "description": "Upload customer authorization document",
+        "function": "attach_authorisation",
+        "transitions": [
+          {
+            "condition": "authorization_uploaded == true",
+            "target": "employee_application_path_selection",
+            "action": "proceed_to_path_selection"
+          }
+        ]
+      },
+
+      "employee_application_path_selection": {
+        "type": "decision",
+        "description": "Employee selects application path",
+        "transitions": [
+          {
+            "condition": "path == 'new_trade_name'",
+            "target": "employee_follow_routine1",
+            "action": "follow_routine1_steps"
+          },
+          {
+            "condition": "path == 'existing_trade_name'",
+            "target": "employee_follow_routine2",
+            "action": "follow_routine2_steps"
+          }
+        ]
+      },
+
+      "employee_follow_routine1": {
+        "type": "process",
+        "description": "Employee follows Routine 1 steps",
+        "transitions": [
+          {
+            "condition": "routine1_completed == true",
+            "target": "employee_notification",
+            "action": "proceed_to_notification"
+          }
+        ]
+      },
+
+      "employee_follow_routine2": {
+        "type": "process",
+        "description": "Employee follows Routine 2 steps",
+        "transitions": [
+          {
+            "condition": "routine2_completed == true",
+            "target": "employee_notification",
+            "action": "proceed_to_notification"
+          }
+        ]
+      },
+
+      "employee_notification": {
+        "type": "process",
+        "description": "Notify customer of submission on their behalf",
+        "function": "notify_user",
+        "transitions": [
+          {
+            "condition": "customer_notified == true",
+            "target": "employee_sync_status",
+            "action": "proceed_to_sync"
+          }
+        ]
+      },
+
+      "employee_sync_status": {
+        "type": "process",
+        "description": "Sync status to TAMM platform",
+        "function": "sync_status_to_TAMM",
+        "transitions": [
+          {
+            "condition": "status_synced == true",
+            "target": "internal_review_start",
+            "action": "proceed_to_internal_review"
+          }
+        ]
+      },
+
+      "internal_review_start": {
+        "type": "process",
+        "description": "Start internal review and due diligence (Routine 4)",
+        "function": "assign_application_to_employee",
+        "transitions": [
+          {
+            "condition": "assigned_to_due_diligence == true",
+            "target": "internal_review_missing_data_check",
+            "action": "start_internal_review"
+          }
+        ]
+      },
+
+      "internal_review_missing_data_check": {
+        "type": "decision",
+        "description": "Check for missing data or documents",
+        "function": "get_missing_fields",
+        "transitions": [
+          {
+            "condition": "has_missing_data == true",
+            "target": "request_additional_information",
+            "action": "request_missing_info"
+          },
+          {
+            "condition": "has_missing_data == false",
+            "target": "internal_review_validate_documents",
+            "action": "proceed_to_validation"
+          }
+        ]
+      },
+
+      "request_additional_information": {
+        "type": "process",
+        "description": "Request additional information from customer",
+        "functions": [
+          "request_additional_information",
+          "notify_user"
+        ],
+        "transitions": [
+          {
+            "condition": "additional_info_requested == true",
+            "target": "exit_pending_customer",
+            "action": "exit_routine_pending_customer"
+          }
+        ]
+      },
+
+      "internal_review_validate_documents": {
+        "type": "process",
+        "description": "Validate documents and data accuracy",
+        "function": "validate_documents",
+        "transitions": [
+          {
+            "condition": "documents_valid == true",
+            "target": "internal_review_calculate_risk",
+            "action": "proceed_to_risk_calculation"
+          }
+        ]
+      },
+
+      "internal_review_calculate_risk": {
+        "type": "process",
+        "description": "Calculate risk score and category",
+        "function": "calculate_risk_score",
+        "transitions": [
+          {
+            "condition": "risk_calculated == true",
+            "target": "alert_screening_start",
+            "action": "proceed_to_alert_screening"
+          }
+        ]
+      },
+
+      "alert_screening_start": {
+        "type": "process",
+        "description": "Run automatic alert screening (Routine 5)",
+        "function": "screen_against_global_lists",
+        "transitions": [
+          {
+            "condition": "has_alerts == false",
+            "target": "alert_screening_complete",
+            "action": "no_alerts_found"
+          },
+          {
+            "condition": "has_alerts == true",
+            "target": "alert_screening_review_results",
+            "action": "review_alert_results"
+          }
+        ]
+      },
+
+      "alert_screening_review_results": {
+        "type": "decision",
+        "description": "Employee reviews alert results",
+        "transitions": [
+          {
+            "condition": "alert_result == 'positive_pep'",
+            "target": "alert_screening_pep_handling",
+            "action": "handle_pep_alert"
+          },
+          {
+            "condition": "alert_result == 'positive_blacklist'",
+            "target": "alert_screening_blacklist_block",
+            "action": "block_for_blacklist"
+          },
+          {
+            "condition": "alert_result == 'possible'",
+            "target": "alert_screening_escalate_edd",
+            "action": "escalate_to_edd"
+          },
+          {
+            "condition": "alert_result == 'negative'",
+            "target": "alert_screening_record_reason",
+            "action": "record_negative_reason"
+          }
+        ]
+      },
+
+      "alert_screening_pep_handling": {
+        "type": "decision",
+        "description": "Handle PEP alert and VIP flagging",
+        "transitions": [
+          {
+            "condition": "flag_as_vip == true",
+            "target": "alert_screening_vip_request",
+            "action": "request_vip_approval"
+          },
+          {
+            "condition": "flag_as_vip == false",
+            "target": "alert_screening_complete",
+            "action": "complete_pep_handling"
+          }
+        ]
+      },
+
+      "alert_screening_vip_request": {
+        "type": "process",
+        "description": "Request VIP approval",
+        "function": "request_vip_approval",
+        "transitions": [
+          {
+            "condition": "vip_request_submitted == true",
+            "target": "alert_screening_complete",
+            "action": "complete_vip_request"
+          }
+        ]
+      },
+
+      "alert_screening_blacklist_block": {
+        "type": "process",
+        "description": "Block application due to blacklist hit",
+        "functions": [
+          "block_application",
+          "notify_license_department_suspend"
+        ],
+        "transitions": [
+          {
+            "condition": "application_blocked == true",
+            "target": "application_blocked",
+            "action": "finalize_block"
+          }
+        ]
+      },
+
+      "alert_screening_escalate_edd": {
+        "type": "process",
+        "description": "Escalate possible match to EDD team",
+        "function": "assign_application_to_employee",
+        "transitions": [
+          {
+            "condition": "escalated_to_edd == true",
+            "target": "alert_screening_complete",
+            "action": "complete_escalation"
+          }
+        ]
+      },
+
+      "alert_screening_record_reason": {
+        "type": "process",
+        "description": "Record reason for negative match",
+        "transitions": [
+          {
+            "condition": "reason_recorded == true",
+            "target": "alert_screening_complete",
+            "action": "complete_negative_handling"
+          }
+        ]
+      },
+
+      "alert_screening_complete": {
+        "type": "process",
+        "description": "Complete alert screening and update status",
+        "function": "update_alert_status",
+        "transitions": [
+          {
+            "condition": "alert_status_updated == true",
+            "target": "risk_category_calculation",
+            "action": "proceed_to_risk_calculation"
+          }
+        ]
+      },
+
+      "risk_category_calculation": {
+        "type": "process",
+        "description": "Calculate final risk category (Routine 6)",
+        "functions": [
+          "fetch_risk_inputs",
+          "calculate_risk_score",
+          "log_risk_result"
+        ],
+        "transitions": [
+          {
+            "condition": "risk_category_calculated == true",
+            "target": "risk_category_decision",
+            "action": "proceed_to_risk_decision"
+          }
+        ]
+      },
+
+      "risk_category_decision": {
+        "type": "decision",
+        "description": "Route based on calculated risk category",
+        "transitions": [
+          {
+            "condition": "risk_category in ['low', 'medium'] AND alerts_clear == true",
+            "target": "low_medium_risk_approval",
+            "action": "process_low_medium_risk"
+          },
+          {
+            "condition": "risk_category in ['medium_high', 'high']",
+            "target": "high_risk_edd_assignment",
+            "action": "assign_to_edd"
+          },
+          {
+            "condition": "risk_category == 'prohibited'",
+            "target": "prohibited_risk_manager_review",
+            "action": "assign_to_manager"
+          }
+        ]
+      },
+
+      "low_medium_risk_approval": {
+        "type": "process",
+        "description": "Process low/medium risk applications",
+        "transitions": [
+          {
+            "condition": "marked_approved_pending_reviewer == true",
+            "target": "reviewer_confirmation",
+            "action": "assign_to_reviewer"
+          }
+        ]
+      },
+
+      "reviewer_confirmation": {
+        "type": "process",
+        "description": "Reviewer confirms and issues unified number",
+        "functions": [
+          "assign_application_to_employee",
+          "issue_unified_registration_number"
+        ],
+        "transitions": [
+          {
+            "condition": "unified_number_issued == true",
+            "target": "application_approved",
+            "action": "finalize_approval"
+          }
+        ]
+      },
+
+      "high_risk_edd_assignment": {
+        "type": "process",
+        "description": "Assign to Enhanced Due Diligence team",
+        "function": "assign_application_to_employee",
+        "transitions": [
+          {
+            "condition": "assigned_to_edd == true",
+            "target": "edd_checks_process",
+            "action": "start_edd_checks"
+          }
+        ]
+      },
+
+      "edd_checks_process": {
+        "type": "process",
+        "description": "Perform enhanced due diligence checks",
+        "function": "perform_edd_checks",
+        "transitions": [
+          {
+            "condition": "edd_outcome == 'approve'",
+            "target": "reviewer_confirmation",
+            "action": "proceed_to_reviewer"
+          },
+          {
+            "condition": "edd_outcome == 'reject'",
+            "target": "manager_rejection_review",
+            "action": "proceed_to_manager_review"
+          }
+        ]
+      },
+
+      "prohibited_risk_manager_review": {
+        "type": "process",
+        "description": "Manager reviews prohibited risk applications",
+        "function": "assign_application_to_manager",
+        "transitions": [
+          {
+            "condition": "manager_review_complete == true",
+            "target": "manager_rejection_review",
+            "action": "proceed_to_rejection"
+          }
+        ]
+      },
+
+      "manager_rejection_review": {
+        "type": "process",
+        "description": "Manager finalizes rejection decision",
+        "transitions": [
+          {
+            "condition": "rejection_finalized == true",
+            "target": "application_rejected",
+            "action": "finalize_rejection"
+          }
+        ]
+      },
+
+      "application_approved": {
+        "type": "final",
+        "description": "Application approved - issue unified number and notify",
+        "functions": [
+          "issue_unified_registration_number",
+          "notify_user"
+        ],
+        "nextState": "notification_management"
+      },
+
+      "application_rejected": {
+        "type": "final",
+        "description": "Application rejected - notify user with reason",
+        "functions": [
+          "notify_user"
+        ],
+        "nextState": "notification_management"
+      },
+
+      "application_blocked": {
+        "type": "final",
+        "description": "Application blocked due to blacklist hit",
+        "functions": [
+          "block_application",
+          "notify_user"
+        ],
+        "nextState": "notification_management"
+      },
+
+      "notification_management": {
+        "type": "process",
+        "description": "Handle all notifications (Routine 8)",
+        "functions": [
+          "get_notification_preferences",
+          "compose_notification",
+          "log_notification"
+        ],
+        "transitions": [
+          {
+            "condition": "notification_sent == true",
+            "target": "process_complete",
+            "action": "complete_process"
+          }
+        ]
+      },
+
+      "process_complete": {
+        "type": "final",
+        "description": "Process completed successfully"
+      },
+
+      "ineligible": {
+        "type": "final",
+        "description": "Applicant ineligible - end process",
+        "functions": [
+          "notify_user"
+        ]
+      },
+
+      "permission_denied": {
+        "type": "final",
+        "description": "Employee permission denied",
+        "functions": [
+          "notify_user"
+        ]
+      },
+
+      "duplicate_declaration": {
+        "type": "final",
+        "description": "Declaration already exists for license",
+        "functions": [
+          "notify_user"
+        ]
+      },
+
+      "license_not_found": {
+        "type": "final",
+        "description": "License not found in registry",
+        "functions": [
+          "notify_user"
+        ]
+      },
+
+      "exit_pending_customer": {
+        "type": "final",
+        "description": "Exit routine pending customer response",
+        "functions": [
+          "notify_user"
+        ]
+      }
+    },
+
+    "globalFunctions": {
+      "verify_digital_id_login_level": {
+        "description": "Confirms applicant's UAE Pass login level",
+        "parameters": ["applicant_id"],
+        "returns": "level"
+      },
+      "check_eligibility_requirements": {
+        "description": "Applies BRD eligibility matrix",
+        "parameters": ["applicant_id"],
+        "returns": "bool"
+      },
+      "fetch_available_trade_names": {
+        "description": "Lists reserved, unlicensed trade names for user",
+        "parameters": ["applicant_id"],
+        "returns": "list"
+      },
+      "invoke_trade_name_reservation_service": {
+        "description": "Creates trade-name reservation record",
+        "parameters": ["trade_name_data"],
+        "returns": "reservation_id"
+      },
+      "check_exemption_rules": {
+        "description": "Determines if legal form is exempt from beneficiary declaration",
+        "parameters": ["legal_form"],
+        "returns": "bool"
+      },
+      "screen_against_blacklists": {
+        "description": "Checks applicants vs CID/Internal security & departmental blacklist",
+        "parameters": ["participants"],
+        "returns": ["status", "details"]
+      },
+      "calculate_risk_score": {
+        "description": "Computes overall risk score using matrices & overrides",
+        "parameters": ["application_id_or_data"],
+        "returns": ["score", "category"]
+      },
+      "submit_application_to_internal_system": {
+        "description": "Persists application & generates ID",
+        "parameters": ["application_data"],
+        "returns": "application_id"
+      },
+      "assign_application_to_employee": {
+        "description": "Places application in queue for role",
+        "parameters": ["application_id", "employee_role"],
+        "returns": "None"
+      },
+      "notify_user": {
+        "description": "Sends notification via preferred channels",
+        "parameters": ["user_id", "subject", "payload"],
+        "returns": "notification_id"
+      },
+      "validate_screen_fields": {
+        "description": "Validates individual field entries (Routine 9)",
+        "parameters": ["field_name", "value"],
+        "returns": ["bool", "message"]
+      },
+      "screen_against_global_lists": {
+        "description": "Runs automatic PEP/CTC/etc. screening",
+        "parameters": ["participants"],
+        "returns": "alert_list"
+      },
+      "update_alert_status": {
+        "description": "Saves final alert handling result to system",
+        "parameters": ["application_id"],
+        "returns": "None"
+      },
+      "fetch_risk_inputs": {
+        "description": "Gathers risk inputs for calculation",
+        "parameters": ["application_id"],
+        "returns": "risk_inputs"
+      },
+      "log_risk_result": {
+        "description": "Logs risk calculation result",
+        "parameters": ["application_id", "score", "category"],
+        "returns": "None"
+      },
+      "issue_unified_registration_number": {
+        "description": "Generates & stores unique unified no.; issues certificate",
+        "parameters": ["application_id"],
+        "returns": "unified_no"
+      },
+      "perform_edd_checks": {
+        "description": "Executes enhanced due-diligence tasks",
+        "parameters": ["application_id"],
+        "returns": "outcome"
+      },
+      "get_notification_preferences": {
+        "description": "Reads user's preferred channels",
+        "parameters": ["user_id"],
+        "returns": "preferences"
+      },
+      "compose_notification": {
+        "description": "Builds notification content from template",
+        "parameters": ["template_id", "parameters"],
+        "returns": "content"
+      },
+      "log_notification": {
+        "description": "Writes notification audit record",
+        "parameters": ["notification_id", "user_id", "channel"],
+        "returns": "None"
+      }
+    },
+
+    "dataValidationRules": {
+      "apartment_number": {
+        "type": "numeric",
+        "range": [1, 9999],
+        "errorMessage": "Apartment number must be numeric (1-9999)"
+      },
+      "floor_number": {
+        "type": "numeric", 
+        "range": [0, 999],
+        "errorMessage": "Floor number must be numeric (0-999)"
+      },
+      "percentage_share": {
+        "type": "decimal",
+        "range": [0, 100],
+        "precision": 2,
+        "errorMessage": "Percentage must be 0-100 with max 2 decimal places"
+      }
+    },
+
+    "riskMatrix": {
+      "categories": ["low", "medium", "medium_high", "high", "prohibited"],
+      "overrideRules": [
+        {
+          "condition": "ctc_positive == true",
+          "forceCategory": "high"
+        },
+        {
+          "condition": "pep_status == true AND high_risk_jurisdiction == true",
+          "forceCategory": "high"
+        }
+      ],
+      "scoringCriteria": [
+        {
+          "factor": "jurisdiction_risk",
+          "weights": {
+            "low": 1,
+            "medium": 3,
+            "high": 5
+          }
+        },
+        {
+          "factor": "business_activity_risk",
+          "weights": {
+            "low": 1,
+            "medium": 2,
+            "high": 4
+          }
+        },
+        {
+          "factor": "pep_involvement",
+          "weights": {
+            "none": 0,
+            "indirect": 2,
+            "direct": 4
+          }
+        }
+      ]
+    },
+
+    "exemptionRules": {
+      "exemptLegalForms": [
+        "public_joint_stock_company",
+        "government_entity",
+        "public_institution"
+      ],
+      "exemptionCriteria": [
+        {
+          "condition": "legal_form in exemptLegalForms",
+          "exempt": true
+        },
+        {
+          "condition": "publicly_traded == true",
+          "exempt": true
+        }
+      ]
+    },
+
+    "metadata": {
+      "createdBy": "DED Abu Dhabi",
+      "version": "1.0",
+      "lastUpdated": "2024-01-01",
+      "compliance": "AML/KYC Regulations UAE",
+      "auditTrail": true,
+      "supportedChannels": ["web", "mobile", "api"],
+      "languages": ["en", "ar"]
+    }
+  }
+}
