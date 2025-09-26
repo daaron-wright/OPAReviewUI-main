@@ -164,7 +164,7 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   
   // Handle walkthrough node selection with cinematic animation
   useEffect(() => {
-    if (isWalkthroughMode && currentNodeId && reactFlowInstance) {
+    if (isWalkthroughMode && currentNodeId && reactFlowInstance && !isTransitioning) {
       const flowNode = nodes.find(n => n.id === currentNodeId);
       const processedNode = stateMachine.nodes.find(n => n.id === currentNodeId);
       
@@ -176,27 +176,33 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
         
         // Then pan and zoom to the new node
         setTimeout(() => {
-          reactFlowInstance.setCenter(
-            flowNode.position.x + 110,
-            flowNode.position.y + 60,
-            {
-              duration: 1200,
-              zoom: 1.8,
-            }
-          );
+          // Check if still in walkthrough mode (in case it was exited)
+          if (isWalkthroughMode) {
+            reactFlowInstance.setCenter(
+              flowNode.position.x + 110,
+              flowNode.position.y + 60,
+              {
+                duration: 1200,
+                zoom: 1.8,
+              }
+            );
+          }
         }, 700);
         
         // Open modal after full animation
         setTimeout(() => {
           setIsTransitioning(false);
-          const pos = getNodeDOMPosition(currentNodeId);
-          setNodePosition(pos);
-          setModalAnimation('entering');
-          setSelectedNode(processedNode);
+          // Only open modal if still in walkthrough mode
+          if (isWalkthroughMode) {
+            const pos = getNodeDOMPosition(currentNodeId);
+            setNodePosition(pos);
+            setModalAnimation('entering');
+            setSelectedNode(processedNode);
+          }
         }, 2000);
       }
     }
-  }, [isWalkthroughMode, currentNodeId, stateMachine.nodes, nodes, reactFlowInstance, getNodeDOMPosition]);
+  }, [isWalkthroughMode, currentNodeId, stateMachine.nodes, nodes, reactFlowInstance, getNodeDOMPosition, isTransitioning]);
   
   const handleStartWalkthrough = useCallback(() => {
     resetReviews();
@@ -264,12 +270,16 @@ export function StateMachineViewer({ stateMachine, rawStates }: StateMachineView
   }, [getPublishStats]);
   
   const handleApproveAll = useCallback(() => {
+    // Exit walkthrough mode if active to prevent animations
+    if (isWalkthroughMode) {
+      endWalkthrough();
+    }
     approveAllNodes();
     toast.success(`✅ All ${getTotalNodes()} nodes approved!`, {
       position: 'top-center',
       autoClose: 3000,
     });
-  }, [approveAllNodes, getTotalNodes]);
+  }, [approveAllNodes, getTotalNodes, isWalkthroughMode, endWalkthrough]);
   
   return (
     <div className="w-full h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 relative">
