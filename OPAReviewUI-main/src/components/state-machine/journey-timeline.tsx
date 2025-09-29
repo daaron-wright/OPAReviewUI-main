@@ -226,7 +226,7 @@ export function JourneyTimeline({
             </ol>
           </div>
         ) : (
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-3">
+          <div className="rounded-[28px] border border-[#dbe9e3] bg-[#f6faf8] p-4">
             {graphContent}
           </div>
         )}
