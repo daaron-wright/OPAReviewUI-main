@@ -29,6 +29,8 @@ interface JourneyTimelineProps {
   readonly viewMode?: 'list' | 'graph';
   readonly onViewModeChange?: (mode: 'list' | 'graph') => void;
   readonly graphContent?: ReactNode;
+  readonly isWalkthroughMode?: boolean;
+  readonly onEndWalkthrough?: () => void;
 }
 
 const reviewerProfile = {
@@ -48,6 +50,8 @@ export function JourneyTimeline({
   viewMode = 'list',
   onViewModeChange,
   graphContent,
+  isWalkthroughMode,
+  onEndWalkthrough,
 }: JourneyTimelineProps): JSX.Element {
   const completionPercentage = useMemo(() => {
     if (progress.total === 0) return 0;
@@ -92,31 +96,41 @@ export function JourneyTimeline({
 
           <div className="flex flex-col gap-4 lg:items-end">
             <div className="flex flex-wrap items-center gap-3 lg:justify-end">
-              <ReviewerProfilePill
-                name={reviewerProfile.name}
-                email={reviewerProfile.email}
-                avatarUrl={reviewerProfile.avatarUrl}
-                className="rounded-full"
-              />
-              <div className="flex min-w-[220px] flex-col gap-2 rounded-full border border-[#dbe9e3] bg-white px-6 py-3 shadow-inner">
-                <div className="flex items-baseline justify-between text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  <span>Progress</span>
-                  <span>{completionPercentage}%</span>
-                </div>
-                <div className="h-2 rounded-full bg-[#eef7f3]">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1] transition-all"
-                    style={{ width: `${completionPercentage}%` }}
-                  />
-                </div>
-                <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
-                  {progress.reviewed} of {progress.total} nodes reviewed
-                </div>
+            <ReviewerProfilePill
+              name={reviewerProfile.name}
+              email={reviewerProfile.email}
+              avatarUrl={reviewerProfile.avatarUrl}
+              className="rounded-full"
+            />
+            <div className="flex min-w-[220px] flex-col gap-2 rounded-full border border-[#dbe9e3] bg-white px-6 py-3 shadow-inner">
+              <div className="flex items-baseline justify-between text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <span>Progress</span>
+                <span>{completionPercentage}%</span>
+              </div>
+              <div className="h-2 rounded-full bg-[#eef7f3]">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1] transition-all"
+                  style={{ width: `${completionPercentage}%` }}
+                />
+              </div>
+              <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
+                {progress.reviewed} of {progress.total} nodes reviewed
               </div>
             </div>
+          </div>
 
-            {canToggleViews && (
-              <div className="flex items-center gap-3 lg:self-end">
+          {isWalkthroughMode && onEndWalkthrough && (
+            <button
+              type="button"
+              onClick={onEndWalkthrough}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-[0_6px_16px_-12px_rgba(15,118,110,0.45)] transition hover:border-[#c5ded5] hover:bg-[#f3f8f6] lg:self-end"
+            >
+              End walkthrough
+            </button>
+          )}
+
+          {canToggleViews && (
+            <div className="flex items-center gap-3 lg:self-end">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                   View
                 </span>
