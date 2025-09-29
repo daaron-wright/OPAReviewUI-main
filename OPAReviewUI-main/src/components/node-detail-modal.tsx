@@ -93,7 +93,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظة: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأشخاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأشخاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
@@ -531,7 +531,7 @@ export function NodeDetailModal({
         </div>
         
         {/* Side-by-Side Content - Scrollable area */}
-        <div className="flex-1 grid grid-cols-2 divide-x divide-gray-200 dark:divide-gray-700 min-h-0">
+        <div className="grid flex-1 grid-cols-1 divide-y divide-slate-200 lg:grid-cols-2 lg:divide-y-0 lg:divide-x">
           {/* Left Panel - BRD References - Independent scroll */}
           <div className="overflow-y-auto p-6 max-h-full" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="space-y-4">
