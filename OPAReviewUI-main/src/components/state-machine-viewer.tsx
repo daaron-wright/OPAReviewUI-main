@@ -723,7 +723,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
               </div>
 
               {publishStats.rejected > 0 && (
-                <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50/80 p-4 text-sm text-rose-700">
+                <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-600">
                   <div className="flex items-center gap-2 font-semibold">
                     <Icon name="alarm" className="h-5 w-5" />
                     {publishStats.rejected} state(s) were rejected and will not be published.
