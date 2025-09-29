@@ -7,6 +7,8 @@ type BaseIconProps = {
 };
 
 export type IconName =
+  | 'check'
+  | 'x'
   | 'checkCircle'
   | 'xCircle'
   | 'warningTriangle'
@@ -27,6 +29,28 @@ export type IconName =
 type IconRenderer = (props: BaseIconProps) => JSX.Element;
 
 const ICONS: Record<IconName, IconRenderer> = {
+  check: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M6 12.5 10.5 17l7.5-10" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  x: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M6 6 18 18M18 6 6 18" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
   checkCircle: ({ className, strokeWidth = 1.8 }) => (
     <svg
       className={clsx('h-5 w-5 stroke-current', className)}
