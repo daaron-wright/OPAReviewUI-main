@@ -12,62 +12,68 @@ interface PolicyInsightsPanelProps {
 }
 
 export function PolicyInsightsPanel({ insights }: PolicyInsightsPanelProps): JSX.Element {
-  const kpis = [
+  const kpis: ReadonlyArray<{
+    label: string;
+    value: string;
+    change: string;
+    changeType: 'positive' | 'negative' | 'neutral';
+    icon: IconName;
+  }> = [
     {
       label: 'Total Policies',
       value: insights.totalPolicies.toString(),
       change: '+3 this week',
       changeType: 'positive' as const,
-      icon: '📋'
+      icon: 'clipboard'
     },
     {
       label: 'Active Policies',
       value: insights.activePolicies.toString(),
       change: `${((insights.activePolicies / insights.totalPolicies) * 100).toFixed(1)}% active`,
       changeType: 'neutral' as const,
-      icon: '✅'
+      icon: 'checkCircle'
     },
     {
       label: 'Evaluations (24h)',
       value: formatLargeNumber(insights.totalEvaluations24h),
       change: '+12.5% vs yesterday',
       changeType: 'positive' as const,
-      icon: '⚡'
+      icon: 'bolt'
     },
     {
       label: 'Success Rate',
       value: `${insights.avgSuccessRate.toFixed(1)}%`,
       change: insights.avgSuccessRate >= 95 ? 'Excellent' : insights.avgSuccessRate >= 90 ? 'Good' : 'Needs attention',
       changeType: insights.avgSuccessRate >= 95 ? 'positive' : insights.avgSuccessRate >= 90 ? 'neutral' : 'negative' as const,
-      icon: '🎯'
+      icon: 'target'
     },
     {
       label: 'Critical Violations',
       value: insights.criticalViolations.toString(),
       change: insights.criticalViolations === 0 ? 'All clear' : 'Requires attention',
       changeType: insights.criticalViolations === 0 ? 'positive' : 'negative' as const,
-      icon: '⚠️'
+      icon: 'warningTriangle'
     },
     {
       label: 'Compliance Score',
       value: `${insights.complianceScore.toFixed(0)}%`,
       change: insights.complianceScore >= 90 ? 'Compliant' : insights.complianceScore >= 70 ? 'Partial' : 'Non-compliant',
       changeType: insights.complianceScore >= 90 ? 'positive' : insights.complianceScore >= 70 ? 'neutral' : 'negative' as const,
-      icon: '🛡️'
+      icon: 'shieldCheck'
     },
     {
       label: 'Security Posture',
       value: insights.securityPosture.level.charAt(0).toUpperCase() + insights.securityPosture.level.slice(1),
       change: `${insights.securityPosture.score.toFixed(0)}/100 score`,
       changeType: insights.securityPosture.score >= 80 ? 'positive' : insights.securityPosture.score >= 60 ? 'neutral' : 'negative' as const,
-      icon: '🔒'
+      icon: 'lock'
     },
     {
       label: 'Top Performer',
       value: insights.topPerformingPolicies[0]?.name.split(' ')[0] || 'N/A',
       change: insights.topPerformingPolicies[0] ? `${insights.topPerformingPolicies[0].metrics.successRate.toFixed(1)}% success` : 'No data',
       changeType: 'neutral' as const,
-      icon: '🏆'
+      icon: 'trophy'
     }
   ];
 
