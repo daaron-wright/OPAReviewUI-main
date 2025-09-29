@@ -1,6 +1,6 @@
 /**
  * Modular confetti celebration component
- * Because successful deployments deserve a PARTY! 🎉
+ * Because successful deployments deserve a celebration.
  */
 'use client';
 
