@@ -752,46 +752,52 @@ function getMiniMapNodeColor(node: Node): string {
   }
 }
 
-function StatBadge({
+function PublishStatCard({
   label,
   value,
+  icon,
   tone,
+  helper,
 }: {
   label: string;
   value: number;
-  tone: 'blue' | 'green' | 'purple';
+  icon: IconName;
+  tone: 'sky' | 'emerald' | 'purple';
+  helper: string;
 }): JSX.Element {
-  const tones = {
-    blue: {
-      bg: 'bg-blue-50',
-      border: 'border-blue-200',
-      text: 'text-blue-700',
+  const palette = {
+    sky: {
+      border: 'border-sky-200',
+      iconBg: 'bg-sky-100',
+      iconText: 'text-sky-600',
+      valueText: 'text-sky-700',
     },
-    green: {
-      bg: 'bg-emerald-50',
+    emerald: {
       border: 'border-emerald-200',
-      text: 'text-emerald-700',
+      iconBg: 'bg-emerald-100',
+      iconText: 'text-emerald-600',
+      valueText: 'text-emerald-700',
     },
     purple: {
-      bg: 'bg-purple-50',
       border: 'border-purple-200',
-      text: 'text-purple-700',
+      iconBg: 'bg-purple-100',
+      iconText: 'text-purple-600',
+      valueText: 'text-purple-700',
     },
   }[tone];
 
   return (
-    <div className={`rounded-2xl border ${tones.border} ${tones.bg} p-4`}>
-      <div className={`text-3xl font-bold ${tones.text}`}>{value}</div>
-      <div className={`mt-1 text-sm ${tones.text}`}>{label}</div>
-    </div>
-  );
-}
-
-function InfoRow({ label, value }: { label: string; value: string }): JSX.Element {
-  return (
-    <div className="flex items-center justify-between rounded-xl bg-white/60 px-3 py-2 text-xs font-medium text-amber-700">
-      <span>{label}</span>
-      <span className="text-amber-900">{value}</span>
+    <div className={`rounded-2xl border ${palette.border} bg-white p-4 shadow-sm`}>
+      <div className="flex items-center justify-between">
+        <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${palette.iconBg} ${palette.iconText}`}>
+          <Icon name={icon} className="h-5 w-5" />
+        </span>
+        <span className={`text-3xl font-bold ${palette.valueText}`}>{value}</span>
+      </div>
+      <div className="mt-3">
+        <p className="text-sm font-semibold text-slate-900">{label}</p>
+        <p className="text-xs text-slate-500">{helper}</p>
+      </div>
     </div>
   );
 }
