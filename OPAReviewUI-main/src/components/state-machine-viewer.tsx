@@ -371,6 +371,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   const totalCount = getTotalNodes();
   const publishStats = getPublishStats();
 
+  const handleToggleGraphSize = useCallback(() => {
+    setIsGraphExpanded((prev) => !prev);
+  }, []);
+
   const graphContent = (
     <div className="space-y-4">
       <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
@@ -460,10 +464,6 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
       }
     }
   }, [activeItem, isWalkthroughMode, nodeSequence, previousNode]);
-
-  const handleToggleGraphSize = useCallback(() => {
-    setIsGraphExpanded((prev) => !prev);
-  }, []);
 
   useEffect(() => {
     if (isWalkthroughMode && currentNodeId && reactFlowInstance) {
