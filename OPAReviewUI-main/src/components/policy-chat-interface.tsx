@@ -256,8 +256,9 @@ deny {
         {suggestedRule && (
           <div className="p-4 bg-green-50 dark:bg-green-950/20 border-y border-green-200 dark:border-green-800">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-semibold text-green-800 dark:text-green-200">
-                💡 Suggested Rule Update
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-green-800 dark:text-green-200">
+                <Icon name="lightbulb" className="h-4 w-4 text-green-600 dark:text-green-300" />
+                Suggested Rule Update
               </h3>
               <button
                 onClick={() => {
