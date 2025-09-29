@@ -101,7 +101,7 @@ export function JourneySummaryPanel({
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#dbe9e3] bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-[#c5ded5]"
                 onClick={onExitWalkthrough}
               >
-                Exit walkthrough
+                End walkthrough
               </button>
             ) : (
               <button
