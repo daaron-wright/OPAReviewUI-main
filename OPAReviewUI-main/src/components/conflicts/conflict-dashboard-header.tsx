@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import clsx from 'clsx';
 import type { ConflictAnalytics } from '@/domain/conflicts/types';
+import { Icon, IconName } from '../icon';
 
 interface ConflictDashboardHeaderProps {
   readonly analytics: ConflictAnalytics | null;
@@ -15,11 +16,15 @@ export function ConflictDashboardHeader({
   activeView,
   onViewChange,
 }: ConflictDashboardHeaderProps): JSX.Element {
-  const viewTabs = [
-    { id: 'list', label: 'Active Conflicts', icon: '⚠️' },
-    { id: 'analytics', label: 'Analytics', icon: '📊' },
-    { id: 'workflow', label: 'Resolution Workflow', icon: '🔄' },
-  ] as const;
+  const viewTabs: ReadonlyArray<{
+    id: 'list' | 'analytics' | 'workflow';
+    label: string;
+    icon: IconName;
+  }> = [
+    { id: 'list', label: 'Active Conflicts', icon: 'alarm' },
+    { id: 'analytics', label: 'Analytics', icon: 'chart' },
+    { id: 'workflow', label: 'Resolution Workflow', icon: 'refresh' },
+  ];
 
   return (
     <header className="border-b border-transparent bg-[#f4f8f6]">
@@ -103,9 +108,7 @@ export function ConflictDashboardHeader({
                       : 'text-slate-500 hover:bg-white'
                   )}
                 >
-                  <span aria-hidden className="text-base leading-none">
-                    {tab.icon}
-                  </span>
+                  <Icon name={tab.icon} className="h-4 w-4" />
                   {tab.label}
                 </button>
               ))}
