@@ -82,7 +82,9 @@ function ViolationCard({ violation }: ViolationCardProps): JSX.Element {
     <div className={`p-4 rounded-lg border ${severityColors[violation.severity]}`}>
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-lg">{severityIcons[violation.severity]}</span>
+          <span className="text-lg">
+            <Icon name={severityIcons[violation.severity]} className="h-5 w-5" />
+          </span>
           <div>
             <h4 className="font-medium text-white">{violation.policyName}</h4>
             <div className="text-sm text-slate-400">{violation.resource}</div>
