@@ -58,7 +58,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات التجارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
-• يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
+• يجب على النظا�� تسجيل جميع محاولات التحقق مع ا��طوابع الزمنية والنتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
@@ -83,7 +83,7 @@ If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
 Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
-      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
+      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر عل�� 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
 • الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
@@ -438,47 +438,63 @@ export function NodeDetailModal({
         className="relative flex max-h-[90vh] w-full max-w-[88rem] flex-col overflow-hidden rounded-[36px] border border-[#e2ede8] bg-white shadow-[0_48px_96px_-52px_rgba(11,64,55,0.55)]"
         style={getModalStyle()}
       >
-        <div className={`flex-shrink-0 border-b bg-gradient-to-r from-emerald-50 via-white to-cyan-50/60 px-6 py-5 ${getHeaderStyle(node)}`}>
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <h2 id="modal-title" className="text-2xl font-semibold text-slate-900">
-                {node.label}
-              </h2>
-              <div className="mt-2 flex flex-wrap items-center gap-3">
-                <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${getTypeBadgeStyle(node)}`}>
-                  <span className="h-1.5 w-1.5 rounded-full bg-current/70" />
-                  {node.type}
-                </span>
-                {node.isInitial && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold uppercase text-emerald-700">
-                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 16 16">
-                      <path d="M3 8.5 6.5 12l6.5-7" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    Initial state
+        <div className={`flex-shrink-0 border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-5 ${getHeaderStyle(node)}`}>
+          <div className="flex items-start justify-between gap-6">
+            <div className="flex-1 space-y-4">
+              <div className="flex items-center gap-3">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F515490be93874e318756209e59f398b6?format=webp&width=800"
+                  alt="Abu Dhabi Government Services"
+                  className="h-8 w-auto object-contain"
+                />
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
+                    Business license portal
                   </span>
-                )}
-                {node.isFinal && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1 text-[11px] font-semibold uppercase text-rose-700">
-                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 16 16">
-                      <path d="M4 4l8 8M12 4l-8 8" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    Final state
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                    Application journey node details
                   </span>
-                )}
-                <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-                  ID: <code className="rounded bg-slate-100 px-2 py-1 text-[11px] text-slate-600">{node.id}</code>
-                </span>
+                </div>
+              </div>
+
+              <div>
+                <h2 id="modal-title" className="text-2xl font-semibold text-slate-900">
+                  {node.label}
+                </h2>
+                <div className="mt-2 flex flex-wrap items-center gap-3">
+                  <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${getTypeBadgeStyle(node)}`}>
+                    <span className="h-1.5 w-1.5 rounded-full bg-current/70" />
+                    {node.type}
+                  </span>
+                  {node.isInitial && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#effaf6] px-3 py-1 text-[11px] font-semibold uppercase text-[#0f766e]">
+                      <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 16 16">
+                        <path d="M3 8.5 6.5 12l6.5-7" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      Initial state
+                    </span>
+                  )}
+                  {node.isFinal && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-3 py-1 text-[11px] font-semibold uppercase text-rose-600">
+                      <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 16 16">
+                        <path d="M4 4l8 8M12 4l-8 8" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      Final state
+                    </span>
+                  )}
+                  <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+                    ID: <code className="rounded bg-white px-2 py-1 text-[11px] text-slate-600">{node.id}</code>
+                  </span>
+                </div>
               </div>
             </div>
-            
-            {/* Language Toggle and Actions */}
-            <div className="flex items-center gap-3">
-              {/* Review status indicator */}
+
+            <div className="flex flex-col items-end gap-3">
               {isNodeReviewed(node.id) && (
                 <div
                   className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
                     isNodeApproved(node.id)
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-600'
+                      ? 'border-[#b7e6d8] bg-[#effaf6] text-[#0f766e]'
                       : 'border-rose-200 bg-rose-50 text-rose-600'
                   }`}
                 >
@@ -493,15 +509,14 @@ export function NodeDetailModal({
                   {isNodeApproved(node.id) ? 'Approved' : 'Needs updates'}
                 </div>
               )}
-              
-              
-              <div className="flex overflow-hidden rounded-full border border-slate-200 bg-white shadow-inner">
+
+              <div className="flex overflow-hidden rounded-full border border-[#dbe9e3] bg-white shadow-inner">
                 <button
                   onClick={() => setLanguage('ar')}
                   className={`px-4 py-1.5 text-xs font-semibold transition ${
                     language === 'ar'
-                      ? 'bg-emerald-500 text-white shadow'
-                      : 'text-slate-500 hover:bg-slate-100'
+                      ? 'bg-[#0f766e] text-white shadow'
+                      : 'text-slate-500 hover:bg-[#f3f8f6]'
                   }`}
                   dir="rtl"
                 >
@@ -511,20 +526,20 @@ export function NodeDetailModal({
                   onClick={() => setLanguage('en')}
                   className={`px-4 py-1.5 text-xs font-semibold transition ${
                     language === 'en'
-                      ? 'bg-emerald-500 text-white shadow'
-                      : 'text-slate-500 hover:bg-slate-100'
+                      ? 'bg-[#0f766e] text-white shadow'
+                      : 'text-slate-500 hover:bg-[#f3f8f6]'
                   }`}
                 >
                   English
                 </button>
               </div>
-              
+
               <button
                 onClick={() => onClose(false)}
-                className="rounded-full p-2 text-slate-500 transition hover:bg-slate-100"
+                className="rounded-full p-2 text-slate-400 transition hover:bg-white hover:text-slate-600"
                 aria-label="Close modal"
               >
-                <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
