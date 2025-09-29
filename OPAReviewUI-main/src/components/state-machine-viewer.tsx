@@ -377,13 +377,13 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
   const graphContent = (
     <div className="space-y-4">
-      <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-[28px] border border-[#dbe9e3] bg-[#f6faf8] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
             Journey map
           </p>
           <h3 className="text-sm font-semibold text-slate-900">Visualise state transitions</h3>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-600">
             Inspect the underlying graph and open any node for deeper review.
           </p>
         </div>
@@ -392,10 +392,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             type="button"
             onClick={handleToggleGraphSize}
             aria-expanded={isGraphExpanded}
-            className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2 ${
               isGraphExpanded
-                ? 'border-slate-300 bg-slate-100 text-slate-800 hover:border-slate-400 hover:bg-slate-200'
-                : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                ? 'border-[#bfded4] bg-white text-[#0f766e] hover:border-[#a9d5c6]'
+                : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
             }`}
           >
             <Icon name={isGraphExpanded ? 'xCircle' : 'chart'} className="h-4 w-4" />
@@ -404,7 +404,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           <button
             type="button"
             onClick={() => router.push('/dashboard')}
-            className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800"
+            className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.45)] transition hover:bg-[#0c5f59]"
           >
             Open dashboard
           </button>
