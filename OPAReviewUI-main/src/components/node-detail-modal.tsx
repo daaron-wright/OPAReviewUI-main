@@ -40,7 +40,7 @@ const getMockBRDReferences = (): any => ({
       title: 'Digital Identity Verification Requirements',
       titleAr: 'متطلبات التحقق من الهوية الرقمية',
       location: 'Chapter 4: Core Business Rules',
-      locationAr: 'الفصل 4: قواعد الأعمال الأساسية',
+      locationAr: 'الف��ل 4: قواعد الأعمال الأساسية',
       content: `The system SHALL verify the digital identity level of all applicants prior to processing any beneficiary declaration. Acceptable verification levels include SOP2 (Smart Pass Level 2) and SOP3 (Smart Pass Level 3) as defined by the UAE Digital Identity Authority.
 
 Key Requirements:
@@ -90,7 +90,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
-إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
+إذا كان الشخص أ يمتلك 60٪ من الشركة س، وا��شركة س تمتلك 50٪ من الكيان المستهدف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأشخاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
@@ -551,7 +551,7 @@ export function NodeDetailModal({
               </div>
               
               <div>
-                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                <h4 className="mb-3 text-sm font-semibold text-slate-700">
                   {language === 'ar' ? 'الأقسام ذات الصلة' : 'Relevant Sections'}
                 </h4>
                 <div className="space-y-2">
