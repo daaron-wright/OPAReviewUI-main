@@ -242,7 +242,7 @@ function renderMetadata(node: ProcessedNode): ReactNode {
   }
 
   return (
-    <div className="mt-4 border-t border-slate-100 pt-4">
+    <div className="mt-4 border-t border-[#e2ede8] pt-4">
       <p className="mb-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
         Automation touchpoints
       </p>
@@ -250,9 +250,9 @@ function renderMetadata(node: ProcessedNode): ReactNode {
         {functions.map((fn) => (
           <span
             key={fn}
-            className="inline-flex items-center gap-2 rounded-full border border-slate-100 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600"
+            className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1 text-xs font-medium text-slate-600"
           >
-            <span className="block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="block h-1.5 w-1.5 rounded-full bg-[#0f766e]" />
             {fn.replace(/_/g, ' ')}
           </span>
         ))}
