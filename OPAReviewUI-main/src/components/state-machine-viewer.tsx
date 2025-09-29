@@ -618,15 +618,18 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 />
               </div>
 
-              <div className="mt-6 rounded-3xl border border-[#d8e4df] bg-white p-5 shadow-sm">
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[#0f766e]">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#0f766e]/10 text-[#0f766e]">
+              <div className="mt-6 rounded-3xl border border-[#d8e4df] bg-[#f6fbf9] p-5">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-[#0f766e] shadow-sm">
                       <Icon name="clipboard" className="h-4 w-4" />
                     </span>
-                    States being published
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-800">States being published</h3>
+                      <p className="text-xs text-slate-500">{publishStats.approved} of {publishStats.total} approved for deployment</p>
+                    </div>
                   </div>
-                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
                     {publishStats.approved} ready
                   </span>
                 </div>
@@ -636,22 +639,35 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                     return (
                       <div
                         key={node.id}
-                        className={`flex items-center gap-3 rounded-2xl border px-3 py-2 text-sm transition ${
+                        className={`flex items-center gap-3 rounded-2xl border px-3 py-3 text-sm transition ${
                           approved
-                            ? 'border-[#b7e1d4] bg-[#f4fdf9] text-[#0f766e]'
-                            : 'border-[#e0e8e4] bg-white text-slate-600'
+                            ? 'border-transparent bg-white shadow-sm text-[#0f766e]'
+                            : 'border-transparent bg-white/90 text-slate-600'
                         }`}
                       >
                         <span
-                          className={`inline-flex h-7 w-7 items-center justify-center rounded-full ${
+                          className={`inline-flex h-8 w-8 items-center justify-center rounded-xl ${
                             approved ? 'bg-[#0f766e]/10 text-[#0f766e]' : 'bg-slate-100 text-slate-400'
                           }`}
                         >
                           <Icon name={approved ? 'checkCircle' : 'infoCircle'} className="h-4 w-4" />
                         </span>
                         <div className="truncate">
-                          <div className="truncate font-semibold">{node.label}</div>
-                          <div className="text-xs uppercase tracking-[0.16em] text-slate-400">Type: {node.type}</div>
+                          <div className="truncate font-semibold text-slate-800">{node.label}</div>
+                          <div className="mt-1 inline-flex items-center gap-2 text-xs text-slate-400">
+                            <span className="rounded-full bg-slate-100 px-2 py-0.5 font-semibold uppercase tracking-[0.16em] text-slate-500">
+                              {node.type}
+                            </span>
+                            {approved ? (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-[#0f766e]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
+                                <Icon name="check" className="h-3 w-3" /> Approved
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                                Pending review
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     );
