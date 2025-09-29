@@ -88,7 +88,7 @@ export function JourneySummaryPanel({
                   onOpenDetail(item.node.id);
                 }
               }}
-              className="inline-flex items-center gap-2 rounded-full bg-emerald-50 text-emerald-600 px-4 py-1.5 text-xs font-semibold hover:bg-emerald-100 transition-colors"
+              className="inline-flex items-center gap-2 rounded-full bg-[#0f766e]/10 px-4 py-1.5 text-xs font-semibold text-[#0f766e] transition-colors hover:bg-[#0f766e]/15"
             >
               Open node review
             </button>
