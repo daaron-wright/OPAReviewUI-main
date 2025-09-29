@@ -365,7 +365,6 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
         icon: false,
         className:
           'bg-gradient-to-r from-violet-500 via-indigo-500 to-sky-500 text-white font-medium rounded-2xl shadow-xl border border-white/40 backdrop-blur px-5 py-3 flex items-center',
-        progressStyle: { background: '#22c55e' },
       }
     );
   }, [approveAllNodes, getTotalNodes]);
