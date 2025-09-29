@@ -544,11 +544,11 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
       />
 
       {showPublishModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md animate-fade-in">
-          <div className="relative w-full max-w-3xl animate-slide-up overflow-hidden rounded-2xl bg-white shadow-2xl">
-            <header className="flex items-start justify-between gap-4 border-b border-slate-200 bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-5 text-white">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-md animate-fade-in">
+          <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-white/60 bg-white/95 shadow-[0_40px_90px_-50px_rgba(15,23,42,0.6)] animate-slide-up">
+            <header className="flex items-start justify-between gap-4 border-b border-emerald-100 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 px-6 py-5 text-white">
               <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-white backdrop-blur">
                   <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -559,8 +559,8 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold">Confirm State Machine Publication</h2>
-                  <p className="mt-1 text-sm text-white/80">
+                  <h2 className="text-2xl font-semibold">Confirm State Machine Publication</h2>
+                  <p className="mt-1 text-sm text-white/85">
                     Review the deployment summary before publishing to production.
                   </p>
                 </div>
@@ -568,7 +568,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
               <button
                 type="button"
                 onClick={() => setShowPublishModal(false)}
-                className="rounded-lg p-2 hover:bg-white/20"
+                className="rounded-full p-2 transition hover:bg-white/20"
               >
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -577,15 +577,15 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             </header>
 
             <div className="max-h-[60vh] overflow-y-auto px-6 py-6">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <StatBadge label="Total States" value={publishStats.total} tone="blue" />
                 <StatBadge label="Approved" value={publishStats.approved} tone="green" />
                 <StatBadge label="Transitions" value={stateMachine.edges.length} tone="purple" />
               </div>
 
-              <div className="mt-6 rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
-                <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-800">
-                  <svg className="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="mt-6 rounded-2xl border border-emerald-100/60 bg-emerald-50/60 p-4">
+                <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                  <svg className="h-5 w-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -601,10 +601,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                     return (
                       <div
                         key={node.id}
-                        className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm ${
+                        className={`flex items-center gap-2 rounded-2xl px-3 py-2 text-sm ${
                           approved
-                            ? 'bg-emerald-50 text-emerald-700'
-                            : 'bg-white text-slate-600'
+                            ? 'bg-white shadow-[inset_0_0_0_1px_rgba(16,185,129,0.25)] text-emerald-600'
+                            : 'bg-white/85 shadow-sm text-slate-600'
                         }`}
                       >
                         <svg
@@ -622,7 +622,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                         </svg>
                         <div className="truncate">
                           <div className="truncate font-medium">{node.label}</div>
-                          <div className="text-xs opacity-70">Type: {node.type}</div>
+                          <div className="text-xs text-slate-400">Type: {node.type}</div>
                         </div>
                       </div>
                     );
@@ -630,7 +630,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 </div>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/70 p-4 text-sm text-amber-700">
+              <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/80 p-4 text-sm text-amber-800">
                 <h3 className="mb-2 font-semibold text-amber-900">Deployment configuration</h3>
                 <dl className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <InfoRow label="Environment" value="Production (UAE-PROD-01)" />
@@ -641,7 +641,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
               </div>
 
               {publishStats.rejected > 0 && (
-                <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50/70 p-4 text-sm text-rose-700">
+                <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50/80 p-4 text-sm text-rose-700">
                   <div className="flex items-center gap-2 font-semibold">
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -665,14 +665,14 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 <button
                   type="button"
                   onClick={() => setShowPublishModal(false)}
-                  className="rounded-xl bg-white px-4 py-2 font-semibold text-slate-600 shadow-sm hover:bg-slate-100"
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={confirmPublish}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 font-semibold text-white shadow-md hover:from-emerald-600 hover:to-teal-600"
+                  className="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-emerald-600"
                 >
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
