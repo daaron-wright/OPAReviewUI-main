@@ -774,7 +774,7 @@ export function NodeDetailModal({
                               <div className="space-y-3">
                                 <div className="flex items-center gap-2 text-[#0f766e]">
                                   <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#e4f5f1]">
-                                    ✅
+                                    <Icon name="checkCircle" className="h-4 w-4 text-[#0f766e]" />
                                   </span>
                                   <span className="text-sm font-semibold">All assertions passed</span>
                                 </div>
