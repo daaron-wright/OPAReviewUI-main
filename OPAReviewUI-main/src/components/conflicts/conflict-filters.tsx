@@ -7,6 +7,7 @@ import type {
   ConflictType,
   ConflictStatus,
 } from '@/domain/conflicts/types';
+import { Icon, IconName } from '../icon';
 
 interface ConflictFiltersProps {
   readonly activeFilter: ConflictFilter;
