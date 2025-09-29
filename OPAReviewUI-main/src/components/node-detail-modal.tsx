@@ -218,7 +218,7 @@ export function NodeDetailModal({
     navigator.clipboard.writeText(text);
     setCopiedRule(ruleId);
     setTimeout(() => setCopiedRule(null), 2000);
-    toast.success('��� Copied to clipboard!', {
+    toast.success('📋 Copied to clipboard!', {
       position: 'bottom-center',
       autoClose: 1500,
     });
@@ -473,12 +473,22 @@ export function NodeDetailModal({
             <div className="flex items-center gap-3">
               {/* Review status indicator */}
               {isNodeReviewed(node.id) && (
-                <div className={`px-3 py-1 rounded-lg font-medium text-sm ${
-                  isNodeApproved(node.id)
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-                    : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
-                }`}>
-                  {isNodeApproved(node.id) ? '✅ Approved' : '❌ Rejected'}
+                <div
+                  className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                    isNodeApproved(node.id)
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-600'
+                      : 'border-rose-200 bg-rose-50 text-rose-600'
+                  }`}
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 14 14">
+                    <path
+                      d={isNodeApproved(node.id) ? 'M2.5 7.5 5.5 10.5 11.5 4.5' : 'M3 3L11 11M11 3L3 11'}
+                      strokeWidth={1.6}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  {isNodeApproved(node.id) ? 'Approved' : 'Needs updates'}
                 </div>
               )}
               
