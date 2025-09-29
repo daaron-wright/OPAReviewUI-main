@@ -82,7 +82,9 @@ export function PolicyInsightsPanel({ insights }: PolicyInsightsPanelProps): JSX
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl p-6">
         <div className="flex items-center gap-4">
-          <div className="text-4xl">🎉</div>
+          <div className="text-4xl text-white">
+            <Icon name="celebration" className="h-10 w-10" />
+          </div>
           <div>
             <h2 className="text-2xl font-bold text-white">Enterprise Policy Dashboard</h2>
             <p className="text-blue-200">
