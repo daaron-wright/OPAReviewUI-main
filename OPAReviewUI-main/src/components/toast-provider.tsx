@@ -18,19 +18,20 @@ export function ToastProvider(): JSX.Element {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme="dark"
+      theme="light"
       style={{
         zIndex: 9999,
       }}
       toastStyle={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: '#fff',
+        backgroundColor: '#ffffff',
+        color: '#0f172a',
         borderRadius: '12px',
-        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 12px 24px rgba(15, 23, 42, 0.08)',
         fontFamily: 'Inter, system-ui, sans-serif',
       }}
       progressStyle={{
-        background: 'rgba(255, 255, 255, 0.9)',
+        background: '#0f766e',
       }}
     />
   );
