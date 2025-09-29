@@ -2,25 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import ReactFlow, {
-  Background,
-  BackgroundVariant,
-  Controls,
-  Edge,
-  MiniMap,
-  Node,
-  NodeTypes,
-  ReactFlowProvider,
-  useEdgesState,
-  useNodesState,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
 import { toast } from 'react-toastify';
+import { useEdgesState, useNodesState } from 'reactflow';
+import type { Edge, Node, ReactFlowInstance } from 'reactflow';
 
 import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
+import { GraphCanvas } from './graph/graph-canvas';
 import { createToastContent } from './toast-content';
 import { Icon, IconName } from './icon';
-import { CustomNode, CustomNodeData } from './graph/custom-node';
+import { CustomNodeData } from './graph/custom-node';
 import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
 import {
