@@ -135,7 +135,7 @@ export function ConflictFilters({
         <label htmlFor="conflict-search" className="text-sm font-medium text-slate-600">
           Search conflicts
         </label>
-        <div className="flex gap-2">
+        <div className="flex items-center rounded-full border border-[#dbe9e3] bg-white px-2 py-1 shadow-inner focus-within:border-[#0f766e] focus-within:ring-2 focus-within:ring-[#0f766e]/20">
           <input
             id="conflict-search"
             type="text"
@@ -146,18 +146,18 @@ export function ConflictFilters({
                 handleSearch();
               }
             }}
-            placeholder="Search by applicant, description, or policy"
-            className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm transition focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100"
+            placeholder="Search by applicant, description"
+            className="flex-1 rounded-full border-none bg-transparent px-3 py-2 text-sm text-slate-700 focus:outline-none"
           />
           <button
             onClick={handleSearch}
             type="button"
-            className="inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-100"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#0f766e] text-white transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+            aria-label="Apply search filters"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <span className="sr-only">Apply search</span>
           </button>
         </div>
         </section>
