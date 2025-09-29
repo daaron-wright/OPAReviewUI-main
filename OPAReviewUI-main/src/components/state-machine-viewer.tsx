@@ -792,7 +792,7 @@ function PublishStatCard({
         <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${palette.iconBg} ${palette.iconText}`}>
           <Icon name={icon} className="h-5 w-5" />
         </span>
-        <span className={`text-3xl font-bold ${palette.valueText}`}>{value}</span>
+        <span className={`text-3xl font-bold ${palette.valueText}`}>{value.toLocaleString('en-US')}</span>
       </div>
       <div className="mt-3">
         <p className="text-sm font-semibold text-slate-900">{label}</p>
