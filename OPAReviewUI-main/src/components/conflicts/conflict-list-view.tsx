@@ -148,7 +148,7 @@ function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
   return (
     <article
       onClick={onClick}
-      className={`group rounded-3xl border border-[#d8e4df] bg-white/95 p-6 shadow-[0_16px_36px_-24px_rgba(11,64,55,0.24)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_44px_-26px_rgba(11,64,55,0.28)] focus:outline-none ${severityTheme.ring}`}
+      className={`group rounded-3xl border border-[#d8e4df] bg-white/95 p-6 shadow-[0_16px_36px_-24px_rgba(11,64,55,0.24)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_44px_-26px_rgba(11,64,55,0.28)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${severityTheme.ring}`}
       role="button"
       tabIndex={0}
       onKeyDown={(event) => {
