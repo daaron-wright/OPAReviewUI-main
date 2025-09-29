@@ -20,6 +20,7 @@ export type IconName =
   | 'globe'
   | 'chart'
   | 'celebration'
+  | 'rocket'
   | 'bolt'
   | 'refresh'
   | 'ban'
@@ -221,6 +222,24 @@ const ICONS: Record<IconName, IconRenderer> = {
       />
       <path d="M15 4.5 16.5 7M19.5 5.5 18 8M19 11l-2.5 1.2" strokeWidth={strokeWidth - 0.4} strokeLinecap="round" />
       <path d="M11 5.5 13 7" strokeWidth={strokeWidth - 0.4} strokeLinecap="round" />
+    </svg>
+  ),
+  rocket: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path
+        d="M12 3c3 1 5 4 5 7.5 0 3.6-2.4 6-5 6s-5-2.4-5-6C7 7 9 4 12 3Z"
+        strokeWidth={strokeWidth}
+        strokeLinejoin="round"
+      />
+      <path d="M12 16.5v4" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M9 9.5a3 3 0 0 1 6 0" strokeWidth={strokeWidth - 0.4} strokeLinecap="round" />
+      <path d="M8.5 13.5 6 16.5m9 0 2.5-3" strokeWidth={strokeWidth - 0.4} strokeLinecap="round" />
     </svg>
   ),
   bolt: ({ className, strokeWidth = 1.8 }) => (
