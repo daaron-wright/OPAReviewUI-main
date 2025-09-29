@@ -47,8 +47,8 @@ export function JourneySummaryPanel({
   const functions = item?.node.metadata.functions ?? [];
 
   return (
-    <aside className="bg-white rounded-3xl border border-slate-200/70 shadow-sm flex flex-col overflow-hidden">
-      <div className="px-6 pt-6 pb-5 border-b border-slate-100/80 bg-slate-50/60">
+    <aside className="flex flex-col overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)]">
+      <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 pt-6 pb-5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-semibold tracking-[0.18em] uppercase text-slate-500">
