@@ -374,17 +374,19 @@ function WorkflowStep({ step, isActive }: WorkflowStepProps): JSX.Element {
     skipped: 'text-yellow-400'
   };
 
-  const statusIcons = {
-    pending: '⏳',
-    'in-progress': '🔄',
-    completed: '✅',
-    blocked: '🚫',
-    skipped: '⏭️'
+  const statusIcons: Record<string, IconName> = {
+    pending: 'hourglass',
+    'in-progress': 'refresh',
+    completed: 'checkCircle',
+    blocked: 'ban',
+    skipped: 'fastForward'
   };
 
   return (
     <div className={`flex items-start gap-4 p-4 rounded-lg ${isActive ? 'bg-blue-900/30 border border-blue-500/50' : 'bg-slate-700/30'}`}>
-      <span className="text-xl">{statusIcons[step.status as keyof typeof statusIcons]}</span>
+      <span className="text-xl text-white/80">
+        <Icon name={statusIcons[step.status as keyof typeof statusIcons]} className="h-5 w-5" />
+      </span>
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1">
           <h4 className="text-white font-medium">{step.name}</h4>
