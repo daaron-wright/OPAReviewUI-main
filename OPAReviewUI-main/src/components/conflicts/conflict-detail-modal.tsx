@@ -23,12 +23,16 @@ export function ConflictDetailModal({
 }: ConflictDetailModalProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<'overview' | 'technical' | 'workflow' | 'resolution'>('overview');
 
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📋' },
-    { id: 'technical', label: 'Technical Details', icon: '🔧' },
-    { id: 'workflow', label: 'Resolution Workflow', icon: '🔄' },
-    { id: 'resolution', label: 'Resolution Actions', icon: '⚡' }
-  ] as const;
+  const tabs: ReadonlyArray<{
+    id: 'overview' | 'technical' | 'workflow' | 'resolution';
+    label: string;
+    icon: IconName;
+  }> = [
+    { id: 'overview', label: 'Overview', icon: 'clipboard' },
+    { id: 'technical', label: 'Technical Details', icon: 'wrench' },
+    { id: 'workflow', label: 'Resolution Workflow', icon: 'refresh' },
+    { id: 'resolution', label: 'Resolution Actions', icon: 'bolt' },
+  ];
 
   const severityColors = {
     critical: 'from-red-600 to-red-800',
