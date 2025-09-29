@@ -34,6 +34,8 @@ export function ConflictDashboardHeader({
       'https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Ffdd0903634a841018729b20c0d63aecb?format=webp&width=200',
   } as const;
 
+  const licenseDeskLabel = 'License review desk';
+
   return (
     <header className="border-b border-transparent bg-[#f4f8f6]">
       <div className="mx-auto max-w-7xl px-4 pt-10 pb-6 lg:px-8">
@@ -85,10 +87,11 @@ export function ConflictDashboardHeader({
                 </Link>
                 <Link
                   href="/?portal=license-reviewer"
+                  aria-label={licenseDeskLabel}
                   className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59]"
                 >
                   <Icon name="briefcase" className="h-4 w-4 text-white" />
-                  License review desk
+                  <span className="whitespace-nowrap" suppressHydrationWarning>{licenseDeskLabel}</span>
                 </Link>
               </div>
             </div>
