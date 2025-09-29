@@ -88,7 +88,7 @@ export function ConflictDashboardHeader({
                   className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59]"
                 >
                   <Icon name="briefcase" className="h-4 w-4 text-white" />
-                  License reviewer portal
+                  License review desk
                 </Link>
               </div>
             </div>
