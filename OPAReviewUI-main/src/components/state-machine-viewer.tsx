@@ -76,19 +76,27 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   } = useReview();
 
   const initialNodes = useMemo(() => {
-    return stateMachine.nodes.map((node) => ({
-      id: node.id,
-      type: 'custom',
-      position: { x: 0, y: 0 },
-      data: {
+    return stateMachine.nodes.map((node) => {
+      const functions = node.metadata.functions
+        ? [...node.metadata.functions]
+        : undefined;
+
+      const data: CustomNodeData = {
         label: node.label,
         type: node.type,
         description: node.description,
         isFinal: node.isFinal,
         isInitial: node.isInitial,
-        functions: node.metadata.functions ? [...node.metadata.functions] : undefined,
-      } satisfies CustomNodeData,
-    }));
+        ...(functions ? { functions } : {}),
+      };
+
+      return {
+        id: node.id,
+        type: 'custom',
+        position: { x: 0, y: 0 },
+        data,
+      };
+    });
   }, [stateMachine.nodes]);
 
   const initialEdges = useMemo(() => {
@@ -215,12 +223,11 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
   const activeItem: TimelineNodeItem | null = useMemo(() => {
     if (timelineItems.length === 0) return null;
+    const firstItem = timelineItems[0]!;
     if (focusedNodeId) {
-      return (
-        timelineItems.find((item) => item.node.id === focusedNodeId) ?? timelineItems[0]
-      );
+      return timelineItems.find((item) => item.node.id === focusedNodeId) ?? firstItem;
     }
-    return timelineItems[0];
+    return firstItem;
   }, [focusedNodeId, timelineItems]);
 
   const activeIndex = useMemo(() => {
