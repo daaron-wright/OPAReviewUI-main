@@ -30,6 +30,9 @@ export type IconName =
   | 'flask'
   | 'laptop'
   | 'microscope'
+  | 'lock'
+  | 'trophy'
+  | 'target'
   | 'refresh'
   | 'ban'
   | 'alarm'
@@ -378,6 +381,47 @@ const ICONS: Record<IconName, IconRenderer> = {
       <path d="M6 13h10" strokeWidth={strokeWidth} strokeLinecap="round" />
       <path d="M8 13a5 5 0 0 0 10 0" strokeWidth={strokeWidth} strokeLinecap="round" />
       <path d="M5 19h14" strokeWidth={strokeWidth} strokeLinecap="round" />
+    </svg>
+  ),
+  lock: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <rect x="5" y="10" width="14" height="10" rx="2" strokeWidth={strokeWidth} />
+      <path d="M9 10V7a3 3 0 0 1 6 0v3" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <circle cx="12" cy="15" r="1.2" fill="currentColor" />
+    </svg>
+  ),
+  trophy: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M9 20h6" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M10 13h4v3h-4z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M4 6h3v2a3 3 0 0 1-3-3Z" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M20 6h-3v2a3 3 0 0 0 3-3Z" strokeWidth={strokeWidth} strokeLinecap="round" />
+    </svg>
+  ),
+  target: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <circle cx="12" cy="12" r="8" strokeWidth={strokeWidth} />
+      <circle cx="12" cy="12" r="4" strokeWidth={strokeWidth - 0.4} />
+      <circle cx="12" cy="12" r="1.5" fill="currentColor" />
     </svg>
   ),
   refresh: ({ className, strokeWidth = 1.8 }) => (
