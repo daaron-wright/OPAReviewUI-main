@@ -5,6 +5,7 @@
 'use client';
 
 import type { PolicyEnvironment } from '@/domain/dashboard/enterprise-types';
+import { Icon, IconName } from '../icon';
 
 interface EnvironmentStatusProps {
   readonly environments: PolicyEnvironment[];
