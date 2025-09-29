@@ -1,6 +1,7 @@
 'use client';
 
 import type { ConflictFilter, PolicyConflict } from '@/domain/conflicts/types';
+import { Icon, IconName } from '../icon';
 
 interface ConflictListViewProps {
   readonly conflicts: PolicyConflict[];
