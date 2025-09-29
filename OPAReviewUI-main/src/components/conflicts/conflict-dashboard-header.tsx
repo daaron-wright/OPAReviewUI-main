@@ -13,10 +13,10 @@ interface ConflictDashboardHeaderProps {
   readonly onViewChange: (view: 'list' | 'analytics' | 'workflow') => void;
 }
 
-export function ConflictDashboardHeader({ 
-  analytics, 
-  activeView, 
-  onViewChange 
+export function ConflictDashboardHeader({
+  analytics,
+  activeView,
+  onViewChange
 }: ConflictDashboardHeaderProps): JSX.Element {
   const viewTabs = [
     { id: 'list', label: 'Active Conflicts', icon: '⚠️' },
@@ -25,100 +25,95 @@ export function ConflictDashboardHeader({
   ] as const;
 
   return (
-    <header className="bg-red-950/90 backdrop-blur-sm border-b border-red-800/50 sticky top-0 z-40">
-      <div className="px-6 py-4">
-        {/* Top Row - Title and Critical Metrics */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 lg:px-8">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-md">
               <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">Policy Conflict Dashboard</h1>
-              <p className="text-red-200 text-sm">Real-time conflict detection and resolution management</p>
+              <h1 className="text-2xl font-semibold text-slate-900">Policy Conflict Dashboard</h1>
+              <p className="mt-1 text-sm text-slate-500">
+                Real-time conflict detection and resolution insights for reviewers
+              </p>
             </div>
           </div>
-          
-          <div className="flex items-center gap-6">
-            {/* Critical Alert Metrics */}
-            {analytics && (
-              <div className="hidden md:flex items-center gap-6">
-                <CriticalMetric 
-                  label="Critical Conflicts" 
-                  value={analytics.criticalConflicts.toString()} 
-                  color="text-red-400"
-                  bgColor="bg-red-900/30"
-                  pulse={analytics.criticalConflicts > 0}
-                />
-                <CriticalMetric 
-                  label="Active Issues" 
-                  value={analytics.activeConflicts.toString()} 
-                  color="text-orange-400"
-                  bgColor="bg-orange-900/30"
-                />
-                <CriticalMetric 
-                  label="Avg Resolution" 
-                  value={`${analytics.averageResolutionTime.toFixed(1)}h`} 
-                  color="text-yellow-400"
-                  bgColor="bg-yellow-900/30"
-                />
-                <CriticalMetric 
-                  label="Total Conflicts" 
-                  value={analytics.totalConflicts.toString()} 
-                  color="text-slate-300"
-                  bgColor="bg-slate-800/50"
-                />
-              </div>
-            )}
-            
+
+          <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors flex items-center gap-2"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              Back to Graph
+              Back to timeline
             </Link>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <nav className="flex space-x-1">
+        {analytics && (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <CriticalMetric
+              label="Critical conflicts"
+              value={analytics.criticalConflicts.toString()}
+              tone="rose"
+              pulse={analytics.criticalConflicts > 0}
+            />
+            <CriticalMetric
+              label="Active issues"
+              value={analytics.activeConflicts.toString()}
+              tone="amber"
+            />
+            <CriticalMetric
+              label="Avg resolution"
+              value={`${analytics.averageResolutionTime.toFixed(1)}h`}
+              tone="sky"
+            />
+            <CriticalMetric
+              label="Total conflicts"
+              value={analytics.totalConflicts.toString()}
+              tone="slate"
+            />
+          </div>
+        )}
+
+        <nav className="flex flex-wrap gap-2">
           {viewTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => onViewChange(tab.id as any)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+              className={clsx(
+                'inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold transition',
                 activeView === tab.id
-                  ? 'bg-red-600 text-white shadow-lg'
-                  : 'text-red-200 hover:text-white hover:bg-red-800/50'
-              }`}
+                  ? 'border-emerald-400 bg-emerald-500 text-white shadow'
+                  : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-700'
+              )}
             >
-              <span className="text-sm">{tab.icon}</span>
+              <span className="text-base">{tab.icon}</span>
               {tab.label}
             </button>
           ))}
         </nav>
 
-        {/* Conflict Status Banner */}
         {analytics && analytics.criticalConflicts > 0 && (
-          <div className="mt-4 bg-red-600/20 border border-red-500/50 rounded-lg p-3">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-rose-500 text-white">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-              </div>
+              </span>
               <div>
-                <div className="text-red-200 font-semibold">
-                  {analytics.criticalConflicts} Critical Conflict{analytics.criticalConflicts !== 1 ? 's' : ''} Require Immediate Attention
-                </div>
-                <div className="text-red-300 text-sm">
-                  These conflicts may cause policy evaluation failures or compliance violations
-                </div>
+                <p className="font-semibold">
+                  {analytics.criticalConflicts} critical conflict{analytics.criticalConflicts !== 1 ? 's' : ''} need immediate review
+                </p>
+                <p className="text-rose-600/80">
+                  Escalate resolution workflows to prevent compliance impacts.
+                </p>
               </div>
             </div>
           </div>
@@ -131,16 +126,51 @@ export function ConflictDashboardHeader({
 interface CriticalMetricProps {
   readonly label: string;
   readonly value: string;
-  readonly color: string;
-  readonly bgColor: string;
+  readonly tone: 'rose' | 'amber' | 'sky' | 'slate';
   readonly pulse?: boolean;
 }
 
-function CriticalMetric({ label, value, color, bgColor, pulse = false }: CriticalMetricProps): JSX.Element {
+function CriticalMetric({ label, value, tone, pulse = false }: CriticalMetricProps): JSX.Element {
+  const styles = {
+    rose: {
+      container: 'border-rose-200 bg-rose-50 text-rose-600',
+      accent: 'bg-rose-500',
+    },
+    amber: {
+      container: 'border-amber-200 bg-amber-50 text-amber-600',
+      accent: 'bg-amber-500',
+    },
+    sky: {
+      container: 'border-sky-200 bg-sky-50 text-sky-600',
+      accent: 'bg-sky-500',
+    },
+    slate: {
+      container: 'border-slate-200 bg-slate-50 text-slate-600',
+      accent: 'bg-slate-400',
+    },
+  }[tone];
+
   return (
-    <div className={`${bgColor} rounded-lg p-3 border border-slate-600/50 ${pulse ? 'animate-pulse' : ''}`}>
-      <div className={`text-lg font-bold ${color}`}>{value}</div>
-      <div className="text-xs text-slate-400">{label}</div>
+    <div
+      className={clsx(
+        'rounded-2xl border px-4 py-3 shadow-sm',
+        styles.container,
+        pulse && 'animate-pulse'
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <span className={clsx('inline-flex h-8 w-8 items-center justify-center rounded-full text-white', styles.accent)}>
+          {value}
+        </span>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500/90">
+            {label}
+          </p>
+          <p className="text-sm font-semibold text-slate-900">
+            {value}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
