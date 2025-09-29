@@ -95,7 +95,7 @@ export function DashboardHeader({ insights, selectedView, onViewChange }: Dashbo
                   : 'text-slate-300 hover:text-white hover:bg-slate-700'
               }`}
             >
-              <span className="text-sm">{tab.icon}</span>
+              <Icon name={tab.icon} className="h-4 w-4" />
               {tab.label}
             </button>
           ))}
