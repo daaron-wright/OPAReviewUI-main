@@ -24,7 +24,7 @@ export function ToastProvider(): JSX.Element {
       }}
       toastStyle={{
         backgroundColor: '#ffffff',
-        color: '#0f172a',
+        color: '#000000',
         borderRadius: '12px',
         border: '1px solid #e2e8f0',
         boxShadow: '0 12px 24px rgba(15, 23, 42, 0.08)',
