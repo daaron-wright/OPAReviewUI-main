@@ -26,53 +26,65 @@ export function ConflictDashboardHeader({
     { id: 'workflow', label: 'Resolution Workflow', icon: 'refresh' },
   ];
 
+  const reviewerProfile = {
+    name: 'Ahmed Al Mansoori',
+    email: 'ahmed.almansoori@email.ae',
+    avatarUrl:
+      'https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Ffdd0903634a841018729b20c0d63aecb?format=webp&width=200',
+  } as const;
+
   return (
     <header className="border-b border-transparent bg-[#f4f8f6]">
       <div className="mx-auto max-w-7xl px-4 pt-10 pb-6 lg:px-8">
-        <div className="flex flex-col gap-6 rounded-3xl border border-[#d8e4df] bg-white/95 px-6 py-6 shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)] lg:px-8 lg:py-8">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-start gap-4">
-              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eff8f6] text-[#0f766e] shadow-inner">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
-              </span>
-              <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-6 rounded-[32px] border border-[#e2ede8] bg-white px-6 py-6 shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)] lg:px-10 lg:py-9">
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F515490be93874e318756209e59f398b6?format=webp&width=800"
                   alt="Abu Dhabi Government Services"
-                  className="h-10 w-auto object-contain"
+                  className="h-9 w-auto object-contain"
                 />
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0f766e]">Conflict oversight</p>
-                <h1 className="mt-2 text-3xl font-semibold text-slate-900">Policy Conflict Dashboard</h1>
-                <p className="mt-2 max-w-2xl text-sm text-slate-600">
-                  Monitor high-risk policy contradictions, prioritise reviewer workflows, and keep approvals on track.
+                <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
+                  Business license portal
+                </span>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-2 w-2 rounded-full bg-[#0f766e]" />
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Conflict oversight</p>
+                </div>
+                <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">Policy Conflict Dashboard</h1>
+                <p className="max-w-2xl text-sm text-slate-600">
+                  Track active policy risks, maintain reviewer accountability, and keep licensing approvals on schedule.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-5 py-2.5 text-sm font-semibold text-[#0f766e] shadow-[0_12px_24px_-18px_rgba(15,118,110,0.32)] transition hover:border-[#0f766e]/30 hover:bg-[#eaf7f3]"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to timeline
-              </Link>
-              <Link
-                href="/?portal=license-reviewer"
-                className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59]"
-              >
-                <Icon name="briefcase" className="h-4 w-4 text-white" />
-                License reviewer portal
-              </Link>
+            <div className="flex flex-col items-start gap-4 md:items-end">
+              <ReviewerProfilePill
+                name={reviewerProfile.name}
+                email={reviewerProfile.email}
+                avatarUrl={reviewerProfile.avatarUrl}
+              />
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-5 py-2.5 text-sm font-semibold text-[#0f766e] shadow-[0_12px_24px_-18px_rgba(15,118,110,0.32)] transition hover:border-[#0f766e]/30 hover:bg-[#eaf7f3]"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Back to timeline
+                </Link>
+                <Link
+                  href="/?portal=license-reviewer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59]"
+                >
+                  <Icon name="briefcase" className="h-4 w-4 text-white" />
+                  License reviewer portal
+                </Link>
+              </div>
             </div>
           </div>
 
