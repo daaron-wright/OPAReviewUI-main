@@ -49,10 +49,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   const [nodePosition, setNodePosition] = useState<{ x: number; y: number } | null>(null);
   const [modalAnimation, setModalAnimation] = useState<'entering' | 'exiting' | 'none'>('none');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showEpicCelebration, setShowEpicCelebration] = useState(false);
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const [primaryView, setPrimaryView] = useState<'list' | 'graph'>('list');
 
   const {
     reviewStatus,
