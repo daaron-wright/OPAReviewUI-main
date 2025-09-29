@@ -384,31 +384,15 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           Open dashboard
         </button>
       </div>
-      <div className="relative h-[520px] rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <ReactFlowProvider>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onNodeClick={handleNodeClick}
-            nodeTypes={nodeTypes}
-            onInit={setReactFlowInstance}
-            fitView
-            fitViewOptions={{ padding: 0.2, duration: 800 }}
-            attributionPosition="bottom-left"
-            className="transition-all duration-300"
-          >
-            <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#e5e7eb" />
-            <Controls className="!bg-white !border-slate-200 !shadow-lg" />
-            <MiniMap
-              nodeColor={getMiniMapNodeColor}
-              className="!bg-white !border-slate-200 !shadow-lg"
-              maskColor="rgba(0, 0, 0, 0.1)"
-            />
-          </ReactFlow>
-        </ReactFlowProvider>
-      </div>
+      <GraphCanvas
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onNodeClick={handleNodeClick}
+        onInit={setReactFlowInstance}
+        height={520}
+      />
     </div>
   );
 
