@@ -53,7 +53,9 @@ function EnvironmentCard({ environment }: EnvironmentCardProps): JSX.Element {
     <div className={`bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border ${statusColors[environment.status]}`}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <span className="text-2xl">{typeIcons[environment.type]}</span>
+          <span className="text-2xl text-white/90">
+            <Icon name={typeIcons[environment.type]} className="h-7 w-7" />
+          </span>
           <div>
             <h3 className="font-semibold text-white">{environment.name}</h3>
             <p className="text-sm text-slate-400 capitalize">{environment.type}</p>
