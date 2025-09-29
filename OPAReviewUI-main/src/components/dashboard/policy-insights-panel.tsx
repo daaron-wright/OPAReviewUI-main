@@ -5,6 +5,7 @@
 'use client';
 
 import type { PolicyInsights } from '@/domain/dashboard/enterprise-types';
+import { Icon, IconName } from '../icon';
 
 interface PolicyInsightsPanelProps {
   readonly insights: PolicyInsights;
