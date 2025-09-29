@@ -544,10 +544,10 @@ export function NodeDetailModal({
                     {language === 'ar' ? 'وثيقة متطلبات الأعمال' : 'Business Requirements Document'}
                   </h3>
                 </div>
-                <div className="text-xs text-amber-800 dark:text-amber-300">
-                  {language === 'ar' ? 'الإصدار' : 'Version'} {brdReferences.documentVersion} • 
+                <p className="text-xs text-amber-700">
+                  {language === 'ar' ? 'الإصدار' : 'Version'} {brdReferences.documentVersion} •
                   {language === 'ar' ? ' آخر تحديث: ' : ' Last Updated: '} {brdReferences.lastUpdated}
-                </div>
+                </p>
               </div>
               
               <div>
