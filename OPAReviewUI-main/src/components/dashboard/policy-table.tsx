@@ -96,15 +96,16 @@ function PolicyStatusBadge({ status }: PolicyStatusBadgeProps): JSX.Element {
     error: 'bg-red-900/30 text-red-300 border-red-500/50'
   } as const;
 
-  const icons = {
-    active: '🟢',
-    inactive: '⚪',
-    error: '🔴'
+  const indicatorColors = {
+    active: 'bg-green-400',
+    inactive: 'bg-slate-400',
+    error: 'bg-red-400'
   } as const;
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status]}`}>
-      {icons[status]} {status.toUpperCase()}
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status]}`}>
+      <span className={`h-2 w-2 rounded-full ${indicatorColors[status]}`} aria-hidden />
+      {status.toUpperCase()}
     </span>
   );
 }
