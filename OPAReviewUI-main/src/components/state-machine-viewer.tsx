@@ -288,16 +288,19 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     setShowPublishModal(false);
     toast.promise(
       new Promise((resolve) => {
-        setTimeout(() => resolve('Published'), 3000);
+        setTimeout(() => {
+          resolve('Published');
+          router.push('/dashboard');
+        }, 1600);
       }),
       {
         pending: {
           render() {
             return (
               <div className="flex items-center gap-3">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 <div>
-                  <div className="font-semibold">Publishing State Machine...</div>
+                  <div className="font-semibold">Publishing state machine…</div>
                   <div className="text-xs opacity-90">
                     Deploying {stats.approved} approved states to production
                   </div>
@@ -309,23 +312,39 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
         },
         success: {
           render() {
-            console.log('🎉🎉🎉 TRIGGERING EPIC CELEBRATION!!!');
-            setShowEpicCelebration(true);
             return (
-              <div>
-                <div className="font-semibold">🎉 State Machine Published Successfully!</div>
-                <div className="text-xs opacity-90 mt-1">
-                  {stats.approved} states deployed • {stats.total} rules activated • Version {stateMachine.metadata.version}
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-white">
+                  <svg
+                    className="h-4 w-4"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3.5 8.5 6.5 11.5 12.5 5.5"
+                      stroke="currentColor"
+                      strokeWidth={1.8}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+                <div>
+                  <div className="font-semibold">State machine published</div>
+                  <div className="text-xs opacity-80">
+                    {stats.approved} states live • Version {stateMachine.metadata.version}
+                  </div>
                 </div>
               </div>
             );
           },
-          icon: () => <span aria-hidden="true">✅</span>,
+          icon: false,
         },
         error: 'Failed to publish state machine',
       }
     );
-  }, [getPublishStats, stateMachine.metadata.version]);
+  }, [getPublishStats, router, stateMachine.metadata.version]);
 
   const handleApproveAll = useCallback(() => {
     approveAllNodes();
