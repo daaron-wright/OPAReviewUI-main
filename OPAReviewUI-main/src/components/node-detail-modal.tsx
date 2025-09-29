@@ -40,7 +40,7 @@ const getMockBRDReferences = (): any => ({
       title: 'Digital Identity Verification Requirements',
       titleAr: 'متطلبات التحقق من الهوية الرقمية',
       location: 'Chapter 4: Core Business Rules',
-      locationAr: 'الفصل 4: قواعد الأعمال الأساسية',
+      locationAr: 'الفصل 4: قواعد الأعم��ل الأساسية',
       content: `The system SHALL verify the digital identity level of all applicants prior to processing any beneficiary declaration. Acceptable verification levels include SOP2 (Smart Pass Level 2) and SOP3 (Smart Pass Level 3) as defined by the UAE Digital Identity Authority.
 
 Key Requirements:
@@ -50,10 +50,10 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام الت��قق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
-• يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
+��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات التجارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظام تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
@@ -687,7 +687,7 @@ export function NodeDetailModal({
                             </p>
                           </div>
                         </div>
-                        <span className="px-1.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded text-xs font-medium">
+                        <span className="rounded-full bg-[#e4f5f1] px-2 py-0.5 text-xs font-semibold text-[#0f766e]">
                           Active
                         </span>
                       </div>
