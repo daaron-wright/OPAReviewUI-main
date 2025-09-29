@@ -5,6 +5,7 @@
 'use client';
 
 import type { PolicyViolation } from '@/domain/dashboard/enterprise-types';
+import { Icon } from '../icon';
 
 interface ViolationsPanelProps {
   readonly violations: PolicyViolation[];
