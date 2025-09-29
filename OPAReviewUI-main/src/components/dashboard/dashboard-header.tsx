@@ -15,13 +15,17 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ insights, selectedView, onViewChange }: DashboardHeaderProps): JSX.Element {
-  const viewTabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'policies', label: 'Policy Graphs', icon: '🔗' },
-    { id: 'compliance', label: 'Compliance', icon: '📋' },
-    { id: 'violations', label: 'Violations', icon: '⚠️' },
-    { id: 'environments', label: 'Environments', icon: '🌐' }
-  ] as const;
+  const viewTabs: ReadonlyArray<{
+    id: 'overview' | 'policies' | 'compliance' | 'violations' | 'environments';
+    label: string;
+    icon: IconName;
+  }> = [
+    { id: 'overview', label: 'Overview', icon: 'chart' },
+    { id: 'policies', label: 'Policy Graphs', icon: 'link' },
+    { id: 'compliance', label: 'Compliance', icon: 'clipboard' },
+    { id: 'violations', label: 'Violations', icon: 'alarm' },
+    { id: 'environments', label: 'Environments', icon: 'globe' },
+  ];
 
   return (
     <header className="bg-slate-900/90 backdrop-blur-sm border-b border-slate-700 sticky top-0 z-40">
