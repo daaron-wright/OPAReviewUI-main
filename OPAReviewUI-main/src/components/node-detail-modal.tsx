@@ -81,7 +81,7 @@ If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
 Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
-      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
+      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو ��كثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
 • الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
@@ -425,19 +425,18 @@ export function NodeDetailModal({
   };
   
   return (
-    <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm ${getBackdropStyle()}`}
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur ${getBackdropStyle()}`}
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div 
-        className="relative w-full max-w-[90rem] max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col"
+      <div
+        className="relative flex max-h-[90vh] w-full max-w-[88rem] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/95 shadow-[0_40px_90px_-50px_rgba(15,23,42,0.7)]"
         style={getModalStyle()}
       >
-        {/* Header - Fixed at top */}
-        <div className={`flex-shrink-0 p-4 border-b ${getHeaderStyle(node)}`}>
+        <div className={`flex-shrink-0 border-b bg-gradient-to-r from-emerald-50 via-white to-cyan-50/60 px-6 py-5 ${getHeaderStyle(node)}`}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <h2 id="modal-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">
