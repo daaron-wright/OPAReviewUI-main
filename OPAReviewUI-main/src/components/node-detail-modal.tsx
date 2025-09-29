@@ -40,7 +40,7 @@ const getMockBRDReferences = (): any => ({
       page: Math.floor(Math.random() * 20) + 10,
       section: '4.2.1',
       title: 'Digital Identity Verification Requirements',
-      titleAr: 'متطلبات التحقق من الهوية الرقمية',
+      titleAr: 'متطلبات الت��قق من الهوية الرقمية',
       location: 'Chapter 4: Core Business Rules',
       locationAr: 'الفصل 4: قواعد الأعم��ل الأساسية',
       content: `The system SHALL verify the digital identity level of all applicants prior to processing any beneficiary declaration. Acceptable verification levels include SOP2 (Smart Pass Level 2) and SOP3 (Smart Pass Level 3) as defined by the UAE Digital Identity Authority.
@@ -963,15 +963,4 @@ function getTypeBadgeStyle(node: ProcessedNode): string {
     default:
       return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
   }
-}
-
-function createToastContent(icon: IconName, message: string): JSX.Element {
-  return (
-    <div className="flex items-center gap-2 text-sm text-slate-800">
-      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600">
-        <Icon name={icon} className="h-4 w-4" />
-      </span>
-      <span className="font-medium text-slate-800">{message}</span>
-    </div>
-  );
 }
