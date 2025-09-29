@@ -264,16 +264,16 @@ function renderMetadata(node: ProcessedNode): ReactNode {
 function TimelineMarker({ status, isSelected }: { status: TimelineStatus; isSelected: boolean }): JSX.Element {
   const base = 'absolute left-0 top-8 -translate-x-1/2 w-3.5 h-3.5 rounded-full border-[3px] bg-white transition-colors duration-200';
   const statusClass = {
-    completed: 'border-emerald-500 bg-emerald-50',
-    'in-progress': 'border-teal-500 bg-teal-50 animate-pulse',
-    upcoming: 'border-slate-200 bg-white',
-    rejected: 'border-rose-500 bg-rose-50',
+    completed: 'border-[#0f766e] bg-[#e6f7f1]',
+    'in-progress': 'border-[#31a6a3] bg-[#e7f9f8] animate-pulse',
+    upcoming: 'border-[#dbe9e3] bg-white',
+    rejected: 'border-rose-400 bg-rose-50',
   }[status];
 
   return (
     <span
       className={clsx(base, statusClass, {
-        'ring-2 ring-offset-2 ring-emerald-300 ring-offset-white': isSelected,
+        'ring-2 ring-offset-2 ring-[#0f766e]/35 ring-offset-white': isSelected,
       })}
     />
   );
@@ -282,12 +282,12 @@ function TimelineMarker({ status, isSelected }: { status: TimelineStatus; isSele
 function StatusPill({ status, isNext }: { status: TimelineStatus; isNext: boolean }): JSX.Element {
   const label = getStatusLabel(status, isNext);
   const className = {
-    completed: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
-    'in-progress': 'bg-teal-50 text-teal-600 border border-teal-100',
+    completed: 'border border-[#b7e6d8] bg-[#effaf6] text-[#0f766e]',
+    'in-progress': 'border border-[#b8eceb] bg-[#edfbfb] text-[#1f8f83]',
     upcoming: isNext
-      ? 'bg-sky-50 text-sky-600 border border-sky-100'
-      : 'bg-slate-100 text-slate-500 border border-slate-200',
-    rejected: 'bg-rose-50 text-rose-600 border border-rose-100',
+      ? 'border border-[#c7e5f4] bg-[#f0f8fd] text-[#1d7fb3]'
+      : 'border border-[#e2ede8] bg-[#f6faf8] text-slate-500',
+    rejected: 'border border-rose-200 bg-rose-50 text-rose-600',
   }[status];
 
   return (
@@ -315,25 +315,25 @@ function getContainerClasses(item: TimelineNodeItem): string {
   const base = 'bg-white/95 hover:-translate-y-0.5 hover:shadow-lg transition';
 
   if (item.status === 'completed') {
-    return clsx(base, 'border-emerald-100 bg-emerald-50/50 shadow-sm', {
-      'ring-2 ring-emerald-200/80': item.isSelected,
+    return clsx(base, 'border-[#b7e6d8] bg-[#effaf6] shadow-sm', {
+      'ring-2 ring-[#0f766e]/25': item.isSelected,
     });
   }
 
   if (item.status === 'in-progress') {
-    return clsx(base, 'border-teal-100 bg-teal-50/50 shadow-sm', {
-      'ring-2 ring-teal-200/80': item.isSelected,
+    return clsx(base, 'border-[#b8eceb] bg-[#edfbfb] shadow-sm', {
+      'ring-2 ring-[#31a6a3]/25': item.isSelected,
     });
   }
 
   if (item.status === 'rejected') {
-    return clsx(base, 'border-rose-100 bg-rose-50/60 shadow-sm', {
-      'ring-2 ring-rose-200/80': item.isSelected,
+    return clsx(base, 'border-rose-200 bg-rose-50 shadow-sm', {
+      'ring-2 ring-rose-200/60': item.isSelected,
     });
   }
 
-  return clsx(base, 'border-slate-200', {
-    'ring-2 ring-sky-200/80': item.isSelected,
+  return clsx(base, 'border-[#e2ede8]', {
+    'ring-2 ring-sky-200/60': item.isSelected,
   });
 }
 
