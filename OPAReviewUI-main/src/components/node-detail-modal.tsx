@@ -55,7 +55,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 المتطلبات الرئيسية:
 • يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات التجارية موقّع مفوض واحد على الأقل بمستوى SOP3
-• قد يتابع المتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
+• قد ��تابع المتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظام تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
@@ -93,7 +93,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأشخاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
@@ -566,18 +566,15 @@ export function NodeDetailModal({
                     >
                       <button
                         onClick={() => {
-                          // Toggle BRD section (only one at a time)
                           const newExpanded = expandedBRDSection === idx ? null : idx;
                           setExpandedBRDSection(newExpanded);
-                          
-                          // Also sync with corresponding Rego rule
                           if (newExpanded !== null && regoRules[idx]) {
                             setExpandedRule(regoRules[idx].id);
                           } else if (newExpanded === null) {
                             setExpandedRule(null);
                           }
                         }}
-                        className="w-full p-3 text-left hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                        className="w-full px-4 py-3 text-left transition hover:bg-slate-50"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
