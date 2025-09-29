@@ -169,7 +169,7 @@ export function JourneyTimeline({
                       }
                     }}
                     className={clsx(
-                      'w-full text-left rounded-2xl border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70',
+                      'w-full text-left rounded-[26px] border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35',
                       getContainerClasses(item)
                     )}
                   >
