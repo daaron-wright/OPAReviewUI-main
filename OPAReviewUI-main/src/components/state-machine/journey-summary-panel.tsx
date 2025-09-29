@@ -119,9 +119,9 @@ export function JourneySummaryPanel({
                 onClick={onPrevious}
                 disabled={!hasPrevious}
                 className={clsx(
-                  'rounded-xl border px-3 py-2 text-sm font-semibold transition flex items-center justify-center gap-2',
+                  'flex items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition',
                   hasPrevious
-                    ? 'border-slate-200 text-slate-700 hover:border-slate-300'
+                    ? 'border-[#dbe9e3] text-slate-600 hover:border-[#c5ded5]'
                     : 'border-slate-100 text-slate-300 cursor-not-allowed'
                 )}
               >
@@ -136,9 +136,9 @@ export function JourneySummaryPanel({
                 onClick={onNext}
                 disabled={!hasNext}
                 className={clsx(
-                  'rounded-xl border px-3 py-2 text-sm font-semibold transition flex items-center justify-center gap-2',
+                  'flex items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition',
                   hasNext
-                    ? 'border-emerald-200 text-emerald-600 hover:border-emerald-300'
+                    ? 'border-[#0f766e] text-[#0f766e] hover:bg-[#0f766e]/10'
                     : 'border-slate-100 text-slate-300 cursor-not-allowed'
                 )}
               >
