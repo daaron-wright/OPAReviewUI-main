@@ -6,6 +6,7 @@
 
 import Link from 'next/link';
 import type { PolicyInsights } from '@/domain/dashboard/enterprise-types';
+import { Icon, IconName } from '../icon';
 
 interface DashboardHeaderProps {
   readonly insights: PolicyInsights | null;
