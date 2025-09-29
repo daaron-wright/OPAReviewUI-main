@@ -4,6 +4,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react';
+import { Icon } from './icon';
 
 interface PolicyChatInterfaceProps {
   isOpen: boolean;
