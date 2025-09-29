@@ -564,23 +564,37 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
       {showPublishModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-xl animate-fade-in">
-          <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-[#d8e4df] bg-white shadow-[0_40px_80px_-45px_rgba(15,64,55,0.35)] animate-slide-up">
-            <header className="flex items-start justify-between gap-4 border-b border-[#d8e4df] bg-gradient-to-r from-[#ecf9f4] via-[#e3f4ef] to-[#eaf7f3] px-6 py-5">
-              <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#0f766e] shadow-sm">
-                  <Icon name="shieldCheck" className="h-6 w-6" />
+          <div className="relative w-full max-w-3xl overflow-hidden rounded-[36px] border border-[#e2ede8] bg-white shadow-[0_48px_96px_-52px_rgba(11,64,55,0.55)] animate-slide-up">
+            <header className="flex items-start justify-between gap-6 border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-6">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F515490be93874e318756209e59f398b6?format=webp&width=800"
+                    alt="Abu Dhabi Government Services"
+                    className="h-8 w-auto object-contain"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
+                      Business license portal
+                    </span>
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      Publication checklist
+                    </span>
+                  </div>
                 </div>
-                <div className="text-slate-800">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
+
+                <div className="space-y-2 text-slate-800">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
                     <Icon name="rocket" className="h-3.5 w-3.5" />
                     Deployment Ready
                   </span>
-                  <h2 className="mt-2 text-2xl font-semibold text-slate-900">Confirm State Machine Publication</h2>
-                  <p className="mt-1 text-sm text-slate-600">
+                  <h2 className="text-2xl font-semibold text-slate-900">Confirm State Machine Publication</h2>
+                  <p className="text-sm text-slate-600">
                     Review the deployment summary before publishing to production.
                   </p>
                 </div>
               </div>
+
               <button
                 type="button"
                 onClick={() => setShowPublishModal(false)}
