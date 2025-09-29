@@ -28,8 +28,9 @@ export function ServerCard({ server }: ServerCardProps): JSX.Element {
     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-white font-semibold">{server.name}</h3>
-        <div className={`px-3 py-1 bg-gradient-to-r ${statusColors[server.status]} rounded-full text-white text-sm font-medium`}>
-          {statusIcons[server.status]} {server.status.toUpperCase()}
+        <div className={`flex items-center gap-2 px-3 py-1 bg-gradient-to-r ${statusColors[server.status]} rounded-full text-white text-sm font-medium`}>
+          <Icon name={statusIcons[server.status]} className="h-4 w-4" />
+          {server.status.toUpperCase()}
         </div>
       </div>
       
