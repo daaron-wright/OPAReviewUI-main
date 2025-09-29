@@ -484,60 +484,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             onInspect={openNodeDetailById}
             progress={{ reviewed: reviewedCount, total: totalCount }}
             headerSubtitle={stateMachine.metadata.description}
+            viewMode={primaryView}
+            onViewModeChange={setPrimaryView}
+            graphContent={graphContent}
           />
-
-          <section className="rounded-3xl border border-slate-200/70 bg-white shadow-sm">
-            <header className="flex items-start justify-between gap-4 border-b border-slate-100/80 bg-slate-50/60 px-6 py-5">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  Journey map
-                </p>
-                <h3 className="mt-1 text-xl font-semibold text-slate-900">
-                  Visualise state transitions
-                </h3>
-                <p className="mt-1 text-sm text-slate-500">
-                  Inspect the underlying graph and open any node for deeper review.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => router.push('/dashboard')}
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800"
-              >
-                Open dashboard
-              </button>
-            </header>
-            <div className="relative h-[520px]">
-              <ReactFlowProvider>
-                <ReactFlow
-                  nodes={nodes}
-                  edges={edges}
-                  onNodesChange={onNodesChange}
-                  onEdgesChange={onEdgesChange}
-                  onNodeClick={handleNodeClick}
-                  nodeTypes={nodeTypes}
-                  onInit={setReactFlowInstance}
-                  fitView
-                  fitViewOptions={{ padding: 0.2, duration: 800 }}
-                  attributionPosition="bottom-left"
-                  className="transition-all duration-300"
-                >
-                  <Background
-                    variant={BackgroundVariant.Dots}
-                    gap={20}
-                    size={1}
-                    color="#e5e7eb"
-                  />
-                  <Controls className="!bg-white !border-slate-200 !shadow-lg" />
-                  <MiniMap
-                    nodeColor={getMiniMapNodeColor}
-                    className="!bg-white !border-slate-200 !shadow-lg"
-                    maskColor="rgba(0, 0, 0, 0.1)"
-                  />
-                </ReactFlow>
-              </ReactFlowProvider>
-            </div>
-          </section>
         </div>
 
         <JourneySummaryPanel
