@@ -56,7 +56,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات التجارية موقّع مفوض واحد على الأقل بمستوى SOP3
-• قد ��تاب�� المتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
+• قد ��تابع ��لمتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
@@ -94,7 +94,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ���خاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
@@ -950,4 +950,15 @@ function getTypeBadgeStyle(node: ProcessedNode): string {
     default:
       return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
   }
+}
+
+function renderToastContent(icon: IconName, message: string): JSX.Element {
+  return (
+    <div className="flex items-center gap-2 text-sm text-slate-800">
+      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600">
+        <Icon name={icon} className="h-4 w-4" />
+      </span>
+      <span className="font-medium text-slate-800">{message}</span>
+    </div>
+  );
 }
