@@ -699,9 +699,9 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                   ).map((item) => (
                     <div
                       key={item.label}
-                      className="flex items-center justify-between rounded-2xl border border-[#f4d278]/70 bg-white px-4 py-3 shadow-sm"
+                      className="flex items-center justify-between rounded-2xl border border-[#f6e7ca] bg-white px-4 py-3 shadow-sm"
                     >
-                      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#b7791f]/70">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#c3912f]/70">
                         {item.label}
                       </div>
                       <div
