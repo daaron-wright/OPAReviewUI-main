@@ -93,7 +93,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 مثال على الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
-ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإ��لان)
+ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
@@ -968,19 +968,20 @@ function getHeaderStyle(node: ProcessedNode): string {
 }
 
 function getTypeBadgeStyle(node: ProcessedNode): string {
-  switch (true) {
-    case node.isInitial:
-      return 'border border-[#b7e6d8] bg-[#effaf6] text-[#0f766e]';
-    case node.isFinal:
-      return 'border border-rose-200 bg-rose-50 text-rose-600';
+  if (node.isInitial) {
+    return 'border border-[#b7e6d8] bg-[#effaf6] text-[#0f766e]';
+  }
+
+  if (node.isFinal) {
+    return 'border border-rose-200 bg-rose-50 text-rose-600';
+  }
+
+  switch (node.type) {
+    case 'decision':
+      return 'border border-[#c7e5f4] bg-[#f0f8fd] text-[#1d7fb3]';
+    case 'process':
+      return 'border border-[#b8c6ff] bg-[#eef1ff] text-[#3948a3]';
     default:
-      switch (node.type) {
-        case 'decision':
-          return 'border border-[#c7e5f4] bg-[#f0f8fd] text-[#1d7fb3]';
-        case 'process':
-          return 'border border-[#b8c6ff] bg-[#eef1ff] text-[#3948a3]';
-        default:
-          return 'border border-[#e2ede8] bg-white text-slate-600';
-      }
+      return 'border border-[#e2ede8] bg-white text-slate-600';
   }
 }
