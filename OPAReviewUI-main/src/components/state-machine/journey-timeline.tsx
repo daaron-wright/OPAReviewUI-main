@@ -86,65 +86,66 @@ export function JourneyTimeline({
             </div>
           </div>
 
-          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center lg:items-end">
-            <ReviewerProfilePill
-              name={reviewerProfile.name}
-              email={reviewerProfile.email}
-              avatarUrl={reviewerProfile.avatarUrl}
-            />
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div className="rounded-2xl border border-[#dbe9e3] bg-white px-5 py-3 shadow-inner">
-                <div className="flex items-center justify-between text-xs font-medium text-slate-500">
+          <div className="flex flex-col gap-4 lg:items-end">
+            <div className="flex flex-wrap items-center gap-3 lg:justify-end">
+              <ReviewerProfilePill
+                name={reviewerProfile.name}
+                email={reviewerProfile.email}
+                avatarUrl={reviewerProfile.avatarUrl}
+                className="rounded-full"
+              />
+              <div className="flex min-w-[220px] flex-col gap-2 rounded-full border border-[#dbe9e3] bg-white px-6 py-3 shadow-inner">
+                <div className="flex items-baseline justify-between text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                   <span>Progress</span>
                   <span>{completionPercentage}%</span>
                 </div>
-                <div className="mt-2 h-1.5 w-48 rounded-full bg-[#eef7f3]">
+                <div className="h-2 rounded-full bg-[#eef7f3]">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1] transition-all"
                     style={{ width: `${completionPercentage}%` }}
                   />
                 </div>
-                <div className="mt-2 text-xs text-slate-500">
+                <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
                   {progress.reviewed} of {progress.total} nodes reviewed
                 </div>
               </div>
-
-              {canToggleViews && (
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    View
-                  </span>
-                  <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
-                    <button
-                      type="button"
-                      onClick={() => onViewModeChange?.('graph')}
-                      aria-pressed={viewMode === 'graph'}
-                      className={clsx(
-                        'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                        viewMode === 'graph'
-                          ? 'bg-[#0f766e] text-white shadow'
-                          : 'text-slate-500 hover:bg-[#f3f8f6]'
-                      )}
-                    >
-                      Graph
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onViewModeChange?.('list')}
-                      aria-pressed={viewMode === 'list'}
-                      className={clsx(
-                        'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                        viewMode === 'list'
-                          ? 'bg-[#0f766e] text-white shadow'
-                          : 'text-slate-500 hover:bg-[#f3f8f6]'
-                      )}
-                    >
-                      Timeline
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
+
+            {canToggleViews && (
+              <div className="flex items-center gap-3 lg:self-end">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  View
+                </span>
+                <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
+                  <button
+                    type="button"
+                    onClick={() => onViewModeChange?.('graph')}
+                    aria-pressed={viewMode === 'graph'}
+                    className={clsx(
+                      'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                      viewMode === 'graph'
+                        ? 'bg-[#0f766e] text-white shadow'
+                        : 'text-slate-500 hover:bg-[#f3f8f6]'
+                    )}
+                  >
+                    Graph
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onViewModeChange?.('list')}
+                    aria-pressed={viewMode === 'list'}
+                    className={clsx(
+                      'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                      viewMode === 'list'
+                        ? 'bg-[#0f766e] text-white shadow'
+                        : 'text-slate-500 hover:bg-[#f3f8f6]'
+                    )}
+                  >
+                    Timeline
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
