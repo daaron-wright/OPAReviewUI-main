@@ -84,7 +84,7 @@ Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
       contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
-قواعد الحساب:
+قواعد ��لحساب:
 • الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
@@ -794,7 +794,7 @@ export function NodeDetailModal({
                               <div className="space-y-3">
                                 <div className="flex items-center gap-2 text-[#c22745]">
                                   <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#fdecee]">
-                                    ❌
+                                    <Icon name="xCircle" className="h-4 w-4 text-[#c22745]" />
                                   </span>
                                   <span className="text-sm font-semibold">Test failed</span>
                                 </div>
