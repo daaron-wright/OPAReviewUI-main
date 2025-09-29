@@ -309,7 +309,7 @@ export function NodeDetailModal({
       ...prev,
       [ruleId]: { ruleId, status: 'confirmed' }
     }));
-    toast.success('✅ Rule confirmed and approved!', {
+    toast.success(renderToastContent('checkCircle', 'Rule confirmed and approved!'), {
       position: 'bottom-right',
       autoClose: 3000,
     });
