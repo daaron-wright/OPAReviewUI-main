@@ -339,7 +339,7 @@ export function NodeDetailModal({
       testResult: testResult?.status
     });
     setIsChatOpen(true);
-    toast.info('💬 Opening AI Chat Assistant...', {
+    toast.info(renderToastContent('chatBubble', 'Opening AI Chat Assistant...'), {
       position: 'top-center',
       autoClose: 2000,
     });
