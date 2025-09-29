@@ -198,7 +198,7 @@ export function ConflictFilters({
 
 interface FilterSectionProps {
   readonly title: string;
-  readonly icon: string;
+  readonly icon: IconName;
   readonly children: React.ReactNode;
 }
 
@@ -206,7 +206,9 @@ function FilterSection({ title, icon, children }: FilterSectionProps): JSX.Eleme
   return (
     <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm">
       <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-        <span>{icon}</span>
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+          <Icon name={icon} className="h-4 w-4" />
+        </span>
         {title}
       </h4>
       <div className="space-y-2">{children}</div>
