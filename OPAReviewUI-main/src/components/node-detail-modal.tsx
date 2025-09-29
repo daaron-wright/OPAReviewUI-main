@@ -40,7 +40,7 @@ const getMockBRDReferences = (): any => ({
       title: 'Digital Identity Verification Requirements',
       titleAr: 'متطلبات التحقق من الهوية الرقمية',
       location: 'Chapter 4: Core Business Rules',
-      locationAr: 'الف��ل 4: قواعد الأعمال الأساسية',
+      locationAr: 'الفصل 4: قواعد الأعمال الأساسية',
       content: `The system SHALL verify the digital identity level of all applicants prior to processing any beneficiary declaration. Acceptable verification levels include SOP2 (Smart Pass Level 2) and SOP3 (Smart Pass Level 3) as defined by the UAE Digital Identity Authority.
 
 Key Requirements:
@@ -90,7 +90,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
-إذا كان الشخص أ يمتلك 60٪ من الشركة س، وا��شركة س تمتلك 50٪ من الكيان المستهدف:
+إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأشخاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
@@ -556,14 +556,14 @@ export function NodeDetailModal({
                 </h4>
                 <div className="space-y-2">
                   {brdReferences.sections.map((ref: any, idx: number) => (
-                  <div 
-                    key={idx}
-                    className={`bg-white dark:bg-gray-800 rounded-lg border overflow-hidden transition-all ${
-                      expandedBRDSection === idx 
-                        ? 'border-indigo-400 dark:border-indigo-600 shadow-md' 
-                        : 'border-gray-200 dark:border-gray-700'
-                    }`}
-                  >
+                    <div
+                      key={idx}
+                      className={`overflow-hidden rounded-2xl border bg-white shadow-sm transition ${
+                        expandedBRDSection === idx
+                          ? 'border-emerald-300 shadow-lg shadow-emerald-200/40'
+                          : 'border-slate-200'
+                      }`}
+                    >
                       <button
                         onClick={() => {
                           // Toggle BRD section (only one at a time)
