@@ -50,7 +50,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لج��يع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام الت��قق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 • يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -679,10 +679,10 @@ export function NodeDetailModal({
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                           <div>
-                            <h4 className="font-mono font-semibold text-purple-700 dark:text-purple-300 text-sm">
+                            <h4 className="font-mono text-sm font-semibold text-[#5b21b6]">
                               {rule.name}
                             </h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                            <p className="mt-0.5 text-xs text-slate-500">
                               {rule.description}
                             </p>
                           </div>
