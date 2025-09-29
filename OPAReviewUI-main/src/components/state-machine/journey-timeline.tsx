@@ -1,7 +1,9 @@
 import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import clsx from 'clsx';
 import { ProcessedNode } from '@/domain/state-machine/processor';
 import { NodeReviewStatus } from '@/context/review-context';
+import { ReviewerProfilePill } from '../reviewer-profile-pill';
 
 export type TimelineStatus = 'completed' | 'in-progress' | 'upcoming' | 'rejected';
 
