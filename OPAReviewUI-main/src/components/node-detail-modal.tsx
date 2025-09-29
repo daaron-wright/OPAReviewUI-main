@@ -320,7 +320,7 @@ export function NodeDetailModal({
       ...prev,
       [ruleId]: { ruleId, status: 'rejected' }
     }));
-    toast.error('❌ Rule rejected - requires revision', {
+    toast.error(renderToastContent('xCircle', 'Rule rejected - requires revision'), {
       position: 'bottom-right',
       autoClose: 3000,
     });
