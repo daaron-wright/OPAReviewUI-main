@@ -493,13 +493,13 @@ export function NodeDetailModal({
               )}
               
               
-              <div className="flex rounded-lg border-2 border-gray-300 dark:border-gray-600 overflow-hidden">
+              <div className="flex overflow-hidden rounded-full border border-slate-200 bg-white shadow-inner">
                 <button
                   onClick={() => setLanguage('ar')}
-                  className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-                    language === 'ar' 
-                      ? 'bg-indigo-500 text-white' 
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  className={`px-4 py-1.5 text-xs font-semibold transition ${
+                    language === 'ar'
+                      ? 'bg-emerald-500 text-white shadow'
+                      : 'text-slate-500 hover:bg-slate-100'
                   }`}
                   dir="rtl"
                 >
@@ -507,10 +507,10 @@ export function NodeDetailModal({
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-                    language === 'en' 
-                      ? 'bg-indigo-500 text-white' 
-                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  className={`px-4 py-1.5 text-xs font-semibold transition ${
+                    language === 'en'
+                      ? 'bg-emerald-500 text-white shadow'
+                      : 'text-slate-500 hover:bg-slate-100'
                   }`}
                 >
                   English
