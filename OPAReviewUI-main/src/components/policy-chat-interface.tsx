@@ -304,11 +304,13 @@ deny {
           
           <div className="flex items-center justify-between mt-3 text-xs text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-4">
-              <button className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                📎 Attach file
+              <button className="flex items-center gap-1.5 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                <Icon name="paperclip" className="h-3.5 w-3.5" />
+                Attach file
               </button>
-              <button className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                💾 Save conversation
+              <button className="flex items-center gap-1.5 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                <Icon name="save" className="h-3.5 w-3.5" />
+                Save conversation
               </button>
             </div>
             <div>
