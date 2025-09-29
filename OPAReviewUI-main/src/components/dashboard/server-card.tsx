@@ -18,11 +18,11 @@ export function ServerCard({ server }: ServerCardProps): JSX.Element {
     error: 'from-red-500 to-pink-600'
   } as const;
 
-  const statusIcons = {
-    healthy: '✅',
-    warning: '⚠️',
-    error: '❌'
-  } as const;
+  const statusIcons: Record<ServerMetric['status'], IconName> = {
+    healthy: 'checkCircle',
+    warning: 'warningTriangle',
+    error: 'xCircle',
+  };
 
   return (
     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
