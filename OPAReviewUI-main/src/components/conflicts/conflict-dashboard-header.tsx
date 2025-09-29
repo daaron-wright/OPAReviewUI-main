@@ -5,6 +5,7 @@
 'use client';
 
 import Link from 'next/link';
+import clsx from 'clsx';
 import type { ConflictAnalytics } from '@/domain/conflicts/types';
 
 interface ConflictDashboardHeaderProps {
