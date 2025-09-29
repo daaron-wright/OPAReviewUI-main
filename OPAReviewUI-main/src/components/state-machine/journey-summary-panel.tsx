@@ -57,7 +57,7 @@ export function JourneySummaryPanel({
             <h2 className="mt-2 text-2xl font-semibold text-slate-900">
               {item?.node.label ?? 'Select a state'}
             </h2>
-            <p className="text-sm text-slate-500 mt-2 leading-relaxed">
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">
               {item?.node.description ?? 'Choose a state from the timeline to inspect its details.'}
             </p>
           </div>
