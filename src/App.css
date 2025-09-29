@@ -1,0 +1,43 @@
+.app {
+  text-align: center;
+}
+
+.app-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.my-component {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 2px solid #61dafb;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.component-content {
+  margin-top: 1rem;
+}
+
+.component-content button {
+  background-color: #61dafb;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #282c34;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.component-content button:hover {
+  background-color: #21a9c9;
+}
