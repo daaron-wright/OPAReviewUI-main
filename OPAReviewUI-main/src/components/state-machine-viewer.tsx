@@ -675,15 +675,18 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 </div>
               </div>
 
-              <div className="mt-6 rounded-3xl border border-[#f4d278] bg-[#fff9eb] p-5">
+              <div className="mt-6 rounded-3xl border border-[#f1e2c4] bg-[#fffbf1] p-5">
                 <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[#b7791f]">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/70 text-[#b7791f]">
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-[#b7791f] shadow-sm">
                       <Icon name="briefcase" className="h-4 w-4" />
                     </span>
-                    Deployment configuration
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-800">Deployment configuration</h3>
+                      <p className="text-xs text-slate-500">Final parameters before pushing to production</p>
+                    </div>
                   </div>
-                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#b7791f]/70">Production ready</span>
+                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#b7791f]">Production ready</span>
                 </div>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {(
