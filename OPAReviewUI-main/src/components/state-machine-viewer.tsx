@@ -443,6 +443,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     }
   }, [activeItem, isWalkthroughMode, nodeSequence, previousNode]);
 
+  const handleToggleGraphSize = useCallback(() => {
+    setIsGraphExpanded((prev) => !prev);
+  }, []);
+
   useEffect(() => {
     if (isWalkthroughMode && currentNodeId && reactFlowInstance) {
       const flowNode = nodes.find((node) => node.id === currentNodeId);
