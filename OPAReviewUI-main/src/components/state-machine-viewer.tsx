@@ -709,8 +709,13 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                           item.tone === 'success' ? 'text-[#0f766e]' : 'text-[#7c5a1b]'
                         }`}
                       >
-                        {item.icon && <Icon name={item.icon} className="h-4 w-4" />}
-                        {item.value}
+                        {item.icon && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[#0f766e]/10 px-2 py-0.5 text-xs font-semibold text-[#0f766e]">
+                            <Icon name={item.icon} className="h-3.5 w-3.5" />
+                            {item.value}
+                          </span>
+                        )}
+                        {!item.icon && <span>{item.value}</span>}
                       </div>
                     </div>
                   ))}
