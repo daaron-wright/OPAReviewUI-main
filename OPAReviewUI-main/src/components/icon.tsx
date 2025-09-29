@@ -22,6 +22,7 @@ export type IconName =
   | 'celebration'
   | 'rocket'
   | 'bolt'
+  | 'infoCircle'
   | 'lightbulb'
   | 'paperclip'
   | 'save'
@@ -259,6 +260,19 @@ const ICONS: Record<IconName, IconRenderer> = {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  ),
+  infoCircle: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <circle cx="12" cy="12" r="9" strokeWidth={strokeWidth} />
+      <circle cx="12" cy="8" r="0.8" fill="currentColor" />
+      <path d="M12 11v5" strokeWidth={strokeWidth} strokeLinecap="round" />
     </svg>
   ),
   lightbulb: ({ className, strokeWidth = 1.8 }) => (
