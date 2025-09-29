@@ -32,7 +32,7 @@ const getMockBRDReferences = (): any => ({
   documentVersion: 'v2.3.1',
   lastUpdated: '2024-01-15',
   approvedBy: 'Director of Digital Transformation',
-  approvedByAr: 'مدير التحول الر��مي',
+  approvedByAr: 'مدير التحول الرقمي',
   sections: [
     {
       page: Math.floor(Math.random() * 20) + 10,
@@ -50,7 +50,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أ�� إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 • يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -554,7 +554,7 @@ export function NodeDetailModal({
               
               <div>
                 <h4 className="mb-3 text-sm font-semibold text-slate-700">
-                  {language === 'ar' ? 'ا��أقسام ذات الصلة' : 'Relevant Sections'}
+                  {language === 'ar' ? 'الأقسام ذات الصلة' : 'Relevant Sections'}
                 </h4>
                 <div className="space-y-2">
                   {brdReferences.sections.map((ref: any, idx: number) => (
@@ -574,7 +574,7 @@ export function NodeDetailModal({
                             setExpandedRule(null);
                           }
                         }}
-                        className="w-full px-4 py-3 text-left transition hover:bg-slate-50"
+                        className="w-full px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
