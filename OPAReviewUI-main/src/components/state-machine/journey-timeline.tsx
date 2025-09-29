@@ -175,12 +175,12 @@ export function JourneyTimeline({
                   >
                     <div className="p-4 sm:p-5">
                       <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1">
+                        <div className="space-y-2">
                           <StatusPill status={item.status} isNext={item.isNext} />
                           <h3 className="text-lg font-semibold text-slate-900">
                             {item.node.label}
                           </h3>
-                          <p className="text-sm text-slate-500 leading-relaxed">
+                          <p className="text-sm text-slate-600 leading-relaxed">
                             {item.node.description || 'No description provided.'}
                           </p>
                         </div>
@@ -191,7 +191,7 @@ export function JourneyTimeline({
                               event.stopPropagation();
                               onInspect(item.node.id);
                             }}
-                            className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-600 transition-colors hover:bg-emerald-100"
+                            className="inline-flex items-center gap-2 rounded-full bg-[#0f766e]/10 px-4 py-1.5 text-xs font-semibold text-[#0f766e] transition-colors hover:bg-[#0f766e]/15"
                           >
                             <span>Open review</span>
                             <svg
