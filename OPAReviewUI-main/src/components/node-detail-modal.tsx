@@ -84,7 +84,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
       contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
-• الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
+• الملك��ة المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
@@ -646,12 +646,10 @@ export function NodeDetailModal({
               
               <div className="space-y-3">
                 {regoRules.map((rule) => (
-                  <div 
+                  <div
                     key={rule.id}
-                    className={`border rounded-lg overflow-hidden transition-all ${
-                      expandedRule === rule.id
-                        ? 'border-purple-400 dark:border-purple-600 shadow-md'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700'
+                    className={`overflow-hidden rounded-2xl border border-[#d8e4df] bg-white/95 shadow-[0_12px_30px_-24px_rgba(11,64,55,0.24)] transition-all ${
+                      expandedRule === rule.id ? 'ring-2 ring-[#5b21b6]/25' : ''
                     }`}
                   >
                     <button
