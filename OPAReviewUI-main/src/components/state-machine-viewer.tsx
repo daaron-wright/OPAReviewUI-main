@@ -277,10 +277,13 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     if (canPublish()) {
       setShowPublishModal(true);
     } else {
-      toast.warning(`⚠️ Cannot publish: ${stats.total - stats.reviewed} nodes not reviewed`, {
-        position: 'top-center',
-        autoClose: 4000,
-      });
+      toast.warning(
+        createToastContent('warningTriangle', `Cannot publish: ${stats.total - stats.reviewed} nodes not reviewed`),
+        {
+          position: 'top-center',
+          autoClose: 4000,
+        }
+      );
     }
   }, [canPublish, getPublishStats]);
 
