@@ -39,7 +39,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
-  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [primaryView, setPrimaryView] = useState<'list' | 'graph'>('graph');
 
   const {
