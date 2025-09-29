@@ -54,7 +54,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
-��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
+��� يجب رفض المتقد��ين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات التجارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
@@ -386,7 +386,7 @@ export function NodeDetailModal({
   const handleRejectNode = useCallback(() => {
     if (!node) return;
     setNodeReviewed(node.id, false, 'Requires changes');
-    toast.error(`❌ Node "${node.label}" rejected - requires revision`, {
+    toast.error(renderToastContent('xCircle', `Node "${node.label}" rejected - requires revision`), {
       position: 'bottom-right',
       autoClose: 2000,
     });
