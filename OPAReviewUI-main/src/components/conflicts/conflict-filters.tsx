@@ -125,7 +125,7 @@ export function ConflictFilters({
         </div>
       </section>
 
-      <FilterSection title="Severity" icon="🚨">
+      <FilterSection title="Severity" icon="alarm">
         {severityOptions.map((severity) => (
           <FilterCheckbox
             key={severity}
@@ -137,7 +137,7 @@ export function ConflictFilters({
         ))}
       </FilterSection>
 
-      <FilterSection title="Status" icon="📊">
+      <FilterSection title="Status" icon="chart">
         {statusOptions.map((status) => (
           <FilterCheckbox
             key={status}
@@ -149,7 +149,7 @@ export function ConflictFilters({
         ))}
       </FilterSection>
 
-      <FilterSection title="Conflict type" icon="⚙️">
+      <FilterSection title="Conflict type" icon="wrench">
         {typeOptions.map((type) => (
           <FilterCheckbox
             key={type}
@@ -166,7 +166,7 @@ export function ConflictFilters({
 
       <section className="space-y-3">
         <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-600">
-          <span>⚡</span>
+          <Icon name="bolt" className="h-4 w-4 text-amber-500" />
           Quick filters
         </h4>
         <div className="grid gap-2">
