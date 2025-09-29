@@ -1,16 +1,11 @@
-/**
- * Policy Conflict Dashboard
- * Dedicated interface for policy conflict detection, analysis, and resolution
- * Complete focus on conflict management workflow
- */
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { 
-  PolicyConflict, 
-  ConflictAnalytics, 
+import type {
+  PolicyConflict,
+  ConflictAnalytics,
   ConflictFilter,
-  ConflictWorkflow 
+  ConflictWorkflow,
 } from '@/domain/conflicts/types';
 import { ConflictDataProvider } from '@/adapters/conflicts/conflict-data-provider';
 import { ConflictDashboardHeader } from '@/components/conflicts/conflict-dashboard-header';
@@ -43,9 +38,9 @@ export default function ConflictDashboardPage(): JSX.Element {
     try {
       const [conflictData, analyticsData] = await Promise.all([
         ConflictDataProvider.getPolicyConflicts(),
-        ConflictDataProvider.getConflictAnalytics()
+        ConflictDataProvider.getConflictAnalytics(),
       ]);
-      
+
       setConflicts(conflictData);
       setAnalytics(analyticsData);
     } catch (error) {
@@ -66,8 +61,7 @@ export default function ConflictDashboardPage(): JSX.Element {
 
   const handleConflictSelect = async (conflict: PolicyConflict): Promise<void> => {
     setSelectedConflict(conflict);
-    
-    // Load workflow data for the selected conflict
+
     try {
       const workflow = await ConflictDataProvider.getConflictWorkflow(conflict.id);
       setConflictWorkflow(workflow);
@@ -81,70 +75,84 @@ export default function ConflictDashboardPage(): JSX.Element {
   };
 
   const handleConflictUpdate = (): void => {
-    // Reload data after conflict updates
     loadConflictData();
     setSelectedConflict(null);
     setConflictWorkflow(null);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-950 via-slate-900 to-orange-950">
-      <ConflictDashboardHeader 
-        analytics={analytics}
-        activeView={view}
-        onViewChange={setView}
-      />
-      
-      <div className="flex">
-        {/* Sidebar with filters */}
-        <div className="w-80 bg-slate-900/50 backdrop-blur-sm border-r border-red-800/30 h-screen overflow-y-auto">
-          <ConflictFilters 
-            activeFilter={activeFilter}
-            onFilterChange={handleFilterChange}
-            conflictCount={conflicts.length}
-          />
-        </div>
+    <div className="min-h-screen bg-slate-100/60">
+      <ConflictDashboardHeader analytics={analytics} activeView={view} onViewChange={setView} />
 
-        {/* Main content area */}
-        <main className="flex-1 overflow-y-auto">
-          {isLoading ? (
-            <div className="flex items-center justify-center h-96">
-              <div className="text-center">
-                <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                <div className="text-white text-xl font-semibold">Loading Conflict Analysis...</div>
-                <div className="text-red-200">Scanning policy conflicts and dependencies</div>
+      <div className="mx-auto max-w-7xl px-4 pb-16 pt-8 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-[320px,1fr]">
+          <aside className="space-y-4">
+            <div className="rounded-3xl border border-slate-200 bg-white shadow-sm">
+              <div className="border-b border-slate-100/80 px-5 py-4">
+                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Filters
+                </h2>
+                <p className="mt-1 text-xs text-slate-400">
+                  Refine conflict results by workflow stage, severity, and status.
+                </p>
+              </div>
+              <div className="px-5 py-4">
+                <ConflictFilters
+                  activeFilter={activeFilter}
+                  onFilterChange={handleFilterChange}
+                  conflictCount={conflicts.length}
+                />
               </div>
             </div>
-          ) : (
-            <div className="p-6 space-y-6">
-              {view === 'analytics' && analytics && (
-                <ConflictAnalyticsPanel analytics={analytics} />
-              )}
-              
-              {view === 'list' && (
-                <ConflictListView 
-                  conflicts={conflicts}
-                  onConflictSelect={handleConflictSelect}
-                  activeFilter={activeFilter}
-                />
-              )}
-              
-              {view === 'workflow' && selectedConflict && conflictWorkflow && (
-                <div className="space-y-6">
-                  <ConflictAnalyticsPanel analytics={analytics} />
-                  <ConflictListView 
-                    conflicts={conflicts}
-                    onConflictSelect={handleConflictSelect}
-                    activeFilter={activeFilter}
-                  />
-                </div>
-              )}
-            </div>
-          )}
-        </main>
+          </aside>
+
+          <main className="space-y-6">
+            {isLoading ? (
+              <div className="rounded-3xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-4 border-emerald-400 border-t-transparent animate-spin" />
+                <h2 className="mt-6 text-lg font-semibold text-slate-900">Loading conflict analysis…</h2>
+                <p className="mt-2 text-sm text-slate-500">
+                  Gathering policy conflict signals and workflows.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {view === 'analytics' && analytics && (
+                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <ConflictAnalyticsPanel analytics={analytics} />
+                  </div>
+                )}
+
+                {view === 'list' && (
+                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <ConflictListView
+                      conflicts={conflicts}
+                      onConflictSelect={handleConflictSelect}
+                      activeFilter={activeFilter}
+                    />
+                  </div>
+                )}
+
+                {view === 'workflow' && selectedConflict && conflictWorkflow && (
+                  <div className="space-y-6">
+                    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                      <ConflictAnalyticsPanel analytics={analytics} />
+                    </div>
+                    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                      <ConflictListView
+                        conflicts={conflicts}
+                        onConflictSelect={handleConflictSelect}
+                        activeFilter={activeFilter}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </main>
+        </div>
       </div>
 
-      {/* Conflict Detail Modal */}
       {selectedConflict && (
         <ConflictDetailModal
           conflict={selectedConflict}
