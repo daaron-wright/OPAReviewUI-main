@@ -196,10 +196,10 @@ function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {conflict.impact.complianceRisk !== 'none' && (
-            <RiskBadge icon="📋" label="Compliance risk" tone={severityTheme.chipText} background={severityTheme.chipBg} />
+            <RiskBadge icon="clipboard" label="Compliance risk" tone={severityTheme.chipText} background={severityTheme.chipBg} />
           )}
           {conflict.impact.securityRisk !== 'none' && (
-            <RiskBadge icon="🔒" label="Security risk" tone="text-[#b7791f]" background="bg-[#fff4e3]" />
+            <RiskBadge icon="lock" label="Security risk" tone="text-[#b7791f]" background="bg-[#fff4e3]" />
           )}
         </div>
       </div>
@@ -222,7 +222,7 @@ function InfoStat({ label, value }: InfoStatProps): JSX.Element {
 }
 
 interface RiskBadgeProps {
-  readonly icon: string;
+  readonly icon: IconName;
   readonly label: string;
   readonly tone: string;
   readonly background?: string;
@@ -231,7 +231,7 @@ interface RiskBadgeProps {
 function RiskBadge({ icon, label, tone, background = 'bg-[#f9fbfa]' }: RiskBadgeProps): JSX.Element {
   return (
     <span className={`inline-flex items-center gap-2 rounded-full ${background} px-3 py-1 font-semibold shadow-sm ${tone}`}>
-      <span>{icon}</span>
+      <Icon name={icon} className="h-4 w-4" />
       <span>{label}</span>
     </span>
   );
