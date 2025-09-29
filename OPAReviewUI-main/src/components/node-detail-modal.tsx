@@ -81,7 +81,7 @@ If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
 Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
-      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو ��كثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
+      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
 • الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
@@ -218,7 +218,7 @@ export function NodeDetailModal({
     navigator.clipboard.writeText(text);
     setCopiedRule(ruleId);
     setTimeout(() => setCopiedRule(null), 2000);
-    toast.success('📋 Copied to clipboard!', {
+    toast.success('��� Copied to clipboard!', {
       position: 'bottom-center',
       autoClose: 1500,
     });
@@ -439,25 +439,32 @@ export function NodeDetailModal({
         <div className={`flex-shrink-0 border-b bg-gradient-to-r from-emerald-50 via-white to-cyan-50/60 px-6 py-5 ${getHeaderStyle(node)}`}>
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <h2 id="modal-title" className="text-xl font-bold text-gray-900 dark:text-gray-100">
+              <h2 id="modal-title" className="text-2xl font-semibold text-slate-900">
                 {node.label}
               </h2>
-              <div className="flex items-center gap-3 mt-1">
-                <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getTypeBadgeStyle(node)}`}>
-                  {node.type.toUpperCase()}
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${getTypeBadgeStyle(node)}`}>
+                  <span className="h-1.5 w-1.5 rounded-full bg-current/70" />
+                  {node.type}
                 </span>
                 {node.isInitial && (
-                  <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 rounded-full">
-                    INITIAL STATE
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold uppercase text-emerald-700">
+                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 16 16">
+                      <path d="M3 8.5 6.5 12l6.5-7" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    Initial state
                   </span>
                 )}
                 {node.isFinal && (
-                  <span className="px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800 rounded-full">
-                    FINAL STATE
+                  <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1 text-[11px] font-semibold uppercase text-rose-700">
+                    <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 16 16">
+                      <path d="M4 4l8 8M12 4l-8 8" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    Final state
                   </span>
                 )}
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  ID: <code className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded">{node.id}</code>
+                <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+                  ID: <code className="rounded bg-slate-100 px-2 py-1 text-[11px] text-slate-600">{node.id}</code>
                 </span>
               </div>
             </div>
