@@ -358,6 +358,54 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   const totalCount = getTotalNodes();
   const publishStats = getPublishStats();
 
+  const graphContent = (
+    <div className="space-y-4">
+      <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Journey map
+          </p>
+          <h3 className="text-sm font-semibold text-slate-900">Visualise state transitions</h3>
+          <p className="text-xs text-slate-500">
+            Inspect the underlying graph and open any node for deeper review.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => router.push('/dashboard')}
+          className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800"
+        >
+          Open dashboard
+        </button>
+      </div>
+      <div className="relative h-[520px] rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <ReactFlowProvider>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onNodeClick={handleNodeClick}
+            nodeTypes={nodeTypes}
+            onInit={setReactFlowInstance}
+            fitView
+            fitViewOptions={{ padding: 0.2, duration: 800 }}
+            attributionPosition="bottom-left"
+            className="transition-all duration-300"
+          >
+            <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#e5e7eb" />
+            <Controls className="!bg-white !border-slate-200 !shadow-lg" />
+            <MiniMap
+              nodeColor={getMiniMapNodeColor}
+              className="!bg-white !border-slate-200 !shadow-lg"
+              maskColor="rgba(0, 0, 0, 0.1)"
+            />
+          </ReactFlow>
+        </ReactFlowProvider>
+      </div>
+    </div>
+  );
+
   const handleTimelineSelect = useCallback(
     (nodeId: string) => {
       setFocusedNodeId(nodeId);
