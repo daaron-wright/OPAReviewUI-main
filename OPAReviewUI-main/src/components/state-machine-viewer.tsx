@@ -28,10 +28,6 @@ interface StateMachineViewerProps {
   rawStates?: Record<string, unknown>;
 }
 
-const nodeTypes: NodeTypes = {
-  custom: CustomNode,
-};
-
 export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): JSX.Element {
   const router = useRouter();
 
