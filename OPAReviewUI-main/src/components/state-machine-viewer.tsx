@@ -618,46 +618,40 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 />
               </div>
 
-              <div className="mt-6 rounded-2xl border border-emerald-100/60 bg-emerald-50/60 p-4">
-                <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-emerald-700">
-                  <svg className="h-5 w-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                    />
-                  </svg>
-                  States being published
-                </h3>
+              <div className="mt-6 rounded-3xl border border-[#d8e4df] bg-white p-5 shadow-sm">
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-[#0f766e]">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#0f766e]/10 text-[#0f766e]">
+                      <Icon name="clipboard" className="h-4 w-4" />
+                    </span>
+                    States being published
+                  </div>
+                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                    {publishStats.approved} ready
+                  </span>
+                </div>
                 <div className="grid max-h-48 grid-cols-1 gap-2 overflow-y-auto md:grid-cols-2">
                   {stateMachine.nodes.map((node) => {
                     const approved = isNodeApproved(node.id);
                     return (
                       <div
                         key={node.id}
-                        className={`flex items-center gap-2 rounded-2xl px-3 py-2 text-sm ${
+                        className={`flex items-center gap-3 rounded-2xl border px-3 py-2 text-sm transition ${
                           approved
-                            ? 'bg-white shadow-[inset_0_0_0_1px_rgba(16,185,129,0.25)] text-emerald-600'
-                            : 'bg-white/85 shadow-sm text-slate-600'
+                            ? 'border-[#b7e1d4] bg-[#f4fdf9] text-[#0f766e]'
+                            : 'border-[#e0e8e4] bg-white text-slate-600'
                         }`}
                       >
-                        <svg
-                          className={`h-4 w-4 ${approved ? 'text-emerald-500' : 'text-slate-300'}`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                        <span
+                          className={`inline-flex h-7 w-7 items-center justify-center rounded-full ${
+                            approved ? 'bg-[#0f766e]/10 text-[#0f766e]' : 'bg-slate-100 text-slate-400'
+                          }`}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={approved ? 3 : 2}
-                            d={approved ? 'M5 13l4 4L19 7' : 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'}
-                          />
-                        </svg>
+                          <Icon name={approved ? 'checkCircle' : 'infoCircle'} className="h-4 w-4" />
+                        </span>
                         <div className="truncate">
-                          <div className="truncate font-medium">{node.label}</div>
-                          <div className="text-xs text-slate-400">Type: {node.type}</div>
+                          <div className="truncate font-semibold">{node.label}</div>
+                          <div className="text-xs uppercase tracking-[0.16em] text-slate-400">Type: {node.type}</div>
                         </div>
                       </div>
                     );
