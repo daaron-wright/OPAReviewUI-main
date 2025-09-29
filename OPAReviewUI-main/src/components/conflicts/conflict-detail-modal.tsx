@@ -342,7 +342,7 @@ function ResolutionTab({ conflict, onUpdate }: ResolutionTabProps): JSX.Element 
 interface ImpactCardProps {
   readonly title: string;
   readonly content: string;
-  readonly icon: string;
+  readonly icon: IconName;
   readonly color: string;
 }
 
