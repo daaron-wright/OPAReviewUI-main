@@ -1,11 +1,12 @@
-/**
- * Conflict Filters Component
- * Advanced filtering sidebar for policy conflicts
- */
 'use client';
 
 import { useState } from 'react';
-import type { ConflictFilter, ConflictSeverity, ConflictType, ConflictStatus } from '@/domain/conflicts/types';
+import type {
+  ConflictFilter,
+  ConflictSeverity,
+  ConflictType,
+  ConflictStatus,
+} from '@/domain/conflicts/types';
 
 interface ConflictFiltersProps {
   readonly activeFilter: ConflictFilter;
@@ -13,24 +14,31 @@ interface ConflictFiltersProps {
   readonly conflictCount: number;
 }
 
-export function ConflictFilters({ 
-  activeFilter, 
-  onFilterChange, 
-  conflictCount 
+export function ConflictFilters({
+  activeFilter,
+  onFilterChange,
+  conflictCount,
 }: ConflictFiltersProps): JSX.Element {
-  const [searchTerm, setSearchTerm] = useState(activeFilter.searchTerm || '');
+  const [searchTerm, setSearchTerm] = useState(activeFilter.searchTerm ?? '');
 
   const severityOptions: ConflictSeverity[] = ['critical', 'high', 'medium', 'low'];
-  const statusOptions: ConflictStatus[] = ['active', 'investigating', 'resolving', 'resolved', 'ignored', 'false-positive'];
+  const statusOptions: ConflictStatus[] = [
+    'active',
+    'investigating',
+    'resolving',
+    'resolved',
+    'ignored',
+    'false-positive',
+  ];
   const typeOptions: ConflictType[] = [
     'rule-contradiction',
-    'overlapping-conditions', 
+    'overlapping-conditions',
     'circular-dependency',
     'unreachable-rule',
     'ambiguous-precedence',
     'data-inconsistency',
     'performance-conflict',
-    'compliance-violation'
+    'compliance-violation',
   ];
 
   const updateFilter = (updates: Partial<ConflictFilter>): void => {
@@ -49,129 +57,140 @@ export function ConflictFilters({
   const toggleArrayFilter = <T extends string>(
     key: keyof ConflictFilter,
     value: T,
-    currentArray: T[] = []
+    currentArray: T[] = [],
   ): void => {
     const newArray = currentArray.includes(value)
-      ? currentArray.filter(item => item !== value)
+      ? currentArray.filter((item) => item !== value)
       : [...currentArray, value];
-    
+
     updateFilter({ [key]: newArray.length > 0 ? newArray : undefined });
   };
 
   return (
-    <div className="p-4 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">Conflict Filters</h3>
-        <button
-          onClick={clearAllFilters}
-          className="text-xs text-red-400 hover:text-red-300 transition-colors"
-        >
-          Clear All
-        </button>
-      </div>
-
-      {/* Results Count */}
-      <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
-        <div className="text-center">
-          <div className="text-2xl font-bold text-white">{conflictCount}</div>
-          <div className="text-xs text-slate-400">Conflicts Found</div>
+    <div className="space-y-6">
+      <header className="flex flex-col gap-3 rounded-2xl bg-slate-50/80 p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-base font-semibold text-slate-900">Conflict filters</h3>
+            <p className="text-sm text-slate-500">
+              Refine results by severity, workflow stage, and conflict status.
+            </p>
+          </div>
+          <button
+            onClick={clearAllFilters}
+            type="button"
+            className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-700"
+          >
+            Clear all
+          </button>
         </div>
-      </div>
+        <div className="flex items-center gap-2 text-sm">
+          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-600">
+            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            {conflictCount} conflict{conflictCount === 1 ? '' : 's'}
+          </span>
+          <span className="text-slate-400">match your current filters.</span>
+        </div>
+      </header>
 
-      {/* Search */}
-      <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
-          Search Conflicts
+      <section className="space-y-2">
+        <label htmlFor="conflict-search" className="text-sm font-medium text-slate-600">
+          Search conflicts
         </label>
         <div className="flex gap-2">
           <input
+            id="conflict-search"
             type="text"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            placeholder="Search by title, description..."
-            className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:border-red-500 focus:outline-none"
+            onChange={(event) => setSearchTerm(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleSearch();
+              }
+            }}
+            placeholder="Search by applicant, description, or policy"
+            className="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm transition focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100"
           />
           <button
             onClick={handleSearch}
-            className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+            type="button"
+            className="inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-100"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
+            <span className="sr-only">Apply search</span>
           </button>
         </div>
-      </div>
+      </section>
 
-      {/* Severity Filter */}
       <FilterSection title="Severity" icon="🚨">
         {severityOptions.map((severity) => (
           <FilterCheckbox
             key={severity}
-            label={severity.charAt(0).toUpperCase() + severity.slice(1)}
-            checked={activeFilter.severity?.includes(severity) || false}
+            label={toTitleCase(severity)}
+            checked={activeFilter.severity?.includes(severity) ?? false}
             onChange={() => toggleArrayFilter('severity', severity, activeFilter.severity)}
-            color={getSeverityColor(severity)}
+            tone={getSeverityTone(severity)}
           />
         ))}
       </FilterSection>
 
-      {/* Status Filter */}
       <FilterSection title="Status" icon="📊">
         {statusOptions.map((status) => (
           <FilterCheckbox
             key={status}
-            label={status.charAt(0).toUpperCase() + status.slice(1).replace('-', ' ')}
-            checked={activeFilter.status?.includes(status) || false}
+            label={toTitleCase(status.replace('-', ' '))}
+            checked={activeFilter.status?.includes(status) ?? false}
             onChange={() => toggleArrayFilter('status', status, activeFilter.status)}
-            color={getStatusColor(status)}
+            tone={getStatusTone(status)}
           />
         ))}
       </FilterSection>
 
-      {/* Conflict Type Filter */}
-      <FilterSection title="Conflict Type" icon="⚙️">
+      <FilterSection title="Conflict type" icon="⚙️">
         {typeOptions.map((type) => (
           <FilterCheckbox
             key={type}
-            label={type.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-            checked={activeFilter.type?.includes(type) || false}
+            label={type
+              .split('-')
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ')}
+            checked={activeFilter.type?.includes(type) ?? false}
             onChange={() => toggleArrayFilter('type', type, activeFilter.type)}
-            color="text-blue-400"
+            tone="text-sky-600"
           />
         ))}
       </FilterSection>
 
-      {/* Quick Filters */}
-      <div>
-        <h4 className="text-sm font-medium text-slate-300 mb-3 flex items-center gap-2">
+      <section className="space-y-3">
+        <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-600">
           <span>⚡</span>
-          Quick Filters
+          Quick filters
         </h4>
-        <div className="space-y-2">
+        <div className="grid gap-2">
           <QuickFilterButton
-            label="Critical Only"
+            label="Critical only"
             active={activeFilter.severity?.length === 1 && activeFilter.severity[0] === 'critical'}
             onClick={() => updateFilter({ severity: ['critical'] })}
           />
           <QuickFilterButton
-            label="Active Issues"
+            label="Active issues"
             active={activeFilter.status?.length === 1 && activeFilter.status[0] === 'active'}
             onClick={() => updateFilter({ status: ['active'] })}
           />
           <QuickFilterButton
-            label="Rule Conflicts"
-            active={activeFilter.type?.includes('rule-contradiction') || false}
+            label="Rule conflicts"
+            active={Boolean(activeFilter.type?.includes('rule-contradiction'))}
             onClick={() => updateFilter({ type: ['rule-contradiction', 'overlapping-conditions'] })}
           />
           <QuickFilterButton
-            label="Compliance Risks"
-            active={activeFilter.type?.includes('compliance-violation') || false}
+            label="Compliance risks"
+            active={Boolean(activeFilter.type?.includes('compliance-violation'))}
             onClick={() => updateFilter({ type: ['compliance-violation'] })}
           />
         </div>
-      </div>
+      </section>
     </div>
   );
 }
@@ -184,15 +203,13 @@ interface FilterSectionProps {
 
 function FilterSection({ title, icon, children }: FilterSectionProps): JSX.Element {
   return (
-    <div>
-      <h4 className="text-sm font-medium text-slate-300 mb-3 flex items-center gap-2">
+    <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm">
+      <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
         <span>{icon}</span>
         {title}
       </h4>
-      <div className="space-y-2">
-        {children}
-      </div>
-    </div>
+      <div className="space-y-2">{children}</div>
+    </section>
   );
 }
 
@@ -200,21 +217,19 @@ interface FilterCheckboxProps {
   readonly label: string;
   readonly checked: boolean;
   readonly onChange: () => void;
-  readonly color: string;
+  readonly tone: string;
 }
 
-function FilterCheckbox({ label, checked, onChange, color }: FilterCheckboxProps): JSX.Element {
+function FilterCheckbox({ label, checked, onChange, tone }: FilterCheckboxProps): JSX.Element {
   return (
-    <label className="flex items-center gap-2 cursor-pointer hover:bg-slate-800/50 rounded p-1 transition-colors">
+    <label className="flex items-center justify-between rounded-xl border border-transparent px-3 py-2 transition hover:border-slate-200 hover:bg-slate-50">
+      <span className={`text-sm font-medium ${checked ? tone : 'text-slate-500'}`}>{label}</span>
       <input
         type="checkbox"
         checked={checked}
         onChange={onChange}
-        className="w-4 h-4 text-red-600 bg-slate-800 border-slate-600 rounded focus:ring-red-500 focus:ring-2"
+        className="h-4 w-4 rounded border-slate-300 text-emerald-500 focus:ring-emerald-400"
       />
-      <span className={`text-sm ${checked ? color : 'text-slate-400'}`}>
-        {label}
-      </span>
     </label>
   );
 }
@@ -228,11 +243,12 @@ interface QuickFilterButtonProps {
 function QuickFilterButton({ label, active, onClick }: QuickFilterButtonProps): JSX.Element {
   return (
     <button
+      type="button"
       onClick={onClick}
-      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+      className={`w-full rounded-2xl px-4 py-2 text-left text-sm font-semibold transition hover:shadow-sm ${
         active
-          ? 'bg-red-600 text-white'
-          : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
+          ? 'border border-emerald-400 bg-emerald-50 text-emerald-600'
+          : 'border border-slate-200 bg-white text-slate-500 hover:border-emerald-200'
       }`}
     >
       {label}
@@ -240,24 +256,33 @@ function QuickFilterButton({ label, active, onClick }: QuickFilterButtonProps): 
   );
 }
 
-function getSeverityColor(severity: ConflictSeverity): string {
-  const colors = {
-    critical: 'text-red-400',
-    high: 'text-orange-400',
-    medium: 'text-yellow-400',
-    low: 'text-blue-400'
-  };
-  return colors[severity];
+function toTitleCase(value: string): string {
+  return value
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
-function getStatusColor(status: ConflictStatus): string {
-  const colors = {
-    active: 'text-red-400',
-    investigating: 'text-yellow-400',
-    resolving: 'text-blue-400',
-    resolved: 'text-green-400',
-    ignored: 'text-gray-400',
-    'false-positive': 'text-purple-400'
+function getSeverityTone(severity: ConflictSeverity): string {
+  const tones: Record<ConflictSeverity, string> = {
+    critical: 'text-rose-600',
+    high: 'text-amber-600',
+    medium: 'text-sky-600',
+    low: 'text-emerald-600',
   };
-  return colors[status];
+
+  return tones[severity];
+}
+
+function getStatusTone(status: ConflictStatus): string {
+  const tones: Record<ConflictStatus, string> = {
+    active: 'text-rose-600',
+    investigating: 'text-amber-600',
+    resolving: 'text-sky-600',
+    resolved: 'text-emerald-600',
+    ignored: 'text-slate-500',
+    'false-positive': 'text-violet-600',
+  };
+
+  return tones[status];
 }
