@@ -84,14 +84,14 @@ Note: Even if ownership is below 25%, persons exercising control through other m
       contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
-• الملك��ة المباشرة: الأسهم المملوكة باسم الشخص نفسه
+• الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
-ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
+ملكية الشخص أ غير المباشرة = 60٪ �� 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
@@ -656,16 +656,15 @@ export function NodeDetailModal({
                       onClick={() => {
                         const newExpanded = expandedRule === rule.id ? null : rule.id;
                         setExpandedRule(newExpanded);
-                        
-                        // Also sync with BRD section (only one at a time)
-                        const ruleIndex = regoRules.findIndex(r => r.id === rule.id);
+
+                        const ruleIndex = regoRules.findIndex((r) => r.id === rule.id);
                         if (newExpanded && ruleIndex >= 0 && brdReferences.sections[ruleIndex]) {
                           setExpandedBRDSection(ruleIndex);
                         } else if (!newExpanded) {
                           setExpandedBRDSection(null);
                         }
                       }}
-                      className="w-full p-3 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
+                      className="w-full bg-[#f9fbfa] px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
