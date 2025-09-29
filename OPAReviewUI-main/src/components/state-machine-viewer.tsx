@@ -348,10 +348,26 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
   const handleApproveAll = useCallback(() => {
     approveAllNodes();
-    toast.success(`✅ All ${getTotalNodes()} nodes approved!`, {
-      position: 'top-center',
-      autoClose: 3000,
-    });
+    toast.success(
+      <div className="flex items-center gap-3">
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-white shadow">
+          <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8.5 6.5 12l6.5-7" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+        <span className="text-sm font-semibold text-slate-100">
+          All {getTotalNodes()} nodes approved!
+        </span>
+      </div>,
+      {
+        position: 'top-center',
+        autoClose: 2800,
+        icon: false,
+        className:
+          'bg-gradient-to-r from-violet-500 via-indigo-500 to-sky-500 text-white font-medium rounded-2xl shadow-xl border border-white/40 backdrop-blur px-5 py-3 flex items-center',
+        progressStyle: { background: '#22c55e' },
+      }
+    );
   }, [approveAllNodes, getTotalNodes]);
 
   const reviewedCount = getReviewedCount();
