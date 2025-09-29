@@ -71,11 +71,11 @@ function ViolationCard({ violation }: ViolationCardProps): JSX.Element {
     low: 'bg-blue-500/20 border-blue-500/30 text-blue-400'
   };
 
-  const severityIcons = {
-    critical: '🚨',
-    high: '⚠️',
-    medium: '⚡',
-    low: 'ℹ️'
+  const severityIcons: Record<PolicyViolation['severity'], IconName> = {
+    critical: 'alarm',
+    high: 'warningTriangle',
+    medium: 'bolt',
+    low: 'infoCircle',
   };
 
   return (
