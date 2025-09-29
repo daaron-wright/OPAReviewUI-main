@@ -152,7 +152,7 @@ export function JourneyTimeline({
       <div className="bg-white px-6 py-6">
         {viewMode === 'list' ? (
           <div className="relative">
-            <div className="pointer-events-none absolute left-[22px] top-4 bottom-4 w-px bg-gradient-to-b from-slate-200 via-slate-200/60 to-transparent" />
+            <div className="pointer-events-none absolute left-[22px] top-4 bottom-4 w-px bg-gradient-to-b from-[#c0e4da] via-[#dbe9e3] to-transparent" />
             <ol className="space-y-4">
               {items.map((item) => (
                 <li key={item.node.id} className="relative pl-10">
