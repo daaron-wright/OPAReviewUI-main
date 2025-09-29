@@ -155,8 +155,8 @@ function getPalette(data: CustomNodeData): {
 } {
   if (data.isInitial) {
     return {
-      badge: 'border-emerald-200 bg-emerald-50 text-emerald-600',
-      accentDot: 'bg-emerald-400',
+      badge: 'border-[#b7e6d8] bg-[#effaf6] text-[#0f766e]',
+      accentDot: 'bg-[#0f766e]',
     };
   }
 
@@ -170,18 +170,18 @@ function getPalette(data: CustomNodeData): {
   switch (data.type) {
     case 'decision':
       return {
-        badge: 'border-sky-200 bg-sky-50 text-sky-600',
-        accentDot: 'bg-sky-400',
+        badge: 'border-[#c7e5f4] bg-[#f0f8fd] text-[#1d7fb3]',
+        accentDot: 'bg-[#1d7fb3]',
       };
     case 'process':
       return {
-        badge: 'border-indigo-200 bg-indigo-50 text-indigo-600',
-        accentDot: 'bg-indigo-400',
+        badge: 'border-[#b8c6ff] bg-[#eef1ff] text-[#3948a3]',
+        accentDot: 'bg-[#3948a3]',
       };
     default:
       return {
-        badge: 'border-slate-200 bg-slate-100 text-slate-600',
-        accentDot: 'bg-slate-400',
+        badge: 'border-[#e2ede8] bg-white text-slate-600',
+        accentDot: 'bg-[#94a3b8]',
       };
   }
 }
