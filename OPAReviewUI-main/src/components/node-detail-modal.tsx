@@ -32,7 +32,7 @@ const getMockBRDReferences = (): any => ({
   documentVersion: 'v2.3.1',
   lastUpdated: '2024-01-15',
   approvedBy: 'Director of Digital Transformation',
-  approvedByAr: 'مدير التحول الرقمي',
+  approvedByAr: 'مدير التحول الر��مي',
   sections: [
     {
       page: Math.floor(Math.random() * 20) + 10,
@@ -50,7 +50,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أ�� إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 • يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -554,16 +554,14 @@ export function NodeDetailModal({
               
               <div>
                 <h4 className="mb-3 text-sm font-semibold text-slate-700">
-                  {language === 'ar' ? 'الأقسام ذات الصلة' : 'Relevant Sections'}
+                  {language === 'ar' ? 'ا��أقسام ذات الصلة' : 'Relevant Sections'}
                 </h4>
                 <div className="space-y-2">
                   {brdReferences.sections.map((ref: any, idx: number) => (
                     <div
                       key={idx}
-                      className={`overflow-hidden rounded-2xl border bg-white shadow-sm transition ${
-                        expandedBRDSection === idx
-                          ? 'border-emerald-300 shadow-lg shadow-emerald-200/40'
-                          : 'border-slate-200'
+                      className={`overflow-hidden rounded-2xl border border-[#d8e4df] bg-white/95 shadow-[0_16px_32px_-28px_rgba(11,64,55,0.24)] transition ${
+                        expandedBRDSection === idx ? 'ring-2 ring-[#0f766e]/25' : ''
                       }`}
                     >
                       <button
