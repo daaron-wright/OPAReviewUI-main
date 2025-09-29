@@ -6,6 +6,7 @@
 
 import { useState } from 'react';
 import type { PolicyConflict, ConflictWorkflow } from '@/domain/conflicts/types';
+import { Icon, IconName } from '../icon';
 
 interface ConflictDetailModalProps {
   readonly conflict: PolicyConflict;
