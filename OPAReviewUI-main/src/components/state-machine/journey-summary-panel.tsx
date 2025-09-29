@@ -51,10 +51,10 @@ export function JourneySummaryPanel({
       <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 pt-6 pb-5">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold tracking-[0.18em] uppercase text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
               Overview
             </p>
-            <h2 className="text-2xl font-semibold text-slate-900 mt-2">
+            <h2 className="mt-2 text-2xl font-semibold text-slate-900">
               {item?.node.label ?? 'Select a state'}
             </h2>
             <p className="text-sm text-slate-500 mt-2 leading-relaxed">
