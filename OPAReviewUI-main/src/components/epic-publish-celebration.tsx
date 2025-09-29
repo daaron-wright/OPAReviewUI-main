@@ -7,6 +7,7 @@
 import { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { MarioSprite, LuigiSprite } from './mario-luigi-sprites';
+import { Icon } from './icon';
 
 interface EpicPublishCelebrationProps {
   trigger: boolean;
