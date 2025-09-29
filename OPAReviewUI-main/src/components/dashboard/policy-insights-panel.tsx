@@ -121,7 +121,7 @@ interface KPICardProps {
   readonly value: string;
   readonly change: string;
   readonly changeType: 'positive' | 'negative' | 'neutral';
-  readonly icon: string;
+  readonly icon: IconName;
 }
 
 function KPICard({ label, value, change, changeType, icon }: KPICardProps): JSX.Element {
