@@ -39,7 +39,9 @@ export function ConflictListView({
 
       {conflicts.length === 0 ? (
         <div className="flex flex-col items-center gap-3 rounded-3xl border border-emerald-200 bg-emerald-50/80 px-10 py-14 text-center shadow-sm">
-          <span className="text-5xl">🎉</span>
+          <span className="text-emerald-500">
+            <Icon name="celebration" className="h-12 w-12" />
+          </span>
           <div>
             <p className="text-lg font-semibold text-emerald-700">No conflicts found</p>
             <p className="text-sm text-emerald-600/80">
