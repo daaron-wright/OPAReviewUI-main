@@ -8,7 +8,8 @@ import { PolicyChatInterface } from './policy-chat-interface';
 import { useReview } from '@/context/review-context';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Icon, IconName } from './icon';
+import { Icon } from './icon';
+import { createToastContent } from './toast-content';
 
 interface NodeDetailModalProps {
   node: ProcessedNode | null;
@@ -54,7 +55,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
-��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
+��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة م��اسبة
 • يجب أن يكون للكيانات التجارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
@@ -84,7 +85,7 @@ Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
       contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
-قواعد ��لحساب:
+قواعد الحساب:
 • الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
