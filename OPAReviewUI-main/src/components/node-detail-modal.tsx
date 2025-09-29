@@ -375,7 +375,7 @@ export function NodeDetailModal({
   const handleApproveNode = useCallback(() => {
     if (!node) return;
     setNodeReviewed(node.id, true, 'Approved after review');
-    toast.success(`✅ Node "${node.label}" approved!`, {
+    toast.success(renderToastContent('checkCircle', `Node "${node.label}" approved!`), {
       position: 'bottom-right',
       autoClose: 2000,
     });
