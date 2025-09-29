@@ -1,6 +1,6 @@
 import { ReactNode, useMemo } from 'react';
 import clsx from 'clsx';
-import {
+import ReactFlow, {
   Background,
   BackgroundVariant,
   Controls,
@@ -12,7 +12,6 @@ import {
   NodeTypes,
   OnEdgesChange,
   OnNodesChange,
-  ReactFlow,
   ReactFlowInstance,
   ReactFlowProvider,
 } from 'reactflow';
