@@ -595,9 +595,27 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
             <div className="max-h-[60vh] overflow-y-auto px-6 py-6">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <StatBadge label="Total States" value={publishStats.total} tone="blue" />
-                <StatBadge label="Approved" value={publishStats.approved} tone="green" />
-                <StatBadge label="Transitions" value={stateMachine.edges.length} tone="purple" />
+                <PublishStatCard
+                  label="Total States"
+                  value={publishStats.total}
+                  tone="sky"
+                  icon="globe"
+                  helper="Model coverage"
+                />
+                <PublishStatCard
+                  label="Approved"
+                  value={publishStats.approved}
+                  tone="emerald"
+                  icon="checkCircle"
+                  helper="Ready to deploy"
+                />
+                <PublishStatCard
+                  label="Transitions"
+                  value={stateMachine.edges.length}
+                  tone="purple"
+                  icon="refresh"
+                  helper="Path connections"
+                />
               </div>
 
               <div className="mt-6 rounded-2xl border border-emerald-100/60 bg-emerald-50/60 p-4">
