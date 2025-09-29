@@ -659,14 +659,43 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 </div>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/80 p-4 text-sm text-amber-800">
-                <h3 className="mb-2 font-semibold text-amber-900">Deployment configuration</h3>
-                <dl className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <InfoRow label="Environment" value="Production (UAE-PROD-01)" />
-                  <InfoRow label="State Machine ID" value="SM-2024-BENF-001" />
-                  <InfoRow label="Version" value={`v${stateMachine.metadata.version}`} />
-                  <InfoRow label="Compliance" value="✓ Passed" />
-                </dl>
+              <div className="mt-6 rounded-3xl border border-[#f4d278] bg-[#fff9eb] p-5">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-[#b7791f]">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/70 text-[#b7791f]">
+                      <Icon name="briefcase" className="h-4 w-4" />
+                    </span>
+                    Deployment configuration
+                  </div>
+                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#b7791f]/70">Production ready</span>
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {(
+                    [
+                      { label: 'Environment', value: 'Production (UAE-PROD-01)' },
+                      { label: 'State Machine ID', value: 'SM-2024-BENF-001' },
+                      { label: 'Version', value: `v${stateMachine.metadata.version}` },
+                      { label: 'Compliance', value: 'Passed', icon: 'checkCircle', tone: 'success' as const },
+                    ] satisfies Array<{ label: string; value: string; icon?: IconName; tone?: 'success' }>
+                  ).map((item) => (
+                    <div
+                      key={item.label}
+                      className="flex items-center justify-between rounded-2xl border border-[#f4d278]/70 bg-white px-4 py-3 shadow-sm"
+                    >
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#b7791f]/70">
+                        {item.label}
+                      </div>
+                      <div
+                        className={`flex items-center gap-1 text-sm font-semibold ${
+                          item.tone === 'success' ? 'text-[#0f766e]' : 'text-[#7c5a1b]'
+                        }`}
+                      >
+                        {item.icon && <Icon name={item.icon} className="h-4 w-4" />}
+                        {item.value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {publishStats.rejected > 0 && (
