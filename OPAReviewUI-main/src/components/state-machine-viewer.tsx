@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 
 import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
 import { createToastContent } from './toast-content';
+import { Icon, IconName } from './icon';
 import { CustomNode, CustomNodeData } from './graph/custom-node';
 import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
