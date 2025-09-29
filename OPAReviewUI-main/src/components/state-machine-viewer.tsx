@@ -594,7 +594,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             </header>
 
             <div className="max-h-[60vh] overflow-y-auto px-6 py-6">
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <PublishStatCard
                   label="Total States"
                   value={publishStats.total}
