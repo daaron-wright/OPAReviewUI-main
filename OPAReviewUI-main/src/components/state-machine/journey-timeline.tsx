@@ -60,26 +60,31 @@ export function JourneyTimeline({
     <section className="overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)]">
       <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-7 lg:px-8">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-xl space-y-4">
-            <div className="flex items-center gap-3">
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F515490be93874e318756209e59f398b6?format=webp&width=800"
-                alt="Abu Dhabi Government Services"
-                className="h-8 w-auto object-contain"
-              />
+          <div className="max-w-xl space-y-5">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F67c03d8c981249bc809a682c60a2173f?format=webp&width=800"
+                  alt="Abu Dhabi Government Services mark"
+                  className="h-10 w-auto object-contain sm:h-12"
+                />
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0f766e] sm:text-[11px]">
+                  Abu Dhabi Government Services
+                </span>
+              </div>
               <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
                 Business license portal
               </span>
             </div>
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#0f766e]" />
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                <span className="inline-flex h-2 w-2 rounded-full bg-[#0f766e]" />
                 {headerTitle}
               </div>
-              <h2 className="text-3xl font-semibold text-slate-900 sm:text-[32px]">
+              <h2 className="text-3xl font-semibold leading-tight text-slate-900 sm:text-[32px]">
                 Review timeline
               </h2>
-              <p className="max-w-xl text-sm text-slate-600">
+              <p className="max-w-xl text-base text-slate-600">
                 {headerSubtitle}
               </p>
             </div>
