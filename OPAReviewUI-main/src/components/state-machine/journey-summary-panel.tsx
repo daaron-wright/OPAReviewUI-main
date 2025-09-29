@@ -279,39 +279,42 @@ function getStatusTone(item: TimelineNodeItem | null): {
 } {
   if (!item) {
     return {
-      container: 'bg-slate-100 text-slate-500 border border-slate-200',
-      secondary: 'border-slate-200 text-slate-500 bg-slate-50/80',
+      container: 'border border-[#e2ede8] bg-[#f6faf8] text-slate-500',
+      secondary: 'border-[#e2ede8] text-slate-500 bg-white',
     };
   }
 
   if (item.status === 'completed') {
     return {
-      container: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
-      secondary: 'border-emerald-100 text-emerald-600 bg-emerald-50/70',
+      container: 'border border-[#b7e6d8] bg-[#effaf6] text-[#0f766e]',
+      secondary: 'border-[#b7e6d8] text-[#0f766e] bg-[#f2fbf7]',
     };
   }
 
   if (item.status === 'in-progress') {
     return {
-      container: 'bg-teal-50 text-teal-600 border border-teal-100',
-      secondary: 'border-teal-100 text-teal-600 bg-teal-50/70',
+      container: 'border border-[#b8eceb] bg-[#edfbfb] text-[#1f8f83]',
+      secondary: 'border-[#b8eceb] text-[#1f8f83] bg-[#f1fbfb]',
     };
   }
 
   if (item.status === 'rejected') {
     return {
-      container: 'bg-rose-50 text-rose-600 border border-rose-100',
-      secondary: 'border-rose-100 text-rose-600 bg-rose-50/70',
+      container: 'border border-rose-200 bg-rose-50 text-rose-600',
+      secondary: 'border-rose-200 text-rose-600 bg-rose-50',
+    };
+  }
+
+  if (item.isNext) {
+    return {
+      container: 'border border-[#c7e5f4] bg-[#f0f8fd] text-[#1d7fb3]',
+      secondary: 'border-[#c7e5f4] text-[#1d7fb3] bg-white',
     };
   }
 
   return {
-    container: item.isNext
-      ? 'bg-sky-50 text-sky-600 border border-sky-100'
-      : 'bg-slate-100 text-slate-500 border border-slate-200',
-    secondary: item.isNext
-      ? 'border-sky-100 text-sky-600 bg-sky-50/70'
-      : 'border-slate-200 text-slate-500 bg-slate-50/80',
+    container: 'border border-[#e2ede8] bg-[#f6faf8] text-slate-500',
+    secondary: 'border-[#e2ede8] text-slate-500 bg-white',
   };
 }
 
