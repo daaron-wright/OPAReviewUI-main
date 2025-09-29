@@ -132,13 +132,13 @@ function getNodeStyles(data: CustomNodeData, isReviewed: boolean, isApproved: bo
   const palette = getPalette(data);
   const reviewAccent = isReviewed
     ? isApproved
-      ? 'border-emerald-300 shadow-[0_10px_25px_-15px_rgba(16,185,129,0.6)]'
-      : 'border-rose-300 shadow-[0_10px_25px_-15px_rgba(244,63,94,0.6)]'
-    : 'border-slate-200 shadow-sm';
+      ? 'border-[#0f766e] shadow-[0_14px_36px_-22px_rgba(15,118,110,0.55)]'
+      : 'border-rose-300 shadow-[0_14px_36px_-22px_rgba(244,63,94,0.45)]'
+    : 'border-[#dbe9e3] shadow-sm';
 
   return {
     container: clsx(
-      'relative min-w-[240px] max-w-[280px] rounded-2xl bg-white px-4 py-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg',
+      'relative min-w-[240px] max-w-[280px] rounded-[24px] bg-white px-4 py-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg',
       reviewAccent
     ),
     typeBadge: clsx(
