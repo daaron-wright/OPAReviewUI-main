@@ -85,11 +85,18 @@ export function JourneyTimeline({
             >
               <TimelineMarker status={item.status} isSelected={item.isSelected} />
 
-              <button
-                type="button"
+              <div
+                role="button"
+                tabIndex={0}
                 onClick={() => onSelect(item.node.id)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    onSelect(item.node.id);
+                  }
+                }}
                 className={clsx(
-                  'w-full text-left rounded-2xl border transition-all focus:outline-none focus:ring-2 focus:ring-emerald-400/70',
+                  'w-full text-left rounded-2xl border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70',
                   getContainerClasses(item)
                 )}
               >
@@ -140,7 +147,7 @@ export function JourneyTimeline({
 
                   {renderMetadata(item.node)}
                 </div>
-              </button>
+              </div>
             </li>
           ))}
         </div>
