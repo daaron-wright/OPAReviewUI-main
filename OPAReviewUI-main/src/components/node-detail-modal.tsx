@@ -51,7 +51,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التح��ق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -68,7 +68,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       title: 'Beneficiary Ownership Thresholds',
       titleAr: 'حدود ملكية المستفيد',
       location: 'Chapter 5: Declaration Requirements',
-      locationAr: 'الفصل 5: متط��بات الإعلان',
+      locationAr: 'الفصل 5: متطلبات الإعلان',
       content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
 
 Calculation Rules:
@@ -85,9 +85,9 @@ Note: Even if ownership is below 25%, persons exercising control through other m
       contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
-• الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
+• الملكية ��لمباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
-• تقييم السيطر��: حقوق التصويت، حقوق النقض، أو حقوق التعيين
+• تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
@@ -587,8 +587,9 @@ export function NodeDetailModal({
                                 {language === 'ar' ? 'القسم' : 'Section'} {ref.section}
                               </span>
                               {expandedBRDSection === idx && expandedRule === regoRules[idx]?.id && (
-                                <span className="px-1.5 py-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded text-xs font-bold animate-pulse">
-                                  🔗 Synced
+                                <span className="inline-flex items-center gap-1 rounded bg-gradient-to-r from-indigo-500 to-purple-500 px-1.5 py-0.5 text-xs font-bold text-white animate-pulse">
+                                  <Icon name="link" className="h-3 w-3 text-white" />
+                                  Synced
                                 </span>
                               )}
                             </div>
