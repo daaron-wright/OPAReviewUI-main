@@ -32,6 +32,13 @@ interface JourneyTimelineProps {
   readonly graphContent?: ReactNode;
 }
 
+const reviewerProfile = {
+  name: 'Ahmed Al Mansoori',
+  email: 'ahmed.almansoori@email.ae',
+  avatarUrl:
+    'https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Ffdd0903634a841018729b20c0d63aecb?format=webp&width=200',
+} as const;
+
 export function JourneyTimeline({
   items,
   onSelect,
