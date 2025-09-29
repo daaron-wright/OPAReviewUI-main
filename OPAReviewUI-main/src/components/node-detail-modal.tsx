@@ -578,11 +578,11 @@ export function NodeDetailModal({
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="px-1.5 py-0.5 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded text-xs font-bold">
+                            <div className="mb-1 flex items-center gap-2">
+                              <span className="rounded-full bg-[#e7f2ff] px-2 py-0.5 text-xs font-semibold text-[#0f6fc4]">
                                 {language === 'ar' ? 'صفحة' : 'Page'} {ref.page}
                               </span>
-                              <span className="text-xs font-semibold text-gray-900 dark:text-gray-100">
+                              <span className="text-xs font-semibold text-slate-600">
                                 {language === 'ar' ? 'القسم' : 'Section'} {ref.section}
                               </span>
                               {expandedBRDSection === idx && expandedRule === regoRules[idx]?.id && (
