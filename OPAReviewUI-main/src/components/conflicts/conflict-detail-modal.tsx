@@ -128,7 +128,7 @@ function OverviewTab({ conflict }: OverviewTabProps): JSX.Element {
         <ImpactCard
           title="Security Risk"
           content={`${conflict.impact.securityRisk.toUpperCase()} security impact`}
-          icon="🔒"
+          icon="lock"
           color="text-yellow-400"
         />
       </div>
