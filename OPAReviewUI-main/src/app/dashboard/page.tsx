@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import type {
   PolicyConflict,
   ConflictAnalytics,
@@ -14,6 +14,9 @@ import { ConflictListView } from '@/components/conflicts/conflict-list-view';
 import { ConflictDetailModal } from '@/components/conflicts/conflict-detail-modal';
 import { ConflictFilters } from '@/components/conflicts/conflict-filters';
 
+const panelCardClassName =
+  'rounded-3xl border border-[#d8e4df] bg-white/95 p-6 shadow-[0_20px_48px_-28px_rgba(11,64,55,0.28)]';
+
 export default function ConflictDashboardPage(): JSX.Element {
   const [conflicts, setConflicts] = useState<PolicyConflict[]>([]);
   const [analytics, setAnalytics] = useState<ConflictAnalytics | null>(null);
@@ -24,12 +27,12 @@ export default function ConflictDashboardPage(): JSX.Element {
   const [view, setView] = useState<'list' | 'analytics' | 'workflow'>('list');
 
   useEffect(() => {
-    loadConflictData();
+    void loadConflictData();
   }, []);
 
   useEffect(() => {
     if (activeFilter) {
-      loadFilteredConflicts();
+      void loadFilteredConflicts();
     }
   }, [activeFilter]);
 
@@ -75,28 +78,30 @@ export default function ConflictDashboardPage(): JSX.Element {
   };
 
   const handleConflictUpdate = (): void => {
-    loadConflictData();
+    void loadConflictData();
     setSelectedConflict(null);
     setConflictWorkflow(null);
   };
 
+  const hasActiveFilter = useMemo(() => Object.keys(activeFilter).length > 0, [activeFilter]);
+
   return (
-    <div className="min-h-screen bg-slate-100/60">
+    <div className="min-h-screen bg-[#f4f8f6]">
       <ConflictDashboardHeader analytics={analytics} activeView={view} onViewChange={setView} />
 
       <div className="mx-auto max-w-7xl px-4 pb-16 pt-8 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[320px,1fr]">
           <aside className="space-y-4">
-            <div className="rounded-3xl border border-slate-200 bg-white shadow-sm">
-              <div className="border-b border-slate-100/80 px-5 py-4">
-                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div className="rounded-3xl border border-[#d8e4df] bg-white/95 shadow-[0_18px_42px_-30px_rgba(11,64,55,0.25)]">
+              <div className="rounded-t-3xl border-b border-[#d8e4df] bg-[#f9fbfa] px-6 py-5">
+                <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
                   Filters
                 </h2>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-2 text-sm text-slate-500">
                   Refine conflict results by workflow stage, severity, and status.
                 </p>
               </div>
-              <div className="px-5 py-4">
+              <div className="px-6 py-5">
                 <ConflictFilters
                   activeFilter={activeFilter}
                   onFilterChange={handleFilterChange}
@@ -108,23 +113,23 @@ export default function ConflictDashboardPage(): JSX.Element {
 
           <main className="space-y-6">
             {isLoading ? (
-              <div className="rounded-3xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-4 border-emerald-400 border-t-transparent animate-spin" />
+              <div className="rounded-3xl border border-[#d8e4df] bg-white/95 px-6 py-16 text-center shadow-[0_18px_42px_-32px_rgba(11,64,55,0.27)]">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-[#94d2c2] border-t-transparent text-[#0f766e] animate-spin" />
                 <h2 className="mt-6 text-lg font-semibold text-slate-900">Loading conflict analysis…</h2>
-                <p className="mt-2 text-sm text-slate-500">
+                <p className="mt-2 text-sm text-slate-600">
                   Gathering policy conflict signals and workflows.
                 </p>
               </div>
             ) : (
               <div className="space-y-6">
                 {view === 'analytics' && analytics && (
-                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <div className={panelCardClassName}>
                     <ConflictAnalyticsPanel analytics={analytics} />
                   </div>
                 )}
 
                 {view === 'list' && (
-                  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <div className={panelCardClassName}>
                     <ConflictListView
                       conflicts={conflicts}
                       onConflictSelect={handleConflictSelect}
@@ -135,16 +140,32 @@ export default function ConflictDashboardPage(): JSX.Element {
 
                 {view === 'workflow' && selectedConflict && conflictWorkflow && (
                   <div className="space-y-6">
-                    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                      <ConflictAnalyticsPanel analytics={analytics} />
-                    </div>
-                    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                    {analytics && (
+                      <div className={panelCardClassName}>
+                        <ConflictAnalyticsPanel analytics={analytics} />
+                      </div>
+                    )}
+                    <div className={panelCardClassName}>
                       <ConflictListView
                         conflicts={conflicts}
                         onConflictSelect={handleConflictSelect}
                         activeFilter={activeFilter}
                       />
                     </div>
+                  </div>
+                )}
+
+                {view === 'workflow' && (!selectedConflict || !conflictWorkflow) && (
+                  <div className="rounded-3xl border border-dashed border-[#d8e4df] bg-white/80 px-6 py-14 text-center text-sm text-slate-600">
+                    Select a conflict from the list to review its resolution workflow details.
+                  </div>
+                )}
+
+                {view !== 'workflow' && !conflicts.length && !isLoading && (
+                  <div className="rounded-3xl border border-dashed border-[#d8e4df] bg-white/85 px-6 py-14 text-center text-sm text-slate-500">
+                    {hasActiveFilter
+                      ? 'No conflicts match your current filters. Try adjusting the filters to broaden the results.'
+                      : 'No policy conflicts detected at this time.'}
                   </div>
                 )}
               </div>
