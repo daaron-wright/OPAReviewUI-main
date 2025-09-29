@@ -88,7 +88,7 @@ function MetricCard({ title, value, tone, caption, pulse = false }: MetricCardPr
 
   return (
     <div
-      className={`rounded-2xl border bg-white/90 p-4 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${style.container} ${pulse ? 'animate-pulse-slow' : ''}`}
+      className={`rounded-2xl border bg-white/90 p-4 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${style.container} ${pulse ? 'animate-pulse' : ''}`}
     >
       <div className="flex items-start justify-between">
         <div>
