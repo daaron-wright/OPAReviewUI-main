@@ -925,10 +925,10 @@ export function NodeDetailModal({
               </button>
               <button
                 onClick={handleApproveNode}
-                className={`px-4 py-2 font-medium rounded-lg transition-all flex items-center gap-2 ${
+                className={`flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-all ${
                   isNodeReviewed(node.id) && isNodeApproved(node.id)
-                    ? 'bg-green-600 text-white cursor-default'
-                    : 'bg-green-600 hover:bg-green-700 text-white'
+                    ? 'bg-[#0f766e] text-white cursor-default'
+                    : 'bg-[#0f766e] text-white hover:bg-[#0c5f59]'
                 }`}
                 disabled={isNodeReviewed(node.id) && isNodeApproved(node.id)}
               >
