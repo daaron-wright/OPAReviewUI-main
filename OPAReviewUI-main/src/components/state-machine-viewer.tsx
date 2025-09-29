@@ -568,16 +568,16 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-[#d8e4df] bg-white shadow-[0_40px_80px_-45px_rgba(15,64,55,0.35)] animate-slide-up">
             <header className="flex items-start justify-between gap-4 border-b border-[#d8e4df] bg-gradient-to-r from-[#ecf9f4] via-[#e3f4ef] to-[#eaf7f3] px-6 py-5">
               <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-emerald-800 backdrop-blur">
-                  <Icon name="shieldCheck" className="h-7 w-7" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#0f766e] shadow-sm">
+                  <Icon name="shieldCheck" className="h-6 w-6" />
                 </div>
-                <div>
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/80">
+                <div className="text-slate-800">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
                     <Icon name="rocket" className="h-3.5 w-3.5" />
                     Deployment Ready
                   </span>
-                  <h2 className="mt-2 text-2xl font-semibold">Confirm State Machine Publication</h2>
-                  <p className="mt-1 text-sm text-white/80">
+                  <h2 className="mt-2 text-2xl font-semibold text-slate-900">Confirm State Machine Publication</h2>
+                  <p className="mt-1 text-sm text-slate-600">
                     Review the deployment summary before publishing to production.
                   </p>
                 </div>
@@ -585,7 +585,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
               <button
                 type="button"
                 onClick={() => setShowPublishModal(false)}
-                className="rounded-full p-2 transition hover:bg-white/20"
+                className="rounded-full p-2 transition hover:bg-white/80"
               >
                 <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
