@@ -56,7 +56,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات التجارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
-• يجب على النظام تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
+• يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
@@ -694,161 +694,158 @@ export function NodeDetailModal({
                     </button>
                     
                     {expandedRule === rule.id && (
-                      <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50">
-                        <div className="space-y-3">
+                      <div className="space-y-3 border-t border-[#d8e4df] bg-white/95 px-4 py-3">
+                        <div>
+                          <div className="mb-2 flex items-center justify-between">
+                            <h5 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                              Policy Rule
+                            </h5>
+                            <button
+                              onClick={() => copyToClipboard(rule.rule, rule.id)}
+                              className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-[#0f766e]/30 hover:text-[#0f766e]"
+                            >
+                              {copiedRule === rule.id ? '✓ Copied' : '📋 Copy'}
+                            </button>
+                          </div>
+                          <pre className="overflow-x-auto rounded-2xl border border-[#1f2937] bg-[#0b1726] p-3 text-[11px] leading-relaxed text-emerald-200">
+                            <code>{rule.rule}</code>
+                          </pre>
+                        </div>
+
+                        <div className="grid gap-3 sm:grid-cols-2">
                           <div>
-                            <div className="flex items-center justify-between mb-2">
-                              <h5 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                                Policy Rule
-                              </h5>
-                              <button
-                                onClick={() => copyToClipboard(rule.rule, rule.id)}
-                                className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
-                              >
-                                {copiedRule === rule.id ? '✓ Copied' : '📋 Copy'}
-                              </button>
-                            </div>
-                            <pre className="p-3 bg-gray-900 dark:bg-black text-green-400 rounded-lg overflow-x-auto text-xs font-mono">
-                              <code>{rule.rule}</code>
+                            <h6 className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Test Input</h6>
+                            <pre className="overflow-x-auto rounded-2xl border border-[#d8e4df] bg-[#f2f6f5] p-3 text-xs font-mono text-slate-700">
+                              <code>{rule.testCase.input}</code>
                             </pre>
                           </div>
-                          
-                          {/* Test Case */}
-                          <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <h6 className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Test Input</h6>
-                              <pre className="p-2 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded text-xs font-mono text-blue-800 dark:text-blue-300 overflow-x-auto">
-                                <code>{rule.testCase.input}</code>
-                              </pre>
-                            </div>
-                            <div>
-                              <h6 className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Expected Output</h6>
-                              <pre className="p-2 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded text-xs font-mono text-green-800 dark:text-green-300 overflow-x-auto">
-                                <code>{rule.testCase.expected}</code>
-                              </pre>
-                            </div>
+                          <div>
+                            <h6 className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Expected Output</h6>
+                            <pre className="overflow-x-auto rounded-2xl border border-[#d8e4df] bg-[#eef6ff] p-3 text-xs font-mono text-slate-700">
+                              <code>{rule.testCase.expected}</code>
+                            </pre>
                           </div>
-                          
-                          {/* Test Results */}
-                          {testResults[rule.id] && testResults[rule.id]?.status !== 'idle' && (
-                            <div className="p-3 rounded-lg border animate-slide-up">
-                              {testResults[rule.id]?.status === 'running' && (
-                                <div className="space-y-3">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-4 h-4 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-                                    <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
-                                      {testResults[rule.id]?.message || 'Running test case...'}
-                                    </span>
-                                  </div>
-                                  
-                                  {/* Show test case being executed */}
-                                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-2 space-y-2">
-                                    <div className="text-xs text-gray-600 dark:text-gray-400 font-semibold">
-                                      Executing Test Case:
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-2 text-xs">
-                                      <div>
-                                        <span className="text-gray-500">Input:</span>
-                                        <pre className="mt-1 p-1 bg-blue-50 dark:bg-blue-950/30 rounded font-mono text-blue-700 dark:text-blue-300">
-                                          {rule.testCase.input}
-                                        </pre>
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-500">Expected:</span>
-                                        <pre className="mt-1 p-1 bg-green-50 dark:bg-green-950/30 rounded font-mono text-green-700 dark:text-green-300">
-                                          {rule.testCase.expected}
-                                        </pre>
-                                      </div>
-                                    </div>
-                                  </div>
+                        </div>
+
+                        {testResults[rule.id] && testResults[rule.id]?.status !== 'idle' && (
+                          <div className="animate-slide-up rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4">
+                            {testResults[rule.id]?.status === 'running' && (
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#5b21b6] border-t-transparent" />
+                                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#5b21b6]">
+                                    {testResults[rule.id]?.message || 'Running test case...'}
+                                  </span>
                                 </div>
-                              )}
-                              
-                              {testResults[rule.id]?.status === 'pass' && (
-                                <div className="space-y-2">
-                                  <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <span className="font-semibold text-sm">Test Passed!</span>
-                                  </div>
-                                  <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-2 text-xs">
-                                    <div className="text-green-600 dark:text-green-400 font-semibold mb-1">
-                                      ✓ {testResults[rule.id]?.message}
-                                    </div>
-                                    <div className="font-mono text-green-700 dark:text-green-300">
-                                      Output: {testResults[rule.id]?.actual}
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                              
-                              {testResults[rule.id]?.status === 'fail' && (
-                                <div className="space-y-2">
-                                  <div className="flex items-center gap-2 text-red-700 dark:text-red-400">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    <span className="font-semibold text-sm">Test Failed</span>
-                                  </div>
-                                  <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-2 text-xs space-y-2">
-                                    <div className="text-red-600 dark:text-red-400 font-semibold">
-                                      ✗ {testResults[rule.id]?.message}
-                                    </div>
+                                <div className="rounded-2xl border border-[#d8e4df] bg-white px-3 py-2 text-xs text-slate-600">
+                                  <div className="font-semibold text-slate-700">Executing Test Case</div>
+                                  <div className="mt-2 grid gap-3 sm:grid-cols-2">
                                     <div>
-                                      <span className="text-red-500 dark:text-red-400">Actual Output:</span>
-                                      <pre className="mt-1 p-1 bg-red-100 dark:bg-red-900/30 rounded font-mono text-red-700 dark:text-red-300">
-                                        {testResults[rule.id]?.actual}
+                                      <span className="text-slate-500">Input</span>
+                                      <pre className="mt-1 overflow-x-auto rounded-xl border border-[#d8e4df] bg-[#eef6ff] p-2 font-mono text-slate-700">
+                                        {rule.testCase.input}
                                       </pre>
                                     </div>
                                     <div>
-                                      <span className="text-gray-500">Expected:</span>
-                                      <pre className="mt-1 p-1 bg-gray-100 dark:bg-gray-800 rounded font-mono text-gray-600 dark:text-gray-400">
+                                      <span className="text-slate-500">Expected</span>
+                                      <pre className="mt-1 overflow-x-auto rounded-xl border border-[#d8e4df] bg-[#f2f6f5] p-2 font-mono text-slate-700">
                                         {rule.testCase.expected}
                                       </pre>
                                     </div>
                                   </div>
                                 </div>
-                              )}
-                              
-                              {/* Workflow Actions */}
-                              {testWorkflows[rule.id] && testWorkflows[rule.id]?.status === 'reviewing' && (
-                                <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                                  <div className="flex gap-1">
-                                    <button
-                                      onClick={() => confirmRule(rule.id)}
-                                      className="flex-1 py-1.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded text-xs transition-colors"
-                                    >
-                                      Confirm
-                                    </button>
-                                    <button
-                                      onClick={() => rejectRule(rule.id)}
-                                      className="flex-1 py-1.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded text-xs transition-colors"
-                                    >
-                                      Reject
-                                    </button>
-                                    <button
-                                      onClick={() => openReworkChat(rule)}
-                                      className="flex-1 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded text-xs transition-colors"
-                                    >
-                                      Rework
-                                    </button>
-                                  </div>
+                              </div>
+                            )}
+
+                            {testResults[rule.id]?.status === 'pass' && (
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-2 text-[#0f766e]">
+                                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#e4f5f1]">
+                                    ✅
+                                  </span>
+                                  <span className="text-sm font-semibold">All assertions passed</span>
                                 </div>
-                              )}
-                            </div>
-                          )}
-                          
-                          {/* Run Test Button */}
-                          {(!testResults[rule.id] || testResults[rule.id]?.status === 'idle') && (
-                            <button 
-                              onClick={() => runTestCase(rule)}
-                              className="w-full py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all text-xs"
-                            >
-                              Run Test Case →
-                            </button>
-                          )}
-                        </div>
+                                <pre className="overflow-x-auto rounded-2xl border border-[#b7e1d4] bg-[#e4f5f1] p-3 text-xs font-mono text-[#0f766e]">
+                                  <code>{testResults[rule.id]?.actual}</code>
+                                </pre>
+                                <button
+                                  onClick={() => confirmRule(rule.id)}
+                                  className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/30 hover:bg-[#e4f5f1]"
+                                >
+                                  Mark as Confirmed
+                                </button>
+                              </div>
+                            )}
+
+                            {testResults[rule.id]?.status === 'fail' && (
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-2 text-[#c22745]">
+                                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#fdecee]">
+                                    ❌
+                                  </span>
+                                  <span className="text-sm font-semibold">Test failed</span>
+                                </div>
+                                <pre className="overflow-x-auto rounded-2xl border border-[#f4c7cf] bg-[#fdecee] p-3 text-xs font-mono text-[#c22745]">
+                                  <code>{testResults[rule.id]?.actual}</code>
+                                </pre>
+                                <div className="flex flex-wrap gap-2">
+                                  <button
+                                    onClick={() => runTestCase(rule)}
+                                    className="inline-flex items-center gap-2 rounded-full border border-[#f4c7cf] bg-white px-3 py-1 text-xs font-semibold text-[#c22745] transition hover:bg-[#fdecee]"
+                                  >
+                                    Re-run Test
+                                  </button>
+                                  <button
+                                    onClick={() => openReworkChat(rule)}
+                                    className="inline-flex items-center gap-2 rounded-full border border-[#d8c8f2] bg-white px-3 py-1 text-xs font-semibold text-[#5b21b6] transition hover:bg-[#ede9ff]"
+                                  >
+                                    Open AI Assistant
+                                  </button>
+                                  <button
+                                    onClick={() => rejectRule(rule.id)}
+                                    className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:bg-[#f4f8f6]"
+                                  >
+                                    Mark for Revision
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {testWorkflows[rule.id] && testWorkflows[rule.id]?.status === 'reviewing' && (
+                              <div className="mt-3 border-t border-[#d8e4df] pt-3">
+                                <div className="flex flex-wrap gap-2">
+                                  <button
+                                    onClick={() => confirmRule(rule.id)}
+                                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#0f766e] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0c635d]"
+                                  >
+                                    Confirm
+                                  </button>
+                                  <button
+                                    onClick={() => rejectRule(rule.id)}
+                                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#c22745] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#a01f39]"
+                                  >
+                                    Reject
+                                  </button>
+                                  <button
+                                    onClick={() => openReworkChat(rule)}
+                                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#5b21b6] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#4c1c99]"
+                                  >
+                                    Rework
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {(!testResults[rule.id] || testResults[rule.id]?.status === 'idle') && (
+                          <button
+                            onClick={() => runTestCase(rule)}
+                            className="w-full rounded-full bg-[#5b21b6] px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#4c1c99]"
+                          >
+                            Run Test Case →
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
