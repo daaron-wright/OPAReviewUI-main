@@ -86,7 +86,7 @@ export function ConflictDetailModal({
                   : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
               }`}
             >
-              <span>{tab.icon}</span>
+              <Icon name={tab.icon} className="h-4 w-4" />
               {tab.label}
             </button>
           ))}
