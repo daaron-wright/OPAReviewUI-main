@@ -568,19 +568,16 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-[#d8e4df] bg-[#f9fbfa] shadow-[0_48px_96px_-48px_rgba(11,64,55,0.45)] animate-slide-up">
             <header className="flex items-start justify-between gap-4 border-b border-[#b7e1d4] bg-gradient-to-r from-emerald-500 via-emerald-500 to-teal-500 px-6 py-5 text-white">
               <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-white backdrop-blur">
-                  <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                    />
-                  </svg>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-emerald-800 backdrop-blur">
+                  <Icon name="shieldCheck" className="h-7 w-7" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold">Confirm State Machine Publication</h2>
-                  <p className="mt-1 text-sm text-white/85">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/80">
+                    <Icon name="rocket" className="h-3.5 w-3.5" />
+                    Deployment Ready
+                  </span>
+                  <h2 className="mt-2 text-2xl font-semibold">Confirm State Machine Publication</h2>
+                  <p className="mt-1 text-sm text-white/80">
                     Review the deployment summary before publishing to production.
                   </p>
                 </div>
