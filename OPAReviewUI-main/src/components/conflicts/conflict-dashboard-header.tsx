@@ -42,7 +42,12 @@ export function ConflictDashboardHeader({
                   />
                 </svg>
               </span>
-              <div>
+              <div className="flex flex-col gap-3">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F515490be93874e318756209e59f398b6?format=webp&width=800"
+                  alt="Abu Dhabi Government Services"
+                  className="h-10 w-auto object-contain"
+                />
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0f766e]">Conflict oversight</p>
                 <h1 className="mt-2 text-3xl font-semibold text-slate-900">Policy Conflict Dashboard</h1>
                 <p className="mt-2 max-w-2xl text-sm text-slate-600">
