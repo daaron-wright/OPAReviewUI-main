@@ -732,20 +732,6 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   );
 }
 
-function getMiniMapNodeColor(node: Node): string {
-  const data = node.data as CustomNodeData;
-  if (data.isFinal) return '#ef4444';
-  if (data.isInitial) return '#10b981';
-  switch (data.type) {
-    case 'decision':
-      return '#f59e0b';
-    case 'process':
-      return '#3b82f6';
-    default:
-      return '#6b7280';
-  }
-}
-
 function formatNodeType(type: string): string {
   return type
     .split(/[-_]/)
