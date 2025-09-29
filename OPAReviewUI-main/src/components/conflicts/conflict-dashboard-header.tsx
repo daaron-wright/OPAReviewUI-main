@@ -4,6 +4,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import type { ConflictAnalytics } from '@/domain/conflicts/types';
 import { Icon, IconName } from '../icon';
+import { ReviewerProfilePill } from '../reviewer-profile-pill';
 
 interface ConflictDashboardHeaderProps {
   readonly analytics: ConflictAnalytics | null;
