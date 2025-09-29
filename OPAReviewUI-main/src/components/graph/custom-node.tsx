@@ -6,6 +6,7 @@
 
 import { Handle, NodeProps, Position } from 'reactflow';
 import { memo } from 'react';
+import clsx from 'clsx';
 import { useReview } from '@/context/review-context';
 
 export interface CustomNodeData {
@@ -22,92 +23,100 @@ export interface CustomNodeData {
  */
 export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePosition = Position.Bottom, id }: NodeProps<CustomNodeData>) => {
   const { isNodeReviewed, isNodeApproved, currentNodeId, isWalkthroughMode } = useReview();
-  const nodeStyles = getNodeStyles(data, isNodeReviewed(id), isNodeApproved(id));
+  const isReviewed = isNodeReviewed(id);
+  const isApproved = isNodeApproved(id);
   const isCurrentNode = currentNodeId === id && isWalkthroughMode;
-  
+  const styles = getNodeStyles(data, isReviewed, isApproved);
+
+  const badgeLabel = data.isInitial
+    ? 'Initial state'
+    : data.isFinal
+      ? 'Final state'
+      : data.type;
+
   return (
     <>
       <Handle
         type="target"
         position={targetPosition}
-        className="!bg-gray-500"
+        className="!bg-slate-300"
       />
-      
-      <div className={`${nodeStyles.container} ${isCurrentNode ? 'walkthrough-current-node' : ''}`}>
-        {/* Review Status Indicator */}
-        {isNodeReviewed(id) && (
-          <div className="absolute -top-2 -right-2 z-10">
-            {isNodeApproved(id) ? (
-              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            ) : (
-              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg">
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-            )}
-          </div>
+
+      <div
+        className={clsx(
+          styles.container,
+          isCurrentNode && 'ring-2 ring-emerald-300 ring-offset-2 ring-offset-white'
         )}
-        
-        {data.isInitial && (
-          <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-            <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">
-              START
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-2">
+            <span className={styles.typeBadge}>{badgeLabel}</span>
+            <h3 className="text-sm font-semibold text-slate-900 leading-snug">
+              {data.label}
+            </h3>
+          </div>
+
+          {isReviewed && (
+            <span
+              className={clsx(
+                'inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide',
+                isApproved
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-600'
+                  : 'border-rose-200 bg-rose-50 text-rose-600'
+              )}
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d={isApproved ? 'M2.5 7.5 5.5 10.5 11.5 4.5' : 'M3 3L11 11M11 3L3 11'}
+                  stroke="currentColor"
+                  strokeWidth={isApproved ? 1.6 : 1.4}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {isApproved ? 'Approved' : 'Needs updates'}
             </span>
-          </div>
-        )}
-        
-        <div className={nodeStyles.header}>
-          <h3 className="font-semibold text-sm truncate">
-            {data.label}
-          </h3>
-          <span className={nodeStyles.typeBadge}>
-            {data.type}
-          </span>
+          )}
         </div>
-        
-        <div className="px-3 pb-2">
-          <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2">
-            {data.description}
-          </p>
-          
-          {data.functions && data.functions.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {data.functions.slice(0, 2).map((fn, idx) => (
+
+        <p className="mt-3 text-xs leading-relaxed text-slate-500">
+          {data.description}
+        </p>
+
+        {data.functions && data.functions.length > 0 && (
+          <div className="mt-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Automation
+            </p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {data.functions.slice(0, 3).map((fn) => (
                 <span
-                  key={idx}
-                  className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-1.5 py-0.5 rounded"
-                  title={fn}
+                  key={fn}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600"
                 >
+                  <span className={clsx('h-1.5 w-1.5 rounded-full', styles.accentDot)} />
                   {formatFunctionName(fn)}
                 </span>
               ))}
-              {data.functions.length > 2 && (
-                <span className="text-xs text-gray-500">
-                  +{data.functions.length - 2}
+              {data.functions.length > 3 && (
+                <span className="text-[11px] font-semibold text-slate-400">
+                  +{data.functions.length - 3}
                 </span>
               )}
             </div>
-          )}
-        </div>
-        
-        {data.isFinal && (
-          <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
-            <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full">
-              END
-            </span>
           </div>
         )}
       </div>
-      
+
       <Handle
         type="source"
         position={sourcePosition}
-        className="!bg-gray-500"
+        className="!bg-slate-300"
       />
     </>
   );
@@ -117,72 +126,69 @@ CustomNode.displayName = 'CustomNode';
 
 function getNodeStyles(data: CustomNodeData, isReviewed: boolean, isApproved: boolean): {
   container: string;
-  header: string;
   typeBadge: string;
+  accentDot: string;
 } {
-  let reviewBorderClass = '';
-  if (isReviewed) {
-    reviewBorderClass = isApproved ? 'border-green-500' : 'border-red-500';
-  }
-  
-  const baseContainer = `
-    bg-white dark:bg-gray-800 
-    ${isReviewed ? 'border-4' : 'border-2'} ${reviewBorderClass} rounded-lg shadow-lg
-    min-w-[200px] max-w-[250px]
-    transition-all duration-200
-    hover:shadow-xl hover:scale-[1.02]
-    cursor-pointer
-    ${isReviewed ? 'opacity-90' : ''}
-  `;
-  
-  const baseHeader = `
-    flex items-center justify-between 
-    px-3 py-2 rounded-t-md
-  `;
-  
-  const baseBadge = `
-    text-xs px-1.5 py-0.5 rounded-full
-    font-medium uppercase
-  `;
-  
-  if (data.isFinal) {
-    return {
-      container: `${baseContainer} border-red-400 dark:border-red-600`,
-      header: `${baseHeader} bg-red-50 dark:bg-red-950 border-b border-red-200 dark:border-red-800`,
-      typeBadge: `${baseBadge} bg-red-200 dark:bg-red-800 text-red-800 dark:text-red-200`,
-    };
-  }
-  
+  const palette = getPalette(data);
+  const reviewAccent = isReviewed
+    ? isApproved
+      ? 'border-emerald-300 shadow-[0_10px_25px_-15px_rgba(16,185,129,0.6)]'
+      : 'border-rose-300 shadow-[0_10px_25px_-15px_rgba(244,63,94,0.6)]'
+    : 'border-slate-200 shadow-sm';
+
+  return {
+    container: clsx(
+      'relative min-w-[240px] max-w-[280px] rounded-2xl bg-white px-4 py-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg',
+      reviewAccent
+    ),
+    typeBadge: clsx(
+      'inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em]',
+      palette.badge
+    ),
+    accentDot: palette.accentDot,
+  };
+}
+
+function getPalette(data: CustomNodeData): {
+  badge: string;
+  accentDot: string;
+} {
   if (data.isInitial) {
     return {
-      container: `${baseContainer} border-green-400 dark:border-green-600`,
-      header: `${baseHeader} bg-green-50 dark:bg-green-950 border-b border-green-200 dark:border-green-800`,
-      typeBadge: `${baseBadge} bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200`,
+      badge: 'border-emerald-200 bg-emerald-50 text-emerald-600',
+      accentDot: 'bg-emerald-400',
     };
   }
-  
+
+  if (data.isFinal) {
+    return {
+      badge: 'border-rose-200 bg-rose-50 text-rose-600',
+      accentDot: 'bg-rose-400',
+    };
+  }
+
   switch (data.type) {
     case 'decision':
       return {
-        container: `${baseContainer} border-yellow-400 dark:border-yellow-600`,
-        header: `${baseHeader} bg-yellow-50 dark:bg-yellow-950 border-b border-yellow-200 dark:border-yellow-800`,
-        typeBadge: `${baseBadge} bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200`,
+        badge: 'border-sky-200 bg-sky-50 text-sky-600',
+        accentDot: 'bg-sky-400',
       };
     case 'process':
       return {
-        container: `${baseContainer} border-blue-400 dark:border-blue-600`,
-        header: `${baseHeader} bg-blue-50 dark:bg-blue-950 border-b border-blue-200 dark:border-blue-800`,
-        typeBadge: `${baseBadge} bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-200`,
+        badge: 'border-indigo-200 bg-indigo-50 text-indigo-600',
+        accentDot: 'bg-indigo-400',
       };
     default:
       return {
-        container: `${baseContainer} border-gray-300 dark:border-gray-600`,
-        header: `${baseHeader} bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700`,
-        typeBadge: `${baseBadge} bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200`,
+        badge: 'border-slate-200 bg-slate-100 text-slate-600',
+        accentDot: 'bg-slate-400',
       };
   }
 }
 
 function formatFunctionName(name: string): string {
-  return name.length > 20 ? `${name.slice(0, 20)}...` : name;
+  return name
+    .split('_')
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
 }
