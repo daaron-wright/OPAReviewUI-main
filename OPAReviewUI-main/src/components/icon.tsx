@@ -22,6 +22,9 @@ export type IconName =
   | 'celebration'
   | 'rocket'
   | 'bolt'
+  | 'lightbulb'
+  | 'paperclip'
+  | 'save'
   | 'refresh'
   | 'ban'
   | 'alarm'
@@ -256,6 +259,56 @@ const ICONS: Record<IconName, IconRenderer> = {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  ),
+  lightbulb: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path
+        d="M9 17h6M10 20h4"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 4a6 6 0 0 0-3 11.2V16h6v-0.8A6 6 0 0 0 12 4Z"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
+  paperclip: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path
+        d="M16.5 8.5 10 15a3 3 0 1 1-4.2-4.2l8-8A4 4 0 0 1 20 7.2l-8 8"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
+  save: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M5 5h12l2 2v12H5V5Z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M8 5v5h8V5" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M9 14h6v4H9z" strokeWidth={strokeWidth} strokeLinejoin="round" />
     </svg>
   ),
   refresh: ({ className, strokeWidth = 1.8 }) => (
