@@ -86,7 +86,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
         description: node.description,
         isFinal: node.isFinal,
         isInitial: node.isInitial,
-        functions: node.metadata.functions,
+        functions: node.metadata.functions ? [...node.metadata.functions] : undefined,
       } satisfies CustomNodeData,
     }));
   }, [stateMachine.nodes]);
@@ -149,7 +149,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
   useEffect(() => {
     if (!focusedNodeId && nodeSequence.length > 0) {
-      setFocusedNodeId(nodeSequence[0]);
+      const firstNodeId = nodeSequence[0];
+      if (firstNodeId) {
+        setFocusedNodeId(firstNodeId);
+      }
     }
   }, [focusedNodeId, nodeSequence]);
 
@@ -182,15 +185,16 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           status = 'in-progress';
         }
 
-        return {
+        const baseItem: TimelineNodeItem = {
           node,
-          review,
           status,
           isCurrent: currentNodeId === nodeId,
           isSelected: focusedNodeId === nodeId,
           isNext: false,
           order,
         };
+
+        return review ? { ...baseItem, review } : baseItem;
       })
       .filter((item): item is TimelineNodeItem => Boolean(item));
 
@@ -209,7 +213,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     focusedNodeId,
   ]);
 
-  const activeItem = useMemo(() => {
+  const activeItem: TimelineNodeItem | null = useMemo(() => {
     if (timelineItems.length === 0) return null;
     if (focusedNodeId) {
       return (
@@ -310,7 +314,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
               </div>
             );
           },
-          icon: '✅',
+          icon: () => <span aria-hidden="true">✅</span>,
         },
         error: 'Failed to publish state machine',
       }
@@ -347,7 +351,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     if (!activeItem) return;
     const index = nodeSequence.indexOf(activeItem.node.id);
     if (index >= 0 && index < nodeSequence.length - 1) {
-      setFocusedNodeId(nodeSequence[index + 1]);
+      const nextId = nodeSequence[index + 1];
+      if (nextId) {
+        setFocusedNodeId(nextId);
+      }
     }
   }, [activeItem, isWalkthroughMode, nextNode, nodeSequence]);
 
@@ -359,7 +366,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     if (!activeItem) return;
     const index = nodeSequence.indexOf(activeItem.node.id);
     if (index > 0) {
-      setFocusedNodeId(nodeSequence[index - 1]);
+      const prevId = nodeSequence[index - 1];
+      if (prevId) {
+        setFocusedNodeId(prevId);
+      }
     }
   }, [activeItem, isWalkthroughMode, nodeSequence, previousNode]);
 
