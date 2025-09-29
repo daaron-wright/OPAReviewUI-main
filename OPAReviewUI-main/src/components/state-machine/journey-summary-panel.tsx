@@ -166,7 +166,7 @@ export function JourneySummaryPanel({
               functions.map((fn) => (
                 <div
                   key={fn}
-                  className="rounded-2xl border border-slate-100 bg-slate-50/60 px-4 py-3 flex items-center justify-between"
+                  className="flex items-center justify-between rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3"
                 >
                   <div>
                     <p className="text-sm font-semibold text-slate-800">
