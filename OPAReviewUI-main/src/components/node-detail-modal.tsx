@@ -93,7 +93,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 مثال على الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
-ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
+ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإ��لان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
@@ -954,28 +954,33 @@ export function NodeDetailModal({
 }
 
 function getHeaderStyle(node: ProcessedNode): string {
-  if (node.isFinal) return 'border-red-200 dark:border-red-800 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20';
-  if (node.isInitial) return 'border-green-200 dark:border-green-800 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20';
-  
+  if (node.isFinal) return 'lg:border-l-[6px] lg:border-rose-200';
+  if (node.isInitial) return 'lg:border-l-[6px] lg:border-[#0f766e]/40';
+
   switch (node.type) {
     case 'decision':
-      return 'border-yellow-200 dark:border-yellow-800 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-950/20 dark:to-amber-950/20';
+      return 'lg:border-l-[6px] lg:border-[#c7e5f4]';
     case 'process':
-      return 'border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20';
+      return 'lg:border-l-[6px] lg:border-[#b8c6ff]';
     default:
-      return 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50';
+      return 'lg:border-l-[6px] lg:border-[#e2ede8]';
   }
 }
 
 function getTypeBadgeStyle(node: ProcessedNode): string {
-  switch (node.type) {
-    case 'decision':
-      return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300';
-    case 'process':
-      return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300';
-    case 'final':
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+  switch (true) {
+    case node.isInitial:
+      return 'border border-[#b7e6d8] bg-[#effaf6] text-[#0f766e]';
+    case node.isFinal:
+      return 'border border-rose-200 bg-rose-50 text-rose-600';
     default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+      switch (node.type) {
+        case 'decision':
+          return 'border border-[#c7e5f4] bg-[#f0f8fd] text-[#1d7fb3]';
+        case 'process':
+          return 'border border-[#b8c6ff] bg-[#eef1ff] text-[#3948a3]';
+        default:
+          return 'border border-[#e2ede8] bg-white text-slate-600';
+      }
   }
 }
