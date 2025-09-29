@@ -116,7 +116,7 @@ function OverviewTab({ conflict }: OverviewTabProps): JSX.Element {
         <ImpactCard
           title="Business Impact"
           content={conflict.conflictDetails.businessImpact}
-          icon="💼"
+          icon="briefcase"
           color="text-orange-400"
         />
         <ImpactCard
@@ -376,7 +376,7 @@ function WorkflowStep({ step, isActive }: WorkflowStepProps): JSX.Element {
     pending: '⏳',
     'in-progress': '🔄',
     completed: '✅',
-    blocked: '🚫',
+    blocked: '���',
     skipped: '⏭️'
   };
 
