@@ -383,13 +383,28 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             Inspect the underlying graph and open any node for deeper review.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => router.push('/dashboard')}
-          className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800"
-        >
-          Open dashboard
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={handleToggleGraphSize}
+            aria-expanded={isGraphExpanded}
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 ${
+              isGraphExpanded
+                ? 'border-slate-300 bg-slate-100 text-slate-800 hover:border-slate-400 hover:bg-slate-200'
+                : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+            }`}
+          >
+            <Icon name={isGraphExpanded ? 'xCircle' : 'chart'} className="h-4 w-4" />
+            {isGraphExpanded ? 'Collapse graph' : 'Expand graph'}
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push('/dashboard')}
+            className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800"
+          >
+            Open dashboard
+          </button>
+        </div>
       </div>
       <GraphCanvas
         nodes={nodes}
@@ -398,7 +413,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
         onEdgesChange={onEdgesChange}
         onNodeClick={handleNodeClick}
         onInit={setReactFlowInstance}
-        height={520}
+        height={isGraphExpanded ? 'min(80vh, 820px)' : 520}
+        containerClassName={`transition-all duration-500 ease-in-out ${
+          isGraphExpanded ? 'shadow-xl ring-1 ring-emerald-100/70' : ''
+        }`}
       />
     </div>
   );
