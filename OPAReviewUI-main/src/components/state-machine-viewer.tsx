@@ -732,7 +732,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
               )}
             </div>
 
-            <footer className="flex items-center justify-between gap-4 border-t border-slate-200 bg-slate-50/80 px-6 py-5 text-sm text-slate-600">
+            <footer className="flex items-center justify-between gap-4 border-t border-slate-200 bg-white px-6 py-5 text-sm text-slate-600">
               <div className="flex items-center gap-2 text-slate-500">
                 <Icon name="infoCircle" className="h-4 w-4" />
                 <span>Publishing will deploy {publishStats.approved} states to production immediately.</span>
