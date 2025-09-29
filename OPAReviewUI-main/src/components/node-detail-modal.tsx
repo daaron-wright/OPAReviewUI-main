@@ -51,10 +51,10 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام التحقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التح��ق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
-��� يجب رفض المتقد��ين الذين لديهم تحقق SOP1 مع رسالة مناسبة
+��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات التجارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون الأفراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
@@ -68,7 +68,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       title: 'Beneficiary Ownership Thresholds',
       titleAr: 'حدود ملكية المستفيد',
       location: 'Chapter 5: Declaration Requirements',
-      locationAr: 'الفصل 5: متطلبات الإعلان',
+      locationAr: 'الفصل 5: متط��بات الإعلان',
       content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
 
 Calculation Rules:
@@ -87,7 +87,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 قواعد الحساب:
 • الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
-• تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
+• تقييم السيطر��: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
@@ -705,7 +705,17 @@ export function NodeDetailModal({
                               onClick={() => copyToClipboard(rule.rule, rule.id)}
                               className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-[#0f766e]/30 hover:text-[#0f766e]"
                             >
-                              {copiedRule === rule.id ? '✓ Copied' : '📋 Copy'}
+                              {copiedRule === rule.id ? (
+                                <>
+                                  <Icon name="check" className="h-4 w-4 text-[#0f766e]" />
+                                  Copied
+                                </>
+                              ) : (
+                                <>
+                                  <Icon name="clipboard" className="h-4 w-4 text-slate-500" />
+                                  Copy
+                                </>
+                              )}
                             </button>
                           </div>
                           <pre className="overflow-x-auto rounded-2xl border border-[#1f2937] bg-[#0b1726] p-3 text-[11px] leading-relaxed text-emerald-200">
