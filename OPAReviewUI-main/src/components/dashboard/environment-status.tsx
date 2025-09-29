@@ -36,17 +36,17 @@ function EnvironmentCard({ environment }: EnvironmentCardProps): JSX.Element {
     down: 'bg-red-500/20 border-red-500/30'
   };
 
-  const statusIcons = {
-    healthy: '✅',
-    degraded: '⚠️',
-    down: '❌'
+  const statusIcons: Record<PolicyEnvironment['status'], IconName> = {
+    healthy: 'checkCircle',
+    degraded: 'warningTriangle',
+    down: 'xCircle',
   };
 
-  const typeIcons = {
-    production: '🏭',
-    staging: '🧪',
-    development: '💻',
-    testing: '🔬'
+  const typeIcons: Record<PolicyEnvironment['type'], IconName> = {
+    production: 'factory',
+    staging: 'flask',
+    development: 'laptop',
+    testing: 'microscope',
   };
 
   return (
