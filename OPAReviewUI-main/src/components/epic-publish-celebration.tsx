@@ -22,7 +22,7 @@ export function EpicPublishCelebration({ trigger, onComplete }: EpicPublishCeleb
   useEffect(() => {
     if (!trigger) return;
     
-    console.log('🎉 EPIC CELEBRATION TRIGGERED!');
+    console.log('EPIC CELEBRATION TRIGGERED!');
     
     // Start EVERYTHING!
     setShowMario(true);
