@@ -122,7 +122,7 @@ function OverviewTab({ conflict }: OverviewTabProps): JSX.Element {
         <ImpactCard
           title="Compliance Risk"
           content={`${conflict.impact.complianceRisk.toUpperCase()} risk level`}
-          icon="📋"
+          icon="clipboard"
           color="text-red-400"
         />
         <ImpactCard
@@ -376,7 +376,7 @@ function WorkflowStep({ step, isActive }: WorkflowStepProps): JSX.Element {
     pending: '⏳',
     'in-progress': '🔄',
     completed: '✅',
-    blocked: '���',
+    blocked: '🚫',
     skipped: '⏭️'
   };
 
