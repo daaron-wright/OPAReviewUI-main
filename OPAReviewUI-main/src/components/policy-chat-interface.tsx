@@ -327,7 +327,7 @@ function getInitialPrompt(context: any): string {
   return `Test Case Analysis:
   
 Rule: ${context.ruleName}
-Test Result: ${context.testResult === 'fail' ? '❌ FAILED' : '✅ PASSED'}
+Test Result: ${context.testResult === 'fail' ? 'FAILED' : 'PASSED'}
 
 Current Rego Rule:
 ${context.currentRule}
