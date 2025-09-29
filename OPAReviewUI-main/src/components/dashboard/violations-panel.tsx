@@ -39,7 +39,9 @@ export function ViolationsPanel({ violations, detailed = false }: ViolationsPane
         
         {violations.length === 0 && (
           <div className="text-center py-8">
-            <div className="text-4xl mb-2">✅</div>
+            <div className="mb-3 flex justify-center">
+              <Icon name="checkCircle" className="h-10 w-10 text-emerald-400" />
+            </div>
             <div className="text-slate-300 font-medium">No violations detected</div>
             <div className="text-slate-400 text-sm">All policies are operating within expected parameters</div>
           </div>
