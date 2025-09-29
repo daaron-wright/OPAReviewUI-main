@@ -717,18 +717,16 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 <button
                   type="button"
                   onClick={() => setShowPublishModal(false)}
-                  className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-white/80 hover:text-slate-900"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={confirmPublish}
-                  className="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-emerald-600"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-5 py-2 font-semibold text-white shadow-[0_18px_36px_-22px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59]"
                 >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <Icon name="check" className="h-4 w-4 text-white" />
                   Confirm & Publish
                 </button>
               </div>
