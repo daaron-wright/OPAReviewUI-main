@@ -564,9 +564,9 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
       />
 
       {showPublishModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/65 p-4 backdrop-blur-xl animate-fade-in">
-          <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-[#d8e4df] bg-[#f9fbfa] shadow-[0_48px_96px_-48px_rgba(11,64,55,0.45)] animate-slide-up">
-            <header className="flex items-start justify-between gap-4 border-b border-[#b7e1d4] bg-gradient-to-r from-emerald-500 via-emerald-500 to-teal-500 px-6 py-5 text-white">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-xl animate-fade-in">
+          <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl border border-[#d8e4df] bg-white shadow-[0_40px_80px_-45px_rgba(15,64,55,0.35)] animate-slide-up">
+            <header className="flex items-start justify-between gap-4 border-b border-[#d8e4df] bg-gradient-to-r from-[#ecf9f4] via-[#e3f4ef] to-[#eaf7f3] px-6 py-5">
               <div className="flex items-start gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-emerald-800 backdrop-blur">
                   <Icon name="shieldCheck" className="h-7 w-7" />
