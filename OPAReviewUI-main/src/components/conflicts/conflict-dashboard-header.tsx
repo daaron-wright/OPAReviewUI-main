@@ -51,15 +51,24 @@ export function ConflictDashboardHeader({
               </div>
             </div>
 
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-5 py-2.5 text-sm font-semibold text-[#0f766e] shadow-[0_12px_24px_-18px_rgba(15,118,110,0.32)] transition hover:border-[#0f766e]/30 hover:bg-[#eaf7f3]"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Back to timeline
-            </Link>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-5 py-2.5 text-sm font-semibold text-[#0f766e] shadow-[0_12px_24px_-18px_rgba(15,118,110,0.32)] transition hover:border-[#0f766e]/30 hover:bg-[#eaf7f3]"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to timeline
+              </Link>
+              <Link
+                href="/?portal=license-reviewer"
+                className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59]"
+              >
+                <Icon name="briefcase" className="h-4 w-4 text-white" />
+                License reviewer portal
+              </Link>
+            </div>
           </div>
 
           {analytics && (
