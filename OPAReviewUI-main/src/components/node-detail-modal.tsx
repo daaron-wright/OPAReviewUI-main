@@ -93,7 +93,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يمارسون السيطرة من خل��ل وسائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يمارسون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
@@ -630,15 +630,17 @@ export function NodeDetailModal({
           {/* Right Panel - Policy Rules - Independent scroll */}
           <div className="overflow-y-auto p-6 max-h-full">
             <div className="space-y-4">
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border border-purple-200 dark:border-purple-800 rounded-lg p-3">
+              <div className="rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4 shadow-sm">
                 <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                  <h3 className="font-semibold text-purple-900 dark:text-purple-200 text-sm">Policy Enforcement Rules (Rego)</h3>
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#ede9ff] text-[#5b21b6]">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </span>
+                  <h3 className="text-sm font-semibold text-slate-900">Policy Enforcement Rules (Rego)</h3>
                 </div>
-                <p className="text-xs text-purple-700 dark:text-purple-300 mt-1">
-                  Click on any rule to expand and run test cases
+                <p className="mt-2 text-sm text-slate-600">
+                  Click a rule to run test cases and sync with the BRD reference.
                 </p>
               </div>
               
