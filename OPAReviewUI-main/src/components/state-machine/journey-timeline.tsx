@@ -89,19 +89,6 @@ export function JourneyTimeline({
                 <div className="inline-flex rounded-full border border-slate-200 bg-white p-1 shadow-inner">
                   <button
                     type="button"
-                    onClick={() => onViewModeChange?.('list')}
-                    aria-pressed={viewMode === 'list'}
-                    className={clsx(
-                      'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                      viewMode === 'list'
-                        ? 'bg-emerald-500 text-white shadow'
-                        : 'text-slate-500 hover:bg-slate-100'
-                    )}
-                  >
-                    Timeline
-                  </button>
-                  <button
-                    type="button"
                     onClick={() => onViewModeChange?.('graph')}
                     aria-pressed={viewMode === 'graph'}
                     className={clsx(
@@ -112,6 +99,19 @@ export function JourneyTimeline({
                     )}
                   >
                     Graph
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onViewModeChange?.('list')}
+                    aria-pressed={viewMode === 'list'}
+                    className={clsx(
+                      'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                      viewMode === 'list'
+                        ? 'bg-emerald-500 text-white shadow'
+                        : 'text-slate-500 hover:bg-slate-100'
+                    )}
+                  >
+                    Timeline
                   </button>
                 </div>
               </div>
