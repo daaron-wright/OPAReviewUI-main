@@ -66,44 +66,64 @@ interface ConflictCardProps {
 
 function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
   const severityThemes: Record<PolicyConflict['severity'], {
-    container: string;
-    badge: string;
-    accent: string;
     icon: string;
+    iconBg: string;
+    accent: string;
+    badgeBg: string;
+    badgeText: string;
+    chipBg: string;
+    chipText: string;
+    ring: string;
   }> = {
     critical: {
-      container: 'border-rose-200 bg-rose-50/90 hover:border-rose-300 hover:bg-rose-50',
-      badge: 'bg-rose-500 text-white',
-      accent: 'text-rose-600',
-      icon: 'text-rose-500',
+      icon: 'text-[#c22745]',
+      iconBg: 'bg-[#fdecee]',
+      accent: 'text-[#c22745]',
+      badgeBg: 'bg-[#c22745]',
+      badgeText: 'text-white',
+      chipBg: 'bg-[#fdecee]',
+      chipText: 'text-[#c22745]',
+      ring: 'focus-visible:ring-[#f4c7cf]/80',
     },
     high: {
-      container: 'border-amber-200 bg-amber-50/90 hover:border-amber-300 hover:bg-amber-50',
-      badge: 'bg-amber-500 text-white',
-      accent: 'text-amber-600',
-      icon: 'text-amber-500',
+      icon: 'text-[#b7791f]',
+      iconBg: 'bg-[#fff4e3]',
+      accent: 'text-[#b7791f]',
+      badgeBg: 'bg-[#b7791f]',
+      badgeText: 'text-white',
+      chipBg: 'bg-[#fff4e3]',
+      chipText: 'text-[#b7791f]',
+      ring: 'focus-visible:ring-[#f6d9a8]/80',
     },
     medium: {
-      container: 'border-sky-200 bg-sky-50/90 hover:border-sky-300 hover:bg-sky-50',
-      badge: 'bg-sky-500 text-white',
-      accent: 'text-sky-600',
-      icon: 'text-sky-500',
+      icon: 'text-[#0f6fc4]',
+      iconBg: 'bg-[#e7f2ff]',
+      accent: 'text-[#0f6fc4]',
+      badgeBg: 'bg-[#0f6fc4]',
+      badgeText: 'text-white',
+      chipBg: 'bg-[#e7f2ff]',
+      chipText: 'text-[#0f6fc4]',
+      ring: 'focus-visible:ring-[#bcdcff]/80',
     },
     low: {
-      container: 'border-emerald-200 bg-emerald-50/90 hover:border-emerald-300 hover:bg-emerald-50',
-      badge: 'bg-emerald-500 text-white',
-      accent: 'text-emerald-600',
-      icon: 'text-emerald-500',
+      icon: 'text-[#0f766e]',
+      iconBg: 'bg-[#e4f5f1]',
+      accent: 'text-[#0f766e]',
+      badgeBg: 'bg-[#0f766e]',
+      badgeText: 'text-white',
+      chipBg: 'bg-[#e4f5f1]',
+      chipText: 'text-[#0f766e]',
+      ring: 'focus-visible:ring-[#b7e1d4]/80',
     },
   };
 
   const statusStyles: Record<PolicyConflict['status'], string> = {
-    active: 'border-rose-200 bg-rose-100 text-rose-700',
-    investigating: 'border-amber-200 bg-amber-100 text-amber-700',
-    resolving: 'border-sky-200 bg-sky-100 text-sky-700',
-    resolved: 'border-emerald-200 bg-emerald-100 text-emerald-700',
-    ignored: 'border-slate-200 bg-slate-100 text-slate-600',
-    'false-positive': 'border-violet-200 bg-violet-100 text-violet-700',
+    active: 'border-[#f4c7cf] bg-[#fdecee] text-[#c22745]',
+    investigating: 'border-[#f6d9a8] bg-[#fff4e3] text-[#b7791f]',
+    resolving: 'border-[#bcdcff] bg-[#e7f2ff] text-[#0f6fc4]',
+    resolved: 'border-[#b7e1d4] bg-[#e4f5f1] text-[#0f766e]',
+    ignored: 'border-[#d8e4df] bg-[#f5f8f7] text-slate-600',
+    'false-positive': 'border-[#d8c8f2] bg-[#f4ecff] text-[#6b4fd4]',
   };
 
   const typeLabels: Record<PolicyConflict['type'], string> = {
@@ -128,17 +148,25 @@ function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
   return (
     <article
       onClick={onClick}
-      className={`group rounded-3xl border bg-white/90 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${severityTheme.container}`}
+      className={`group rounded-3xl border border-[#d8e4df] bg-white/95 p-6 shadow-[0_16px_36px_-24px_rgba(11,64,55,0.24)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_44px_-26px_rgba(11,64,55,0.28)] focus:outline-none ${severityTheme.ring}`}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onClick();
+        }
+      }}
     >
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-1 items-start gap-4">
-          <span className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl shadow ${severityTheme.icon}`}>
+          <span className={`flex h-12 w-12 items-center justify-center rounded-2xl text-2xl shadow-inner ${severityTheme.iconBg} ${severityTheme.icon}`}>
             {severityIcon[conflict.severity]}
           </span>
           <div className="space-y-2">
             <div className="space-y-1">
               <h3 className="text-lg font-semibold text-slate-900">{conflict.title}</h3>
-              <p className="text-sm font-medium text-slate-500">
+              <p className={`text-sm font-medium ${severityTheme.accent}`}>
                 {typeLabels[conflict.type] ?? conflict.type}
               </p>
             </div>
@@ -153,7 +181,7 @@ function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
           <span className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 ${statusStyles[conflict.status]}`}>
             {conflict.status.replace('-', ' ').toUpperCase()}
           </span>
-          <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-white ${severityTheme.badge}`}>
+          <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 ${severityTheme.badgeBg} ${severityTheme.badgeText}`}>
             {conflict.severity.toUpperCase()}
           </span>
         </div>
@@ -165,10 +193,10 @@ function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {conflict.impact.complianceRisk !== 'none' && (
-            <RiskBadge icon="📋" label="Compliance risk" tone="text-rose-500" />
+            <RiskBadge icon="📋" label="Compliance risk" tone={severityTheme.chipText} background={severityTheme.chipBg} />
           )}
           {conflict.impact.securityRisk !== 'none' && (
-            <RiskBadge icon="🔒" label="Security risk" tone="text-amber-500" />
+            <RiskBadge icon="🔒" label="Security risk" tone="text-[#b7791f]" background="bg-[#fff4e3]" />
           )}
         </div>
       </div>
@@ -194,11 +222,12 @@ interface RiskBadgeProps {
   readonly icon: string;
   readonly label: string;
   readonly tone: string;
+  readonly background?: string;
 }
 
-function RiskBadge({ icon, label, tone }: RiskBadgeProps): JSX.Element {
+function RiskBadge({ icon, label, tone, background = 'bg-[#f9fbfa]' }: RiskBadgeProps): JSX.Element {
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 font-semibold shadow-sm ${tone}`}>
+    <span className={`inline-flex items-center gap-2 rounded-full ${background} px-3 py-1 font-semibold shadow-sm ${tone}`}>
       <span>{icon}</span>
       <span>{label}</span>
     </span>
