@@ -158,6 +158,12 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     }
   }, [currentNodeId, isWalkthroughMode]);
 
+  useEffect(() => {
+    if (reactFlowInstance) {
+      reactFlowInstance.fitView({ padding: 0.2, duration: 600 });
+    }
+  }, [isGraphExpanded, reactFlowInstance]);
+
   const nodesById = useMemo(() => {
     const map = new Map<string, ProcessedNode>();
     stateMachine.nodes.forEach((node) => {
