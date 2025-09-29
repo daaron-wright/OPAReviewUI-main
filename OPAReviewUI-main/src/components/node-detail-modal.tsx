@@ -365,7 +365,7 @@ export function NodeDetailModal({
         [chatContext.ruleId]: { ruleId: chatContext.ruleId, status: 'testing' }
       }));
       
-      toast.success('✨ Rule updated successfully! Ready for re-testing.', {
+      toast.success(renderToastContent('sparkle', 'Rule updated successfully! Ready for re-testing.'), {
         position: 'bottom-right',
         autoClose: 3000,
       });
