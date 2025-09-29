@@ -41,6 +41,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [primaryView, setPrimaryView] = useState<'list' | 'graph'>('graph');
+  const [isGraphExpanded, setIsGraphExpanded] = useState(false);
 
   const {
     reviewStatus,
