@@ -62,7 +62,9 @@ function EnvironmentCard({ environment }: EnvironmentCardProps): JSX.Element {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-lg">{statusIcons[environment.status]}</span>
+          <span className="text-lg text-white">
+            <Icon name={statusIcons[environment.status]} className="h-5 w-5" />
+          </span>
           <span className="text-sm font-medium text-white capitalize">{environment.status}</span>
         </div>
       </div>
