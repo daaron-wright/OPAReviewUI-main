@@ -656,7 +656,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                           <div className="truncate font-semibold text-slate-800">{node.label}</div>
                           <div className="mt-1 inline-flex items-center gap-2 text-xs text-slate-400">
                             <span className="rounded-full bg-slate-100 px-2 py-0.5 font-semibold uppercase tracking-[0.16em] text-slate-500">
-                              {node.type}
+                              {formatNodeType(node.type)}
                             </span>
                             {approved ? (
                               <span className="inline-flex items-center gap-1 rounded-full bg-[#0f766e]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
@@ -766,6 +766,13 @@ function getMiniMapNodeColor(node: Node): string {
     default:
       return '#6b7280';
   }
+}
+
+function formatNodeType(type: string): string {
+  return type
+    .split(/[-_]/)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
 }
 
 function PublishStatCard({
