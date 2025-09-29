@@ -61,48 +61,38 @@ interface MetricCardProps {
 }
 
 function MetricCard({ title, value, tone, caption, pulse = false }: MetricCardProps): JSX.Element {
-  const toneStyles: Record<MetricTone, { container: string; chip: string; accent: string }> = {
+  const toneStyles: Record<MetricTone, { accent: string; dot: string }> = {
     emerald: {
-      container: 'border-emerald-200 bg-emerald-50/80 text-emerald-700',
-      chip: 'bg-emerald-500 text-white',
-      accent: 'text-emerald-500',
+      accent: 'text-emerald-600',
+      dot: 'bg-emerald-400',
     },
     amber: {
-      container: 'border-amber-200 bg-amber-50/80 text-amber-700',
-      chip: 'bg-amber-500 text-white',
-      accent: 'text-amber-500',
+      accent: 'text-amber-600',
+      dot: 'bg-amber-400',
     },
     rose: {
-      container: 'border-rose-200 bg-rose-50/80 text-rose-700',
-      chip: 'bg-rose-500 text-white',
-      accent: 'text-rose-500',
+      accent: 'text-rose-600',
+      dot: 'bg-rose-400',
     },
     sky: {
-      container: 'border-sky-200 bg-sky-50/80 text-sky-700',
-      chip: 'bg-sky-500 text-white',
-      accent: 'text-sky-500',
+      accent: 'text-sky-600',
+      dot: 'bg-sky-400',
     },
   };
 
   const style = toneStyles[tone];
 
   return (
-    <div
-      className={`rounded-2xl border bg-white/90 p-4 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${style.container} ${pulse ? 'animate-pulse' : ''}`}
+    <article
+      className={`rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-5 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md ${pulse ? 'animate-pulse' : ''}`}
     >
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500/80">{title}</p>
-          <div className={`mt-3 flex items-center gap-3 text-3xl font-semibold ${style.accent}`}>
-            <span>{value}</span>
-            <span className={`inline-flex items-center rounded-full px-2 text-xs font-semibold ${style.chip}`}>
-              Live
-            </span>
-          </div>
-        </div>
-      </div>
-      <p className="mt-3 text-xs text-slate-500/80">{caption}</p>
-    </div>
+      <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+        <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
+        {title}
+      </span>
+      <p className={`mt-3 text-3xl font-semibold ${style.accent}`}>{value}</p>
+      <p className="mt-2 text-sm text-slate-500">{caption}</p>
+    </article>
   );
 }
 
