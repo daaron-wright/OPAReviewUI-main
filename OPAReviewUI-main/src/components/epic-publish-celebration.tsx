@@ -185,18 +185,27 @@ export function EpicPublishCelebration({ trigger, onComplete }: EpicPublishCeleb
       
       {/* SUCCESS MESSAGE */}
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] pointer-events-none">
-        <div 
-          className="text-8xl font-bold animate-bounce"
+        <div
+          className="flex items-center gap-4 text-8xl font-bold animate-bounce"
           style={{
             animation: 'mega-pulse 0.5s ease-in-out infinite',
-            background: 'linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ffff00, #ff00ff, #00ffff)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
             filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.8))',
           }}
         >
-          PUBLISHED! 🎉
+          <span
+            style={{
+              background: 'linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ffff00, #ff00ff, #00ffff)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+            className="block"
+          >
+            PUBLISHED!
+          </span>
+          <span className="text-white">
+            <Icon name="celebration" className="h-16 w-16" />
+          </span>
         </div>
       </div>
       
