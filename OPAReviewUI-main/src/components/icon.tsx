@@ -26,6 +26,10 @@ export type IconName =
   | 'lightbulb'
   | 'paperclip'
   | 'save'
+  | 'factory'
+  | 'flask'
+  | 'laptop'
+  | 'microscope'
   | 'refresh'
   | 'ban'
   | 'alarm'
@@ -323,6 +327,57 @@ const ICONS: Record<IconName, IconRenderer> = {
       <path d="M5 5h12l2 2v12H5V5Z" strokeWidth={strokeWidth} strokeLinejoin="round" />
       <path d="M8 5v5h8V5" strokeWidth={strokeWidth} strokeLinejoin="round" />
       <path d="M9 14h6v4H9z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+    </svg>
+  ),
+  factory: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M4 9V20h16V10l-4 2V8l-4 2V6H9v4L5 8v1Z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M9 20v-4h3V20" strokeWidth={strokeWidth} strokeLinecap="round" />
+    </svg>
+  ),
+  flask: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M10 5V4h4v1l3 5.5a5 5 0 0 1-4.4 7.5h-1.2A5 5 0 0 1 7 10.5L10 5Z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M9 12h6" strokeWidth={strokeWidth} strokeLinecap="round" />
+    </svg>
+  ),
+  laptop: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <rect x="5" y="6" width="14" height="10" rx="1.5" strokeWidth={strokeWidth} />
+      <path d="M3 18h18" strokeWidth={strokeWidth} strokeLinecap="round" />
+    </svg>
+  ),
+  microscope: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M8 3h4v3H8z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M9 6h2l1.5 4h-5L9 6Z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M6 13h10" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M8 13a5 5 0 0 0 10 0" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M5 19h14" strokeWidth={strokeWidth} strokeLinecap="round" />
     </svg>
   ),
   refresh: ({ className, strokeWidth = 1.8 }) => (
