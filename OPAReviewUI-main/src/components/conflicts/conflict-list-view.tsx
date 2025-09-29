@@ -1,10 +1,6 @@
-/**
- * Conflict List View Component
- * Displays list of policy conflicts with severity indicators and quick actions
- */
 'use client';
 
-import type { PolicyConflict, ConflictFilter } from '@/domain/conflicts/types';
+import type { ConflictFilter, PolicyConflict } from '@/domain/conflicts/types';
 
 interface ConflictListViewProps {
   readonly conflicts: PolicyConflict[];
@@ -12,50 +8,50 @@ interface ConflictListViewProps {
   readonly activeFilter: ConflictFilter;
 }
 
-export function ConflictListView({ 
-  conflicts, 
-  onConflictSelect, 
-  activeFilter 
+export function ConflictListView({
+  conflicts,
+  onConflictSelect,
+  activeFilter,
 }: ConflictListViewProps): JSX.Element {
   const sortedConflicts = [...conflicts].sort((a, b) => {
-    // Sort by severity (critical first), then by detection date
-    const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+    const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 } as const;
     const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
-    if (severityDiff !== 0) return severityDiff;
-    
+    if (severityDiff !== 0) {
+      return severityDiff;
+    }
+
     return new Date(b.detectedAt).getTime() - new Date(a.detectedAt).getTime();
   });
 
+  const hasFiltersApplied = activeFilter && Object.keys(activeFilter).length > 0;
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white">
-          Policy Conflicts {activeFilter && Object.keys(activeFilter).length > 0 && '(Filtered)'}
+    <div className="space-y-6">
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-xl font-semibold tracking-tight text-slate-900">
+          Policy Conflicts {hasFiltersApplied ? '(Filtered)' : ''}
         </h2>
-        <div className="text-sm text-slate-400">
-          {conflicts.length} conflict{conflicts.length !== 1 ? 's' : ''} found
-        </div>
+        <p className="text-sm text-slate-500">
+          {conflicts.length} conflict{conflicts.length === 1 ? '' : 's'} found
+        </p>
       </div>
-      
+
       {conflicts.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">🎉</div>
-          <div className="text-white text-xl font-semibold mb-2">No Conflicts Found</div>
-          <div className="text-slate-400">
-            {Object.keys(activeFilter).length > 0 
-              ? 'No conflicts match your current filters'
-              : 'All policies are operating without conflicts'
-            }
+        <div className="flex flex-col items-center gap-3 rounded-3xl border border-emerald-200 bg-emerald-50/80 px-10 py-14 text-center shadow-sm">
+          <span className="text-5xl">🎉</span>
+          <div>
+            <p className="text-lg font-semibold text-emerald-700">No conflicts found</p>
+            <p className="text-sm text-emerald-600/80">
+              {hasFiltersApplied
+                ? 'No conflicts match your current filters. Adjust filters to broaden the results.'
+                : 'All monitored policies are currently operating without detected conflicts.'}
+            </p>
           </div>
         </div>
       ) : (
         <div className="grid gap-4">
           {sortedConflicts.map((conflict) => (
-            <ConflictCard 
-              key={conflict.id} 
-              conflict={conflict} 
-              onClick={() => onConflictSelect(conflict)}
-            />
+            <ConflictCard key={conflict.id} conflict={conflict} onClick={() => onConflictSelect(conflict)} />
           ))}
         </div>
       )}
@@ -69,30 +65,48 @@ interface ConflictCardProps {
 }
 
 function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
-  const severityStyles = {
-    critical: 'bg-red-600/20 border-red-500/50 hover:border-red-400',
-    high: 'bg-orange-600/20 border-orange-500/50 hover:border-orange-400',
-    medium: 'bg-yellow-600/20 border-yellow-500/50 hover:border-yellow-400',
-    low: 'bg-blue-600/20 border-blue-500/50 hover:border-blue-400'
+  const severityThemes: Record<PolicyConflict['severity'], {
+    container: string;
+    badge: string;
+    accent: string;
+    icon: string;
+  }> = {
+    critical: {
+      container: 'border-rose-200 bg-rose-50/90 hover:border-rose-300 hover:bg-rose-50',
+      badge: 'bg-rose-500 text-white',
+      accent: 'text-rose-600',
+      icon: 'text-rose-500',
+    },
+    high: {
+      container: 'border-amber-200 bg-amber-50/90 hover:border-amber-300 hover:bg-amber-50',
+      badge: 'bg-amber-500 text-white',
+      accent: 'text-amber-600',
+      icon: 'text-amber-500',
+    },
+    medium: {
+      container: 'border-sky-200 bg-sky-50/90 hover:border-sky-300 hover:bg-sky-50',
+      badge: 'bg-sky-500 text-white',
+      accent: 'text-sky-600',
+      icon: 'text-sky-500',
+    },
+    low: {
+      container: 'border-emerald-200 bg-emerald-50/90 hover:border-emerald-300 hover:bg-emerald-50',
+      badge: 'bg-emerald-500 text-white',
+      accent: 'text-emerald-600',
+      icon: 'text-emerald-500',
+    },
   };
 
-  const severityIcons = {
-    critical: '🚨',
-    high: '⚠️',
-    medium: '⚡',
-    low: 'ℹ️'
+  const statusStyles: Record<PolicyConflict['status'], string> = {
+    active: 'border-rose-200 bg-rose-100 text-rose-700',
+    investigating: 'border-amber-200 bg-amber-100 text-amber-700',
+    resolving: 'border-sky-200 bg-sky-100 text-sky-700',
+    resolved: 'border-emerald-200 bg-emerald-100 text-emerald-700',
+    ignored: 'border-slate-200 bg-slate-100 text-slate-600',
+    'false-positive': 'border-violet-200 bg-violet-100 text-violet-700',
   };
 
-  const statusStyles = {
-    active: 'bg-red-500/20 text-red-300 border-red-500/50',
-    investigating: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50',
-    resolving: 'bg-blue-500/20 text-blue-300 border-blue-500/50',
-    resolved: 'bg-green-500/20 text-green-300 border-green-500/50',
-    ignored: 'bg-gray-500/20 text-gray-300 border-gray-500/50',
-    'false-positive': 'bg-purple-500/20 text-purple-300 border-purple-500/50'
-  };
-
-  const typeLabels = {
+  const typeLabels: Record<PolicyConflict['type'], string> = {
     'rule-contradiction': 'Rule Contradiction',
     'overlapping-conditions': 'Overlapping Conditions',
     'circular-dependency': 'Circular Dependency',
@@ -100,74 +114,93 @@ function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
     'ambiguous-precedence': 'Ambiguous Precedence',
     'data-inconsistency': 'Data Inconsistency',
     'performance-conflict': 'Performance Conflict',
-    'compliance-violation': 'Compliance Violation'
+    'compliance-violation': 'Compliance Violation',
+  };
+
+  const severityTheme = severityThemes[conflict.severity];
+  const severityIcon: Record<PolicyConflict['severity'], string> = {
+    critical: '🚨',
+    high: '⚠️',
+    medium: '⚡',
+    low: 'ℹ️',
   };
 
   return (
-    <div 
-      className={`${severityStyles[conflict.severity]} border rounded-xl p-6 cursor-pointer transition-all hover:scale-[1.01] hover:shadow-xl`}
+    <article
       onClick={onClick}
+      className={`group rounded-3xl border bg-white/90 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${severityTheme.container}`}
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">{severityIcons[conflict.severity]}</span>
-          <div>
-            <h3 className="text-white font-semibold text-lg">{conflict.title}</h3>
-            <p className="text-slate-300 text-sm">{typeLabels[conflict.type]}</p>
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-1 items-start gap-4">
+          <span className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl shadow ${severityTheme.icon}`}>
+            {severityIcon[conflict.severity]}
+          </span>
+          <div className="space-y-2">
+            <div className="space-y-1">
+              <h3 className="text-lg font-semibold text-slate-900">{conflict.title}</h3>
+              <p className="text-sm font-medium text-slate-500">
+                {typeLabels[conflict.type] ?? conflict.type}
+              </p>
+            </div>
+            <p className="text-sm text-slate-600 line-clamp-2">{conflict.description}</p>
+            <div className="grid gap-4 text-sm text-slate-500 sm:grid-cols-2">
+              <InfoStat label="Affected Policies" value={conflict.affectedPolicies.length.toString()} />
+              <InfoStat label="Detection Confidence" value={`${conflict.conflictDetails.confidence}%`} />
+            </div>
           </div>
         </div>
-        
-        <div className="flex items-center gap-2">
-          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${statusStyles[conflict.status]}`}>
-            {conflict.status.toUpperCase()}
+        <div className="flex flex-shrink-0 flex-col items-end gap-2 text-xs font-semibold">
+          <span className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 ${statusStyles[conflict.status]}`}>
+            {conflict.status.replace('-', ' ').toUpperCase()}
           </span>
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-            conflict.severity === 'critical' ? 'bg-red-600 text-white' :
-            conflict.severity === 'high' ? 'bg-orange-600 text-white' :
-            conflict.severity === 'medium' ? 'bg-yellow-600 text-white' :
-            'bg-blue-600 text-white'
-          }`}>
+          <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-white ${severityTheme.badge}`}>
             {conflict.severity.toUpperCase()}
           </span>
         </div>
       </div>
-      
-      <p className="text-slate-300 text-sm mb-4 line-clamp-2">{conflict.description}</p>
-      
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <div className="text-xs text-slate-400 mb-1">Affected Policies</div>
-          <div className="text-white font-medium">{conflict.affectedPolicies.length}</div>
+      <div className="mt-6 flex flex-col gap-3 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <span>Detected {new Date(conflict.detectedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+          {conflict.assignedTo && <span>Assigned to {conflict.assignedTo.split('@')[0]}</span>}
         </div>
-        <div>
-          <div className="text-xs text-slate-400 mb-1">Detection Confidence</div>
-          <div className="text-white font-medium">{conflict.conflictDetails.confidence}%</div>
-        </div>
-      </div>
-      
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4 text-xs text-slate-400">
-          <span>Detected: {new Date(conflict.detectedAt).toLocaleDateString()}</span>
-          {conflict.assignedTo && (
-            <span>Assigned: {conflict.assignedTo.split('@')[0]}</span>
-          )}
-        </div>
-        
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           {conflict.impact.complianceRisk !== 'none' && (
-            <div className="flex items-center gap-1 text-xs">
-              <span className="text-red-400">📋</span>
-              <span className="text-slate-300">Compliance Risk</span>
-            </div>
+            <RiskBadge icon="📋" label="Compliance risk" tone="text-rose-500" />
           )}
           {conflict.impact.securityRisk !== 'none' && (
-            <div className="flex items-center gap-1 text-xs">
-              <span className="text-orange-400">🔒</span>
-              <span className="text-slate-300">Security Risk</span>
-            </div>
+            <RiskBadge icon="🔒" label="Security risk" tone="text-amber-500" />
           )}
         </div>
       </div>
+    </article>
+  );
+}
+
+interface InfoStatProps {
+  readonly label: string;
+  readonly value: string;
+}
+
+function InfoStat({ label, value }: InfoStatProps): JSX.Element {
+  return (
+    <div className="space-y-1">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{label}</p>
+      <p className="text-base font-semibold text-slate-900">{value}</p>
     </div>
+  );
+}
+
+interface RiskBadgeProps {
+  readonly icon: string;
+  readonly label: string;
+  readonly tone: string;
+}
+
+function RiskBadge({ icon, label, tone }: RiskBadgeProps): JSX.Element {
+  return (
+    <span className={`inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 font-semibold shadow-sm ${tone}`}>
+      <span>{icon}</span>
+      <span>{label}</span>
+    </span>
   );
 }
