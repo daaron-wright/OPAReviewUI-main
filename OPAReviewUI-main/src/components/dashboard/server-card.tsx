@@ -5,6 +5,7 @@
 'use client';
 
 import type { ServerMetric } from '@/domain/dashboard/types';
+import { Icon, IconName } from '../icon';
 
 interface ServerCardProps {
   readonly server: ServerMetric;
