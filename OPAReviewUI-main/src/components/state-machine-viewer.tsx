@@ -684,15 +684,6 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           </div>
         </div>
       )}
-
-      <EpicPublishCelebration
-        trigger={showEpicCelebration}
-        onComplete={() => {
-          console.log('🚀 CELEBRATION COMPLETE - REDIRECTING TO DASHBOARD!');
-          setShowEpicCelebration(false);
-          router.push('/dashboard');
-        }}
-      />
     </div>
   );
 }
