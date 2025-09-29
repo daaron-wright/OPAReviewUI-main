@@ -33,6 +33,10 @@ export type IconName =
   | 'lock'
   | 'trophy'
   | 'target'
+  | 'briefcase'
+  | 'wrench'
+  | 'fastForward'
+  | 'hourglass'
   | 'refresh'
   | 'ban'
   | 'alarm'
@@ -422,6 +426,65 @@ const ICONS: Record<IconName, IconRenderer> = {
       <circle cx="12" cy="12" r="8" strokeWidth={strokeWidth} />
       <circle cx="12" cy="12" r="4" strokeWidth={strokeWidth - 0.4} />
       <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+    </svg>
+  ),
+  briefcase: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <rect x="4" y="7" width="16" height="11" rx="2" strokeWidth={strokeWidth} />
+      <path d="M9 7V5h6v2" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M4 12h16" strokeWidth={strokeWidth} strokeLinecap="round" />
+    </svg>
+  ),
+  wrench: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path
+        d="M20 6a4 4 0 0 1-5.4 3.7L9 15.3V19l-2 2-3-3 2-2h3.7l5.6-5.6A4 4 0 1 1 20 6Z"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
+  fastForward: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M4 6v12l7-6-7-6Z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+      <path d="M13 6v12l7-6-7-6Z" strokeWidth={strokeWidth} strokeLinejoin="round" />
+    </svg>
+  ),
+  hourglass: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M7 4h10M7 20h10" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path
+        d="M10 4v3l4 4-4 4v5"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M14 4v3l-4 4 4 4v5" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   refresh: ({ className, strokeWidth = 1.8 }) => (
