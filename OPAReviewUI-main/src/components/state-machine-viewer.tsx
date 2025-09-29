@@ -21,7 +21,6 @@ import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
 import { CustomNode, CustomNodeData } from './graph/custom-node';
 import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
-import { EpicPublishCelebration } from '@/components/epic-publish-celebration';
 import {
   ProcessedNode,
   ProcessedStateMachine,
