@@ -435,7 +435,7 @@ export function NodeDetailModal({
       aria-labelledby="modal-title"
     >
       <div
-        className="relative flex max-h-[90vh] w-full max-w-[88rem] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/95 shadow-[0_40px_90px_-50px_rgba(15,23,42,0.7)]"
+        className="relative flex max-h-[90vh] w-full max-w-[88rem] flex-col overflow-hidden rounded-[36px] border border-[#e2ede8] bg-white shadow-[0_48px_96px_-52px_rgba(11,64,55,0.55)]"
         style={getModalStyle()}
       >
         <div className={`flex-shrink-0 border-b bg-gradient-to-r from-emerald-50 via-white to-cyan-50/60 px-6 py-5 ${getHeaderStyle(node)}`}>
