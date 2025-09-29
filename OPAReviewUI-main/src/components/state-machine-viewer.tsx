@@ -266,7 +266,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   const handleStartWalkthrough = useCallback(() => {
     resetReviews();
     startWalkthrough();
-    toast.info('🚀 Starting walkthrough from the initial state', {
+    toast.info(createToastContent('rocket', 'Starting walkthrough from the initial state'), {
       position: 'top-center',
       autoClose: 3000,
     });
