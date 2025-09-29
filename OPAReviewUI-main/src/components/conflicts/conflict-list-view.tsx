@@ -141,11 +141,11 @@ function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
   };
 
   const severityTheme = severityThemes[conflict.severity];
-  const severityIcon: Record<PolicyConflict['severity'], string> = {
-    critical: '🚨',
-    high: '⚠️',
-    medium: '⚡',
-    low: 'ℹ️',
+  const severityIcons: Record<PolicyConflict['severity'], IconName> = {
+    critical: 'alarm',
+    high: 'warningTriangle',
+    medium: 'bolt',
+    low: 'infoCircle',
   };
 
   return (
@@ -163,8 +163,8 @@ function ConflictCard({ conflict, onClick }: ConflictCardProps): JSX.Element {
     >
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-1 items-start gap-4">
-          <span className={`flex h-12 w-12 items-center justify-center rounded-2xl text-2xl shadow-inner ${severityTheme.iconBg} ${severityTheme.icon}`}>
-            {severityIcon[conflict.severity]}
+          <span className={`flex h-12 w-12 items-center justify-center rounded-2xl shadow-inner ${severityTheme.iconBg}`}>
+            <Icon name={severityIcons[conflict.severity]} className={`h-6 w-6 ${severityTheme.icon}`} />
           </span>
           <div className="space-y-2">
             <div className="space-y-1">
