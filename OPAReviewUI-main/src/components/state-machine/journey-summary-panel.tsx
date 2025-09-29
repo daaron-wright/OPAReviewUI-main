@@ -205,16 +205,16 @@ export function JourneySummaryPanel({
           </header>
 
           <div className="space-y-3">
-            <div className="bg-slate-50/70 border border-slate-100 rounded-2xl px-4 py-3">
+            <div className="rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3">
               <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
                 <span>Overall progress</span>
                 <span>
                   {progress.reviewed} / {progress.total}
                 </span>
               </div>
-              <div className="mt-2 h-2 bg-white border border-slate-100 rounded-full overflow-hidden">
+              <div className="mt-2 h-2 overflow-hidden rounded-full border border-white bg-white">
                 <div
-                  className="h-full bg-gradient-to-r from-emerald-400 to-teal-500"
+                  className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1]"
                   style={{
                     width: `${progress.total === 0 ? 0 : Math.min(100, (progress.reviewed / progress.total) * 100)}%`,
                   }}
@@ -229,7 +229,7 @@ export function JourneySummaryPanel({
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300 transition"
+                className="rounded-xl border border-[#dbe9e3] bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#c5ded5]"
                 onClick={onApproveAll}
               >
                 Approve all
@@ -239,9 +239,9 @@ export function JourneySummaryPanel({
                 onClick={onPublish}
                 disabled={!canPublish}
                 className={clsx(
-                  'rounded-xl px-3 py-2 text-sm font-semibold transition flex items-center justify-center gap-2',
+                  'flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition',
                   canPublish
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md hover:from-emerald-600 hover:to-teal-600'
+                    ? 'bg-[#0f766e] text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)] hover:bg-[#0c5f59]'
                     : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                 )}
               >
