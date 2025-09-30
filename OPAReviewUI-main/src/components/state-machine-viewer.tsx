@@ -164,6 +164,29 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     }
   }, [isGraphExpanded, reactFlowInstance]);
 
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsGraphExpanded(false);
+      }
+    };
+
+    if (isGraphExpanded) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isGraphExpanded]);
+
   const nodesById = useMemo(() => {
     const map = new Map<string, ProcessedNode>();
     stateMachine.nodes.forEach((node) => {
