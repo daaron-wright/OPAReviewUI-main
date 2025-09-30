@@ -69,7 +69,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       title: 'Beneficiary Ownership Thresholds',
       titleAr: 'حدود ملكية المستفيد',
       location: 'Chapter 5: Declaration Requirements',
-      locationAr: 'الفصل 5: متطلبات الإعلان',
+      locationAr: 'الف��ل 5: متطلبات الإعلان',
       content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
 
 Calculation Rules:
@@ -548,7 +548,7 @@ export function NodeDetailModal({
         </div>
         
         {/* Side-by-Side Content - Scrollable area */}
-        <div className="grid flex-1 grid-cols-1 divide-y divide-[#e2ede8] lg:grid-cols-2 lg:divide-y-0 lg:divide-x lg:divide-[#e2ede8]">
+        <div className="grid flex-1 min-h-0 overflow-hidden grid-cols-1 divide-y divide-[#e2ede8] lg:grid-cols-2 lg:divide-y-0 lg:divide-x lg:divide-[#e2ede8]">
           {/* Left Panel - BRD References - Independent scroll */}
           <div className="overflow-y-auto p-6 max-h-full" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="space-y-4">
