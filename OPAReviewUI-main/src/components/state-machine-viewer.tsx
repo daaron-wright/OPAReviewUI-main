@@ -398,6 +398,14 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     setIsGraphExpanded((prev) => !prev);
   }, []);
 
+  const handleCollapseGraph = useCallback(() => {
+    setIsGraphExpanded(false);
+  }, []);
+
+  const handleFocusFit = useCallback(() => {
+    reactFlowInstance?.fitView({ padding: 0.18, duration: 600 });
+  }, [reactFlowInstance]);
+
   const graphContent = (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 rounded-[28px] border border-[#dbe9e3] bg-[#f6faf8] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
@@ -433,20 +441,81 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           </button>
         </div>
       </div>
-      <GraphCanvas
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onNodeClick={handleNodeClick}
-        onInit={setReactFlowInstance}
-        height={isGraphExpanded ? 'min(80vh, 820px)' : 520}
-        containerClassName={`transition-all duration-500 ease-in-out ${
-          isGraphExpanded ? 'shadow-xl ring-1 ring-emerald-100/70' : ''
-        }`}
-      />
+      {isGraphExpanded ? (
+        <div className="flex h-[520px] items-center justify-center rounded-2xl border border-dashed border-[#cbe6dc] bg-white text-sm font-semibold text-slate-500">
+          Graph open in focus view
+        </div>
+      ) : (
+        <GraphCanvas
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeClick={handleNodeClick}
+          onInit={setReactFlowInstance}
+          height={520}
+          containerClassName="transition-all duration-500 ease-in-out"
+        />
+      )}
     </div>
   );
+
+  const fullscreenGraphOverlay = !isGraphExpanded
+    ? null
+    : (
+        <div
+          className="fixed inset-0 z-[80] flex flex-col bg-slate-900/75 backdrop-blur-xl"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Journey map focus view"
+        >
+          <div className="flex flex-col gap-4 border-b border-white/10 bg-white/95 px-6 py-6 shadow-[0_20px_60px_-20px_rgba(11,64,55,0.45)] sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-2 text-slate-900">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
+                Journey map focus
+              </span>
+              <h2 className="text-lg font-semibold leading-snug sm:text-xl">Abu Dhabi DED Beneficiary Graph</h2>
+              <p className="text-xs text-slate-600">
+                Drag to pan, scroll to zoom, or use the controls. Press Esc or close to return.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handleFocusFit}
+                className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#c5ded5] hover:bg-[#f3f8f6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
+              >
+                <Icon name="target" className="h-4 w-4" />
+                Reset view
+              </button>
+              <button
+                type="button"
+                onClick={handleCollapseGraph}
+                className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e]"
+              >
+                <Icon name="xCircle" className="h-4 w-4" />
+                Close focus
+              </button>
+            </div>
+          </div>
+          <div className="relative flex-1 bg-white">
+            <GraphCanvas
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onNodeClick={handleNodeClick}
+              onInit={setReactFlowInstance}
+              height="100%"
+              containerClassName="h-full !rounded-none !border-none !shadow-none"
+              graphClassName="bg-white"
+              controlsClassName="!border-[#dbe9e3] !shadow-xl"
+              miniMapClassName="!border-[#dbe9e3] !shadow-xl"
+              backgroundColor="#e2ede8"
+            />
+          </div>
+        </div>
+      );
 
   const handleTimelineSelect = useCallback(
     (nodeId: string) => {
