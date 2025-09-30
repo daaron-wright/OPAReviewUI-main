@@ -656,6 +656,8 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
         originPosition={nodePosition}
       />
 
+      {fullscreenGraphOverlay}
+
       {showPublishModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/55 p-4 backdrop-blur-xl animate-fade-in">
           <div className="relative w-full max-w-3xl overflow-hidden rounded-[36px] border border-[#e2ede8] bg-white shadow-[0_48px_96px_-52px_rgba(11,64,55,0.55)] animate-slide-up">
