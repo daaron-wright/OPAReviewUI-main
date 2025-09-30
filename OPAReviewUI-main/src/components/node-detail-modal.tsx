@@ -69,7 +69,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       title: 'Beneficiary Ownership Thresholds',
       titleAr: 'حدود ملكية المستفيد',
       location: 'Chapter 5: Declaration Requirements',
-      locationAr: 'الف��ل 5: متطلبات الإعلان',
+      locationAr: 'الفصل 5: متطلبات الإعلان',
       content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
 
 Calculation Rules:
@@ -93,7 +93,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 مثال على الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
-ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
+ملكية الشخص أ غير المبا��رة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
@@ -550,7 +550,7 @@ export function NodeDetailModal({
         {/* Side-by-Side Content - Scrollable area */}
         <div className="grid flex-1 min-h-0 overflow-hidden grid-cols-1 divide-y divide-[#e2ede8] lg:grid-cols-2 lg:divide-y-0 lg:divide-x lg:divide-[#e2ede8]">
           {/* Left Panel - BRD References - Independent scroll */}
-          <div className="overflow-y-auto p-6 max-h-full" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="h-full min-h-0 overflow-y-auto p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="space-y-4">
               <div className="rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4 shadow-sm">
                 <div className="mb-2 flex items-center gap-2">
