@@ -857,9 +857,23 @@ export function NodeDetailModal({
                                   </button>
                                   <button
                                     onClick={() => openReworkChat(rule)}
-                                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#0f766e] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0c5f59]"
+                                    className="relative inline-flex flex-1 items-center justify-center overflow-hidden rounded-full px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f766e]"
                                   >
-                                    Rework
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute inset-0 bg-gradient-to-br from-[#0f766e] via-[#119a80] to-[#0b5c55]"
+                                    />
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute inset-0 opacity-60"
+                                      style={{
+                                        backgroundImage:
+                                          'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.45) 0, rgba(255,255,255,0.45) 1.2px, transparent 1.2px), radial-gradient(circle at 4px 4px, rgba(15,118,110,0.38) 0, rgba(15,118,110,0.38) 1.2px, transparent 1.2px)',
+                                        backgroundSize: '8px 8px',
+                                        backgroundPosition: '0 0,4px 4px'
+                                      }}
+                                    />
+                                    <span className="relative">Rework</span>
                                   </button>
                                 </div>
                               </div>
