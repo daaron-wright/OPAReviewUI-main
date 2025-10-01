@@ -34,8 +34,8 @@ interface JourneyTimelineProps {
 }
 
 const reviewerProfile = {
-  name: 'Ahmed Al Mansoori',
-  email: 'ahmed.almansoori@email.ae',
+  id: 'RV-45812',
+  status: 'Credentialed reviewer',
   avatarUrl:
     'https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Ffdd0903634a841018729b20c0d63aecb?format=webp&width=200',
 } as const;
@@ -97,8 +97,8 @@ export function JourneyTimeline({
           <div className="flex flex-col gap-4 lg:items-end">
             <div className="flex flex-wrap items-center gap-3 lg:justify-end">
             <ReviewerProfilePill
-              name={reviewerProfile.name}
-              email={reviewerProfile.email}
+              primaryText={`Reviewer ID ${reviewerProfile.id}`}
+              secondaryText={reviewerProfile.status}
               avatarUrl={reviewerProfile.avatarUrl}
               className="rounded-full"
             />
