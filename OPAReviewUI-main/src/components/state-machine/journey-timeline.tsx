@@ -34,10 +34,10 @@ interface JourneyTimelineProps {
 }
 
 const reviewerProfile = {
-  id: 'RV-45812',
-  status: 'Credentialed reviewer',
+  name: 'Khalid Entrepreneur',
+  email: 'khalid.entrepreneur@email.ae',
   avatarUrl:
-    'https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Ffdd0903634a841018729b20c0d63aecb?format=webp&width=200',
+    'https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Fc053ea3ff8b6499b884ed87c87f941eb?format=webp&width=200',
 } as const;
 
 export function JourneyTimeline({
@@ -97,8 +97,8 @@ export function JourneyTimeline({
           <div className="flex flex-col gap-4 lg:items-end">
             <div className="flex flex-wrap items-center gap-3 lg:justify-end">
             <ReviewerProfilePill
-              primaryText={`Reviewer ID ${reviewerProfile.id}`}
-              secondaryText={reviewerProfile.status}
+              primaryText={reviewerProfile.name}
+              secondaryText={reviewerProfile.email}
               avatarUrl={reviewerProfile.avatarUrl}
               className="rounded-full"
             />
