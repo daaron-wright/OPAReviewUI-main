@@ -1,0 +1,176 @@
+{
+  "stateMachine": {
+    "name": "PolicyReviewWorkflow",
+    "version": "1.0",
+    "description": "Policy extraction and multi-stage review workflow for BRD-aligned policy governance.",
+    "initialState": "brd_upload_and_policy_extraction",
+    "finalStates": [
+      "technical_deletion",
+      "local_deletion_and_archiving",
+      "stakeholder_notification"
+    ],
+    "states": {
+      "brd_upload_and_policy_extraction": {
+        "type": "process",
+        "description": "BRD document is uploaded and policies are extracted and registered.",
+        "control_attribute": "policy_extraction_done",
+        "transitions": [
+          {
+            "condition": "policy_extraction_done == true",
+            "target": "policy_review_process_initiation",
+            "action": "policy_extraction_completed",
+            "control_attribute": "policy_extraction_done",
+            "control_attribute_value": "true"
+          }
+        ]
+      },
+      "policy_review_process_initiation": {
+        "type": "process",
+        "description": "Initiates the policy review process and sets the review cycle to one.",
+        "control_attribute": "review_cycle",
+        "transitions": [
+          {
+            "condition": "review_cycle == 1",
+            "target": "business_review",
+            "action": "review_process_initiated",
+            "control_attribute": "review_cycle",
+            "control_attribute_value": "1"
+          }
+        ]
+      },
+      "business_review": {
+        "type": "decision",
+        "description": "First review performed by the business user; possible outcomes: approved, changes requested, or rejected.",
+        "control_attribute": "business_review_decision",
+        "transitions": [
+          {
+            "condition": "business_review_decision == 'approved'",
+            "target": "technical_review",
+            "action": "business_approved_policy",
+            "control_attribute": "business_review_decision",
+            "control_attribute_value": "approved"
+          },
+          {
+            "condition": "business_review_decision == 'changes_requested'",
+            "target": "technical_review",
+            "action": "business_requested_changes",
+            "control_attribute": "business_review_decision",
+            "control_attribute_value": "changes_requested"
+          },
+          {
+            "condition": "business_review_decision == 'rejected'",
+            "target": "prepare_policy_for_deletion",
+            "action": "business_rejected_policy",
+            "control_attribute": "business_review_decision",
+            "control_attribute_value": "rejected"
+          }
+        ]
+      },
+      "prepare_policy_for_deletion": {
+        "type": "decision",
+        "description": "If a policy is rejected, determine if it already exists in the system.",
+        "control_attribute": "policy_exists_in_system",
+        "transitions": [
+          {
+            "condition": "policy_exists_in_system == true",
+            "target": "technical_deletion",
+            "action": "technical_deletion_initiated",
+            "control_attribute": "policy_exists_in_system",
+            "control_attribute_value": "true"
+          },
+          {
+            "condition": "policy_exists_in_system == false",
+            "target": "local_deletion_and_archiving",
+            "action": "local_deletion_and_archive",
+            "control_attribute": "policy_exists_in_system",
+            "control_attribute_value": "false"
+          }
+        ]
+      },
+      "technical_deletion": {
+        "type": "process",
+        "description": "For existing policies rejected in the first review, the technical user deletes the policy from the system.",
+        "control_attribute": "technical_deletion_done"
+      },
+      "local_deletion_and_archiving": {
+        "type": "final",
+        "description": "For new policies rejected in the first review, the policy is deleted locally and archived."
+      },
+      "technical_review": {
+        "type": "decision",
+        "description": "The technical user reviews the policy and provides a test outcome: passed, failed, or blocked.",
+        "control_attribute": "tech_review_outcome",
+        "transitions": [
+          {
+            "condition": "tech_review_outcome == 'passed'",
+            "target": "verification_and_business_validation",
+            "action": "technical_review_passed",
+            "control_attribute": "tech_review_outcome",
+            "control_attribute_value": "passed"
+          },
+          {
+            "condition": "tech_review_outcome == 'failed'",
+            "target": "verification_and_business_validation",
+            "action": "technical_review_failed",
+            "control_attribute": "tech_review_outcome",
+            "control_attribute_value": "failed"
+          },
+          {
+            "condition": "tech_review_outcome == 'blocked'",
+            "target": "verification_and_business_validation",
+            "action": "technical_review_blocked",
+            "control_attribute": "tech_review_outcome",
+            "control_attribute_value": "blocked"
+          }
+        ]
+      },
+      "verification_and_business_validation": {
+        "type": "decision",
+        "description": "After technical review, the business user verifies the policy and decides whether to approve it or request further revisions.",
+        "control_attribute": "business_validation_decision",
+        "transitions": [
+          {
+            "condition": "business_validation_decision == 'approved'",
+            "target": "deployment_and_communication",
+            "action": "business_validation_approved",
+            "control_attribute": "business_validation_decision",
+            "control_attribute_value": "approved"
+          },
+          {
+            "condition": "business_validation_decision == 'changes_requested'",
+            "target": "technical_review",
+            "action": "business_validation_changes_requested",
+            "control_attribute": "business_validation_decision",
+            "control_attribute_value": "changes_requested"
+          },
+          {
+            "condition": "business_validation_decision == 'rejected'",
+            "target": "prepare_policy_for_deletion",
+            "action": "business_validation_rejected",
+            "control_attribute": "business_validation_decision",
+            "control_attribute_value": "rejected"
+          }
+        ]
+      },
+      "deployment_and_communication": {
+        "type": "process",
+        "description": "Upon final business approval, the policy is deployed to production and notifications are sent to all stakeholders.",
+        "control_attribute": "deployment_status",
+        "transitions": [
+          {
+            "condition": "deployment_status == 'deployed'",
+            "target": "stakeholder_notification",
+            "action": "policy_deployed",
+            "control_attribute": "deployment_status",
+            "control_attribute_value": "deployed"
+          }
+        ]
+      },
+      "stakeholder_notification": {
+        "type": "notify",
+        "description": "Final notification step where the business user informs all affected stakeholders about the updated policy.",
+        "control_attribute": "notification_status"
+      }
+    }
+  }
+}
