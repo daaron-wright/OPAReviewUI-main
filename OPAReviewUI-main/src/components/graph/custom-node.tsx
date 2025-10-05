@@ -119,9 +119,9 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
               Transition values
             </p>
             <div className="mt-1 space-y-1">
-              {transitions.slice(0, 2).map((transition) => (
+              {transitions.slice(0, 2).map((transition, index) => (
                 <div
-                  key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}`}
+                  key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}-${index}`}
                   className="flex items-center justify-between rounded-xl border border-[#dbe9e3] bg-white px-2.5 py-1.5 text-[10px] font-semibold text-slate-600"
                 >
                   <span className="inline-flex items-center gap-1 text-[#0f766e]">
