@@ -34,7 +34,7 @@ const getMockBRDReferences = (): any => ({
   documentVersion: 'v2.3.1',
   lastUpdated: '2024-01-15',
   approvedBy: 'Director of Digital Transformation',
-  approvedByAr: 'مدير التحول الرقمي',
+  approvedByAr: 'مدي�� التحول الرقمي',
   sections: [
     {
       page: Math.floor(Math.random() * 20) + 10,
@@ -1073,7 +1073,40 @@ function getTypeBadgeStyle(node: ProcessedNode): string {
       return 'border border-[#c7e5f4] bg-[#f0f8fd] text-[#1d7fb3]';
     case 'process':
       return 'border border-[#b8c6ff] bg-[#eef1ff] text-[#3948a3]';
+    case 'notify':
+      return 'border border-[#fde68a] bg-[#fef9c3] text-[#ca8a04]';
     default:
       return 'border border-[#e2ede8] bg-white text-slate-600';
   }
+}
+
+function formatAttributeName(value: string): string {
+  return value
+    .replace(/[_-]+/g, ' ')
+    .split(' ')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
+
+function formatConditionOutcome(condition: string): string {
+  const equalityMatch = condition.match(/==\s*['"]?([\w-]+)['"]?/);
+  if (equalityMatch) {
+    return equalityMatch[1];
+  }
+
+  const booleanMatch = condition.match(/\b(true|false)\b/i);
+  if (booleanMatch) {
+    return booleanMatch[1].toLowerCase();
+  }
+
+  return condition.replace(/\s+/g, ' ').trim();
+}
+
+function formatActionName(value: string): string {
+  return value
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
