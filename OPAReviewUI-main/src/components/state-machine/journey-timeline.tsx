@@ -291,9 +291,9 @@ function renderMetadata(node: ProcessedNode): ReactNode {
             Transition outcomes
           </p>
           <ul className="space-y-2">
-            {transitions.map((transition) => (
+            {transitions.map((transition, index) => (
               <li
-                key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}`}
+                key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}-${index}`}
               >
                 <div className="rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3 shadow-sm">
                   <div className="flex flex-wrap items-center justify-between gap-2">
