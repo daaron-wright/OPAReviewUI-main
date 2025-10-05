@@ -63,6 +63,8 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     previousNode,
   } = useReview();
 
+  const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
+
   const initialNodes = useMemo(() => {
     return stateMachine.nodes.map((node) => {
       const functions = node.metadata.functions
