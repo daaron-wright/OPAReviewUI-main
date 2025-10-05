@@ -8,6 +8,7 @@ import { Handle, NodeProps, Position } from 'reactflow';
 import { memo } from 'react';
 import clsx from 'clsx';
 import { useReview } from '@/context/review-context';
+import { ProcessedNodeTransition } from '@/domain/state-machine/processor';
 
 export interface CustomNodeData {
   label: string;
@@ -16,6 +17,9 @@ export interface CustomNodeData {
   isFinal: boolean;
   isInitial: boolean;
   functions?: string[];
+  controlAttribute?: string;
+  controlAttributes?: string[];
+  transitions?: ProcessedNodeTransition[];
 }
 
 /**
@@ -27,6 +31,8 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
   const isApproved = isNodeApproved(id);
   const isCurrentNode = currentNodeId === id && isWalkthroughMode;
   const styles = getNodeStyles(data, isReviewed, isApproved);
+  const controlAttributes = data.controlAttributes ?? (data.controlAttribute ? [data.controlAttribute] : []);
+  const transitions = data.transitions ?? [];
 
   const badgeLabel = data.isInitial
     ? 'Initial state'
@@ -87,6 +93,54 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
         <p className="mt-3 text-xs leading-relaxed text-slate-500">
           {data.description}
         </p>
+
+        {controlAttributes.length > 0 && (
+          <div className="mt-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Control attributes
+            </p>
+            <div className="mt-1 flex flex-wrap gap-1.5">
+              {controlAttributes.map((attribute) => (
+                <span
+                  key={attribute}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-[#c7e5f4] bg-[#f0f8fd] px-2.5 py-1 text-[10px] font-semibold text-[#1d7fb3]"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#1d7fb3]" />
+                  {formatAttributeName(attribute)}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {transitions.length > 0 && (
+          <div className="mt-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Transition values
+            </p>
+            <div className="mt-1 space-y-1">
+              {transitions.slice(0, 2).map((transition) => (
+                <div
+                  key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}`}
+                  className="flex items-center justify-between rounded-xl border border-[#dbe9e3] bg-white px-2.5 py-1.5 text-[10px] font-semibold text-slate-600"
+                >
+                  <span className="inline-flex items-center gap-1 text-[#0f766e]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#0f766e]" />
+                    {transition.controlAttributeValue ?? formatConditionOutcome(transition.condition)}
+                  </span>
+                  <span className="text-slate-400">
+                    {formatAttributeName(transition.target)}
+                  </span>
+                </div>
+              ))}
+              {transitions.length > 2 && (
+                <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+                  +{transitions.length - 2} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
 
         {data.functions && data.functions.length > 0 && (
           <div className="mt-3">
@@ -178,6 +232,11 @@ function getPalette(data: CustomNodeData): {
         badge: 'border-[#b8c6ff] bg-[#eef1ff] text-[#3948a3]',
         accentDot: 'bg-[#3948a3]',
       };
+    case 'notify':
+      return {
+        badge: 'border-[#fde68a] bg-[#fef9c3] text-[#ca8a04]',
+        accentDot: 'bg-[#ca8a04]',
+      };
     default:
       return {
         badge: 'border-[#e2ede8] bg-white text-slate-600',
@@ -191,4 +250,27 @@ function formatFunctionName(name: string): string {
     .split('_')
     .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
     .join(' ');
+}
+
+function formatAttributeName(name: string): string {
+  return name
+    .replace(/[_-]+/g, ' ')
+    .split(' ')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
+
+function formatConditionOutcome(condition: string): string {
+  const equalityMatch = condition.match(/==\s*['"]?([\w-]+)['"]?/);
+  if (equalityMatch) {
+    return equalityMatch[1];
+  }
+
+  const booleanMatch = condition.match(/\b(true|false)\b/i);
+  if (booleanMatch) {
+    return booleanMatch[1].toLowerCase();
+  }
+
+  return condition.replace(/\s+/g, ' ').trim();
 }
