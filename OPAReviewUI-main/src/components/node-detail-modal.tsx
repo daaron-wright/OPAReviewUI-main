@@ -34,7 +34,7 @@ const getMockBRDReferences = (): any => ({
   documentVersion: 'v2.3.1',
   lastUpdated: '2024-01-15',
   approvedBy: 'Director of Digital Transformation',
-  approvedByAr: 'مدي�� التحول الرقمي',
+  approvedByAr: 'مدير التحول الرقمي',
   sections: [
     {
       page: Math.floor(Math.random() * 20) + 10,
@@ -1054,6 +1054,8 @@ function getHeaderStyle(node: ProcessedNode): string {
       return 'lg:border-l-[6px] lg:border-[#c7e5f4]';
     case 'process':
       return 'lg:border-l-[6px] lg:border-[#b8c6ff]';
+    case 'notify':
+      return 'lg:border-l-[6px] lg:border-[#fde68a]';
     default:
       return 'lg:border-l-[6px] lg:border-[#e2ede8]';
   }
