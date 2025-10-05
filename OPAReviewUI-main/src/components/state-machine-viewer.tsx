@@ -619,6 +619,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             onSelect={handleTimelineSelect}
             onInspect={openNodeDetailById}
             progress={{ reviewed: reviewedCount, total: totalCount }}
+            headerTitle={machineTitle}
             headerSubtitle={stateMachine.metadata.description}
             viewMode={primaryView}
             onViewModeChange={setPrimaryView}
