@@ -103,6 +103,62 @@ function createNode(
   };
 }
 
+function normalizeControlAttributes(state: State): { primary: string | null; all: string[] } {
+  const primaryCandidate =
+    state.controlAttribute ??
+    state.control_attribute ??
+    (Array.isArray(state.controlAttributes) && state.controlAttributes.length > 0
+      ? state.controlAttributes[0]
+      : undefined) ??
+    (Array.isArray(state.control_attributes) && state.control_attributes.length > 0
+      ? state.control_attributes[0]
+      : undefined) ??
+    null;
+
+  const additional = [
+    ...(Array.isArray(state.controlAttributes) ? state.controlAttributes : []),
+    ...(Array.isArray(state.control_attributes) ? state.control_attributes : []),
+  ];
+
+  const all = new Set<string>();
+  if (typeof primaryCandidate === 'string' && primaryCandidate.trim().length > 0) {
+    all.add(primaryCandidate.trim());
+  }
+  additional
+    .filter((attr): attr is string => typeof attr === 'string' && attr.trim().length > 0)
+    .forEach((attr) => all.add(attr.trim()));
+
+  const primary = primaryCandidate && typeof primaryCandidate === 'string' && primaryCandidate.trim().length > 0
+    ? primaryCandidate.trim()
+    : all.values().next().value ?? null;
+
+  return {
+    primary,
+    all: Array.from(all),
+  };
+}
+
+function normalizeTransition(transition: Transition): ProcessedNodeTransition {
+  const controlAttribute =
+    transition.controlAttribute ??
+    transition.control_attribute;
+  const controlAttributeValue =
+    transition.controlAttributeValue ??
+    transition.control_attribute_value;
+
+  return {
+    target: transition.target,
+    action: transition.action,
+    condition: transition.condition,
+    ...(controlAttribute && controlAttribute.trim().length > 0
+      ? { controlAttribute: controlAttribute.trim() }
+      : {}),
+    ...(controlAttributeValue && controlAttributeValue.trim().length > 0
+      ? { controlAttributeValue: controlAttributeValue.trim() }
+      : {}),
+  };
+}
+
 function createEdges(machine: StateMachine): ReadonlyArray<ProcessedEdge> {
   const edges: ProcessedEdge[] = [];
   
