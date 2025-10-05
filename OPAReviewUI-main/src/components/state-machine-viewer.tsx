@@ -897,6 +897,24 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   );
 }
 
+function formatMachineName(name: string): string {
+  if (!name) {
+    return 'Application Journey';
+  }
+
+  const withSpaces = name
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return withSpaces
+    .split(' ')
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
+
 function formatNodeType(type: string): string {
   return type
     .split(/[-_]/)
