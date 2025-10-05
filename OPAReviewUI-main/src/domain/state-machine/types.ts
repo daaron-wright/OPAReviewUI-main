@@ -3,12 +3,16 @@
  * Pure types with no external dependencies
  */
 
-export type StateType = 'decision' | 'process' | 'final';
+export type StateType = 'decision' | 'process' | 'final' | 'notify';
 
 export interface Transition {
   readonly condition: string;
   readonly target: string;
   readonly action: string;
+  readonly controlAttribute?: string;
+  readonly control_attribute?: string;
+  readonly controlAttributeValue?: string;
+  readonly control_attribute_value?: string;
 }
 
 export interface StateFunction {
@@ -24,6 +28,10 @@ export interface State {
   readonly functions?: ReadonlyArray<string>;
   readonly transitions?: ReadonlyArray<Transition>;
   readonly nextState?: string;
+  readonly controlAttribute?: string;
+  readonly control_attribute?: string;
+  readonly controlAttributes?: ReadonlyArray<string>;
+  readonly control_attributes?: ReadonlyArray<string>;
 }
 
 export interface StateMachineMetadata {
