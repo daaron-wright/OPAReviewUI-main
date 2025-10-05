@@ -57,7 +57,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
-• قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
+• قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
@@ -69,7 +69,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       title: 'Beneficiary Ownership Thresholds',
       titleAr: 'حدود ملكية المستفيد',
       location: 'Chapter 5: Declaration Requirements',
-      locationAr: 'الفصل 5: متطلبات الإعلان',
+      locationAr: 'الفصل 5: متطلبات الإع��ان',
       content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
 
 Calculation Rules:
@@ -88,7 +88,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 قواعد الحساب:
 • الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
-• تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
+• تقييم السيطرة: حقوق ال��صويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
@@ -400,6 +400,7 @@ export function NodeDetailModal({
   const brdReferences = getMockBRDReferences();
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
+  const controlSummaryCount = controlAttributes.length + transitions.length;
 
   // Calculate animation styles
   const getModalStyle = () => {
@@ -641,7 +642,7 @@ export function NodeDetailModal({
                     </svg>
                   </span>
                   <h3 className="text-sm font-semibold text-slate-900">
-                    {language === 'ar' ? 'وثيقة متطلبات الأعمال' : 'Business Requirements Document'}
+                    {language === 'ar' ? 'وثيقة متطلب��ت الأعمال' : 'Business Requirements Document'}
                   </h3>
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
