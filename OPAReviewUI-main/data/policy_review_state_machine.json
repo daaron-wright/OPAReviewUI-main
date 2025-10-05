@@ -66,36 +66,6 @@
           }
         ]
       },
-      "prepare_policy_for_deletion": {
-        "type": "decision",
-        "description": "If a policy is rejected, determine if it already exists in the system.",
-        "control_attribute": "policy_exists_in_system",
-        "transitions": [
-          {
-            "condition": "policy_exists_in_system == true",
-            "target": "technical_deletion",
-            "action": "technical_deletion_initiated",
-            "control_attribute": "policy_exists_in_system",
-            "control_attribute_value": "true"
-          },
-          {
-            "condition": "policy_exists_in_system == false",
-            "target": "local_deletion_and_archiving",
-            "action": "local_deletion_and_archive",
-            "control_attribute": "policy_exists_in_system",
-            "control_attribute_value": "false"
-          }
-        ]
-      },
-      "technical_deletion": {
-        "type": "process",
-        "description": "For existing policies rejected in the first review, the technical user deletes the policy from the system.",
-        "control_attribute": "technical_deletion_done"
-      },
-      "local_deletion_and_archiving": {
-        "type": "final",
-        "description": "For new policies rejected in the first review, the policy is deleted locally and archived."
-      },
       "technical_review": {
         "type": "decision",
         "description": "The technical user reviews the policy and provides a test outcome: passed, failed, or blocked.",
@@ -170,6 +140,36 @@
         "type": "notify",
         "description": "Final notification step where the business user informs all affected stakeholders about the updated policy.",
         "control_attribute": "notification_status"
+      },
+      "prepare_policy_for_deletion": {
+        "type": "decision",
+        "description": "If a policy is rejected, determine if it already exists in the system.",
+        "control_attribute": "policy_exists_in_system",
+        "transitions": [
+          {
+            "condition": "policy_exists_in_system == true",
+            "target": "technical_deletion",
+            "action": "technical_deletion_initiated",
+            "control_attribute": "policy_exists_in_system",
+            "control_attribute_value": "true"
+          },
+          {
+            "condition": "policy_exists_in_system == false",
+            "target": "local_deletion_and_archiving",
+            "action": "local_deletion_and_archive",
+            "control_attribute": "policy_exists_in_system",
+            "control_attribute_value": "false"
+          }
+        ]
+      },
+      "technical_deletion": {
+        "type": "process",
+        "description": "For existing policies rejected in the first review, the technical user deletes the policy from the system.",
+        "control_attribute": "technical_deletion_done"
+      },
+      "local_deletion_and_archiving": {
+        "type": "final",
+        "description": "For new policies rejected in the first review, the policy is deleted locally and archived."
       }
     }
   }
