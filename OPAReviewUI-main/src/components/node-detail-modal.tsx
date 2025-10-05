@@ -52,12 +52,12 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبط��قة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
-• قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
+• قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
 • يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
@@ -554,6 +554,85 @@ export function NodeDetailModal({
           {/* Left Panel - BRD References - Independent scroll */}
           <div className="h-full min-h-0 overflow-y-auto p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="space-y-4">
+              {(controlAttributes.length > 0 || transitions.length > 0) && (
+                <div className="rounded-2xl border border-[#d8e4df] bg-white/95 p-4 shadow-sm">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        {language === 'ar' ? 'ملخص عناصر التحكم' : 'State control summary'}
+                      </h3>
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {language === 'ar'
+                          ? 'سمات التحكم وقيم الانتقال لهذه العقدة.'
+                          : 'Control attributes and transition values for this node.'}
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#f0f8fd] px-3 py-1 text-[11px] font-semibold text-[#1d7fb3]">
+                      {controlAttributes.length}
+                      <span className="text-[10px] uppercase tracking-[0.14em] text-[#1d7fb3]/80">
+                        {language === 'ar' ? 'سمات' : 'Attributes'}
+                      </span>
+                    </span>
+                  </div>
+
+                  {controlAttributes.length > 0 && (
+                    <div className="mt-3 space-y-2">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                        {language === 'ar' ? 'سمات التحكم' : 'Control attributes'}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {controlAttributes.map((attribute) => (
+                          <span
+                            key={attribute}
+                            className="inline-flex items-center gap-2 rounded-full border border-[#c7e5f4] bg-[#f0f8fd] px-3 py-1 text-[11px] font-semibold text-[#1d7fb3]"
+                          >
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#1d7fb3]" />
+                            {formatAttributeName(attribute)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {transitions.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                        {language === 'ar' ? 'نتائج الانتقال' : 'Transition outcomes'}
+                      </p>
+                      <div className="space-y-2">
+                        {transitions.map((transition) => (
+                          <div
+                            key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}`}
+                            className="rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-3 py-2"
+                          >
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
+                                {transition.controlAttribute
+                                  ? formatAttributeName(transition.controlAttribute)
+                                  : language === 'ar'
+                                    ? 'الشرط'
+                                    : 'Condition'}
+                              </span>
+                              <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-[#0f766e]">
+                                {transition.controlAttributeValue ?? formatConditionOutcome(transition.condition)}
+                              </span>
+                            </div>
+                            <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+                              <span className="font-semibold text-slate-700">
+                                {formatAttributeName(transition.target)}
+                              </span>
+                              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+                                {formatActionName(transition.action)}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4 shadow-sm">
                 <div className="mb-2 flex items-center gap-2">
                   <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#0f766e]/10 text-[#0f766e]">
