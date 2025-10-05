@@ -256,26 +256,90 @@ export function JourneyTimeline({
 
 function renderMetadata(node: ProcessedNode): ReactNode {
   const functions = node.metadata.functions ?? [];
-  if (functions.length === 0) {
+  const controlAttributes = node.metadata.controlAttributes ?? (node.metadata.controlAttribute ? [node.metadata.controlAttribute] : []);
+  const transitions = node.metadata.transitions ?? [];
+  const hasContent = controlAttributes.length > 0 || transitions.length > 0 || functions.length > 0;
+
+  if (!hasContent) {
     return null;
   }
 
   return (
-    <div className="mt-4 border-t border-[#e2ede8] pt-4">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
-        Automation touchpoints
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {functions.map((fn) => (
-          <span
-            key={fn}
-            className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1 text-xs font-medium text-slate-600"
-          >
-            <span className="block h-1.5 w-1.5 rounded-full bg-[#0f766e]" />
-            {fn.replace(/_/g, ' ')}
-          </span>
-        ))}
-      </div>
+    <div className="mt-5 space-y-5 border-t border-[#e2ede8] pt-5">
+      {controlAttributes.length > 0 && (
+        <section className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+            Control attributes
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {controlAttributes.map((attribute) => (
+              <span
+                key={attribute}
+                className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1 text-xs font-medium text-slate-700 shadow-sm"
+              >
+                <span className="block h-1.5 w-1.5 rounded-full bg-[#1d7fb3]" />
+                {formatControlAttribute(attribute)}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {transitions.length > 0 && (
+        <section className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+            Transition outcomes
+          </p>
+          <ul className="space-y-2">
+            {transitions.map((transition) => (
+              <li
+                key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}`}
+              >
+                <div className="rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3 shadow-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#0f766e]" />
+                      {transition.controlAttribute
+                        ? formatControlAttribute(transition.controlAttribute)
+                        : 'Condition'}
+                    </div>
+                    <span className="inline-flex items-center gap-2 rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-[#0f766e]">
+                      {transition.controlAttributeValue ?? formatConditionOutcome(transition.condition)}
+                    </span>
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-sm font-semibold text-slate-900">
+                      {formatTransitionTarget(transition.target)}
+                    </span>
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                      {formatActionName(transition.action)}
+                    </span>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {functions.length > 0 && (
+        <section className="space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+            Automation touchpoints
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {functions.map((fn) => (
+              <span
+                key={fn}
+                className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1 text-xs font-medium text-slate-600"
+              >
+                <span className="block h-1.5 w-1.5 rounded-full bg-[#0f766e]" />
+                {formatActionName(fn)}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
