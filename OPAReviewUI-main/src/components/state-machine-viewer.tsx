@@ -68,6 +68,14 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
       const functions = node.metadata.functions
         ? [...node.metadata.functions]
         : undefined;
+      const controlAttributes = node.metadata.controlAttributes
+        ? [...node.metadata.controlAttributes]
+        : node.metadata.controlAttribute
+        ? [node.metadata.controlAttribute]
+        : undefined;
+      const transitions = node.metadata.transitions
+        ? [...node.metadata.transitions]
+        : undefined;
 
       const data: CustomNodeData = {
         label: node.label,
@@ -76,6 +84,9 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
         isFinal: node.isFinal,
         isInitial: node.isInitial,
         ...(functions ? { functions } : {}),
+        ...(node.metadata.controlAttribute ? { controlAttribute: node.metadata.controlAttribute } : {}),
+        ...(controlAttributes ? { controlAttributes } : {}),
+        ...(transitions ? { transitions } : {}),
       };
 
       return {
