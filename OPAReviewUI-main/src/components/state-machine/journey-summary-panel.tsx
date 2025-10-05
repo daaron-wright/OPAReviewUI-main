@@ -60,6 +60,17 @@ export function JourneySummaryPanel({
             <p className="mt-2 text-sm leading-relaxed text-slate-600">
               {item?.node.description ?? 'Choose a state from the timeline to inspect its details.'}
             </p>
+            {item?.node.metadata.controlAttribute && (
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#c7e5f4] bg-[#f0f8fd] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1d7fb3]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#1d7fb3]" />
+                  Primary control
+                </span>
+                <span className="text-xs font-semibold text-slate-600">
+                  {formatControlAttribute(item.node.metadata.controlAttribute)}
+                </span>
+              </div>
+            )}
           </div>
           <span
             className={clsx(
