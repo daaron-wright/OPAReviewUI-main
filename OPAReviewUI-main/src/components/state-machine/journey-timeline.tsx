@@ -420,6 +420,36 @@ function getContainerClasses(item: TimelineNodeItem): string {
   });
 }
 
+function formatControlAttribute(value: string): string {
+  return formatActionName(value);
+}
+
+function formatActionName(value: string): string {
+  return value
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function formatTransitionTarget(targetId: string): string {
+  return formatActionName(targetId);
+}
+
+function formatConditionOutcome(condition: string): string {
+  const equalityMatch = condition.match(/==\s*['"]?([\w-]+)['"]?/);
+  if (equalityMatch) {
+    return equalityMatch[1];
+  }
+
+  const booleanMatch = condition.match(/\b(true|false)\b/i);
+  if (booleanMatch) {
+    return booleanMatch[1].toLowerCase();
+  }
+
+  return condition.replace(/\s+/g, ' ').trim();
+}
+
 function formatDate(date: Date): string {
   try {
     return new Intl.DateTimeFormat('en', {
