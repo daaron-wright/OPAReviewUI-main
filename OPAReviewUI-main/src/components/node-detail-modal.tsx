@@ -69,7 +69,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       title: 'Beneficiary Ownership Thresholds',
       titleAr: 'حدود ملكية المستفيد',
       location: 'Chapter 5: Declaration Requirements',
-      locationAr: 'الفصل 5: متطلبات الإع��ان',
+      locationAr: 'الفصل 5: متطلبات الإعلان',
       content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
 
 Calculation Rules:
@@ -88,7 +88,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 قواعد الحساب:
 • الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
-• تقييم السيطرة: حقوق ال��صويت، حقوق النقض، أو حقوق التعيين
+• تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
@@ -569,9 +569,9 @@ export function NodeDetailModal({
                       </p>
                     </div>
                     <span className="inline-flex items-center gap-1 rounded-full bg-[#f0f8fd] px-3 py-1 text-[11px] font-semibold text-[#1d7fb3]">
-                      {controlAttributes.length}
+                      {controlSummaryCount}
                       <span className="text-[10px] uppercase tracking-[0.14em] text-[#1d7fb3]/80">
-                        {language === 'ar' ? 'سمات' : 'Attributes'}
+                        {language === 'ar' ? 'نقاط' : 'Touchpoints'}
                       </span>
                     </span>
                   </div>
@@ -642,7 +642,7 @@ export function NodeDetailModal({
                     </svg>
                   </span>
                   <h3 className="text-sm font-semibold text-slate-900">
-                    {language === 'ar' ? 'وثيقة متطلب��ت الأعمال' : 'Business Requirements Document'}
+                    {language === 'ar' ? 'وثيقة متطلبات الأعمال' : 'Business Requirements Document'}
                   </h3>
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
