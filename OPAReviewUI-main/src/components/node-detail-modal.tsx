@@ -86,7 +86,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
       contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
-• الملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
+• ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
@@ -601,9 +601,9 @@ export function NodeDetailModal({
                         {language === 'ar' ? 'نتائج الانتقال' : 'Transition outcomes'}
                       </p>
                       <div className="space-y-2">
-                        {transitions.map((transition) => (
+                        {transitions.map((transition, index) => (
                           <div
-                            key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}`}
+                            key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}-${index}`}
                             className="rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-3 py-2"
                           >
                             <div className="flex flex-wrap items-center justify-between gap-2">
