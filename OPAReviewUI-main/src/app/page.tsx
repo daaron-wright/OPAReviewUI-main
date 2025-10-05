@@ -9,18 +9,31 @@ import { processStateMachine } from '@/domain/state-machine/processor';
 /**
  * Server component that loads and processes the state machine data
  */
-export default async function HomePage(): Promise<JSX.Element> {
+interface HomePageProps {
+  readonly searchParams?: Record<string, string | string[] | undefined>;
+}
+
+export default async function HomePage({ searchParams }: HomePageProps = {}): Promise<JSX.Element> {
+  const fileMap: Record<string, string> = {
+    'policy-review': 'policy_review_state_machine.json',
+    'real-beneficiary': 'real_beneficiary_state_machine.json',
+  };
+  const defaultKey = 'policy-review';
+  const requestedKeyRaw = searchParams?.machine;
+  const requestedKey = Array.isArray(requestedKeyRaw) ? requestedKeyRaw[0] : requestedKeyRaw;
+  const selectedKey = requestedKey && fileMap[requestedKey] ? requestedKey : defaultKey;
+
   try {
     // Load state machine from JSON file
     const stateMachine = await loadStateMachineFromFile(
-      'real_beneficiary_state_machine.json'
+      fileMap[selectedKey]
     );
-    
+
     // Process into graph-renderable format
     const processedStateMachine = processStateMachine(stateMachine);
-    
-    return <StateMachineViewer 
-      stateMachine={processedStateMachine} 
+
+    return <StateMachineViewer
+      stateMachine={processedStateMachine}
       rawStates={stateMachine.states}
     />;
   } catch (error) {
