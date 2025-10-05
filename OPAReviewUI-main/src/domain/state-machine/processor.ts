@@ -15,7 +15,18 @@ export interface ProcessedNode {
   readonly metadata: {
     readonly functions?: ReadonlyArray<string>;
     readonly nextState?: string;
+    readonly controlAttribute?: string;
+    readonly controlAttributes?: ReadonlyArray<string>;
+    readonly transitions?: ReadonlyArray<ProcessedNodeTransition>;
   };
+}
+
+export interface ProcessedNodeTransition {
+  readonly target: string;
+  readonly action: string;
+  readonly condition: string;
+  readonly controlAttribute?: string;
+  readonly controlAttributeValue?: string;
 }
 
 export interface ProcessedEdge {
@@ -25,6 +36,8 @@ export interface ProcessedEdge {
   readonly label: string;
   readonly condition: string;
   readonly action: string;
+  readonly controlAttribute?: string;
+  readonly controlAttributeValue?: string;
 }
 
 export interface ProcessedStateMachine {
@@ -70,6 +83,9 @@ function createNode(
   state: State, 
   machine: StateMachine
 ): ProcessedNode {
+  const controlAttributes = normalizeControlAttributes(state);
+  const transitions = state.transitions?.map((transition) => normalizeTransition(transition));
+
   return {
     id,
     label: formatLabel(id),
@@ -80,6 +96,9 @@ function createNode(
     metadata: {
       functions: state.functions || (state.function ? [state.function] : undefined),
       nextState: state.nextState,
+      controlAttribute: controlAttributes.primary ?? undefined,
+      controlAttributes: controlAttributes.all.length > 0 ? controlAttributes.all : undefined,
+      transitions: transitions?.length ? transitions : undefined,
     },
   };
 }
@@ -103,13 +122,17 @@ function createEdge(
   transition: Transition,
   index: number
 ): ProcessedEdge {
+  const normalizedTransition = normalizeTransition(transition);
+
   return {
     id: `${sourceId}-${transition.target}-${index}`,
     source: sourceId,
     target: transition.target,
-    label: formatTransitionLabel(transition.condition),
+    label: formatTransitionLabel(normalizedTransition),
     condition: transition.condition,
     action: transition.action,
+    controlAttribute: normalizedTransition.controlAttribute,
+    controlAttributeValue: normalizedTransition.controlAttributeValue,
   };
 }
 
@@ -120,8 +143,11 @@ function formatLabel(id: string): string {
     .join(' ');
 }
 
-function formatTransitionLabel(condition: string): string {
-  // Extract simple condition text for edge label
-  const match = condition.match(/(\w+)\s*==\s*['"]?(\w+)['"]?/);
-  return match ? match[2] : condition.slice(0, 30);
+function formatTransitionLabel(transition: ProcessedNodeTransition): string {
+  if (transition.controlAttributeValue) {
+    return transition.controlAttributeValue;
+  }
+
+  const match = transition.condition.match(/(\w+)\s*==\s*['"]?([\w-]+)['"]?/);
+  return match ? match[2] : transition.condition.slice(0, 30);
 }
