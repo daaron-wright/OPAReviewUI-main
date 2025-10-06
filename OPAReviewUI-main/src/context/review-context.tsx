@@ -4,7 +4,9 @@
  */
 'use client';
 
-import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode, useEffect, useRef } from 'react';
+
+import { fetchPolicyActors, type PolicyActor } from '@/adapters/policy-actors-client';
 
 export interface NodeReviewStatus {
   nodeId: string;
