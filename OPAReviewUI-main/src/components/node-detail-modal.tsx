@@ -73,7 +73,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
 
 Calculation Rules:
-• Direct ownership: Shares held in the person's own name
+�� Direct ownership: Shares held in the person's own name
 • Indirect ownership: Shares held through intermediate entities (calculated proportionally)
 • Control assessment: Voting rights, veto powers, or appointment rights
 • Special consideration for trust structures and nominee arrangements
@@ -92,7 +92,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
-إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
+إذا ك��ن الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
@@ -446,13 +446,13 @@ export function NodeDetailModal({
             <div className="flex-1 space-y-4">
               <div className="flex items-center gap-3">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F515490be93874e318756209e59f398b6?format=webp&width=800"
-                  alt="Abu Dhabi Government Services"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F49939b4f5ee54de39a2d600c468ae7f7?format=webp&width=800"
+                  alt="Abu Dhabi Department of Economic Development Business"
                   className="h-8 w-auto object-contain"
                 />
                 <div className="flex flex-col">
                   <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
-                    Business license portal
+                    Business License Portal
                   </span>
                   <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                     Application journey node details
