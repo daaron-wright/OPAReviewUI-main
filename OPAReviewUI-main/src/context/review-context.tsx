@@ -6,6 +6,7 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect, useRef } from 'react';
 
+import { fetchDocumentInfo, type DocumentInfo } from '@/adapters/document-info-client';
 import { fetchPolicyActors, type PolicyActor } from '@/adapters/policy-actors-client';
 
 export interface NodeReviewStatus {
@@ -91,6 +92,11 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   const [isPolicyActorsLoading, setIsPolicyActorsLoading] = useState(false);
   const [policyActorsError, setPolicyActorsError] = useState<string | null>(null);
   const policyActorsControllerRef = useRef<AbortController | null>(null);
+
+  const [documentInfo, setDocumentInfo] = useState<DocumentInfo | null>(null);
+  const [isDocumentInfoLoading, setIsDocumentInfoLoading] = useState(false);
+  const [documentInfoError, setDocumentInfoError] = useState<string | null>(null);
+  const documentInfoControllerRef = useRef<AbortController | null>(null);
 
   const setNodeReviewed = useCallback((nodeId: string, approved: boolean, notes?: string) => {
     setReviewStatus(prev => ({
@@ -282,12 +288,41 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const refreshDocumentInfo = useCallback(async () => {
+    documentInfoControllerRef.current?.abort();
+    const controller = new AbortController();
+    documentInfoControllerRef.current = controller;
+    setIsDocumentInfoLoading(true);
+    setDocumentInfoError(null);
+
+    try {
+      const info = await fetchDocumentInfo(controller.signal);
+      setDocumentInfo(info);
+    } catch (error) {
+      const isAbortError =
+        (error instanceof Error && error.name === 'AbortError') ||
+        (typeof error === 'object' && error !== null && 'name' in error && (error as { name?: unknown }).name === 'AbortError');
+      if (isAbortError) {
+        return;
+      }
+      console.error('Failed to load document info from API', error);
+      setDocumentInfoError('Unable to load document information. Please try again.');
+    } finally {
+      if (documentInfoControllerRef.current === controller) {
+        documentInfoControllerRef.current = null;
+      }
+      setIsDocumentInfoLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     void refreshPolicyActors();
+    void refreshDocumentInfo();
     return () => {
       policyActorsControllerRef.current?.abort();
+      documentInfoControllerRef.current?.abort();
     };
-  }, [refreshPolicyActors]);
+  }, [refreshPolicyActors, refreshDocumentInfo]);
 
   const value: ReviewContextType = {
     reviewStatus,
@@ -319,7 +354,11 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     policyActors,
     isPolicyActorsLoading,
     policyActorsError,
-    refreshPolicyActors
+    refreshPolicyActors,
+    documentInfo,
+    isDocumentInfoLoading,
+    documentInfoError,
+    refreshDocumentInfo
   };
   
   return (
