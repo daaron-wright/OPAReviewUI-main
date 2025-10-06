@@ -451,6 +451,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     toast.promise(
       new Promise((resolve) => {
         setTimeout(() => {
+          setHasPublishedToOpa(true);
           resolve('Published');
           router.push('/dashboard');
         }, 1600);
