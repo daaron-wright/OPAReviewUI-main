@@ -262,6 +262,14 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   }, [reviewStatus, nodeSequence]);
 
   const refreshPolicyActors = useCallback(async () => {
+    if (!policyDocument) {
+      policyActorsControllerRef.current?.abort();
+      setPolicyActors([]);
+      setIsPolicyActorsLoading(false);
+      setPolicyActorsError(null);
+      return;
+    }
+
     policyActorsControllerRef.current?.abort();
     const controller = new AbortController();
     policyActorsControllerRef.current = controller;
@@ -286,7 +294,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       }
       setIsPolicyActorsLoading(false);
     }
-  }, []);
+  }, [policyDocument]);
 
   const refreshDocumentInfo = useCallback(async () => {
     documentInfoControllerRef.current?.abort();
