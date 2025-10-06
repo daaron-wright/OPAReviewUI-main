@@ -260,13 +260,17 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     try {
       const actors = await fetchPolicyActors(controller.signal);
       setPolicyActors(actors);
-      setIsPolicyActorsLoading(false);
     } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         return;
       }
+      console.error('Failed to load policy actors from API', error);
+      setPolicyActorsError('Unable to load policy actors. Please try again.');
+    } finally {
+      if (policyActorsControllerRef.current === controller) {
+        policyActorsControllerRef.current = null;
+      }
       setIsPolicyActorsLoading(false);
-      setPolicyActorsError(error instanceof Error ? error.message : 'Unable to load policy actors');
     }
   }, []);
 
