@@ -236,6 +236,9 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     previousNode,
     nodeSequence,
     setNodeSequence,
+    policyDocument,
+    uploadPolicyDocument,
+    removePolicyDocument,
     canPublish,
     getPublishStats
   };
