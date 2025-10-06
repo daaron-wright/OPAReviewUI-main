@@ -71,6 +71,11 @@ interface ReviewContextType {
   isPolicyActorsLoading: boolean;
   policyActorsError: string | null;
   refreshPolicyActors: () => Promise<void>;
+
+  documentInfo: DocumentInfo | null;
+  isDocumentInfoLoading: boolean;
+  documentInfoError: string | null;
+  refreshDocumentInfo: () => Promise<void>;
 }
 
 const ReviewContext = createContext<ReviewContextType | undefined>(undefined);
