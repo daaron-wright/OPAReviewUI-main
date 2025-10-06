@@ -73,6 +73,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   const [isWalkthroughMode, setIsWalkthroughMode] = useState(false);
   const [currentNodeId, setCurrentNodeId] = useState<string | null>(null);
   const [nodeSequence, setNodeSequence] = useState<string[]>([]);
+  const [isWalkthroughPaused, setIsWalkthroughPaused] = useState(false);
   const [policyDocument, setPolicyDocument] = useState<UploadedPolicyDocument | null>(null);
 
   const setNodeReviewed = useCallback((nodeId: string, approved: boolean, notes?: string) => {
