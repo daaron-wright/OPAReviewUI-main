@@ -624,19 +624,33 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
     if (!hasDocument || documentErrorMessage) {
       step4Status = 'idle';
-      step4Description = 'Regulatory testing requires policy inputs';
+      step4Description = 'Walkthrough requires policy extraction';
     } else if (!timelineReady) {
       step4Status = 'idle';
-      step4Description = 'Decision tree must be ready before testing';
-    } else if (testsComplete) {
+      step4Description = 'Generate the decision tree before walkthrough';
+    } else if (walkthroughComplete) {
       step4Status = 'complete';
       step4Description =
-        reviewedStates === 1 ? '1 compliance test validated' : `${reviewedStates} compliance tests validated`;
+        totalStates === 1
+          ? 'Walkthrough complete • 1 state reviewed'
+          : `Walkthrough complete • ${Math.min(reviewedStates, totalStates)} states reviewed`;
+    } else if (isWalkthroughMode) {
+      step4Status = 'active';
+      step4Description =
+        totalStates > 0
+          ? `Walkthrough in progress • ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
+          : 'Walkthrough in progress…';
+    } else if (walkthroughInProgress) {
+      step4Status = 'active';
+      step4Description =
+        totalStates > 0
+          ? `Resume walkthrough • ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
+          : 'Resume walkthrough to continue reviewing states';
     } else {
       step4Status = 'active';
-      step4Description = 'Running test cases against regulatory rules…';
+      step4Description = 'Start walkthrough to review each state';
     }
-    addStep('regulatory-tests', 'Run test cases against regulatory rules', step4Status, step4Description);
+    addStep('walkthrough', 'Run walkthrough', step4Status, step4Description);
 
     let step5Status: JourneyProcessStepStatus;
     let step5Description: string;
@@ -647,24 +661,23 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     } else if (!timelineReady) {
       step5Status = 'idle';
       step5Description = 'Decision tree still in progress';
-    } else if (!testsComplete) {
+    } else if (!walkthroughComplete) {
       step5Status = 'idle';
-      step5Description = 'Compliance validation required before deployment';
-    } else if (actorsErrorMessage) {
-      step5Status = 'error';
-      step5Description = actorsErrorMessage;
-    } else if (isPolicyActorsLoading) {
+      step5Description = 'Complete the walkthrough before publishing';
+    } else if (!allNodesApproved) {
       step5Status = 'active';
-      step5Description = 'Deploying actors…';
-    } else if (actorsLoaded) {
-      step5Status = 'complete';
       step5Description =
-        actorCount === 0 ? 'No actors returned from service' : `${actorCount} actor${actorCount === 1 ? '' : 's'} ready`;
-    } else {
+        publishStats.total > 0
+          ? `${publishStats.approved}/${publishStats.total} nodes approved • Approve all nodes before publishing`
+          : 'Approve reviewed nodes before publishing';
+    } else if (!hasPublishedToOpa) {
       step5Status = 'active';
-      step5Description = 'Deploying actors…';
+      step5Description = 'Ready to deploy to OPA Server • Click Publish when ready';
+    } else {
+      step5Status = 'complete';
+      step5Description = 'Deployment to OPA Server completed';
     }
-    addStep('deploying-actors', 'Deploying actors', step5Status, step5Description);
+    addStep('deploy-opa-server', 'Deploy to OPA Server', step5Status, step5Description);
 
     let step6Status: JourneyProcessStepStatus;
     let step6Description: string;
@@ -675,18 +688,24 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     } else if (documentErrorMessage || actorsErrorMessage) {
       step6Status = 'error';
       step6Description = actorsErrorMessage ?? documentErrorMessage ?? 'Resolve setup issues to continue';
-    } else if (!documentLoaded) {
-      step6Status = 'active';
-      step6Description = 'Finalising document insights…';
     } else if (!timelineReady) {
+      step6Status = 'idle';
+      step6Description = 'Decision tree must be ready to activate agents';
+    } else if (!walkthroughComplete) {
+      step6Status = 'idle';
+      step6Description = 'Complete the walkthrough to configure agents';
+    } else if (!allNodesApproved) {
+      step6Status = 'idle';
+      step6Description = 'Approve all nodes before engaging agents';
+    } else if (!hasPublishedToOpa) {
       step6Status = 'active';
-      step6Description = 'Preparing workflow for agent use…';
-    } else if (!testsComplete) {
+      step6Description = 'Deploy to OPA Server to unlock agents';
+    } else if (isPolicyActorsLoading) {
       step6Status = 'active';
-      step6Description = 'Awaiting regulatory test validation…';
+      step6Description = 'Activating agents…';
     } else if (!actorsLoaded) {
       step6Status = 'active';
-      step6Description = 'Waiting for actor deployment…';
+      step6Description = 'Waiting for agent configuration…';
     } else {
       step6Status = 'complete';
       step6Description = 'Agents ready for operational use';
