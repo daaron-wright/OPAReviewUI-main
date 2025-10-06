@@ -128,6 +128,22 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     [handlePolicyDocumentSelected]
   );
 
+  const handlePauseWalkthrough = useCallback(() => {
+    clearWalkthroughTimers();
+    setIsTransitioning(false);
+    pauseWalkthrough();
+  }, [clearWalkthroughTimers, pauseWalkthrough]);
+
+  const handleResumeWalkthrough = useCallback(() => {
+    resumeWalkthrough();
+  }, [resumeWalkthrough]);
+
+  const handleExitWalkthrough = useCallback(() => {
+    clearWalkthroughTimers();
+    setIsTransitioning(false);
+    endWalkthrough();
+  }, [clearWalkthroughTimers, endWalkthrough]);
+
   const initialNodes = useMemo(() => {
     return stateMachine.nodes.map((node) => {
       const functions = node.metadata.functions
