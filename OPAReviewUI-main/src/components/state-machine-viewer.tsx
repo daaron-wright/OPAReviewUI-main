@@ -617,7 +617,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     </div>
   );
 
-  const fullscreenGraphOverlay = !isGraphExpanded
+  const fullscreenGraphOverlay = !isGraphExpanded || !hasUploadedDocument
     ? null
     : (
         <div
