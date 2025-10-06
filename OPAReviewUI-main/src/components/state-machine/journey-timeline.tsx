@@ -67,7 +67,7 @@ export function JourneyTimeline({
                 <div className="flex items-center gap-3">
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F49939b4f5ee54de39a2d600c468ae7f7?format=webp&width=800"
-                    alt="Abu Dhabi Department of Economic Development logo"
+                    alt="ABU DHABI DEPARTMENT OF ECONOMIC DEVELOPMENTBUSINESS"
                     className="h-12 w-auto object-contain"
                   />
                 </div>
