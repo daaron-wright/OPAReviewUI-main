@@ -60,107 +60,118 @@ export function JourneyTimeline({
   return (
     <section className="overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)]">
       <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-7 lg:px-8">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-xl space-y-5">
-            <div className="flex flex-col gap-3">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F67c03d8c981249bc809a682c60a2173f?format=webp&width=800"
-                  alt="Abu Dhabi Government Services mark"
-                  className="h-10 w-auto object-contain sm:h-12"
-                />
-                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0f766e] sm:text-[11px]">
-                  Abu Dhabi Government Services
-                </span>
-              </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
-                Business license portal
-              </span>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                <span className="inline-flex h-2 w-2 rounded-full bg-[#0f766e]" />
-                {headerTitle}
-              </div>
-              <h2 className="text-3xl font-semibold leading-tight text-slate-900 sm:text-[32px]">
-                Review timeline
-              </h2>
-              <p className="max-w-xl text-base text-slate-600">
-                {headerSubtitle}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-4 lg:items-end">
-            <div className="flex flex-wrap items-center gap-3 lg:justify-end">
-            <ReviewerProfilePill
-              primaryText={reviewerProfile.name}
-              secondaryText={reviewerProfile.email}
-              avatarUrl={reviewerProfile.avatarUrl}
-              className="rounded-full"
-            />
-            <div className="flex min-w-[220px] flex-col gap-2 rounded-full border border-[#dbe9e3] bg-white px-6 py-3 shadow-inner">
-              <div className="flex items-baseline justify-between text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                <span>Progress</span>
-                <span>{completionPercentage}%</span>
-              </div>
-              <div className="h-2 rounded-full bg-[#eef7f3]">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1] transition-all"
-                  style={{ width: `${completionPercentage}%` }}
-                />
-              </div>
-              <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
-                {progress.reviewed} of {progress.total} nodes reviewed
-              </div>
-            </div>
-          </div>
-
-          {isWalkthroughMode && onEndWalkthrough && (
-            <button
-              type="button"
-              onClick={onEndWalkthrough}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-[0_6px_16px_-12px_rgba(15,118,110,0.45)] transition hover:border-[#c5ded5] hover:bg-[#f3f8f6] lg:self-end"
-            >
-              End walkthrough
-            </button>
-          )}
-
-          {canToggleViews && (
-            <div className="flex items-center gap-3 lg:self-end">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  View
-                </span>
-                <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
-                  <button
-                    type="button"
-                    onClick={() => onViewModeChange?.('graph')}
-                    aria-pressed={viewMode === 'graph'}
-                    className={clsx(
-                      'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                      viewMode === 'graph'
-                        ? 'bg-[#0f766e] text-white shadow'
-                        : 'text-slate-500 hover:bg-[#f3f8f6]'
-                    )}
-                  >
-                    Graph
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onViewModeChange?.('list')}
-                    aria-pressed={viewMode === 'list'}
-                    className={clsx(
-                      'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                      viewMode === 'list'
-                        ? 'bg-[#0f766e] text-white shadow'
-                        : 'text-slate-500 hover:bg-[#f3f8f6]'
-                    )}
-                  >
-                    Timeline
-                  </button>
+        <div className="space-y-8">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#dbe9e3] bg-white text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400 shadow-inner">
+                    Logo
+                  </div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#dbe9e3] bg-white text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400 shadow-inner">
+                    Logo
+                  </div>
+                </div>
+                <div className="space-y-1 text-[#0f766e]">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#0f766e] sm:text-[11px]">
+                    Abu Dhabi Department of Economic Development
+                  </span>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
+                    Business license portal
+                  </span>
                 </div>
               </div>
-            )}
+              <div className="space-y-3">
+                <h1 className="text-[32px] font-semibold text-slate-900 sm:text-[36px]">My workspace</h1>
+                <p className="max-w-xl text-base text-slate-600">
+                  Monitor the unified queue, keep SLAs healthy, and collaborate with your team to move applications forward.
+                </p>
+              </div>
+            </div>
+            <div className="inline-flex items-center gap-3 rounded-full border border-[#dbe9e3] bg-white px-5 py-3 shadow-[0_6px_18px_-14px_rgba(15,118,110,0.35)]">
+              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
+              <div className="flex flex-col text-right">
+                <span className="text-sm font-semibold text-slate-900">{reviewerAssignment.identifier}</span>
+                <span className="text-xs font-medium text-slate-500">{reviewerAssignment.status}</span>
+              </div>
+              <svg
+                className="h-4 w-4 text-slate-400"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path d="M6 6l2 2 2-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex min-w-[240px] flex-col gap-2 rounded-full border border-[#dbe9e3] bg-white px-6 py-3 shadow-inner">
+                <div className="flex items-baseline justify-between text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  <span>Progress</span>
+                  <span>{completionPercentage}%</span>
+                </div>
+                <div className="h-2 rounded-full bg-[#eef7f3]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1] transition-all"
+                    style={{ width: `${completionPercentage}%` }}
+                  />
+                </div>
+                <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
+                  {progress.reviewed} of {progress.total} nodes reviewed
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 lg:justify-end">
+              {isWalkthroughMode && onEndWalkthrough && (
+                <button
+                  type="button"
+                  onClick={onEndWalkthrough}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-[0_6px_16px_-12px_rgba(15,118,110,0.45)] transition hover:border-[#c5ded5] hover:bg-[#f3f8f6]"
+                >
+                  End walkthrough
+                </button>
+              )}
+
+              {canToggleViews && (
+                <div className="flex items-center gap-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    View
+                  </span>
+                  <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
+                    <button
+                      type="button"
+                      onClick={() => onViewModeChange?.('graph')}
+                      aria-pressed={viewMode === 'graph'}
+                      className={clsx(
+                        'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                        viewMode === 'graph'
+                          ? 'bg-[#0f766e] text-white shadow'
+                          : 'text-slate-500 hover:bg-[#f3f8f6]'
+                      )}
+                    >
+                      Graph
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onViewModeChange?.('list')}
+                      aria-pressed={viewMode === 'list'}
+                      className={clsx(
+                        'rounded-full px-3 py-1.5 text-xs font-semibold transition',
+                        viewMode === 'list'
+                          ? 'bg-[#0f766e] text-white shadow'
+                          : 'text-slate-500 hover:bg-[#f3f8f6]'
+                      )}
+                    >
+                      Timeline
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
