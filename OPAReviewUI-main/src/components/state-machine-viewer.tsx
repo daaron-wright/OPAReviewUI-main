@@ -531,6 +531,28 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     reactFlowInstance?.fitView({ padding: 0.18, duration: 600 });
   }, [reactFlowInstance]);
 
+  const graphPlaceholder = (
+    <div className="flex h-[520px] flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-[#cbe6dc] bg-white px-6 text-center">
+      <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0f766e]/10 text-[#0f766e]">
+        <Icon name="paperclip" className="h-5 w-5" />
+      </div>
+      <div className="space-y-2">
+        <p className="text-sm font-semibold text-slate-900">Upload a BRD policy PDF to generate the journey map</p>
+        <p className="text-xs font-medium text-slate-500">
+          The graph, policy actors, and document insights appear after the upload is complete.
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={handleOverlayUploadClick}
+        className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.45)] transition hover:bg-[#0c5f59]"
+      >
+        <Icon name="paperclip" className="h-4 w-4" />
+        BRD Policy Upload
+      </button>
+    </div>
+  );
+
   const graphContent = (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 rounded-[28px] border border-[#dbe9e3] bg-[#f6faf8] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
