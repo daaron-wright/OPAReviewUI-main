@@ -1,14 +1,10 @@
 const DOCUMENT_INFO_ENDPOINT = '/api/document-info';
 
 export interface DocumentInfo {
-  readonly document_id: string;
-  readonly file_name: string;
-  readonly page_count: number;
-  readonly size_bytes: number;
-  readonly status: string;
-  readonly ingestion_started_at?: string;
-  readonly ingestion_completed_at?: string;
-  readonly metadata?: Record<string, unknown>;
+  readonly filename?: string;
+  readonly caption?: string;
+  readonly context?: string;
+  readonly [key: string]: unknown;
 }
 
 export async function fetchDocumentInfo(signal?: AbortSignal): Promise<DocumentInfo> {
