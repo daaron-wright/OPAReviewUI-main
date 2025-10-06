@@ -53,6 +53,24 @@ export function JourneySummaryPanel({
   const statusLabel = getStatusLabel(item);
   const statusTone = getStatusTone(item);
   const functions = item?.node.metadata.functions ?? [];
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleUploadClick = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const handleFileChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) {
+        return;
+      }
+
+      onUploadPolicyDocument(file);
+      event.target.value = '';
+    },
+    [onUploadPolicyDocument]
+  );
 
   return (
     <aside className="flex flex-col overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)]">
