@@ -792,6 +792,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           isWalkthroughPaused={isWalkthroughPaused}
           onPauseWalkthrough={handlePauseWalkthrough}
           onResumeWalkthrough={handleResumeWalkthrough}
+          policyActors={policyActors}
+          isPolicyActorsLoading={isPolicyActorsLoading}
+          policyActorsError={policyActorsError}
+          onRefreshPolicyActors={refreshPolicyActors}
         />
       </div>
 
