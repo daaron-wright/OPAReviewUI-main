@@ -129,15 +129,17 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   }, [nodeSequence]);
   
   const startWalkthrough = useCallback(() => {
+    setIsWalkthroughPaused(false);
     setIsWalkthroughMode(true);
     if (nodeSequence.length > 0) {
       setCurrentNodeId(nodeSequence[0]);
     }
   }, [nodeSequence]);
-  
+
   const endWalkthrough = useCallback(() => {
     setIsWalkthroughMode(false);
     setCurrentNodeId(null);
+    setIsWalkthroughPaused(false);
   }, []);
   
   const setCurrentNode = useCallback((nodeId: string | null) => {
