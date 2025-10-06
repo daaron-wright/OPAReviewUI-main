@@ -689,27 +689,45 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   }, [activeItem, isWalkthroughMode, nodeSequence, previousNode]);
 
   useEffect(() => {
-    if (isWalkthroughMode && currentNodeId && reactFlowInstance) {
-      const flowNode = nodes.find((node) => node.id === currentNodeId);
-      const processedNode = nodesById.get(currentNodeId);
-      if (!flowNode || !processedNode) return;
-
-      setIsTransitioning(true);
-      reactFlowInstance.zoomTo(0.6, { duration: 600 });
-      setTimeout(() => {
-        reactFlowInstance.setCenter(flowNode.position.x + 110, flowNode.position.y + 60, {
-          duration: 1200,
-          zoom: 1.8,
-        });
-      }, 700);
-      setTimeout(() => {
-        setIsTransitioning(false);
-        openNodeDetailById(currentNodeId);
-      }, 2000);
+    if (!isWalkthroughMode || isWalkthroughPaused || !currentNodeId || !reactFlowInstance) {
+      clearWalkthroughTimers();
+      setIsTransitioning(false);
+      return;
     }
+
+    const flowNode = nodes.find((node) => node.id === currentNodeId);
+    const processedNode = nodesById.get(currentNodeId);
+    if (!flowNode || !processedNode) {
+      clearWalkthroughTimers();
+      setIsTransitioning(false);
+      return;
+    }
+
+    setIsTransitioning(true);
+    reactFlowInstance.zoomTo(0.6, { duration: 600 });
+
+    transitionPanTimeoutRef.current = window.setTimeout(() => {
+      reactFlowInstance.setCenter(flowNode.position.x + 110, flowNode.position.y + 60, {
+        duration: 1200,
+        zoom: 1.8,
+      });
+      transitionPanTimeoutRef.current = null;
+    }, 700);
+
+    detailOpenTimeoutRef.current = window.setTimeout(() => {
+      setIsTransitioning(false);
+      openNodeDetailById(currentNodeId);
+      detailOpenTimeoutRef.current = null;
+    }, 2000);
+
+    return () => {
+      clearWalkthroughTimers();
+    };
   }, [
+    clearWalkthroughTimers,
     currentNodeId,
     isWalkthroughMode,
+    isWalkthroughPaused,
     nodes,
     nodesById,
     openNodeDetailById,
