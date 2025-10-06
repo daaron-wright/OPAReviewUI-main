@@ -550,7 +550,6 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     const documentLoaded = Boolean(documentInfo);
     const actorsLoaded = hasDocument && !isPolicyActorsLoading && !policyActorsError;
     const timelineReady = hasDocument && timelineItems.length > 0;
-    const actorCount = policyActors.length;
     const reviewedStates = reviewedCount;
     const totalStates = totalCount;
     const walkthroughComplete = totalStates > 0 && reviewedStates >= totalStates;
