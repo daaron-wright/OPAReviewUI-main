@@ -184,6 +184,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const removePolicyDocument = useCallback(() => {
+    setIsWalkthroughPaused(false);
     setPolicyDocument((previous) => {
       if (previous?.previewUrl) {
         URL.revokeObjectURL(previous.previewUrl);
