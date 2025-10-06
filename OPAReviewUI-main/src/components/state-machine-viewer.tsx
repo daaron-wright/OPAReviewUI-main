@@ -71,6 +71,19 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
   const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const transitionPanTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const detailOpenTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearWalkthroughTimers = useCallback(() => {
+    if (transitionPanTimeoutRef.current !== null) {
+      clearTimeout(transitionPanTimeoutRef.current);
+      transitionPanTimeoutRef.current = null;
+    }
+    if (detailOpenTimeoutRef.current !== null) {
+      clearTimeout(detailOpenTimeoutRef.current);
+      detailOpenTimeoutRef.current = null;
+    }
+  }, []);
 
   const handlePolicyDocumentSelected = useCallback(
     (file: File) => {
