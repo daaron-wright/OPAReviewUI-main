@@ -387,13 +387,15 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
       return;
     }
 
+    resumeWalkthrough();
+    clearWalkthroughTimers();
     resetReviews();
     startWalkthrough();
     toast.info(createToastContent('rocket', 'Starting walkthrough from the initial state'), {
       position: 'top-center',
       autoClose: 3000,
     });
-  }, [policyDocument, resetReviews, startWalkthrough]);
+  }, [policyDocument, clearWalkthroughTimers, resetReviews, resumeWalkthrough, startWalkthrough]);
 
   const handlePublish = useCallback(() => {
     const stats = getPublishStats();
