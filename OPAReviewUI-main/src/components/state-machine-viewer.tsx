@@ -77,6 +77,8 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     previousNode,
   } = useReview();
 
+  const hasUploadedDocument = Boolean(policyDocument);
+
   const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const transitionPanTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
