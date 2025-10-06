@@ -66,14 +66,14 @@ export function JourneyTimeline({
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
                 <div className="flex items-center gap-3">
                   <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Fd0ffda1c92da48ebac2f0afea908a80d?format=webp&width=800"
+                    src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F49939b4f5ee54de39a2d600c468ae7f7?format=webp&width=800"
                     alt="Abu Dhabi Department of Economic Development logo"
                     className="h-12 w-auto object-contain"
                   />
                 </div>
                 <div className="space-y-1 text-[#0f766e]">
                   <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#0f766e] sm:text-[11px]">
-                    Abu Dhabi Department of Economic Development
+                    Abu Dhabi Department of Economic Development Business
                   </span>
                   <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
                     Business license portal
