@@ -1047,13 +1047,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 <div className="flex items-center gap-3">
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F49939b4f5ee54de39a2d600c468ae7f7?format=webp&width=800"
-                    alt="ABU DHABI DEPARTMENT OF ECONOMIC DEVELOPMENTBUSINESS"
+                    alt="ABU DHABI DEPARTMENT OF ECONOMIC DEVELOPMENT"
                     className="h-8 w-auto object-contain"
                   />
                   <div className="flex flex-col">
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
-                      Business License Portal
-                    </span>
                     <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                       Publication checklist
                     </span>
