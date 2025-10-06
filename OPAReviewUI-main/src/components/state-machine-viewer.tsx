@@ -528,7 +528,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             Inspect the underlying graph and open any node for deeper review.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:ml-auto sm:justify-end">
           <button
             type="button"
             onClick={handleToggleGraphSize}
