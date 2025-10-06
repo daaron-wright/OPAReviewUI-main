@@ -76,7 +76,7 @@ export function JourneyTimeline({
                     Abu Dhabi Department of Economic Development Business
                   </span>
                   <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
-                    Business license portal
+                    Business License Portal
                   </span>
                 </div>
               </div>
