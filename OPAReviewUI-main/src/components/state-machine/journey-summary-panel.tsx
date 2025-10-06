@@ -26,6 +26,9 @@ interface JourneySummaryPanelProps {
   readonly onApproveAll: () => void;
   readonly onPublish: () => void;
   readonly canPublish: boolean;
+  readonly policyDocument: UploadedPolicyDocument | null;
+  readonly onUploadPolicyDocument: (file: File) => void;
+  readonly onRemovePolicyDocument: () => void;
 }
 
 export function JourneySummaryPanel({
