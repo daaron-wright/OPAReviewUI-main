@@ -252,9 +252,9 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
   useEffect(() => {
     if (!policyDocument && isWalkthroughMode) {
-      endWalkthrough();
+      handleExitWalkthrough();
     }
-  }, [endWalkthrough, isWalkthroughMode, policyDocument]);
+  }, [handleExitWalkthrough, isWalkthroughMode, policyDocument]);
 
   useEffect(() => {
     if (reactFlowInstance) {
