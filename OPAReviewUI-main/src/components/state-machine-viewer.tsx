@@ -80,6 +80,13 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
   const hasUploadedDocument = Boolean(policyDocument);
 
+  useEffect(() => {
+    if (!hasUploadedDocument) {
+      setIsGraphExpanded(false);
+      setPrimaryView('list');
+    }
+  }, [hasUploadedDocument]);
+
   const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const transitionPanTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
