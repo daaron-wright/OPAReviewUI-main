@@ -1,4 +1,4 @@
-const POLICY_ACTORS_ENDPOINT = 'https://brd-db-api.fly.dev/policy-actors';
+const POLICY_ACTORS_ENDPOINT = 'https://brd-db-api.fly.dev/policy_actors';
 
 export interface PolicyActorAttribute {
   readonly key: string;
