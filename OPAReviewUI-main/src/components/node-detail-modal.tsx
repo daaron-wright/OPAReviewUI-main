@@ -34,7 +34,7 @@ const getMockBRDReferences = (): any => ({
   documentVersion: 'v2.3.1',
   lastUpdated: '2024-01-15',
   approvedBy: 'Director of Digital Transformation',
-  approvedByAr: 'مدير التحول الرقمي',
+  approvedByAr: '��دير التحول الرقمي',
   sections: [
     {
       page: Math.floor(Math.random() * 20) + 10,
@@ -73,7 +73,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
 
 Calculation Rules:
-�� Direct ownership: Shares held in the person's own name
+• Direct ownership: Shares held in the person's own name
 • Indirect ownership: Shares held through intermediate entities (calculated proportionally)
 • Control assessment: Voting rights, veto powers, or appointment rights
 • Special consideration for trust structures and nominee arrangements
@@ -92,7 +92,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
-إذا ك��ن الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
+إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المستهدف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
@@ -447,7 +447,7 @@ export function NodeDetailModal({
               <div className="flex items-center gap-3">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F49939b4f5ee54de39a2d600c468ae7f7?format=webp&width=800"
-                  alt="Abu Dhabi Department of Economic Development Business"
+                  alt="ABU DHABI DEPARTMENT OF ECONOMIC DEVELOPMENTBUSINESS"
                   className="h-8 w-auto object-contain"
                 />
                 <div className="flex flex-col">
