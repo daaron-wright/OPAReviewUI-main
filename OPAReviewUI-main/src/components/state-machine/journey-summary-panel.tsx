@@ -33,6 +33,10 @@ interface JourneySummaryPanelProps {
   readonly isWalkthroughPaused: boolean;
   readonly onPauseWalkthrough: () => void;
   readonly onResumeWalkthrough: () => void;
+  readonly policyActors: ReadonlyArray<PolicyActor>;
+  readonly isPolicyActorsLoading: boolean;
+  readonly policyActorsError: string | null;
+  readonly onRefreshPolicyActors: () => Promise<void>;
 }
 
 export function JourneySummaryPanel({
