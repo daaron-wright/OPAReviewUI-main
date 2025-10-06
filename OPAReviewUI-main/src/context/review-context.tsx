@@ -261,7 +261,10 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       const actors = await fetchPolicyActors(controller.signal);
       setPolicyActors(actors);
     } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
+      const isAbortError =
+        (error instanceof Error && error.name === 'AbortError') ||
+        (typeof error === 'object' && error !== null && 'name' in error && (error as { name?: unknown }).name === 'AbortError');
+      if (isAbortError) {
         return;
       }
       console.error('Failed to load policy actors from API', error);
