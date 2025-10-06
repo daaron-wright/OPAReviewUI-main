@@ -756,7 +756,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             onViewModeChange={setPrimaryView}
             graphContent={graphContent}
             isWalkthroughMode={isWalkthroughMode}
-            onEndWalkthrough={endWalkthrough}
+            onEndWalkthrough={handleExitWalkthrough}
           />
         </div>
 
