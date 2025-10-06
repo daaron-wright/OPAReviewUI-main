@@ -570,11 +570,15 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             type="button"
             onClick={handleToggleGraphSize}
             aria-expanded={isGraphExpanded}
-            className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2 ${
-              isGraphExpanded
-                ? 'border-[#bfded4] bg-white text-[#0f766e] hover:border-[#a9d5c6]'
-                : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
-            }`}
+            disabled={!hasUploadedDocument}
+            className={clsx(
+              'inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+              hasUploadedDocument
+                ? isGraphExpanded
+                  ? 'border-[#bfded4] bg-white text-[#0f766e] hover:border-[#a9d5c6]'
+                  : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
+                : 'cursor-not-allowed border-[#e7f0ec] bg-white text-slate-300'
+            )}
           >
             <Icon name={isGraphExpanded ? 'xCircle' : 'chart'} className="h-4 w-4" />
             {isGraphExpanded ? 'Collapse graph' : 'Expand graph'}
@@ -589,10 +593,14 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
         </div>
       </div>
       {isGraphExpanded ? (
-        <div className="flex h-[520px] items-center justify-center rounded-2xl border border-dashed border-[#cbe6dc] bg-white text-sm font-semibold text-slate-500">
-          Graph open in focus view
-        </div>
-      ) : (
+        hasUploadedDocument ? (
+          <div className="flex h-[520px] items-center justify-center rounded-2xl border border-dashed border-[#cbe6dc] bg-white text-sm font-semibold text-slate-500">
+            Graph open in focus view
+          </div>
+        ) : (
+          graphPlaceholder
+        )
+      ) : hasUploadedDocument ? (
         <GraphCanvas
           nodes={nodes}
           edges={edges}
@@ -603,6 +611,8 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           height={520}
           containerClassName="transition-all duration-500 ease-in-out"
         />
+      ) : (
+        graphPlaceholder
       )}
     </div>
   );
