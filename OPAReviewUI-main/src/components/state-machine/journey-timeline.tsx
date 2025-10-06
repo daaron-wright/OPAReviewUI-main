@@ -79,8 +79,11 @@ export function JourneyTimeline({
                   <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#0f766e] sm:text-[11px]">
                     ABU DHABI DEPARTMENT OF ECONOMIC DEVELOPMENT
                   </span>
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#0f766e] sm:text-[11px]">
+                    BUSINESS
+                  </span>
                   <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
-                    BUSINESS LICENSE PORTAL
+                    LICENSE PORTAL
                   </span>
                 </div>
               </div>
