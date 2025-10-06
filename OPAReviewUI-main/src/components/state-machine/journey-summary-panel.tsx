@@ -1,8 +1,10 @@
 'use client';
 
+import { useCallback, useRef } from 'react';
 import clsx from 'clsx';
 import { TimelineNodeItem } from './journey-timeline';
 import { ProcessedStateMachine } from '@/domain/state-machine/processor';
+import { UploadedPolicyDocument } from '@/context/review-context';
 
 interface JourneySummaryPanelProps {
   readonly item: TimelineNodeItem | null;
