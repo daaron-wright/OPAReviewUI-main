@@ -800,6 +800,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           isPolicyActorsLoading={isPolicyActorsLoading}
           policyActorsError={policyActorsError}
           onRefreshPolicyActors={refreshPolicyActors}
+          documentInfo={documentInfo}
+          isDocumentInfoLoading={isDocumentInfoLoading}
+          documentInfoError={documentInfoError}
+          onRefreshDocumentInfo={refreshDocumentInfo}
         />
       </div>
 
