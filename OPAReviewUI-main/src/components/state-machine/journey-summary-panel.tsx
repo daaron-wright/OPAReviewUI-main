@@ -29,6 +29,9 @@ interface JourneySummaryPanelProps {
   readonly policyDocument: UploadedPolicyDocument | null;
   readonly onUploadPolicyDocument: (file: File) => void;
   readonly onRemovePolicyDocument: () => void;
+  readonly isWalkthroughPaused: boolean;
+  readonly onPauseWalkthrough: () => void;
+  readonly onResumeWalkthrough: () => void;
 }
 
 export function JourneySummaryPanel({
