@@ -69,6 +69,10 @@ export function JourneySummaryPanel({
   isPolicyActorsLoading,
   policyActorsError,
   onRefreshPolicyActors,
+  documentInfo,
+  isDocumentInfoLoading,
+  documentInfoError,
+  onRefreshDocumentInfo,
 }: JourneySummaryPanelProps): JSX.Element {
   const statusLabel = getStatusLabel(item);
   const statusTone = getStatusTone(item);
