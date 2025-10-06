@@ -783,6 +783,9 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           policyDocument={policyDocument}
           onUploadPolicyDocument={handlePolicyDocumentSelected}
           onRemovePolicyDocument={handlePolicyDocumentRemoval}
+          isWalkthroughPaused={isWalkthroughPaused}
+          onPauseWalkthrough={handlePauseWalkthrough}
+          onResumeWalkthrough={handleResumeWalkthrough}
         />
       </div>
 
