@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef } from 'react';
+import { ChangeEvent, useCallback, useRef } from 'react';
 import clsx from 'clsx';
 import { TimelineNodeItem } from './journey-timeline';
 import { ProcessedStateMachine } from '@/domain/state-machine/processor';
