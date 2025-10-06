@@ -41,6 +41,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
+  const [hasPublishedToOpa, setHasPublishedToOpa] = useState(false);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [primaryView, setPrimaryView] = useState<'list' | 'graph'>('graph');
   const [isGraphExpanded, setIsGraphExpanded] = useState(false);
@@ -80,6 +81,12 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   } = useReview();
 
   const hasUploadedDocument = Boolean(policyDocument);
+
+  useEffect(() => {
+    if (!hasUploadedDocument) {
+      setHasPublishedToOpa(false);
+    }
+  }, [hasUploadedDocument]);
 
   useEffect(() => {
     if (!hasUploadedDocument) {
