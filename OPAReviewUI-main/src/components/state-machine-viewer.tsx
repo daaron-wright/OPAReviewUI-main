@@ -723,6 +723,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     policyActors,
     timelineItems,
     reviewedCount,
+    publishStats,
+    totalCount,
+    hasPublishedToOpa,
+    isWalkthroughMode,
   ]);
 
   const handleToggleGraphSize = useCallback(() => {
