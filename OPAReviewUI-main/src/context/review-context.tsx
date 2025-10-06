@@ -332,13 +332,29 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   }, [policyDocument]);
 
   useEffect(() => {
+    if (!policyDocument) {
+      policyActorsControllerRef.current?.abort();
+      documentInfoControllerRef.current?.abort();
+      setPolicyActors([]);
+      setIsPolicyActorsLoading(false);
+      setPolicyActorsError(null);
+      setDocumentInfo(null);
+      setIsDocumentInfoLoading(false);
+      setDocumentInfoError(null);
+      return () => {
+        policyActorsControllerRef.current?.abort();
+        documentInfoControllerRef.current?.abort();
+      };
+    }
+
     void refreshPolicyActors();
     void refreshDocumentInfo();
+
     return () => {
       policyActorsControllerRef.current?.abort();
       documentInfoControllerRef.current?.abort();
     };
-  }, [refreshPolicyActors, refreshDocumentInfo]);
+  }, [policyDocument, refreshPolicyActors, refreshDocumentInfo]);
 
   const value: ReviewContextType = {
     reviewStatus,
