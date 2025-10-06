@@ -597,75 +597,90 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
     if (!hasDocument || documentErrorMessage) {
       step3Status = 'idle';
-      step3Description = 'Waiting for policy assets';
-    } else if (actorsErrorMessage) {
-      step3Status = 'error';
-      step3Description = actorsErrorMessage;
-    } else if (isPolicyActorsLoading) {
+      step3Description = 'Decision tree pending policy extraction';
+    } else if (!timelineReady) {
       step3Status = 'active';
-      step3Description = 'Deploying actors…';
-    } else if (actorsLoaded) {
+      step3Description = 'Developing decision tree…';
+    } else {
       step3Status = 'complete';
       step3Description =
-        actorCount === 0 ? 'No actors returned from service' : `${actorCount} actor${actorCount === 1 ? '' : 's'} ready`;
-    } else {
-      step3Status = 'active';
-      step3Description = 'Deploying actors…';
+        timelineItems.length === 1 ? '1 state mapped' : `${timelineItems.length} states mapped`;
     }
-    addStep('deploying-actors', 'Deploying actors', step3Status, step3Description);
+    addStep('developing-decision-tree', 'Developing decision tree', step3Status, step3Description);
 
     let step4Status: JourneyProcessStepStatus;
     let step4Description: string;
 
     if (!hasDocument || documentErrorMessage) {
       step4Status = 'idle';
-      step4Description = 'Decision tree pending policy extraction';
+      step4Description = 'Regulatory testing requires policy inputs';
     } else if (!timelineReady) {
-      step4Status = 'active';
-      step4Description = 'Developing decision tree…';
-    } else {
+      step4Status = 'idle';
+      step4Description = 'Decision tree must be ready before testing';
+    } else if (testsComplete) {
       step4Status = 'complete';
       step4Description =
-        timelineItems.length === 1 ? '1 state mapped' : `${timelineItems.length} states mapped`;
+        reviewedStates === 1 ? '1 compliance test validated' : `${reviewedStates} compliance tests validated`;
+    } else {
+      step4Status = 'active';
+      step4Description = 'Running test cases against regulatory rules…';
     }
-    addStep('developing-decision-tree', 'Developing decision tree', step4Status, step4Description);
+    addStep('regulatory-tests', 'Run test cases against regulatory rules', step4Status, step4Description);
 
     let step5Status: JourneyProcessStepStatus;
     let step5Description: string;
 
     if (!hasDocument || documentErrorMessage) {
       step5Status = 'idle';
-      step5Description = 'Awaiting decision tree';
+      step5Description = 'Awaiting policy extraction';
     } else if (!timelineReady) {
       step5Status = 'idle';
-      step5Description = 'Awaiting decision tree';
-    } else if (reviewedStates > 0) {
+      step5Description = 'Decision tree still in progress';
+    } else if (!testsComplete) {
+      step5Status = 'idle';
+      step5Description = 'Compliance validation required before deployment';
+    } else if (actorsErrorMessage) {
+      step5Status = 'error';
+      step5Description = actorsErrorMessage;
+    } else if (isPolicyActorsLoading) {
+      step5Status = 'active';
+      step5Description = 'Deploying actors…';
+    } else if (actorsLoaded) {
       step5Status = 'complete';
       step5Description =
-        reviewedStates === 1 ? '1 state reviewed' : `${reviewedStates} states reviewed`;
+        actorCount === 0 ? 'No actors returned from service' : `${actorCount} actor${actorCount === 1 ? '' : 's'} ready`;
     } else {
       step5Status = 'active';
-      step5Description = 'Execute review states to progress';
+      step5Description = 'Deploying actors…';
     }
-    addStep('executing-review-states', 'Executing review states', step5Status, step5Description);
+    addStep('deploying-actors', 'Deploying actors', step5Status, step5Description);
 
     let step6Status: JourneyProcessStepStatus;
     let step6Description: string;
 
     if (!hasDocument) {
       step6Status = 'idle';
-      step6Description = 'Upload a BRD policy to unlock review';
+      step6Description = 'Upload a BRD policy to enable agents';
     } else if (documentErrorMessage || actorsErrorMessage) {
       step6Status = 'error';
       step6Description = actorsErrorMessage ?? documentErrorMessage ?? 'Resolve setup issues to continue';
-    } else if (documentLoaded && actorsLoaded && timelineReady) {
-      step6Status = 'complete';
-      step6Description = 'Ready to review';
-    } else {
+    } else if (!documentLoaded) {
       step6Status = 'active';
-      step6Description = 'Finalising review workspace…';
+      step6Description = 'Finalising document insights…';
+    } else if (!timelineReady) {
+      step6Status = 'active';
+      step6Description = 'Preparing workflow for agent use…';
+    } else if (!testsComplete) {
+      step6Status = 'active';
+      step6Description = 'Awaiting regulatory test validation…';
+    } else if (!actorsLoaded) {
+      step6Status = 'active';
+      step6Description = 'Waiting for actor deployment…';
+    } else {
+      step6Status = 'complete';
+      step6Description = 'Agents ready for operational use';
     }
-    addStep('ready-to-review', 'Ready to review', step6Status, step6Description);
+    addStep('agent-use', 'Agent use', step6Status, step6Description);
 
     return steps;
   }, [
