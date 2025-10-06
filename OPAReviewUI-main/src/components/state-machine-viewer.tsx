@@ -219,6 +219,12 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   }, [currentNodeId, isWalkthroughMode]);
 
   useEffect(() => {
+    if (!policyDocument && isWalkthroughMode) {
+      endWalkthrough();
+    }
+  }, [endWalkthrough, isWalkthroughMode, policyDocument]);
+
+  useEffect(() => {
     if (reactFlowInstance) {
       reactFlowInstance.fitView({ padding: 0.2, duration: 600 });
     }
