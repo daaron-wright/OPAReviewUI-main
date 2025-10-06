@@ -235,6 +235,8 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     setNodeSequence(sequence);
   }, [applyLayout, setNodeSequence, stateMachine.nodes]);
 
+  useEffect(() => () => clearWalkthroughTimers(), [clearWalkthroughTimers]);
+
   useEffect(() => {
     if (!focusedNodeId && nodeSequence.length > 0) {
       const firstNodeId = nodeSequence[0];
