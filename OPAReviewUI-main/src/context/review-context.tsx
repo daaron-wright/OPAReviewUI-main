@@ -303,7 +303,11 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     uploadPolicyDocument,
     removePolicyDocument,
     canPublish,
-    getPublishStats
+    getPublishStats,
+    policyActors,
+    isPolicyActorsLoading,
+    policyActorsError,
+    refreshPolicyActors
   };
   
   return (
