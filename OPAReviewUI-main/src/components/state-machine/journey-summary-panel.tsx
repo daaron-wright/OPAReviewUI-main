@@ -536,76 +536,55 @@ export function JourneySummaryPanel({
 }
 
 function DocumentInfoCard({ info }: { info: DocumentInfo }): JSX.Element {
+  const { filename, caption, context, ...additionalFields } = info;
+  const title = typeof filename === 'string' && filename.trim().length > 0 ? filename.trim() : 'Policy document';
+  const description = typeof caption === 'string' && caption.trim().length > 0 ? caption.trim() : null;
+  const narrative = typeof context === 'string' && context.trim().length > 0 ? context.trim() : null;
+  const extraEntries = Object.entries(additionalFields ?? {}).filter(([, value]) => value !== null && typeof value !== 'undefined');
+
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-semibold text-slate-900">{info.file_name}</p>
-          <p className="mt-1 text-xs text-slate-600">Document ID: {info.document_id}</p>
-        </div>
-        <span className="inline-flex items-center rounded-full border border-[#cde4dc] bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
-          {info.status.toUpperCase()}
-        </span>
+    <div className="flex flex-col gap-4 rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-4">
+      <div className="space-y-2">
+        <p className="text-sm font-semibold text-slate-900">{title}</p>
+        {description && <p className="text-xs leading-relaxed text-slate-600">{description}</p>}
       </div>
-      <dl className="grid grid-cols-1 gap-3 text-xs text-slate-600 sm:grid-cols-2">
-        <div className="flex flex-col gap-1">
-          <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Pages</dt>
-          <dd className="text-xs text-slate-700">{info.page_count}</dd>
+
+      {narrative && (
+        <div className="rounded-2xl border border-[#cde4dc] bg-white px-3 py-2">
+          <h4 className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">Context</h4>
+          <p className="mt-1 text-xs leading-relaxed text-slate-700">{narrative}</p>
         </div>
-        <div className="flex flex-col gap-1">
-          <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">File size</dt>
-          <dd className="text-xs text-slate-700">{formatBytes(info.size_bytes)}</dd>
-        </div>
-        {info.ingestion_started_at && (
-          <div className="flex flex-col gap-1">
-            <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Ingestion started</dt>
-            <dd className="text-xs text-slate-700">{formatDate(info.ingestion_started_at)}</dd>
-          </div>
-        )}
-        {info.ingestion_completed_at && (
-          <div className="flex flex-col gap-1">
-            <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Ingestion completed</dt>
-            <dd className="text-xs text-slate-700">{formatDate(info.ingestion_completed_at)}</dd>
-          </div>
-        )}
-      </dl>
-      {info.metadata && Object.keys(info.metadata).length > 0 && (
-        <div className="rounded-2xl border border-white bg-white/60 px-3 py-2">
-          <h4 className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Metadata</h4>
-          <pre className="mt-1 whitespace-pre-wrap break-words text-xs text-slate-700">
-            {JSON.stringify(info.metadata, null, 2)}
-          </pre>
-        </div>
+      )}
+
+      {extraEntries.length > 0 && (
+        <dl className="space-y-3 text-xs text-slate-600">
+          {extraEntries.map(([key, value]) => (
+            <div key={key} className="flex flex-col gap-1">
+              <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                {key.replace(/[_\s]+/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').toUpperCase()}
+              </dt>
+              <dd className="whitespace-pre-wrap break-words text-xs text-slate-700">{formatInfoValue(value)}</dd>
+            </div>
+          ))}
+        </dl>
       )}
     </div>
   );
 }
 
-function formatBytes(bytes: number): string {
-  if (!Number.isFinite(bytes)) {
-    return 'Unknown';
+function formatInfoValue(value: unknown): string {
+  if (typeof value === 'string') {
+    return value;
   }
-  if (bytes === 0) {
-    return '0 B';
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
   }
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
-  const value = bytes / Math.pow(1024, exponent);
-  return `${value.toFixed(value >= 10 || exponent === 0 ? 0 : 1)} ${units[exponent]}`;
-}
-
-function formatDate(isoString: string): string {
-  const date = new Date(isoString);
-  if (Number.isNaN(date.getTime())) {
-    return isoString;
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch (error) {
+    console.error('Failed to serialise document info value', error);
+    return 'Unavailable';
   }
-  return date.toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
 }
 
 function PolicyActorCard({ actor }: { actor: PolicyActor }): JSX.Element {
