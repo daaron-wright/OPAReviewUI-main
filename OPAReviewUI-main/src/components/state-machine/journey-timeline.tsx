@@ -86,6 +86,18 @@ export function JourneyTimeline({
                 <p className="max-w-xl text-base text-slate-600">
                   Monitor the unified queue, keep SLAs healthy, and collaborate with your team to move applications forward.
                 </p>
+                <div className="space-y-3 pt-3">
+                  <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-[#0f766e]" aria-hidden="true" />
+                    {headerTitle}
+                  </div>
+                  <h2 className="text-3xl font-semibold leading-tight text-slate-900 sm:text-[32px]">
+                    Review timeline
+                  </h2>
+                  <p className="max-w-xl text-base text-slate-600">
+                    {headerSubtitle}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="inline-flex items-center gap-3 rounded-full border border-[#dbe9e3] bg-white px-5 py-3 shadow-[0_6px_18px_-14px_rgba(15,118,110,0.35)]">
