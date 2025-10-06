@@ -67,6 +67,50 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   } = useReview();
 
   const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handlePolicyDocumentSelected = useCallback(
+    (file: File) => {
+      const uploaded = uploadPolicyDocument(file);
+      if (!uploaded) {
+        toast.error(createToastContent('infoCircle', 'Please select a PDF document'), {
+          position: 'top-center',
+        });
+        return;
+      }
+
+      toast.success(createToastContent('checkCircle', `${uploaded.fileName} uploaded successfully`), {
+        position: 'top-center',
+      });
+    },
+    [uploadPolicyDocument]
+  );
+
+  const handlePolicyDocumentRemoval = useCallback(() => {
+    if (!policyDocument) {
+      return;
+    }
+    removePolicyDocument();
+    toast.info(createToastContent('infoCircle', 'Policy document removed'), {
+      position: 'top-center',
+    });
+  }, [policyDocument, removePolicyDocument]);
+
+  const handleOverlayUploadClick = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const handleOverlayFileChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) {
+        return;
+      }
+      handlePolicyDocumentSelected(file);
+      event.target.value = '';
+    },
+    [handlePolicyDocumentSelected]
+  );
 
   const initialNodes = useMemo(() => {
     return stateMachine.nodes.map((node) => {
