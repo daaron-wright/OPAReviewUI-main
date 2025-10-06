@@ -203,6 +203,8 @@ export function JourneyTimeline({
               )}
             </div>
           </div>
+
+          {processSteps.length > 0 && <JourneyProcessStatusBar steps={processSteps} />}
         </div>
       </div>
 
