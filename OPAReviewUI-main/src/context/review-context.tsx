@@ -297,6 +297,14 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   }, [policyDocument]);
 
   const refreshDocumentInfo = useCallback(async () => {
+    if (!policyDocument) {
+      documentInfoControllerRef.current?.abort();
+      setDocumentInfo(null);
+      setIsDocumentInfoLoading(false);
+      setDocumentInfoError(null);
+      return;
+    }
+
     documentInfoControllerRef.current?.abort();
     const controller = new AbortController();
     documentInfoControllerRef.current = controller;
@@ -321,7 +329,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       }
       setIsDocumentInfoLoading(false);
     }
-  }, []);
+  }, [policyDocument]);
 
   useEffect(() => {
     void refreshPolicyActors();
