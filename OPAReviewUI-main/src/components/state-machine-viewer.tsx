@@ -717,6 +717,9 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           onApproveAll={handleApproveAll}
           onPublish={handlePublish}
           canPublish={canPublish()}
+          policyDocument={policyDocument}
+          onUploadPolicyDocument={handlePolicyDocumentSelected}
+          onRemovePolicyDocument={handlePolicyDocumentRemoval}
         />
       </div>
 
