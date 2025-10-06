@@ -515,9 +515,15 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     );
   }, [approveAllNodes, getTotalNodes]);
 
-  const reviewedCount = getReviewedCount();
-  const totalCount = getTotalNodes();
-  const publishStats = getPublishStats();
+  const rawReviewedCount = getReviewedCount();
+  const rawTotalCount = getTotalNodes();
+  const rawPublishStats = getPublishStats();
+
+  const reviewedCount = hasUploadedDocument ? rawReviewedCount : 0;
+  const totalCount = hasUploadedDocument ? rawTotalCount : 0;
+  const publishStats = hasUploadedDocument
+    ? rawPublishStats
+    : { total: 0, reviewed: 0, approved: 0, rejected: 0 };
 
   const handleToggleGraphSize = useCallback(() => {
     setIsGraphExpanded((prev) => !prev);
