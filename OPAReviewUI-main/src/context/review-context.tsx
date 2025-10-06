@@ -249,7 +249,34 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       rejected: reviewed.filter(s => !s.approved).length
     };
   }, [reviewStatus, nodeSequence]);
-  
+
+  const refreshPolicyActors = useCallback(async () => {
+    policyActorsControllerRef.current?.abort();
+    const controller = new AbortController();
+    policyActorsControllerRef.current = controller;
+    setIsPolicyActorsLoading(true);
+    setPolicyActorsError(null);
+
+    try {
+      const actors = await fetchPolicyActors(controller.signal);
+      setPolicyActors(actors);
+      setIsPolicyActorsLoading(false);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+      setIsPolicyActorsLoading(false);
+      setPolicyActorsError(error instanceof Error ? error.message : 'Unable to load policy actors');
+    }
+  }, []);
+
+  useEffect(() => {
+    void refreshPolicyActors();
+    return () => {
+      policyActorsControllerRef.current?.abort();
+    };
+  }, [refreshPolicyActors]);
+
   const value: ReviewContextType = {
     reviewStatus,
     setNodeReviewed,
