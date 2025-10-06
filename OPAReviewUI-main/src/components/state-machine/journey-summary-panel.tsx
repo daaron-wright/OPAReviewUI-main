@@ -186,13 +186,27 @@ export function JourneySummaryPanel({
             )}
 
             {isWalkthroughMode ? (
-              <button
-                type="button"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#dbe9e3] bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-[#c5ded5]"
-                onClick={onExitWalkthrough}
-              >
-                End walkthrough
-              </button>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <button
+                  type="button"
+                  className={clsx(
+                    'inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition',
+                    isWalkthroughPaused
+                      ? 'border-[#0f766e] bg-[#0f766e] text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)] hover:bg-[#0c5f59]'
+                      : 'border-[#dbe9e3] bg-white text-slate-700 hover:border-[#c5ded5]'
+                  )}
+                  onClick={isWalkthroughPaused ? onResumeWalkthrough : onPauseWalkthrough}
+                >
+                  {isWalkthroughPaused ? 'Resume walkthrough' : 'Pause walkthrough'}
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#f3d2d6] bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:border-rose-300 hover:bg-rose-50"
+                  onClick={onExitWalkthrough}
+                >
+                  End walkthrough
+                </button>
+              </div>
             ) : policyDocument ? (
               <button
                 type="button"
