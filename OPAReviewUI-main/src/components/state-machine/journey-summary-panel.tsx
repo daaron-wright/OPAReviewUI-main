@@ -132,6 +132,53 @@ export function JourneySummaryPanel({
           </header>
 
           <div className="grid grid-cols-1 gap-3">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/pdf"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+
+            {policyDocument ? (
+              <div className="flex flex-col gap-3 rounded-2xl border border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-700">
+                <div className="flex flex-col gap-1">
+                  <span className="truncate text-sm font-semibold text-slate-900">{policyDocument.fileName}</span>
+                  <span className="text-xs text-slate-500">
+                    {formatFileSize(policyDocument.fileSize)} • Uploaded {formatUploadedAt(policyDocument.uploadedAt)}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <a
+                    href={policyDocument.previewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#0f766e]/20 bg-[#0f766e]/5 px-3 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/40 hover:bg-[#0f766e]/10"
+                  >
+                    View PDF
+                  </a>
+                  <button
+                    type="button"
+                    onClick={handleUploadClick}
+                    className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#c5ded5]"
+                  >
+                    Replace
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onRemovePolicyDocument}
+                    className="inline-flex items-center gap-2 rounded-full border border-transparent bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-100"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-4 text-sm text-slate-500">
+                Upload the BRD policy PDF to enable guided walkthrough mode.
+              </div>
+            )}
+
             {isWalkthroughMode ? (
               <button
                 type="button"
@@ -140,13 +187,21 @@ export function JourneySummaryPanel({
               >
                 End walkthrough
               </button>
-            ) : (
+            ) : policyDocument ? (
               <button
                 type="button"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59]"
                 onClick={onStartWalkthrough}
               >
                 Start walkthrough
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59]"
+                onClick={handleUploadClick}
+              >
+                BRD Policy Upload
               </button>
             )}
 
