@@ -32,6 +32,7 @@ interface JourneyTimelineProps {
   readonly graphContent?: ReactNode;
   readonly isWalkthroughMode?: boolean;
   readonly onEndWalkthrough?: () => void;
+  readonly processSteps?: JourneyProcessStep[];
 }
 
 const reviewerAssignment = {
