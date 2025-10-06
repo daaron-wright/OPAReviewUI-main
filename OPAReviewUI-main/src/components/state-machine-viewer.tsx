@@ -765,7 +765,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           metadata={stateMachine.metadata}
           isWalkthroughMode={isWalkthroughMode}
           onStartWalkthrough={handleStartWalkthrough}
-          onExitWalkthrough={endWalkthrough}
+          onExitWalkthrough={handleExitWalkthrough}
           onOpenDetail={(nodeId) => openNodeDetailById(nodeId)}
           onNext={goToNext}
           onPrevious={goToPrevious}
