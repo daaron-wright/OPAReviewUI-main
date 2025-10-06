@@ -15,6 +15,14 @@ export interface NodeReviewStatus {
   reviewedBy?: string;
 }
 
+export interface UploadedPolicyDocument {
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  uploadedAt: Date;
+  previewUrl: string;
+}
+
 interface ReviewContextType {
   // Review status tracking
   reviewStatus: Record<string, NodeReviewStatus>;
@@ -25,20 +33,25 @@ interface ReviewContextType {
   getTotalNodes: () => number;
   resetReviews: () => void;
   approveAllNodes: () => void;
-  
+
   // Walkthrough mode
   isWalkthroughMode: boolean;
   startWalkthrough: () => void;
   endWalkthrough: () => void;
   currentNodeId: string | null;
   setCurrentNode: (nodeId: string | null) => void;
-  
+
   // Navigation
   nextNode: () => void;
   previousNode: () => void;
   nodeSequence: string[];
   setNodeSequence: (sequence: string[]) => void;
-  
+
+  // Document upload
+  policyDocument: UploadedPolicyDocument | null;
+  uploadPolicyDocument: (file: File) => UploadedPolicyDocument | null;
+  removePolicyDocument: () => void;
+
   // Publishing
   canPublish: () => boolean;
   getPublishStats: () => {
