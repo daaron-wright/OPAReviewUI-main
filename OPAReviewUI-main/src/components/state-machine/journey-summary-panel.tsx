@@ -38,6 +38,10 @@ interface JourneySummaryPanelProps {
   readonly isPolicyActorsLoading: boolean;
   readonly policyActorsError: string | null;
   readonly onRefreshPolicyActors: () => Promise<void>;
+  readonly documentInfo: DocumentInfo | null;
+  readonly isDocumentInfoLoading: boolean;
+  readonly documentInfoError: string | null;
+  readonly onRefreshDocumentInfo: () => Promise<void>;
 }
 
 export function JourneySummaryPanel({
