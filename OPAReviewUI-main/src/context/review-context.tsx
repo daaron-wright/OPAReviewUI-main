@@ -146,6 +146,18 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     setCurrentNodeId(nodeId);
   }, []);
 
+  const pauseWalkthrough = useCallback(() => {
+    setIsWalkthroughPaused(true);
+  }, []);
+
+  const resumeWalkthrough = useCallback(() => {
+    setIsWalkthroughPaused(false);
+  }, []);
+
+  const toggleWalkthroughPause = useCallback(() => {
+    setIsWalkthroughPaused((prev) => !prev);
+  }, []);
+
   const uploadPolicyDocument = useCallback((file: File): UploadedPolicyDocument | null => {
     if (!file) return null;
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
