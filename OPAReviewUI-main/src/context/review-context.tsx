@@ -38,6 +38,10 @@ interface ReviewContextType {
   isWalkthroughMode: boolean;
   startWalkthrough: () => void;
   endWalkthrough: () => void;
+  isWalkthroughPaused: boolean;
+  pauseWalkthrough: () => void;
+  resumeWalkthrough: () => void;
+  toggleWalkthroughPause: () => void;
   currentNodeId: string | null;
   setCurrentNode: (nodeId: string | null) => void;
 
