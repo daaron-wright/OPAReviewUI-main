@@ -50,7 +50,7 @@ export function ConflictDashboardHeader({
                     className="h-10 w-auto object-contain sm:h-12"
                   />
                   <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0f766e] sm:text-[11px]">
-                    Abu Dhabi Department of Economic Development Business
+                    ABU DHABI DEPARTMENT OF ECONOMIC DEVELOPMENTBUSINESS
                   </span>
                 </div>
                 <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
