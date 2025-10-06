@@ -805,7 +805,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
           setTimeout(() => {
             setSelectedNode(null);
             setModalAnimation('none');
-            if (isWalkthroughMode && approved) {
+            if (isWalkthroughMode && approved && !isWalkthroughPaused) {
               setTimeout(() => {
                 nextNode();
               }, 300);
