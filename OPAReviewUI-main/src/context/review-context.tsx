@@ -82,6 +82,10 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   const [nodeSequence, setNodeSequence] = useState<string[]>([]);
   const [isWalkthroughPaused, setIsWalkthroughPaused] = useState(false);
   const [policyDocument, setPolicyDocument] = useState<UploadedPolicyDocument | null>(null);
+  const [policyActors, setPolicyActors] = useState<PolicyActor[]>([]);
+  const [isPolicyActorsLoading, setIsPolicyActorsLoading] = useState(false);
+  const [policyActorsError, setPolicyActorsError] = useState<string | null>(null);
+  const policyActorsControllerRef = useRef<AbortController | null>(null);
 
   const setNodeReviewed = useCallback((nodeId: string, approved: boolean, notes?: string) => {
     setReviewStatus(prev => ({
