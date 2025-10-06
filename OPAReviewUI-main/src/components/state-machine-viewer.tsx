@@ -562,18 +562,29 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
                 <Icon name="target" className="h-4 w-4" />
                 Reset view
               </button>
-              <button
-                type="button"
-                onClick={isWalkthroughMode ? endWalkthrough : handleStartWalkthrough}
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2 ${
-                  isWalkthroughMode
-                    ? 'border border-[#dbe9e3] bg-white text-[#0f766e] hover:border-[#c5ded5] hover:bg-[#f3f8f6]'
-                    : 'border border-[#0f766e] bg-[#0f766e] text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.65)] hover:bg-[#0c5f59]'
-                }`}
-              >
-                <Icon name={isWalkthroughMode ? 'xCircle' : 'rocket'} className="h-4 w-4" />
-                {isWalkthroughMode ? 'End walkthrough' : 'Start walkthrough'}
-              </button>
+              {!policyDocument ? (
+                <button
+                  type="button"
+                  onClick={handleOverlayUploadClick}
+                  className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
+                >
+                  <Icon name="paperclip" className="h-4 w-4" />
+                  BRD Policy Upload
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={isWalkthroughMode ? endWalkthrough : handleStartWalkthrough}
+                  className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2 ${
+                    isWalkthroughMode
+                      ? 'border border-[#dbe9e3] bg-white text-[#0f766e] hover:border-[#c5ded5] hover:bg-[#f3f8f6]'
+                      : 'border border-[#0f766e] bg-[#0f766e] text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.65)] hover:bg-[#0c5f59]'
+                  }`}
+                >
+                  <Icon name={isWalkthroughMode ? 'xCircle' : 'rocket'} className="h-4 w-4" />
+                  {isWalkthroughMode ? 'End walkthrough' : 'Start walkthrough'}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleCollapseGraph}
