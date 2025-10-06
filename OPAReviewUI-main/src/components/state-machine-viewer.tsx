@@ -306,6 +306,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   }, [stateMachine.nodes]);
 
   const timelineItems = useMemo(() => {
+    if (!hasUploadedDocument) {
+      return [] as TimelineNodeItem[];
+    }
+
     const items = nodeSequence
       .map((nodeId, order): TimelineNodeItem | null => {
         const node = nodesById.get(nodeId);
