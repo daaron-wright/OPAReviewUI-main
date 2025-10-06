@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useCallback, useRef } from 'react';
 import clsx from 'clsx';
+import type { DocumentInfo } from '@/adapters/document-info-client';
 import type { PolicyActor } from '@/adapters/policy-actors-client';
 import { TimelineNodeItem } from './journey-timeline';
 import { ProcessedStateMachine } from '@/domain/state-machine/processor';
