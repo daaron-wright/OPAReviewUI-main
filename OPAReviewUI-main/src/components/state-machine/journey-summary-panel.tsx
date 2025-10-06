@@ -458,6 +458,34 @@ export function JourneySummaryPanel({
   );
 }
 
+function PolicyActorCard({ actor }: { actor: PolicyActor }): JSX.Element {
+  return (
+    <div className="flex flex-col gap-3 rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold text-slate-900">{actor.label}</p>
+          {actor.summary && <p className="mt-1 text-xs leading-relaxed text-slate-600">{actor.summary}</p>}
+        </div>
+        <span className="inline-flex items-center rounded-full border border-[#cde4dc] bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
+          Actor
+        </span>
+      </div>
+      {actor.attributes.length > 0 && (
+        <dl className="grid grid-cols-1 gap-3 text-xs text-slate-600 sm:grid-cols-2">
+          {actor.attributes.map((attribute, index) => (
+            <div key={`${attribute.key}-${index}`} className="flex flex-col gap-1">
+              <dt className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                {attribute.key}
+              </dt>
+              <dd className="break-words text-xs text-slate-700">{attribute.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </div>
+  );
+}
+
 function getStatusLabel(item: TimelineNodeItem | null): string {
   if (!item) return 'Awaiting selection';
   switch (item.status) {
