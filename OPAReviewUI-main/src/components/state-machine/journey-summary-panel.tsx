@@ -52,6 +52,9 @@ export function JourneySummaryPanel({
   policyDocument,
   onUploadPolicyDocument,
   onRemovePolicyDocument,
+  isWalkthroughPaused,
+  onPauseWalkthrough,
+  onResumeWalkthrough,
 }: JourneySummaryPanelProps): JSX.Element {
   const statusLabel = getStatusLabel(item);
   const statusTone = getStatusTone(item);
