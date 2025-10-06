@@ -544,6 +544,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     const timelineReady = hasDocument && timelineItems.length > 0;
     const actorCount = policyActors.length;
     const reviewedStates = reviewedCount;
+    const testsComplete = timelineReady && reviewedStates > 0;
 
     const addStep = (id: string, label: string, status: JourneyProcessStepStatus, description: string) => {
       steps.push({ id, label, status, description });
