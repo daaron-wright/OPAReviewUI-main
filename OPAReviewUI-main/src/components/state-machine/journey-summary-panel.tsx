@@ -118,6 +118,19 @@ export function JourneySummaryPanel({
     });
   }, []);
 
+  useEffect(() => {
+    if (!policyDocument) {
+      setExpandedPanels(new Set());
+      return;
+    }
+    setExpandedPanels((prev) => {
+      if (prev.size === 0) {
+        return new Set(['document', 'actors']);
+      }
+      return prev;
+    });
+  }, [policyDocument]);
+
   const isDocumentPanelOpen = useMemo(() => expandedPanels.has('document'), [expandedPanels]);
   const isActorsPanelOpen = useMemo(() => expandedPanels.has('actors'), [expandedPanels]);
 
