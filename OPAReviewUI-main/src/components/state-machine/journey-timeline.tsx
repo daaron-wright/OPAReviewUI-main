@@ -99,9 +99,24 @@ export function JourneyTimeline({
                 </div>
               </div>
             </div>
-            <div className="inline-flex items-center gap-3 rounded-full border border-[#dbe9e3] bg-white px-5 py-3 shadow-[0_6px_18px_-14px_rgba(15,118,110,0.35)] self-start lg:self-start">
-              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
-              <div className="flex flex-col text-right">
+            <div className="inline-flex items-center gap-3 rounded-full border border-[#d1e3dc] bg-white/95 px-4 py-2 shadow-[0_8px_20px_-18px_rgba(15,118,110,0.5)] self-start lg:self-start">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#f1f5f3] text-slate-400">
+                <svg
+                  className="h-5 w-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="8" r="3.2" />
+                  <path d="M6.5 19.5a5.5 5.5 0 0 1 11 0" />
+                </svg>
+                <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500" aria-hidden="true" />
+              </div>
+              <div className="flex flex-col justify-center">
                 <span className="text-sm font-semibold text-slate-900">{reviewerAssignment.identifier}</span>
                 <span className="text-xs font-medium text-slate-500">{reviewerAssignment.status}</span>
               </div>
@@ -112,7 +127,7 @@ export function JourneyTimeline({
                 xmlns="http://www.w3.org/2000/svg"
                 aria-hidden="true"
               >
-                <path d="M6 6l2 2 2-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M5.75 6.5 8 8.75 10.25 6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
           </div>
