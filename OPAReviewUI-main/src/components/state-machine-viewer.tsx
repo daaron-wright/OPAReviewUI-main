@@ -341,13 +341,21 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   );
 
   const handleStartWalkthrough = useCallback(() => {
+    if (!policyDocument) {
+      toast.info(createToastContent('infoCircle', 'Upload the BRD policy PDF to start the walkthrough'), {
+        position: 'top-center',
+        autoClose: 3500,
+      });
+      return;
+    }
+
     resetReviews();
     startWalkthrough();
     toast.info(createToastContent('rocket', 'Starting walkthrough from the initial state'), {
       position: 'top-center',
       autoClose: 3000,
     });
-  }, [resetReviews, startWalkthrough]);
+  }, [policyDocument, resetReviews, startWalkthrough]);
 
   const handlePublish = useCallback(() => {
     const stats = getPublishStats();
