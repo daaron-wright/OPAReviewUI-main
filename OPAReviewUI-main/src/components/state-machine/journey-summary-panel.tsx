@@ -439,7 +439,7 @@ function formatFileSize(bytes: number): string {
 function formatUploadedAt(value: Date): string {
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return '';
+    return 'just now';
   }
   return date.toLocaleString();
 }
