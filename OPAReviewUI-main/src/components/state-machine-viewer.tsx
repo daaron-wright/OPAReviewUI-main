@@ -344,6 +344,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
       isSelected: focusedNodeId ? item.node.id === focusedNodeId : index === 0,
     }));
   }, [
+    hasUploadedDocument,
     nodeSequence,
     nodesById,
     reviewStatus,
