@@ -104,6 +104,23 @@ export function JourneySummaryPanel({
     void onRefreshDocumentInfo();
   }, [onRefreshDocumentInfo]);
 
+  const [expandedPanels, setExpandedPanels] = useState(() => new Set(['document', 'actors']));
+
+  const togglePanel = useCallback((panelId: string) => {
+    setExpandedPanels((prev) => {
+      const next = new Set(prev);
+      if (next.has(panelId)) {
+        next.delete(panelId);
+      } else {
+        next.add(panelId);
+      }
+      return next;
+    });
+  }, []);
+
+  const isDocumentPanelOpen = useMemo(() => expandedPanels.has('document'), [expandedPanels]);
+  const isActorsPanelOpen = useMemo(() => expandedPanels.has('actors'), [expandedPanels]);
+
   return (
     <aside className="flex flex-col overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)]">
       <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 pt-6 pb-5">
