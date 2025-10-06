@@ -45,16 +45,16 @@ export function ConflictDashboardHeader({
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
                   <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F67c03d8c981249bc809a682c60a2173f?format=webp&width=800"
-                    alt="Abu Dhabi Government Services mark"
+                    src="https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2F49939b4f5ee54de39a2d600c468ae7f7?format=webp&width=800"
+                    alt="Abu Dhabi Department of Economic Development Business"
                     className="h-10 w-auto object-contain sm:h-12"
                   />
                   <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0f766e] sm:text-[11px]">
-                    Abu Dhabi Government Services
+                    Abu Dhabi Department of Economic Development Business
                   </span>
                 </div>
                 <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
-                  Business license portal
+                  Business License Portal
                 </span>
               </div>
               <div className="space-y-4">
