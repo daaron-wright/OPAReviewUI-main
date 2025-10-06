@@ -673,6 +673,13 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
 
   return (
     <div className="min-h-screen bg-[#f4f8f6] py-10">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="application/pdf"
+        className="hidden"
+        onChange={handleOverlayFileChange}
+      />
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 lg:px-8 xl:grid xl:grid-cols-[1.7fr_1fr]">
         <div className="space-y-6">
           <JourneyTimeline
