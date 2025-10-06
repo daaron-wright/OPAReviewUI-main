@@ -110,6 +110,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     setReviewStatus({});
     setCurrentNodeId(null);
     setIsWalkthroughMode(false);
+    setIsWalkthroughPaused(false);
   }, []);
   
   const approveAllNodes = useCallback(() => {
