@@ -544,7 +544,7 @@ function DocumentInfoCard({ info }: { info: DocumentInfo }): JSX.Element {
           <p className="mt-1 text-xs text-slate-600">Document ID: {info.document_id}</p>
         </div>
         <span className="inline-flex items-center rounded-full border border-[#cde4dc] bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
-          {info.status}
+          {info.status.toUpperCase()}
         </span>
       </div>
       <dl className="grid grid-cols-1 gap-3 text-xs text-slate-600 sm:grid-cols-2">
