@@ -99,7 +99,7 @@ export function JourneyTimeline({
                 </div>
               </div>
             </div>
-            <div className="inline-flex items-center gap-3 rounded-full border border-[#dbe9e3] bg-white px-5 py-3 shadow-[0_6px_18px_-14px_rgba(15,118,110,0.35)]">
+            <div className="inline-flex items-center gap-3 rounded-full border border-[#dbe9e3] bg-white px-5 py-3 shadow-[0_6px_18px_-14px_rgba(15,118,110,0.35)] self-start lg:self-start">
               <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
               <div className="flex flex-col text-right">
                 <span className="text-sm font-semibold text-slate-900">{reviewerAssignment.identifier}</span>
