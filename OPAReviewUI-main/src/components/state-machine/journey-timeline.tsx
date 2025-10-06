@@ -52,6 +52,7 @@ export function JourneyTimeline({
   graphContent,
   isWalkthroughMode,
   onEndWalkthrough,
+  processSteps = [],
 }: JourneyTimelineProps): JSX.Element {
   const completionPercentage = useMemo(() => {
     if (progress.total === 0) return 0;
