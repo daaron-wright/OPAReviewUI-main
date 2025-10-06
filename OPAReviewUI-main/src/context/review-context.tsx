@@ -137,7 +137,49 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   const setCurrentNode = useCallback((nodeId: string | null) => {
     setCurrentNodeId(nodeId);
   }, []);
-  
+
+  const uploadPolicyDocument = useCallback((file: File): UploadedPolicyDocument | null => {
+    if (!file) return null;
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    if (!isPdf) {
+      return null;
+    }
+
+    const nextDocument: UploadedPolicyDocument = {
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type || 'application/pdf',
+      uploadedAt: new Date(),
+      previewUrl: URL.createObjectURL(file),
+    };
+
+    setPolicyDocument((previous) => {
+      if (previous?.previewUrl) {
+        URL.revokeObjectURL(previous.previewUrl);
+      }
+      return nextDocument;
+    });
+
+    return nextDocument;
+  }, []);
+
+  const removePolicyDocument = useCallback(() => {
+    setPolicyDocument((previous) => {
+      if (previous?.previewUrl) {
+        URL.revokeObjectURL(previous.previewUrl);
+      }
+      return null;
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (policyDocument?.previewUrl) {
+        URL.revokeObjectURL(policyDocument.previewUrl);
+      }
+    };
+  }, [policyDocument]);
+
   const nextNode = useCallback(() => {
     if (!currentNodeId || nodeSequence.length === 0) return;
     
