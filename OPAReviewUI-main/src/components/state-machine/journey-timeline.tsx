@@ -61,7 +61,7 @@ export function JourneyTimeline({
     <section className="overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)]">
       <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-7 lg:px-8">
         <div className="space-y-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
                 <div className="flex items-center gap-3">
