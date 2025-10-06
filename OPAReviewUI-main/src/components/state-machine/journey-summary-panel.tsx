@@ -46,6 +46,9 @@ export function JourneySummaryPanel({
   onApproveAll,
   onPublish,
   canPublish,
+  policyDocument,
+  onUploadPolicyDocument,
+  onRemovePolicyDocument,
 }: JourneySummaryPanelProps): JSX.Element {
   const statusLabel = getStatusLabel(item);
   const statusTone = getStatusTone(item);
