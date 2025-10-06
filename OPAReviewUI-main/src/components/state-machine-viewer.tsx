@@ -816,7 +816,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             headerTitle={machineTitle}
             headerSubtitle={stateMachine.metadata.description}
             viewMode={primaryView}
-            onViewModeChange={setPrimaryView}
+            onViewModeChange={hasUploadedDocument ? setPrimaryView : undefined}
             graphContent={graphContent}
             isWalkthroughMode={isWalkthroughMode}
             onEndWalkthrough={handleExitWalkthrough}
