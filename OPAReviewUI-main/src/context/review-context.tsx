@@ -66,6 +66,11 @@ interface ReviewContextType {
     approved: number;
     rejected: number;
   };
+
+  policyActors: ReadonlyArray<PolicyActor>;
+  isPolicyActorsLoading: boolean;
+  policyActorsError: string | null;
+  refreshPolicyActors: () => Promise<void>;
 }
 
 const ReviewContext = createContext<ReviewContextType | undefined>(undefined);
