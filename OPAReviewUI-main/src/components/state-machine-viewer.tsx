@@ -23,6 +23,7 @@ import {
   TimelineNodeItem,
 } from './state-machine/journey-timeline';
 import { JourneySummaryPanel } from './state-machine/journey-summary-panel';
+import type { JourneyProcessStep, JourneyProcessStepStatus } from './state-machine/journey-process-status';
 
 interface StateMachineViewerProps {
   stateMachine: ProcessedStateMachine;
@@ -533,6 +534,151 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     ? rawPublishStats
     : { total: 0, reviewed: 0, approved: 0, rejected: 0 };
 
+  const processSteps = useMemo<JourneyProcessStep[]>(() => {
+    const steps: JourneyProcessStep[] = [];
+    const hasDocument = hasUploadedDocument;
+    const documentErrorMessage = documentInfoError ?? undefined;
+    const actorsErrorMessage = policyActorsError ?? undefined;
+    const documentLoaded = Boolean(documentInfo);
+    const actorsLoaded = hasDocument && !isPolicyActorsLoading && !policyActorsError;
+    const timelineReady = hasDocument && timelineItems.length > 0;
+    const actorCount = policyActors.length;
+    const reviewedStates = reviewedCount;
+
+    const addStep = (id: string, label: string, status: JourneyProcessStepStatus, description: string) => {
+      steps.push({ id, label, status, description });
+    };
+
+    let step1Status: JourneyProcessStepStatus;
+    let step1Description: string;
+
+    if (!hasDocument) {
+      step1Status = 'idle';
+      step1Description = 'Awaiting BRD policy upload';
+    } else if (documentErrorMessage) {
+      step1Status = 'error';
+      step1Description = documentErrorMessage;
+    } else if (isDocumentInfoLoading && !documentLoaded) {
+      step1Status = 'active';
+      step1Description = 'Extracting document insights…';
+    } else if (documentLoaded) {
+      step1Status = 'complete';
+      step1Description = documentInfo?.filename ? `Loaded ${documentInfo.filename}` : 'Policy extracted';
+    } else {
+      step1Status = 'active';
+      step1Description = 'Extracting document insights…';
+    }
+    addStep('extract-policy', 'Extracting policy', step1Status, step1Description);
+
+    let step2Status: JourneyProcessStepStatus;
+    let step2Description: string;
+
+    if (!hasDocument) {
+      step2Status = 'idle';
+      step2Description = 'Awaiting BRD policy upload';
+    } else if (documentErrorMessage) {
+      step2Status = 'idle';
+      step2Description = 'Resolve extraction issues to continue';
+    } else if (!documentLoaded) {
+      step2Status = 'idle';
+      step2Description = 'Waiting for policy extraction';
+    } else if (!timelineReady) {
+      step2Status = 'active';
+      step2Description = 'Translating policy into automation code…';
+    } else {
+      step2Status = 'complete';
+      step2Description = 'Policy logic assembled';
+    }
+    addStep('extract-policy-as-code', 'Extracting policy as code', step2Status, step2Description);
+
+    let step3Status: JourneyProcessStepStatus;
+    let step3Description: string;
+
+    if (!hasDocument || documentErrorMessage) {
+      step3Status = 'idle';
+      step3Description = 'Waiting for policy assets';
+    } else if (actorsErrorMessage) {
+      step3Status = 'error';
+      step3Description = actorsErrorMessage;
+    } else if (isPolicyActorsLoading) {
+      step3Status = 'active';
+      step3Description = 'Deploying actors…';
+    } else if (actorsLoaded) {
+      step3Status = 'complete';
+      step3Description =
+        actorCount === 0 ? 'No actors returned from service' : `${actorCount} actor${actorCount === 1 ? '' : 's'} ready`;
+    } else {
+      step3Status = 'active';
+      step3Description = 'Deploying actors…';
+    }
+    addStep('deploying-actors', 'Deploying actors', step3Status, step3Description);
+
+    let step4Status: JourneyProcessStepStatus;
+    let step4Description: string;
+
+    if (!hasDocument || documentErrorMessage) {
+      step4Status = 'idle';
+      step4Description = 'Decision tree pending policy extraction';
+    } else if (!timelineReady) {
+      step4Status = 'active';
+      step4Description = 'Developing decision tree…';
+    } else {
+      step4Status = 'complete';
+      step4Description =
+        timelineItems.length === 1 ? '1 state mapped' : `${timelineItems.length} states mapped`;
+    }
+    addStep('developing-decision-tree', 'Developing decision tree', step4Status, step4Description);
+
+    let step5Status: JourneyProcessStepStatus;
+    let step5Description: string;
+
+    if (!hasDocument || documentErrorMessage) {
+      step5Status = 'idle';
+      step5Description = 'Awaiting decision tree';
+    } else if (!timelineReady) {
+      step5Status = 'idle';
+      step5Description = 'Awaiting decision tree';
+    } else if (reviewedStates > 0) {
+      step5Status = 'complete';
+      step5Description =
+        reviewedStates === 1 ? '1 state reviewed' : `${reviewedStates} states reviewed`;
+    } else {
+      step5Status = 'active';
+      step5Description = 'Execute review states to progress';
+    }
+    addStep('executing-review-states', 'Executing review states', step5Status, step5Description);
+
+    let step6Status: JourneyProcessStepStatus;
+    let step6Description: string;
+
+    if (!hasDocument) {
+      step6Status = 'idle';
+      step6Description = 'Upload a BRD policy to unlock review';
+    } else if (documentErrorMessage || actorsErrorMessage) {
+      step6Status = 'error';
+      step6Description = actorsErrorMessage ?? documentErrorMessage ?? 'Resolve setup issues to continue';
+    } else if (documentLoaded && actorsLoaded && timelineReady) {
+      step6Status = 'complete';
+      step6Description = 'Ready to review';
+    } else {
+      step6Status = 'active';
+      step6Description = 'Finalising review workspace…';
+    }
+    addStep('ready-to-review', 'Ready to review', step6Status, step6Description);
+
+    return steps;
+  }, [
+    hasUploadedDocument,
+    documentInfoError,
+    isDocumentInfoLoading,
+    documentInfo,
+    policyActorsError,
+    isPolicyActorsLoading,
+    policyActors,
+    timelineItems,
+    reviewedCount,
+  ]);
+
   const handleToggleGraphSize = useCallback(() => {
     setIsGraphExpanded((prev) => !prev);
   }, []);
@@ -820,6 +966,7 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             graphContent={graphContent}
             isWalkthroughMode={isWalkthroughMode}
             onEndWalkthrough={handleExitWalkthrough}
+            processSteps={processSteps}
           />
         </div>
 
