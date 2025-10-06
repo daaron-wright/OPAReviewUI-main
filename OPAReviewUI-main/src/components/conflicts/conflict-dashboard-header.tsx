@@ -28,8 +28,8 @@ export function ConflictDashboardHeader({
   ];
 
   const reviewerProfile = {
-    name: 'Khalid Entrepreneur',
-    email: 'khalid.entrepreneur@email.ae',
+    name: 'DED Reviewer ID RV-45812',
+    email: 'Credentialed reviewer',
     avatarUrl:
       'https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Fc053ea3ff8b6499b884ed87c87f941eb?format=webp&width=200',
   } as const;
