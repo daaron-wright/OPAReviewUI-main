@@ -25,6 +25,7 @@ export type IconName =
   | 'infoCircle'
   | 'lightbulb'
   | 'paperclip'
+  | 'arrowUp'
   | 'save'
   | 'factory'
   | 'flask'
