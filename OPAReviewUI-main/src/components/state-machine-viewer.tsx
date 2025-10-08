@@ -1370,8 +1370,8 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         className="hidden"
         onChange={handleOverlayFileChange}
       />
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 lg:px-8 xl:grid xl:grid-cols-[1.7fr_1fr]">
-        <div className="space-y-6">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 lg:px-8 xl:flex-row xl:items-start">
+        <div className="flex-1 space-y-6">
           <JourneyTimeline
             items={timelineItems}
             onSelect={handleTimelineSelect}
