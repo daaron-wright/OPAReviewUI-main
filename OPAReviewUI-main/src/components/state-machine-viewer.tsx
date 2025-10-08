@@ -22,6 +22,7 @@ import {
   processStateMachine,
 } from '@/domain/state-machine/processor';
 import type { StateMachine } from '@/domain/state-machine/types';
+import { isAbortError, isRetriableFetchError } from '@/utils/fetch-error-utils';
 import realBeneficiaryStateMachineFile from '../../data/real_beneficiary_state_machine.json';
 import {
   JourneyTimeline,
@@ -85,52 +86,6 @@ const RETRYABLE_HTTP_STATUS_CODES = new Set([408, 409, 425, 429, 500, 502, 503, 
 
 type FetchError = Error & { status?: number };
 
-interface NormalizedErrorDetails {
-  readonly name: string;
-  readonly message: string;
-  readonly code?: string;
-}
-
-function getErrorDetails(error: unknown): NormalizedErrorDetails {
-  if (!error) {
-    return { name: '', message: '' };
-  }
-
-  if (typeof error === 'string') {
-    const trimmed = error.trim();
-    return { name: '', message: trimmed };
-  }
-
-  const candidate = error as { name?: unknown; message?: unknown; code?: unknown };
-  const name = typeof candidate.name === 'string' ? candidate.name : '';
-  const message = typeof candidate.message === 'string' ? candidate.message : '';
-  const code = typeof candidate.code === 'string' ? candidate.code : undefined;
-
-  if (name || message || code) {
-    return { name, message, code };
-  }
-
-  try {
-    return { name: '', message: JSON.stringify(error) };
-  } catch {
-    return { name: '', message: String(error) };
-  }
-}
-
-function messageIndicatesAbort(message: string): boolean {
-  if (!message) {
-    return false;
-  }
-
-  const normalized = message.toLowerCase();
-  return (
-    normalized.includes('abort') ||
-    normalized.includes('the operation was aborted') ||
-    normalized.includes('fetch is aborted') ||
-    normalized.includes('user aborted')
-  );
-}
-
 function delay(ms: number): Promise<void> {
   if (ms <= 0) {
     return Promise.resolve();
@@ -141,87 +96,12 @@ function delay(ms: number): Promise<void> {
   });
 }
 
-function isAbortError(error: unknown, signal?: AbortSignal): boolean {
-  if (signal?.aborted) {
-    return true;
-  }
-
-  if (typeof DOMException !== 'undefined' && error instanceof DOMException) {
-    return error.name === 'AbortError';
-  }
-
-  const { name, message, code } = getErrorDetails(error);
-  const normalizedName = name.toLowerCase();
-  const normalizedCode = code?.toLowerCase();
-  const normalizedMessage = message.toLowerCase();
-
-  if (normalizedName === 'aborterror') {
-    return true;
-  }
-
-  if (normalizedCode === 'abort_err' || normalizedCode === 'aborted' || normalizedCode === 'ecanceled') {
-    return true;
-  }
-
-  if (!normalizedMessage) {
-    return false;
-  }
-
-  if (messageIndicatesAbort(normalizedMessage)) {
-    return true;
-  }
-
-  return false;
-}
-
 function isRetriableStatus(status?: number): boolean {
   if (typeof status !== 'number') {
     return false;
   }
 
   return RETRYABLE_HTTP_STATUS_CODES.has(status);
-}
-
-function isRetriableFetchError(error: unknown): boolean {
-  if (!error) {
-    return false;
-  }
-
-  const { name, message, code } = getErrorDetails(error);
-  const normalizedName = name.toLowerCase();
-  const normalizedCode = code?.toLowerCase();
-  const normalizedMessage = message.toLowerCase();
-
-  if (normalizedName === 'aborterror' || normalizedCode === 'abort_err') {
-    return false;
-  }
-
-  if (messageIndicatesAbort(normalizedMessage)) {
-    return false;
-  }
-
-  if (normalizedName === 'typeerror' || normalizedName === 'networkerror' || normalizedName === 'fetcherror') {
-    return true;
-  }
-
-  if (normalizedCode === 'etimedout' || normalizedCode === 'econnreset' || normalizedCode === 'ecanceled') {
-    return true;
-  }
-
-  if (!normalizedMessage) {
-    return false;
-  }
-
-  return (
-    normalizedMessage === 'error' ||
-    normalizedMessage.includes('network') ||
-    normalizedMessage.includes('timeout') ||
-    normalizedMessage.includes('temporarily') ||
-    normalizedMessage.includes('failed to fetch') ||
-    normalizedMessage.includes('load failed') ||
-    normalizedMessage.includes('connection') ||
-    normalizedMessage.includes('reset by peer')
-  );
 }
 
 interface JourneyTabConfig {
@@ -778,7 +658,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
           return true;
         } catch (error) {
-          if (isAbortError(error, signal)) {
+          if (isAbortError(error, { signal })) {
             return false;
           }
 
