@@ -20,6 +20,7 @@ export interface CustomNodeData {
   controlAttribute?: string;
   controlAttributes?: string[];
   transitions?: ProcessedNodeTransition[];
+  journeyVisibility?: 'highlight' | 'dimmed';
 }
 
 /**
