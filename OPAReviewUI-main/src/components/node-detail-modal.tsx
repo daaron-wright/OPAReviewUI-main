@@ -91,7 +91,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
 • يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الزمنية والنتائج
 
-المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
+المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غس�� الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
     },
     {
@@ -514,12 +514,73 @@ export function NodeDetailModal({
   }, [node, setNodeReviewed, onClose]);
 
   const brdReferences = useMemo(() => getMockBRDReferences(), []);
+  const regoRuleMap = useMemo(() => {
+    const map = new Map<string, RegoRule>();
+    regoRules.forEach((rule) => map.set(rule.id, rule));
+    return map;
+  }, [regoRules]);
 
   if (!node) return null;
 
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
+
+  const nodeContextTokens = useMemo(() => {
+    const tokens = new Set<string>();
+
+    const addValue = (value?: string | null) => {
+      if (!value) return;
+      const normalized = value.trim().toLowerCase();
+      if (!normalized) return;
+      tokens.add(normalized);
+      normalized
+        .split(/[^a-z0-9]+/g)
+        .filter(Boolean)
+        .forEach((part) => tokens.add(part));
+    };
+
+    controlAttributes.forEach(addValue);
+    const functions = node.metadata?.functions ?? [];
+    functions.forEach(addValue);
+    transitions.forEach((transition) => {
+      addValue(transition.controlAttribute);
+      addValue(transition.controlAttributeValue);
+      addValue(transition.condition);
+      addValue(transition.target);
+    });
+    addValue(node.label);
+    addValue(node.id);
+    addValue(node.description);
+
+    return Array.from(tokens);
+  }, [controlAttributes, node.description, node.id, node.label, node.metadata?.functions, transitions]);
+
+  const relevantBrdSections = useMemo(() => {
+    const tokenSet = new Set(nodeContextTokens);
+
+    return brdReferences.sections.filter((section) => {
+      if (!section.ruleId) {
+        return false;
+      }
+      const linkedRule = regoRuleMap.get(section.ruleId);
+      if (!linkedRule) {
+        return false;
+      }
+
+      const matchesNodeId = linkedRule.relatedNodeIds?.some((id) => id === node.id);
+      const matchesAttribute = linkedRule.relatedAttributes?.some((attr) => tokenSet.has(attr.toLowerCase()));
+      const matchesKeyword = linkedRule.keywords?.some((keyword) => {
+        const normalizedKeyword = keyword.toLowerCase();
+        return nodeContextTokens.some((token) => token.includes(normalizedKeyword));
+      });
+
+      return Boolean(matchesNodeId || matchesAttribute || matchesKeyword);
+    });
+  }, [brdReferences, node.id, nodeContextTokens, regoRuleMap]);
+
+  const sectionsToDisplay = relevantBrdSections.length > 0 ? relevantBrdSections : brdReferences.sections;
+  const usingFallbackSections = relevantBrdSections.length === 0;
   const isSplitView = viewMode === 'split';
   const contentLayoutClasses = clsx(
     'grid flex-1 min-h-0 overflow-hidden',
