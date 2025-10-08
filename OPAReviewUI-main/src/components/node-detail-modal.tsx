@@ -720,7 +720,7 @@ export function NodeDetailModal({
                   ? 'عرض قواعد السياسة'
                   : 'Policy rules view'
                 : language === 'ar'
-                  ? 'وضع النظرة العامة'
+                  ? 'وضع النظرة العا��ة'
                   : 'Overview mode'}
             </span>
 
@@ -934,77 +934,72 @@ export function NodeDetailModal({
                     </svg>
                   </span>
                   <h3 className="text-sm font-semibold text-slate-900">
-                    {language === 'ar' ? 'وثيقة متطلبات ال��عمال' : 'Business Requirements Document'}
+                    {language === 'ar' ? 'المقاطع ذات الصلة' : 'Relevant Chunks'}
                   </h3>
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                  {language === 'ar' ? 'الإصدار' : 'Version'} {brdReferences.documentVersion} ���
-                  {language === 'ar' ? ' آخر تحديث: ' : ' Last Updated: '} {brdReferences.lastUpdated}
+                  {language === 'ar' ? 'من آلة الحالة' : 'From State Machine JSON'}
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="mb-3 text-sm font-semibold text-slate-700">
-                  {language === 'ar' ? 'الأقسام ذات الصلة' : 'Relevant Sections'}
+                  {language === 'ar' ? 'المحتوى' : 'Content'}
                 </h4>
                 <div className="space-y-2">
-                  {usingFallbackSections && (
+                  {!hasRelevantChunks && (
                     <p className="text-xs text-slate-500">
                       {language === 'ar'
-                        ? 'لا توجد أقسام مباشرة مرتبطة بهذه العقدة. يتم عرض المراجع العام�� للوثيقة.'
-                        : 'No direct BRD sections matched this node. Showing general document references.'}
+                        ? 'لا توجد مقاطع متاحة لهذه العقدة.'
+                        : 'No relevant chunks available for this node.'}
                     </p>
                   )}
 
-                  {sectionsToDisplay.map((ref) => {
-                    const linkedRule = ref.ruleId ? regoRuleMap.get(ref.ruleId) : undefined;
-                    const isExpanded = expandedBRDSection === ref.id;
+                  {localizedRelevantChunks.map((chunk, idx) => {
+                    const chunkId = chunk.referenceId || `chunk_${idx}`;
+                    const isExpanded = expandedBRDSection === chunkId;
 
                     return (
                       <div
-                        key={ref.id}
+                        key={chunkId}
                         className={`overflow-hidden rounded-2xl border border-[#d8e4df] bg-white/95 shadow-[0_16px_32px_-28px_rgba(11,64,55,0.24)] transition ${
                           isExpanded ? 'ring-2 ring-[#0f766e]/25' : ''
                         }`}
                       >
                         <button
                           onClick={() => {
-                            const newExpanded = isExpanded ? null : ref.id;
-                            setExpandedBRDSection(newExpanded);
-
-                            if (newExpanded && linkedRule) {
-                              setExpandedRule(linkedRule.id);
-                            }
-
-                            if (!newExpanded && linkedRule && expandedRule === linkedRule.id) {
-                              setExpandedRule(null);
-                            }
+                            setExpandedBRDSection(isExpanded ? null : chunkId);
                           }}
                           className="w-full px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="mb-1 flex items-center gap-2">
-                                <span className="rounded-full bg-[#e7f2ff] px-2 py-0.5 text-xs font-semibold text-[#0f6fc4]">
-                                  {language === 'ar' ? 'صفحة' : 'Page'} {ref.page}
-                                </span>
-                                <span className="text-xs font-semibold text-slate-600">
-                                  {language === 'ar' ? 'القسم' : 'Section'} {ref.section}
-                                </span>
-                                {isExpanded && linkedRule && expandedRule === linkedRule.id && (
-                                  <span className="inline-flex items-center gap-1 rounded bg-gradient-to-r from-indigo-500 to-purple-500 px-1.5 py-0.5 text-xs font-bold text-white animate-pulse">
-                                    <Icon name="link" className="h-3 w-3 text-white" />
-                                    Synced
+                                {chunk.referenceId && (
+                                  <span className="rounded-full bg-[#e7f2ff] px-2 py-0.5 text-xs font-semibold text-[#0f6fc4]">
+                                    {chunk.referenceId}
+                                  </span>
+                                )}
+                                {chunk.section && (
+                                  <span className="text-xs font-semibold text-slate-600">
+                                    {language === 'ar' ? 'القسم' : 'Section'}: {chunk.section}
+                                  </span>
+                                )}
+                                {chunk.tags && chunk.tags.length > 0 && (
+                                  <span className="inline-flex items-center gap-1 rounded bg-gradient-to-r from-indigo-500 to-purple-500 px-1.5 py-0.5 text-xs font-bold text-white">
+                                    {chunk.tags[0]}
                                   </span>
                                 )}
                               </div>
-                              <h5 className="text-sm font-semibold text-slate-900">
-                                {language === 'ar' ? ref.titleAr : ref.title}
+                              <h5 className="text-sm font-semibold text-slate-900 line-clamp-2">
+                                {chunk.text.substring(0, 100)}{chunk.text.length > 100 ? '...' : ''}
                               </h5>
-                              <div className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
-                                <Icon name="location" className="h-3.5 w-3.5 text-slate-400" />
-                                <span>{language === 'ar' ? ref.locationAr : ref.location}</span>
-                              </div>
+                              {chunk.source && (
+                                <div className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
+                                  <Icon name="location" className="h-3.5 w-3.5 text-slate-400" />
+                                  <span>{chunk.source}</span>
+                                </div>
+                              )}
                             </div>
                             <svg
                               className={`h-4 w-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
@@ -1022,7 +1017,7 @@ export function NodeDetailModal({
                             <div className="mt-3 rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-3">
                               <div className="prose prose-sm max-w-none text-slate-600">
                                 <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed">
-                                  {language === 'ar' ? ref.contentAr : ref.content}
+                                  {chunk.text}
                                 </pre>
                               </div>
                             </div>
