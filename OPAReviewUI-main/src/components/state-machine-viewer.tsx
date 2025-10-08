@@ -1400,14 +1400,10 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
           <p className="text-xs font-medium text-slate-500">
             Upload a BRD policy to unlock walkthrough reviews and publishing features.
           </p>
-          <button
-            type="button"
-            onClick={handleOverlayUploadClick}
-            className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.45)] transition hover:bg-[#0c5f59]"
-          >
-            <Icon name="arrowUp" className="h-4 w-4" />
-            Upload BRD
-          </button>
+          <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-1.5 text-xs font-semibold text-slate-600 shadow-[0_14px_28px_-20px_rgba(15,118,110,0.25)]">
+            <Icon name="pause" className="h-4 w-4 text-[#0f766e]" />
+            Awaiting policy document
+          </div>
         </div>
       )}
     </div>
@@ -1558,14 +1554,10 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                 Reset view
               </button>
               {!policyDocument ? (
-                <button
-                  type="button"
-                  onClick={handleOverlayUploadClick}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
-                >
-                  <Icon name="arrowUp" className="h-4 w-4" />
-                  Upload BRD
-                </button>
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-1.5 text-xs font-semibold text-slate-500">
+                  <Icon name="pause" className="h-4 w-4 text-[#0f766e]" />
+                  Awaiting policy document
+                </span>
               ) : (
                 <button
                   type="button"
