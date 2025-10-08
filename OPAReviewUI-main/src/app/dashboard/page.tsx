@@ -227,14 +227,11 @@ export default function ConflictDashboardPage(): JSX.Element {
         </div>
       </div>
 
-      {selectedConflict && (
+      {selectedConflict && isDetailModalOpen && (
         <ConflictDetailModal
           conflict={selectedConflict}
           workflow={conflictWorkflow}
-          onClose={() => {
-            setSelectedConflict(null);
-            setConflictWorkflow(null);
-          }}
+          onClose={() => setIsDetailModalOpen(false)}
           onUpdate={handleConflictUpdate}
         />
       )}
