@@ -1409,13 +1409,13 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       step4Status = 'active';
       step4Description =
         totalStates > 0
-          ? `Walkthrough in progress �� ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
+          ? `Walkthrough in progress 📊 ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
           : 'Walkthrough in progress…';
     } else if (walkthroughInProgress) {
       step4Status = 'active';
       step4Description =
         totalStates > 0
-          ? `Resume walkthrough ��� ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
+          ? `Resume walkthrough ▶️ ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
           : 'Resume walkthrough to continue reviewing states';
     } else {
       step4Status = 'active';
