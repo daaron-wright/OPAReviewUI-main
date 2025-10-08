@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -17,7 +19,10 @@ import { useReview } from '@/context/review-context';
 import {
   ProcessedNode,
   ProcessedStateMachine,
+  processStateMachine,
 } from '@/domain/state-machine/processor';
+import type { StateMachine } from '@/domain/state-machine/types';
+import realBeneficiaryStateMachineFile from '../../data/real_beneficiary_state_machine.json';
 import {
   JourneyTimeline,
   TimelineNodeItem,
@@ -25,12 +30,19 @@ import {
 import { JourneySummaryPanel } from './state-machine/journey-summary-panel';
 import type { JourneyProcessStep, JourneyProcessStepStatus } from './state-machine/journey-process-status';
 
-interface StateMachineViewerProps {
-  stateMachine: ProcessedStateMachine;
-  rawStates?: Record<string, unknown>;
+interface StateMachineFile {
+  readonly stateMachine: StateMachine;
 }
 
-export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): JSX.Element {
+const defaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
+  (realBeneficiaryStateMachineFile as StateMachineFile).stateMachine
+);
+
+interface StateMachineViewerProps {
+  readonly stateMachine?: ProcessedStateMachine;
+}
+
+export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine }: StateMachineViewerProps = {}): JSX.Element {
   const router = useRouter();
 
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
