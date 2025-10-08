@@ -80,7 +80,7 @@
           },
           {
             "language": "ar",
-            "text": "يفصل من��ق التفرع بين التسجيل الجديد، وتنشيط الاسم التجاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
+            "text": "يفصل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم التجاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
             "reference_id": "brd_table_3",
             "tags": [
               "journey",
@@ -613,6 +613,29 @@
       "routine3_eligibility_check": {
         "type": "process",
         "description": "Check eligibility for existing license",
+        "journey_paths": [
+          "update_compliance"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Validates compliance prerequisites—outstanding filings, sanctions, and audit triggers—per BRD 7.1 \"License Maintenance Checks\".",
+            "reference_id": "brd_section_7_1",
+            "tags": [
+              "eligibility",
+              "compliance"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يتحقق من متطلبات الامتثال مثل الإقرارات المتأخرة، والعقوبات، ومحفزات التدقيق وفق الفقرة 7.1 «فحوصات صيانة الرخصة».",
+            "reference_id": "brd_section_7_1",
+            "tags": [
+              "eligibility",
+              "compliance"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "eligibility_check == true",
