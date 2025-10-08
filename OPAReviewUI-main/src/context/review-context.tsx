@@ -1,4 +1,4 @@
-/**
+/*
  * Review workflow context for tracking node review status
  * Because Master Jedi wants a proper walkthrough experience
  */
@@ -99,7 +99,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   const documentInfoControllerRef = useRef<AbortController | null>(null);
 
   const setNodeReviewed = useCallback((nodeId: string, approved: boolean, notes?: string) => {
-    setReviewStatus(prev => ({
+    setReviewStatus((prev) => ({
       ...prev,
       [nodeId]: {
         nodeId,
@@ -107,49 +107,50 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
         approved,
         notes,
         reviewedAt: new Date(),
-        reviewedBy: 'Master Jedi Barney' // Would come from auth in real app
-      }
+        reviewedBy: 'Master Jedi Barney', // Would come from auth in real app
+      },
     }));
   }, []);
-  
-  const isNodeReviewed = useCallback((nodeId: string) => {
-    return reviewStatus[nodeId]?.reviewed || false;
-  }, [reviewStatus]);
-  
-  const isNodeApproved = useCallback((nodeId: string) => {
-    return reviewStatus[nodeId]?.approved || false;
-  }, [reviewStatus]);
-  
-  const getReviewedCount = useCallback(() => {
-    return Object.values(reviewStatus).filter(s => s.reviewed).length;
-  }, [reviewStatus]);
-  
-  const getTotalNodes = useCallback(() => {
-    return nodeSequence.length;
-  }, [nodeSequence]);
-  
+
+  const isNodeReviewed = useCallback(
+    (nodeId: string) => reviewStatus[nodeId]?.reviewed || false,
+    [reviewStatus]
+  );
+
+  const isNodeApproved = useCallback(
+    (nodeId: string) => reviewStatus[nodeId]?.approved || false,
+    [reviewStatus]
+  );
+
+  const getReviewedCount = useCallback(
+    () => Object.values(reviewStatus).filter((status) => status.reviewed).length,
+    [reviewStatus]
+  );
+
+  const getTotalNodes = useCallback(() => nodeSequence.length, [nodeSequence]);
+
   const resetReviews = useCallback(() => {
     setReviewStatus({});
     setCurrentNodeId(null);
     setIsWalkthroughMode(false);
     setIsWalkthroughPaused(false);
   }, []);
-  
+
   const approveAllNodes = useCallback(() => {
     const allApproved: Record<string, NodeReviewStatus> = {};
-    nodeSequence.forEach(nodeId => {
+    nodeSequence.forEach((nodeId) => {
       allApproved[nodeId] = {
         nodeId,
         reviewed: true,
         approved: true,
         notes: 'Bulk approved',
         reviewedAt: new Date(),
-        reviewedBy: 'Master Jedi Barney'
+        reviewedBy: 'Master Jedi Barney',
       };
     });
     setReviewStatus(allApproved);
   }, [nodeSequence]);
-  
+
   const startWalkthrough = useCallback(() => {
     setIsWalkthroughPaused(false);
     setIsWalkthroughMode(true);
@@ -163,7 +164,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     setCurrentNodeId(null);
     setIsWalkthroughPaused(false);
   }, []);
-  
+
   const setCurrentNode = useCallback((nodeId: string | null) => {
     setCurrentNodeId(nodeId);
   }, []);
@@ -181,7 +182,10 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const uploadPolicyDocument = useCallback((file: File): UploadedPolicyDocument | null => {
-    if (!file) return null;
+    if (!file) {
+      return null;
+    }
+
     const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
     if (!isPdf) {
       return null;
@@ -224,40 +228,45 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   }, [policyDocument]);
 
   const nextNode = useCallback(() => {
-    if (!currentNodeId || nodeSequence.length === 0) return;
-    
+    if (!currentNodeId || nodeSequence.length === 0) {
+      return;
+    }
+
     const currentIndex = nodeSequence.indexOf(currentNodeId);
     if (currentIndex < nodeSequence.length - 1) {
       setCurrentNodeId(nodeSequence[currentIndex + 1]);
     }
   }, [currentNodeId, nodeSequence]);
-  
+
   const previousNode = useCallback(() => {
-    if (!currentNodeId || nodeSequence.length === 0) return;
-    
+    if (!currentNodeId || nodeSequence.length === 0) {
+      return;
+    }
+
     const currentIndex = nodeSequence.indexOf(currentNodeId);
     if (currentIndex > 0) {
       setCurrentNodeId(nodeSequence[currentIndex - 1]);
     }
   }, [currentNodeId, nodeSequence]);
-  
+
   const canPublish = useCallback(() => {
-    // All nodes must be reviewed and approved
-    if (nodeSequence.length === 0) return false;
-    
-    return nodeSequence.every(nodeId => {
+    if (nodeSequence.length === 0) {
+      return false;
+    }
+
+    return nodeSequence.every((nodeId) => {
       const status = reviewStatus[nodeId];
       return status?.reviewed && status?.approved;
     });
   }, [reviewStatus, nodeSequence]);
-  
+
   const getPublishStats = useCallback(() => {
-    const reviewed = Object.values(reviewStatus).filter(s => s.reviewed);
+    const reviewed = Object.values(reviewStatus).filter((status) => status.reviewed);
     return {
       total: nodeSequence.length,
       reviewed: reviewed.length,
-      approved: reviewed.filter(s => s.approved).length,
-      rejected: reviewed.filter(s => !s.approved).length
+      approved: reviewed.filter((status) => status.approved).length,
+      rejected: reviewed.filter((status) => !status.approved).length,
     };
   }, [reviewStatus, nodeSequence]);
 
@@ -390,19 +399,15 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     documentInfo,
     isDocumentInfoLoading,
     documentInfoError,
-    refreshDocumentInfo
+    refreshDocumentInfo,
   };
-  
-  return (
-    <ReviewContext.Provider value={value}>
-      {children}
-    </ReviewContext.Provider>
-  );
+
+  return <ReviewContext.Provider value={value}>{children}</ReviewContext.Provider>;
 }
 
-export function useReview() {
+export function useReview(): ReviewContextType {
   const context = useContext(ReviewContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useReview must be used within a ReviewProvider');
   }
   return context;
