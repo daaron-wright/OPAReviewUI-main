@@ -271,45 +271,13 @@ interface WorkflowTabProps {
 function WorkflowTab({ workflow }: WorkflowTabProps): JSX.Element {
   if (!workflow) {
     return (
-      <div className="text-center py-12">
-        <div className="text-slate-400">No workflow data available</div>
+      <div className="py-12 text-center text-slate-400">
+        No workflow data available
       </div>
     );
   }
 
-  return (
-    <div className="space-y-6">
-      {/* Workflow Progress */}
-      <div className="rounded-2xl border border-[#dbe9e3] bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-semibold text-slate-900">Resolution Progress</h3>
-        <div className="space-y-4">
-          {workflow.steps.map((step, index) => (
-            <WorkflowStep key={step.id} step={step} isActive={step.id === workflow.currentStep.id} />
-          ))}
-        </div>
-      </div>
-
-      {/* Blockers */}
-      {workflow.blockers.length > 0 && (
-        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 shadow-sm">
-          <h3 className="mb-4 text-lg font-semibold text-rose-600">Active Blockers</h3>
-          <div className="space-y-3">
-            {workflow.blockers.map((blocker) => (
-              <div key={blocker.id} className="flex items-start gap-3">
-                <span className="mt-1 text-rose-500">⚠️</span>
-                <div>
-                  <div className="font-medium text-rose-700">{blocker.description}</div>
-                  <div className="text-sm text-rose-500">
-                    {blocker.type} • {blocker.severity} • Reported by {blocker.reportedBy}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  return <ConflictWorkflowTimeline workflow={workflow} />;
 }
 
 interface ResolutionTabProps {
