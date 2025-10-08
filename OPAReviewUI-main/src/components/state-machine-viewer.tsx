@@ -37,6 +37,20 @@ interface StateMachineFile {
 type JourneyTabId = string;
 
 const NEW_TRADE_NAME_JOURNEY_ID: JourneyTabId = 'new_trade_name';
+const NEW_TRADE_NAME_FOCUS_NODE_IDS = Object.freeze(
+  new Set([
+    'entry_point',
+    'customer_application_type_selection',
+    'routine1_digital_id_verification',
+    'routine1_eligibility_check',
+    'routine1_trade_name_check',
+    'routine1_collect_trade_name_data',
+    'routine1_exemption_check',
+    'routine1_collect_beneficiary_data',
+    'routine1_blacklist_precheck',
+    'routine1_submit_application',
+  ])
+);
 const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
 
 /*
@@ -561,38 +575,76 @@ function restrictStateMachineToJourney(
   const filtered = filterStateMachineForJourney(machine, targetJourney);
   const journeys = filtered.metadata.journeys?.filter((journey) => journey.id === journeyId);
 
-  if (journeys && journeys.length > 0) {
+  const withJourneyMetadata = (() => {
+    if (journeys && journeys.length > 0) {
+      return {
+        ...filtered,
+        metadata: {
+          ...filtered.metadata,
+          journeys,
+        },
+      };
+    }
+
+    if (filtered.metadata.journeys && filtered.metadata.journeys.length > 0) {
+      return filtered;
+    }
+
+    const fallbackJourney = Object.freeze({
+      id: journeyId,
+      label: targetJourney.label,
+      intent: targetJourney.label,
+      exampleScenario: undefined,
+      suggestedJourney: targetJourney.label,
+      description: targetJourney.description,
+      seedStates: Object.freeze(Array.from(targetJourney.seedStates)),
+      routinePrefixes: Object.freeze([] as string[]),
+      conditionKeywords: Object.freeze([] as string[]),
+      pathStates: Object.freeze(Array.from(targetJourney.pathStates)),
+    });
+
     return {
       ...filtered,
       metadata: {
         ...filtered.metadata,
-        journeys,
+        journeys: [fallbackJourney],
       },
     };
+  })();
+
+  if (journeyId === NEW_TRADE_NAME_JOURNEY_ID) {
+    return focusProcessedStateMachine(withJourneyMetadata, NEW_TRADE_NAME_FOCUS_NODE_IDS);
   }
 
-  if (filtered.metadata.journeys && filtered.metadata.journeys.length > 0) {
-    return filtered;
+  return withJourneyMetadata;
+}
+
+function focusProcessedStateMachine(
+  machine: ProcessedStateMachine,
+  allowedNodes: ReadonlySet<string>
+): ProcessedStateMachine {
+  if (machine.nodes.length === 0) {
+    return machine;
   }
 
-  const fallbackJourney = Object.freeze({
-    id: journeyId,
-    label: targetJourney.label,
-    intent: targetJourney.label,
-    exampleScenario: undefined,
-    suggestedJourney: targetJourney.label,
-    description: targetJourney.description,
-    seedStates: Object.freeze(Array.from(targetJourney.seedStates)),
-    routinePrefixes: Object.freeze([] as string[]),
-    conditionKeywords: Object.freeze([] as string[]),
-    pathStates: Object.freeze(Array.from(targetJourney.pathStates)),
-  });
+  const prioritized = machine.nodes.filter((node) => allowedNodes.has(node.id));
+
+  if (prioritized.length === 0) {
+    return machine;
+  }
+
+  const includedIds = new Set(prioritized.map((node) => node.id));
+  const edges = machine.edges.filter(
+    (edge) => includedIds.has(edge.source) && includedIds.has(edge.target)
+  );
 
   return {
-    ...filtered,
+    nodes: prioritized,
+    edges,
     metadata: {
-      ...filtered.metadata,
-      journeys: [fallbackJourney],
+      ...machine.metadata,
+      totalStates: prioritized.length,
+      totalTransitions: edges.length,
     },
   };
 }
