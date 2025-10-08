@@ -32,11 +32,8 @@ export function JourneyProcessStatusBar({ steps }: JourneyProcessStatusBarProps)
         ))}
       </div>
       <div className="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-        {steps.map((step, index) => (
+        {steps.map((step) => (
           <div key={`${step.id}-detail`} className="space-y-1">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">
-              Step {index + 1}
-            </div>
             <div className={clsx('text-sm font-semibold', getLabelClass(step.status))}>{step.label}</div>
             {step.description && (
               <p className="text-xs leading-relaxed text-slate-500">{step.description}</p>
