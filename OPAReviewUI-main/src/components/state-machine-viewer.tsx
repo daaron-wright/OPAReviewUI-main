@@ -525,7 +525,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         try {
           const response = await fetch(REMOTE_STATE_MACHINE_ENDPOINT, {
             cache: 'no-store',
-            signal,
+            ...(signal ? { signal } : {}),
           });
 
           if (!response.ok) {
