@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import { NextResponse } from 'next/server';
 
 const LOCAL_STATE_MACHINE_PATH = path.resolve(
   process.env.STATE_MACHINE_JSON_PATH ?? process.cwd(),
