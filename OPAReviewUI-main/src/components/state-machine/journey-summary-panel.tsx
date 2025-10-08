@@ -202,13 +202,13 @@ export function JourneySummaryPanel({
       </div>
 
       <div className="flex w-full xl:w-auto xl:flex-row">
-        <div className="pointer-events-none xl:fixed xl:right-6 xl:top-24 xl:z-40 xl:pointer-events-auto">
+        <div className="pointer-events-none xl:fixed xl:right-6 xl:top-24 xl:z-40 xl:pointer-events-auto xl:w-auto">
           <button
             type="button"
             onClick={onToggleOpen}
             aria-expanded={isOpen}
             aria-controls={panelId}
-            className="hidden items-center gap-3 rounded-full bg-[#0f766e] px-4 py-2 text-sm font-semibold text-white shadow-[0_20px_36px_-24px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e] xl:flex"
+            className="hidden max-w-[220px] items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-sm font-semibold text-white shadow-[0_20px_36px_-24px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e] xl:flex"
           >
             <svg
               className={clsx('h-5 w-5 transition-transform duration-300', isOpen ? 'rotate-180' : 'rotate-0')}
