@@ -10,6 +10,13 @@ import clsx from 'clsx';
 import { useReview } from '@/context/review-context';
 import { ProcessedNodeTransition } from '@/domain/state-machine/processor';
 
+export interface NodeActorSummary {
+  readonly id: string;
+  readonly label: string;
+  readonly summary?: string;
+  readonly confidence: number;
+}
+
 export interface CustomNodeData {
   label: string;
   type: string;
@@ -21,6 +28,7 @@ export interface CustomNodeData {
   controlAttributes?: string[];
   transitions?: ProcessedNodeTransition[];
   journeyVisibility?: 'highlight' | 'dimmed';
+  actors?: ReadonlyArray<NodeActorSummary>;
 }
 
 /**
@@ -36,6 +44,7 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
   const styles = getNodeStyles(data, isReviewed, isApproved, journeyVisibility);
   const controlAttributes = data.controlAttributes ?? (data.controlAttribute ? [data.controlAttribute] : []);
   const transitions = data.transitions ?? [];
+  const actors = data.actors ?? [];
 
   const badgeLabel = data.isInitial
     ? 'Initial state'
@@ -101,6 +110,51 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
         <p className={clsx('mt-3 text-xs leading-relaxed', isDimmed ? 'text-slate-400' : 'text-slate-500')}>
           {data.description}
         </p>
+
+        {actors.length > 0 && (
+          <div className="mt-3">
+            <p
+              className={clsx(
+                'text-[11px] font-semibold uppercase tracking-[0.16em]',
+                isDimmed ? 'text-slate-400/80' : 'text-slate-400'
+              )}
+            >
+              Primary actors
+            </p>
+            <div className="mt-1 flex flex-wrap gap-1.5">
+              {actors.slice(0, 3).map((actor) => (
+                <span
+                  key={actor.id}
+                  title={actor.summary}
+                  className={clsx(
+                    'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold',
+                    isDimmed
+                      ? 'border border-slate-200 bg-white text-slate-400'
+                      : 'border border-[#b7e6d8] bg-[#effaf6] text-[#0f766e]'
+                  )}
+                >
+                  <svg
+                    className={clsx('h-2.5 w-2.5 flex-shrink-0', isDimmed ? 'text-slate-300' : 'text-[#0f766e]')}
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.3}
+                    aria-hidden
+                  >
+                    <circle cx="6" cy="4" r="2.25" />
+                    <path d="M2.5 10c.8-1.6 2.1-2.5 3.5-2.5S8.7 8.4 9.5 10" strokeLinecap="round" />
+                  </svg>
+                  <span>{actor.label}</span>
+                </span>
+              ))}
+              {actors.length > 3 && (
+                <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+                  +{actors.length - 3} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
 
         {controlAttributes.length > 0 && (
           <div className="mt-3">
