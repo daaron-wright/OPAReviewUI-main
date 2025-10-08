@@ -1059,7 +1059,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
               Journeys
             </span>
             <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
-              {JOURNEY_TABS.map((tab) => {
+              {journeyTabs.map((tab) => {
                 const isActive = tab.id === selectedJourney;
                 return (
                   <button
@@ -1154,7 +1154,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                   Journeys
                 </span>
                 <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
-                  {JOURNEY_TABS.map((tab) => {
+                  {journeyTabs.map((tab) => {
                     const isActive = tab.id === selectedJourney;
                     return (
                       <button
