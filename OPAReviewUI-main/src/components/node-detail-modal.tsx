@@ -128,7 +128,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال ��سائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��س��ن السيطرة من خلال ��سائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
@@ -650,7 +650,7 @@ export function NodeDetailModal({
 
       return Boolean(matchesNodeId || matchesAttribute || matchesKeyword);
     });
-  }, [brdReferences, node.id, nodeContextTokens, regoRuleMap]);
+  }, [brdReferences, node, nodeContextTokens, regoRuleMap]);
 
   const sectionsToDisplay = relevantBrdSections.length > 0 ? relevantBrdSections : brdReferences.sections;
   const usingFallbackSections = relevantBrdSections.length === 0;
@@ -1073,7 +1073,7 @@ export function NodeDetailModal({
                   {usingFallbackSections && (
                     <p className="text-xs text-slate-500">
                       {language === 'ar'
-                        ? 'لا توجد أقسام مباشرة مرتبطة بهذه العقدة. يتم عرض المراجع العامة للوثيقة.'
+                        ? 'لا توجد أقسام مباشرة مرتبطة بهذه العقدة. يتم عرض المراجع العام�� للوثيقة.'
                         : 'No direct BRD sections matched this node. Showing general document references.'}
                     </p>
                   )}
