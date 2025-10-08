@@ -81,6 +81,13 @@ export function JourneySummaryPanel({
   const functions = item?.node.metadata.functions ?? [];
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const hasDocument = Boolean(policyDocument);
+  const pendingCount = Math.max(0, progress.reviewed - progress.approved - progress.rejected);
+  const journeyBreakdown = useMemo(
+    () => journeyTotals.filter((journey) => journey.total > 0),
+    [journeyTotals]
+  );
+
   const handleUploadClick = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
