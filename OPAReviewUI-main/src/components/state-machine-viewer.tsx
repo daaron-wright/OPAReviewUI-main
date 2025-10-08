@@ -1332,7 +1332,34 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     setIsGraphExpanded(false);
   }, []);
 
+  const handleGraphInit = useCallback(
+    (instance: ReactFlowInstance) => {
+      setReactFlowInstance(instance);
+      if (lastViewportRef.current) {
+        instance.setViewport(lastViewportRef.current);
+      } else {
+        shouldAutoFitRef.current = true;
+      }
+    },
+    [setReactFlowInstance]
+  );
+
+  const handleViewportMoveStart = useCallback(() => {
+    shouldAutoFitRef.current = false;
+  }, []);
+
+  const handleViewportMove = useCallback((_: unknown, viewport: Viewport) => {
+    shouldAutoFitRef.current = false;
+    lastViewportRef.current = viewport;
+  }, []);
+
+  const handleViewportMoveEnd = useCallback((_: unknown, viewport: Viewport) => {
+    shouldAutoFitRef.current = false;
+    lastViewportRef.current = viewport;
+  }, []);
+
   const handleFocusFit = useCallback(() => {
+    shouldAutoFitRef.current = false;
     scheduleFitView({ padding: 0.18 });
   }, [scheduleFitView]);
 
