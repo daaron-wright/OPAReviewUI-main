@@ -78,7 +78,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المق��ولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات ��لتحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -115,9 +115,9 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
-• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة ��التناسب)
+• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وس��طة (محسوبة بالتناسب)
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
-• اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
+• اعتبار خاص لهياكل الأمانة وت��تيبات المرشحين
 
 مثال ��لى الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
@@ -782,73 +782,81 @@ export function NodeDetailModal({
                   {language === 'ar' ? 'الأقسام ذات الصلة' : 'Relevant Sections'}
                 </h4>
                 <div className="space-y-2">
-                  {brdReferences.sections.map((ref: any, idx: number) => (
-                    <div
-                      key={idx}
-                      className={`overflow-hidden rounded-2xl border border-[#d8e4df] bg-white/95 shadow-[0_16px_32px_-28px_rgba(11,64,55,0.24)] transition ${
-                        expandedBRDSection === idx ? 'ring-2 ring-[#0f766e]/25' : ''
-                      }`}
-                    >
-                      <button
-                        onClick={() => {
-                          const newExpanded = expandedBRDSection === idx ? null : idx;
-                          setExpandedBRDSection(newExpanded);
-                          if (newExpanded !== null && regoRules[idx]) {
-                            setExpandedRule(regoRules[idx].id);
-                          } else if (newExpanded === null) {
-                            setExpandedRule(null);
-                          }
-                        }}
-                        className="w-full px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
+                  {brdReferences.sections.map((ref) => {
+                    const linkedRule = ref.ruleId ? regoRules.find((rule) => rule.id === ref.ruleId) : undefined;
+                    const isExpanded = expandedBRDSection === ref.id;
+
+                    return (
+                      <div
+                        key={ref.id}
+                        className={`overflow-hidden rounded-2xl border border-[#d8e4df] bg-white/95 shadow-[0_16px_32px_-28px_rgba(11,64,55,0.24)] transition ${
+                          isExpanded ? 'ring-2 ring-[#0f766e]/25' : ''
+                        }`}
                       >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="mb-1 flex items-center gap-2">
-                              <span className="rounded-full bg-[#e7f2ff] px-2 py-0.5 text-xs font-semibold text-[#0f6fc4]">
-                                {language === 'ar' ? 'صفحة' : 'Page'} {ref.page}
-                              </span>
-                              <span className="text-xs font-semibold text-slate-600">
-                                {language === 'ar' ? 'القسم' : 'Section'} {ref.section}
-                              </span>
-                              {expandedBRDSection === idx && expandedRule === regoRules[idx]?.id && (
-                                <span className="inline-flex items-center gap-1 rounded bg-gradient-to-r from-indigo-500 to-purple-500 px-1.5 py-0.5 text-xs font-bold text-white animate-pulse">
-                                  <Icon name="link" className="h-3 w-3 text-white" />
-                                  Synced
+                        <button
+                          onClick={() => {
+                            const newExpanded = isExpanded ? null : ref.id;
+                            setExpandedBRDSection(newExpanded);
+
+                            if (newExpanded && linkedRule) {
+                              setExpandedRule(linkedRule.id);
+                            }
+
+                            if (!newExpanded && linkedRule && expandedRule === linkedRule.id) {
+                              setExpandedRule(null);
+                            }
+                          }}
+                          className="w-full px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="mb-1 flex items-center gap-2">
+                                <span className="rounded-full bg-[#e7f2ff] px-2 py-0.5 text-xs font-semibold text-[#0f6fc4]">
+                                  {language === 'ar' ? 'صفحة' : 'Page'} {ref.page}
                                 </span>
-                              )}
+                                <span className="text-xs font-semibold text-slate-600">
+                                  {language === 'ar' ? 'القسم' : 'Section'} {ref.section}
+                                </span>
+                                {isExpanded && linkedRule && expandedRule === linkedRule.id && (
+                                  <span className="inline-flex items-center gap-1 rounded bg-gradient-to-r from-indigo-500 to-purple-500 px-1.5 py-0.5 text-xs font-bold text-white animate-pulse">
+                                    <Icon name="link" className="h-3 w-3 text-white" />
+                                    Synced
+                                  </span>
+                                )}
+                              </div>
+                              <h5 className="text-sm font-semibold text-slate-900">
+                                {language === 'ar' ? ref.titleAr : ref.title}
+                              </h5>
+                              <div className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
+                                <Icon name="location" className="h-3.5 w-3.5 text-slate-400" />
+                                <span>{language === 'ar' ? ref.locationAr : ref.location}</span>
+                              </div>
                             </div>
-                            <h5 className="text-sm font-semibold text-slate-900">
-                              {language === 'ar' ? ref.titleAr : ref.title}
-                            </h5>
-                            <div className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
-                              <Icon name="location" className="h-3.5 w-3.5 text-slate-400" />
-                              <span>{language === 'ar' ? ref.locationAr : ref.location}</span>
+                            <svg
+                              className={`h-4 w-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </button>
+
+                        {isExpanded && (
+                          <div className="animate-slide-up border-t border-[#d8e4df] px-3 pb-3">
+                            <div className="mt-3 rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-3">
+                              <div className="prose prose-sm max-w-none text-slate-600">
+                                <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed">
+                                  {language === 'ar' ? ref.contentAr : ref.content}
+                                </pre>
+                              </div>
                             </div>
                           </div>
-                          <svg
-                            className={`h-4 w-4 text-slate-400 transition-transform ${expandedBRDSection === idx ? 'rotate-90' : ''}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </div>
-                      </button>
-                      
-                      {expandedBRDSection === idx && (
-                        <div className="animate-slide-up border-t border-[#d8e4df] px-3 pb-3">
-                          <div className="mt-3 rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-3">
-                            <div className="prose prose-sm max-w-none text-slate-600">
-                              <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed">
-                                {language === 'ar' ? ref.contentAr : ref.content}
-                              </pre>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -1028,7 +1036,7 @@ export function NodeDetailModal({
                                         onClick={() => confirmRule(rule.id)}
                                         className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/30 hover:bg-[#e4f5f1]"
                                       >
-                                        {language === 'ar' ? 'تأكيد' : 'Mark as Confirmed'}
+                                        {language === 'ar' ? 'ت��كيد' : 'Mark as Confirmed'}
                                       </button>
                                     </div>
                                   )}
