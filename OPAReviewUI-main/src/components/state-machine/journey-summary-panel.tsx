@@ -626,13 +626,6 @@ export function JourneySummaryPanel({
                     <p className="mt-2 text-xs leading-relaxed text-slate-500">
                       Upload the BRD policy PDF to view journey coverage and publication readiness metrics.
                     </p>
-                    <button
-                      type="button"
-                      onClick={handleUploadClick}
-                      className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#0f766e] px-4 py-2 text-sm font-semibold text-[#0f766e] transition hover:bg-[#f0fdfa]"
-                    >
-                      Upload BRD
-                    </button>
                   </div>
                 ) : (
                   <>
