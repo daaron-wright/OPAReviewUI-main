@@ -88,7 +88,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
-• الملكية غير المباشرة: الأسهم المملوكة من خلا�� كيانات وسيطة (محسوبة بالتناسب)
+• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
@@ -583,12 +583,8 @@ export function NodeDetailModal({
             <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
               {viewMode === 'split'
                 ? language === 'ar'
-                  ? isPolicyRulesExpanded
-                    ? 'قواعد السياسة مفتوحة'
-                    : 'قواعد السياسة مطوية'
-                  : isPolicyRulesExpanded
-                    ? 'Policy rules expanded'
-                    : 'Policy rules collapsed'
+                  ? 'عرض قواعد السياسة'
+                  : 'Policy rules view'
                 : language === 'ar'
                   ? 'وضع النظرة العامة'
                   : 'Overview mode'}
@@ -597,8 +593,7 @@ export function NodeDetailModal({
             <button
               type="button"
               onClick={() => {
-                setViewMode('split');
-                setIsPolicyRulesExpanded(false);
+                setViewMode((prev) => (prev === 'split' ? 'overview' : 'split'));
               }}
               aria-pressed={viewMode === 'split'}
               className={clsx(
@@ -610,21 +605,22 @@ export function NodeDetailModal({
             >
               <span
                 className={clsx(
-                  'flex h-6 w-6 items-center justify-center rounded-full border text-[#0f766e] transition',
+                  'flex h-6 w-6 items-center justify-center rounded-full border transition',
                   viewMode === 'split'
                     ? 'border-white/40 bg-white/10 text-white'
-                    : 'border-[#dbe9e3] bg-white group-hover:border-[#c2d7cf]'
+                    : 'border-[#dbe9e3] bg-white text-[#0f766e] group-hover:border-[#c2d7cf]'
                 )}
               >
                 <svg
                   className={clsx(
-                    'h-3.5 w-3.5 translate-x-0 transform transition-transform',
-                    language === 'ar' ? 'rotate-180' : '',
+                    'h-3.5 w-3.5 transition-transform',
                     viewMode === 'split'
-                      ? ''
+                      ? language === 'ar'
+                        ? 'rotate-0'
+                        : 'rotate-180'
                       : language === 'ar'
-                        ? 'group-hover:-translate-x-0.5'
-                        : 'group-hover:translate-x-0.5'
+                        ? 'rotate-180'
+                        : 'rotate-0'
                   )}
                   viewBox="0 0 24 24"
                   fill="none"
@@ -634,7 +630,15 @@ export function NodeDetailModal({
                   <path d="M14 8l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              <span>{language === 'ar' ? 'عرض منقسم' : 'Split screen'}</span>
+              <span>
+                {viewMode === 'split'
+                  ? language === 'ar'
+                    ? 'إخفاء قواعد السياسة'
+                    : 'Hide Policy Rules'
+                  : language === 'ar'
+                    ? 'عرض قواعد السياسة'
+                    : 'View Policy Rules'}
+              </span>
             </button>
           </div>
         </div>
@@ -849,7 +853,7 @@ export function NodeDetailModal({
                   </svg>
                   {isPolicyRulesExpanded
                     ? language === 'ar'
-                      ? 'طي قواع�� السياس��'
+                      ? 'طي قواع�� السياسة'
                       : 'Collapse policy rules'
                     : language === 'ar'
                       ? 'توسيع قواعد السياسة'
