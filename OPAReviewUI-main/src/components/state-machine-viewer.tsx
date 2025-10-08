@@ -771,8 +771,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   }, [hasUploadedDocument]);
 
   const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
-  const transitionPanTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const detailOpenTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const transitionPanTimeoutRef = useRef<number | null>(null);
+  const detailOpenTimeoutRef = useRef<number | null>(null);
   const previousJourneyRef = useRef<JourneyTabId>(selectedJourney);
   const fitViewRafRef = useRef<number | null>(null);
   const shouldAutoFitRef = useRef(true);
