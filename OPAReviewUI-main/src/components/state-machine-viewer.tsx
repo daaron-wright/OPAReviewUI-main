@@ -676,7 +676,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
               <div className="flex items-center gap-3">
                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 <div>
-                  <div className="font-semibold">Publishing state machine���</div>
+                  <div className="font-semibold">Publishing state machine…</div>
                   <div className="text-xs opacity-90">
                     Deploying {stats.approved} approved states to production
                   </div>
@@ -1093,7 +1093,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
                 Journey map focus
               </span>
-              <h2 className="text-lg font-semibold leading-snug sm:text-xl">Abu Dhabi DED Beneficiary Graph</h2>
+              <h2 className="text-lg font-semibold leading-snug sm:text-xl">{selectedJourneyConfig.label} Journey</h2>
               <p className="text-xs text-slate-600">
                 Drag to pan, scroll to zoom, or use the controls. Press Esc or close to return.
               </p>
