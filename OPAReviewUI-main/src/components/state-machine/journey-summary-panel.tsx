@@ -202,24 +202,25 @@ export function JourneySummaryPanel({
       </div>
 
       <div className="flex w-full xl:w-auto xl:flex-row">
-        <div className="pointer-events-auto xl:fixed xl:right-6 xl:top-[calc(theme(spacing.24))] xl:z-30">
+        <div className="pointer-events-none xl:fixed xl:right-6 xl:top-24 xl:z-40 xl:pointer-events-auto">
           <button
             type="button"
             onClick={onToggleOpen}
             aria-expanded={isOpen}
             aria-controls={panelId}
-            className="hidden h-12 w-12 items-center justify-center rounded-full bg-[#0f766e] text-white shadow-[0_22px_42px_-28px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e] xl:flex"
+            className="hidden h-11 w-11 items-center justify-center rounded-full bg-[#0f766e] text-white shadow-[0_20px_36px_-24px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e] xl:flex"
           >
             <span className="sr-only">Toggle overview panel</span>
             <svg
-              className={clsx('h-5 w-5 transition-transform duration-300', isOpen ? 'rotate-45' : 'rotate-0')}
-              viewBox="0 0 20 20"
+              className={clsx('h-5 w-5 transition-transform duration-300', isOpen ? 'rotate-180' : 'rotate-0')}
+              viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth={1.6}
+              strokeWidth={1.5}
               aria-hidden
             >
-              <path d="M5 7.5h10M5 12.5h6" strokeLinecap="round" />
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 8h.01M11.4 10.5h1.2v5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>
@@ -227,19 +228,17 @@ export function JourneySummaryPanel({
         <div
           id={panelId}
           className={clsx(
-            'relative w-full overflow-hidden transition-all duration-500 ease-out xl:absolute xl:right-12 xl:top-28 xl:w-[min(90vw,420px)] xl:translate-y-0 xl:rounded-[32px] xl:shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)]',
-            isOpen ? 'xl:pointer-events-auto xl:opacity-100' : 'pointer-events-none opacity-0'
+            'relative w-full overflow-hidden transition-all duration-400 ease-out xl:fixed xl:right-6 xl:top-24 xl:z-30 xl:w-[min(90vw,420px)]',
+            isOpen
+              ? 'max-h-[3200px] opacity-100 pointer-events-auto xl:translate-y-0'
+              : 'max-h-0 opacity-0 pointer-events-none xl:translate-y-2'
           )}
-          style={{
-            width: isOpen ? '100%' : '0px',
-            maxWidth: isOpen ? '420px' : '0px',
-          }}
           aria-hidden={!isOpen}
         >
           <div
             className={clsx(
-              'flex h-full flex-col overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)] transition-opacity duration-300',
-              isOpen ? 'opacity-100' : 'opacity-0'
+              'flex h-full flex-col overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)] transition-transform duration-300 ease-out',
+              isOpen ? 'scale-100' : 'scale-95'
             )}
           >
             <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 pt-6 pb-5">
