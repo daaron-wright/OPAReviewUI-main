@@ -74,6 +74,7 @@ export default function ConflictDashboardPage(): JSX.Element {
 
   const handleConflictSelect = async (conflict: PolicyConflict): Promise<void> => {
     setSelectedConflict(conflict);
+    setView('workflow');
     setConflictWorkflow(null);
     setIsWorkflowLoading(true);
     workflowRequestIdRef.current = conflict.id;
