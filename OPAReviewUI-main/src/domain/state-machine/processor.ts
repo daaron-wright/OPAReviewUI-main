@@ -354,11 +354,11 @@ function normalizeJourneyPaths(
 
   if (collected.size === 0 && journeys.length === 0) {
     if (id.startsWith('routine1_')) {
-      collected.add('new_registration');
+      collected.add('new_trade_name');
     } else if (id.startsWith('routine2_')) {
-      collected.add('fast_track');
+      collected.add('existing_trade_name');
     } else if (id.startsWith('routine3_')) {
-      collected.add('update_compliance');
+      collected.add('existing_trade_license');
     }
   }
 
