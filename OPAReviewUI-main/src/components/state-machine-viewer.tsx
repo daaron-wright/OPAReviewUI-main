@@ -42,6 +42,11 @@ const defaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
 );
 
 const REMOTE_STATE_MACHINE_ENDPOINT = '/data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json';
+const REMOTE_STATE_MACHINE_MAX_ATTEMPTS = 3;
+const REMOTE_STATE_MACHINE_RETRY_DELAYS_MS = [0, 400, 1200];
+const RETRYABLE_HTTP_STATUS_CODES = new Set([408, 409, 425, 429, 500, 502, 503, 504, 507, 509]);
+
+type FetchError = Error & { status?: number };
 
 type JourneyTabId = string;
 
