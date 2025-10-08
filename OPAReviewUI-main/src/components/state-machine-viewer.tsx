@@ -391,6 +391,10 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     [handlePolicyDocumentSelected]
   );
 
+  const toggleSummaryOpen = useCallback(() => {
+    setIsSummaryOpen((previous) => !previous);
+  }, []);
+
   const handlePauseWalkthrough = useCallback(() => {
     clearWalkthroughTimers();
     setIsTransitioning(false);
