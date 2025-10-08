@@ -37,7 +37,6 @@ interface StateMachineFile {
 
 type JourneyTabId = string;
 
-const DEFAULT_JOURNEY_ID: JourneyTabId = 'new_trade_name';
 const DEFAULT_JOURNEY_PATHS: Readonly<Record<JourneyTabId, ReadonlyArray<string>>> = Object.freeze({
   new_trade_name: Object.freeze([
     'routine1_digital_id_verification',
