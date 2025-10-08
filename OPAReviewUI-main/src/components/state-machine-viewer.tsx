@@ -341,13 +341,16 @@ function deriveJourneyTabs(machine: ProcessedStateMachine): JourneyTabConfig[] {
   const journeys = machine.metadata.journeys ?? [];
 
   if (journeys.length > 0) {
-    return journeys.map((journey) => ({
-      id: journey.id,
-      label: journey.label ?? formatJourneyTitle(journey.id),
-      seedStates: journey.seedStates.length > 0 ? Array.from(journey.seedStates) : [],
-      pathStates: journey.pathStates.length > 0 ? Array.from(journey.pathStates) : [],
-      description: journey.description ?? journey.suggestedJourney,
-    }));
+    return journeys.map((journey) => {
+      const base = {
+        id: journey.id,
+        label: journey.label ?? formatJourneyTitle(journey.id),
+        seedStates: journey.seedStates.length > 0 ? Array.from(journey.seedStates) : [],
+        pathStates: journey.pathStates.length > 0 ? Array.from(journey.pathStates) : [],
+      };
+      const description = journey.description ?? journey.suggestedJourney;
+      return description !== undefined ? { ...base, description } : base;
+    });
   }
 
   return [
