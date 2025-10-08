@@ -239,7 +239,7 @@ export function ConflictWorkflowDetailPanel({
               onClick={onOpenModal}
               className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] px-4 py-2 text-sm font-semibold text-[#0f766e] transition hover:bg-[#f0fdfa]"
             >
-              <Icon name="expand" className="h-4 w-4" />
+              <Icon name="bolt" className="h-4 w-4" />
               Open detailed modal
             </button>
           )}
