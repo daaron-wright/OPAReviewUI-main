@@ -380,6 +380,10 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [clearWalkthroughTimers, endWalkthrough]);
 
   const initialNodes = useMemo(() => {
+    if (!hasUploadedDocument) {
+      return [];
+    }
+
     return stateMachine.nodes.map((node) => {
       const functions = node.metadata.functions ? [...node.metadata.functions] : undefined;
       const controlAttributes = node.metadata.controlAttributes
@@ -410,7 +414,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         data,
       };
     });
-  }, [journeyNodeIds, stateMachine.nodes]);
+  }, [hasUploadedDocument, journeyNodeIds, stateMachine.nodes]);
 
   const initialEdges = useMemo(() => {
     const initialId = stateMachine.nodes.find((n) => n.isInitial)?.id;
