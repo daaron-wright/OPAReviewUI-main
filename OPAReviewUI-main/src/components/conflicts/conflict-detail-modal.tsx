@@ -130,7 +130,7 @@ export function ConflictDetailModal({
         </div>
 
         {/* Navigation Tabs */}
-        <nav className="flex border-b border-[#dbe9e3] bg-[#f6fbf9]">
+        <nav className="flex border-b border-[#dbe9e3] bg-[#f6fbf9] px-6">
           {tabs.map((tab) => (
             <button
               key={tab.id}
