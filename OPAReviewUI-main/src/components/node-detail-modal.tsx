@@ -35,28 +35,14 @@ interface RegoRule {
   keywords?: string[];
 }
 
-interface BRDReferenceSection {
+interface DisplayChunk {
   id: string;
-  ruleId?: string;
-  page: number;
-  section: string;
-  title: string;
-  titleAr: string;
-  location: string;
-  locationAr: string;
-  content: string;
-  contentAr: string;
-  tags: string[];
-}
-
-interface BRDReferences {
-  documentVersion: string;
-  lastUpdated: string;
-  approvedBy: string;
-  approvedByAr: string;
-  sections: BRDReferenceSection[];
-  stakeholders: string[];
-  complianceFrameworks: string[];
+  language: string;
+  text: string;
+  referenceId?: string;
+  source?: string;
+  section?: string;
+  tags?: string[];
 }
 
 const BRD_REFERENCE_SOURCE: BRDReferences = {
@@ -89,7 +75,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 ��� يجب رفض ا��متقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون لل��يانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
-• يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية وا��نتائج
+• يجب على النظا�� تسجيل ج��يع مح��ولات التحقق مع الطوابع الز��نية وا��نتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
