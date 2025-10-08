@@ -640,7 +640,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
             return false;
           }
 
-          setStateMachine(processStateMachine(file.stateMachine));
+          const processed = processStateMachine(file.stateMachine);
+          const focused = restrictStateMachineToJourney(processed, NEW_TRADE_NAME_JOURNEY_ID);
+
+          setStateMachine(focused);
           remoteStateLoadedRef.current = true;
 
           if (!suppressToast) {
