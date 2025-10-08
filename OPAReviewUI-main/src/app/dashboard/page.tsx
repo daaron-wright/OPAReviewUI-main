@@ -206,7 +206,13 @@ export default function ConflictDashboardPage(): JSX.Element {
                           />
                         )}
 
-                        {!isWorkflowLoading && (!selectedConflict || !conflictWorkflow) && (
+                        {!isWorkflowLoading && selectedConflict && !conflictWorkflow && (
+                          <div className="flex min-h-[280px] items-center justify-center text-sm text-slate-500">
+                            Workflow details are not available for this conflict yet.
+                          </div>
+                        )}
+
+                        {!isWorkflowLoading && !selectedConflict && (
                           <div className="flex min-h-[280px] items-center justify-center text-sm text-slate-500">
                             Select a conflict to review its resolution workflow.
                           </div>
