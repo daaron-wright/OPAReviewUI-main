@@ -369,7 +369,63 @@ export function NodeDetailModal({
       autoClose: 3000,
     });
   }, []);
-  
+
+  const getWorkflowStatusLabel = useCallback(
+    (status: TestWorkflow['status']) => {
+      switch (status) {
+        case 'confirmed':
+          return language === 'ar' ? 'تم تأكيد حالة سير العمل' : 'Workflow marked confirmed';
+        case 'reviewing':
+          return language === 'ar' ? 'تم التعيين للمراجعة' : 'Workflow set to reviewing';
+        case 'rejected':
+          return language === 'ar' ? 'تم التعيين للمراجعة' : 'Workflow marked for revision';
+        default:
+          return language === 'ar' ? 'تمت إعادة الاختبار' : 'Workflow reset to testing';
+      }
+    },
+    [language]
+  );
+
+  const updateWorkflow = useCallback(
+    (ruleId: string, status: TestWorkflow['status']) => {
+      setTestWorkflows((prev) => ({
+        ...prev,
+        [ruleId]: { ruleId, status }
+      }));
+      toast.info(createToastContent('refresh', getWorkflowStatusLabel(status)), {
+        position: 'bottom-right',
+        autoClose: 2000,
+      });
+    },
+    [getWorkflowStatusLabel]
+  );
+
+  const approveRule = useCallback(
+    (ruleId: string) => {
+      setTestWorkflows((prev) => ({
+        ...prev,
+        [ruleId]: { ruleId, status: 'confirmed' }
+      }));
+      setTestResults((prev) => {
+        const existing = prev[ruleId];
+        return {
+          ...prev,
+          [ruleId]: {
+            ruleId,
+            status: 'pass',
+            actual: existing?.actual,
+            message: language === 'ar' ? 'تم اعتماد القاعدة' : 'Rule approved',
+          },
+        };
+      });
+      toast.success(createToastContent('checkCircle', language === 'ar' ? 'تم اعتماد القاعدة' : 'Rule approved successfully'), {
+        position: 'bottom-right',
+        autoClose: 2500,
+      });
+    },
+    [language]
+  );
+
   const openReworkChat = useCallback((rule: RegoRule) => {
     const testResult = testResults[rule.id];
     setChatContext({
@@ -1053,7 +1109,7 @@ export function NodeDetailModal({
                                         <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#fdecee]">
                                           <Icon name="xCircle" className="h-4 w-4 text-[#c22745]" />
                                         </span>
-                                        <span className="text-sm font-semibold">{language === 'ar' ? 'فشل الا��تبار' : 'Test failed'}</span>
+                                        <span className="text-sm font-semibold">{language === 'ar' ? 'فشل الا��تب��ر' : 'Test failed'}</span>
                                       </div>
                                       <pre className="overflow-x-auto rounded-2xl border border-[#f4c7cf] bg-[#fdecee] p-3 text-xs font-mono text-[#c22745]">
                                         <code>{testResults[rule.id]?.actual}</code>
