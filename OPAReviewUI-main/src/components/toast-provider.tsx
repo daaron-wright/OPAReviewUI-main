@@ -30,9 +30,6 @@ export function ToastProvider(): JSX.Element {
         boxShadow: '0 12px 24px rgba(15, 23, 42, 0.08)',
         fontFamily: 'Inter, system-ui, sans-serif',
       }}
-      progressStyle={{
-        background: '#0f766e',
-      }}
     />
   );
 }
