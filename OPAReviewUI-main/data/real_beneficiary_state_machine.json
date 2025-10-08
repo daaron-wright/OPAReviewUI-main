@@ -80,7 +80,7 @@
           },
           {
             "language": "ar",
-            "text": "يفصل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم ال��جاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
+            "text": "يفصل منطق التفرع ب��ن التسجيل الجديد، وتنشيط الاسم ال��جاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
             "reference_id": "brd_table_3",
             "tags": [
               "journey",
@@ -1565,12 +1565,12 @@
       },
     "journeys": [
       {
-        "id": "new_registration",
-        "label": "New Registration Flow",
-        "intent": "New License Registration",
-        "example_scenario": "First-time applicant",
-        "suggested_journey": "Path 1: New Registration Flow",
-        "description": "Guides first-time applicants through routine 1 from identity verification to submission.",
+        "id": "new_trade_name",
+        "label": "New Trade Name",
+        "intent": "Register a new trade name license",
+        "example_scenario": "First-time applicant establishing a new trade name",
+        "suggested_journey": "Path 1: New Trade Name",
+        "description": "Guides first-time applicants through routine 1 from identity verification to submission for a newly created trade name.",
         "seed_states": [
           "entry_point",
           "customer_application_type_selection",
@@ -1593,39 +1593,12 @@
         ]
       },
       {
-        "id": "update_compliance",
-        "label": "Update / Compliance Flow",
-        "intent": "Existing License Compliance Update",
-        "example_scenario": "Existing entity submitting beneficiary declaration",
-        "suggested_journey": "Path 2: Update / Compliance Flow",
-        "description": "Supports licensed entities refreshing declarations and compliance artifacts via routine 3.",
-        "seed_states": [
-          "entry_point",
-          "customer_application_type_selection",
-          "routine3_digital_id_verification"
-        ],
-        "routine_prefixes": [
-          "routine3_"
-        ],
-        "condition_keywords": [
-          "existing_license",
-          "compliance"
-        ],
-        "path_states": [
-          "routine3_digital_id_verification",
-          "routine3_eligibility_check",
-          "routine3_license_prompt",
-          "routine3_collect_beneficiary_data",
-          "routine3_submit_application"
-        ]
-      },
-      {
-        "id": "fast_track",
-        "label": "Fast-Track / Linked Trade Name Flow",
-        "intent": "Reserved Trade Name Activation",
-        "example_scenario": "Applicant with pre-approved trade name",
-        "suggested_journey": "Path 3: Fast-Track / Linked Trade Name Flow",
-        "description": "Fast-tracks applicants that already hold a reserved trade name through routine 2.",
+        "id": "existing_trade_name",
+        "label": "Existing Trade Name",
+        "intent": "Activate a reserved trade name",
+        "example_scenario": "Applicant with a pre-approved trade name",
+        "suggested_journey": "Path 2: Existing Trade Name",
+        "description": "Expedites applicants that already hold a reserved trade name through routine 2.",
         "seed_states": [
           "entry_point",
           "customer_application_type_selection",
@@ -1646,6 +1619,33 @@
           "routine2_exemption_check",
           "routine2_blacklist_precheck",
           "routine2_submit_application"
+        ]
+      },
+      {
+        "id": "existing_trade_license",
+        "label": "Existing Trade License",
+        "intent": "Update an existing license with beneficiary compliance",
+        "example_scenario": "Existing entity refreshing beneficiary declaration details",
+        "suggested_journey": "Path 3: Existing Trade License",
+        "description": "Supports licensed entities refreshing declarations and compliance artifacts via routine 3.",
+        "seed_states": [
+          "entry_point",
+          "customer_application_type_selection",
+          "routine3_digital_id_verification"
+        ],
+        "routine_prefixes": [
+          "routine3_"
+        ],
+        "condition_keywords": [
+          "existing_license",
+          "compliance"
+        ],
+        "path_states": [
+          "routine3_digital_id_verification",
+          "routine3_eligibility_check",
+          "routine3_license_prompt",
+          "routine3_collect_beneficiary_data",
+          "routine3_submit_application"
         ]
       }
     ]
