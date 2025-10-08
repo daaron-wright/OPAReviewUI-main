@@ -1,5 +1,4 @@
 import { clsx } from 'clsx';
-import type { ComponentProps } from 'react';
 
 type BaseIconProps = {
   className?: string;
