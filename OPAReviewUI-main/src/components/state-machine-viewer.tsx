@@ -570,7 +570,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
               attempt,
               REMOTE_STATE_MACHINE_RETRY_DELAYS_MS.length - 1
             );
-            await delay(REMOTE_STATE_MACHINE_RETRY_DELAYS_MS[delayIndex]);
+            await delay(REMOTE_STATE_MACHINE_RETRY_DELAYS_MS[delayIndex] ?? 0);
             continue;
           }
 
