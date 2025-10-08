@@ -495,6 +495,12 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   useEffect(() => () => clearWalkthroughTimers(), [clearWalkthroughTimers]);
 
   useEffect(() => {
+    if (!hasUploadedDocument) {
+      setFocusedNodeId(null);
+      previousJourneyRef.current = selectedJourney;
+      return;
+    }
+
     const hasJourneyChanged = previousJourneyRef.current !== selectedJourney;
     previousJourneyRef.current = selectedJourney;
 
@@ -506,7 +512,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     if (!focusedNodeId || (hasJourneyChanged && !journeyNodeIds.has(focusedNodeId))) {
       setFocusedNodeId(journeyNodes[0]?.id ?? null);
     }
-  }, [focusedNodeId, journeyNodeIds, journeyNodes, selectedJourney]);
+  }, [focusedNodeId, hasUploadedDocument, journeyNodeIds, journeyNodes, selectedJourney]);
 
   useEffect(() => {
     if (!focusedNodeId && nodeSequence.length > 0) {
