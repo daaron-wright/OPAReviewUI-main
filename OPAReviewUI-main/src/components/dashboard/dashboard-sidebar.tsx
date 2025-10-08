@@ -14,12 +14,12 @@ interface DashboardSidebarProps {
   readonly onViewChange: (view: 'overview' | 'policies' | 'compliance' | 'violations' | 'environments') => void;
 }
 
-export function DashboardSidebar({ 
-  categories, 
-  selectedCategory, 
+export function DashboardSidebar({
+  categories,
+  selectedCategory,
   onCategorySelect,
   selectedView,
-  onViewChange 
+  onViewChange: _onViewChange
 }: DashboardSidebarProps): JSX.Element {
   const quickActions = [
     { id: 'new-policy', label: 'New Policy Graph', icon: '➕', action: () => console.log('New policy') },
