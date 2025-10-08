@@ -1,13 +1,9 @@
-'use client';
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type {
   ConflictFilter,
   ConflictSeverity,
-  ConflictType,
   ConflictStatus,
 } from '@/domain/conflicts/types';
-import { Icon, IconName } from '../icon';
 
 interface ConflictFiltersProps {
   readonly activeFilter: ConflictFilter;
@@ -15,33 +11,39 @@ interface ConflictFiltersProps {
   readonly conflictCount: number;
 }
 
+interface FilterOption<T extends string> {
+  readonly label: string;
+  readonly value?: T;
+}
+
+const SEVERITY_OPTIONS: ReadonlyArray<FilterOption<ConflictSeverity>> = [
+  { label: 'All severities' },
+  { label: 'Critical', value: 'critical' },
+  { label: 'High', value: 'high' },
+  { label: 'Medium', value: 'medium' },
+  { label: 'Low', value: 'low' },
+];
+
+const STATUS_OPTIONS: ReadonlyArray<FilterOption<ConflictStatus>> = [
+  { label: 'All statuses' },
+  { label: 'Active', value: 'active' },
+  { label: 'Investigating', value: 'investigating' },
+  { label: 'Resolving', value: 'resolving' },
+  { label: 'Resolved', value: 'resolved' },
+  { label: 'Ignored', value: 'ignored' },
+  { label: 'False positive', value: 'false-positive' },
+];
+
 export function ConflictFilters({
   activeFilter,
   onFilterChange,
   conflictCount,
 }: ConflictFiltersProps): JSX.Element {
   const [searchTerm, setSearchTerm] = useState(activeFilter.searchTerm ?? '');
-  const [isPanelOpen, setIsPanelOpen] = useState(true);
 
-  const severityOptions: ConflictSeverity[] = ['critical', 'high', 'medium', 'low'];
-  const statusOptions: ConflictStatus[] = [
-    'active',
-    'investigating',
-    'resolving',
-    'resolved',
-    'ignored',
-    'false-positive',
-  ];
-  const typeOptions: ConflictType[] = [
-    'rule-contradiction',
-    'overlapping-conditions',
-    'circular-dependency',
-    'unreachable-rule',
-    'ambiguous-precedence',
-    'data-inconsistency',
-    'performance-conflict',
-    'compliance-violation',
-  ];
+  useEffect(() => {
+    setSearchTerm(activeFilter.searchTerm ?? '');
+  }, [activeFilter.searchTerm]);
 
   const updateFilter = (updates: Partial<ConflictFilter>): void => {
     onFilterChange({ ...activeFilter, ...updates });
@@ -52,278 +54,101 @@ export function ConflictFilters({
     onFilterChange({});
   };
 
-  const togglePanel = (): void => {
-    setIsPanelOpen((previous) => !previous);
-  };
-
-  const handleSearch = (): void => {
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
     updateFilter({ searchTerm: searchTerm.trim() || undefined });
   };
 
-  const toggleArrayFilter = <T extends string>(
-    key: keyof ConflictFilter,
-    value: T,
-    currentArray: T[] = [],
-  ): void => {
-    const newArray = currentArray.includes(value)
-      ? currentArray.filter((item) => item !== value)
-      : [...currentArray, value];
+  const handleSeverityChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    const value = event.target.value as ConflictSeverity | '';
+    updateFilter({
+      severity: value ? [value] : undefined,
+    });
+  };
 
-    updateFilter({ [key]: newArray.length > 0 ? newArray : undefined });
+  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    const value = event.target.value as ConflictStatus | '';
+    updateFilter({
+      status: value ? [value] : undefined,
+    });
   };
 
   return (
-    <div className="space-y-6">
-      <header className="flex flex-col gap-3 rounded-2xl bg-slate-50/80 p-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h3 className="text-base font-semibold text-slate-900">Conflict filters</h3>
-            <p className="text-sm text-slate-500">
-              Refine results by severity, workflow stage, and conflict status.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={togglePanel}
-              type="button"
-              aria-expanded={isPanelOpen}
-              aria-controls="conflict-filters-panel"
-              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 ${
-                isPanelOpen
-                  ? 'border-emerald-200 bg-white text-emerald-600 hover:border-emerald-300'
-                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-              }`}
-            >
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 text-slate-500">
-                <svg
-                  className={`h-3 w-3 transition-transform ${isPanelOpen ? 'rotate-0' : '-rotate-90'}`}
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path d="M4 6L8 10L12 6" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              {isPanelOpen ? 'Collapse filters' : 'Expand filters'}
-            </button>
-            <button
-              onClick={clearAllFilters}
-              type="button"
-              className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-700"
-            >
-              Clear all
-            </button>
-          </div>
+    <section className="space-y-4 rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm">
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="text-base font-semibold text-slate-900">Filters</h3>
+          <p className="text-sm text-slate-500">Quickly narrow results or reset to view everything.</p>
         </div>
-        <div className="flex items-center gap-2 text-sm">
-          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-600">
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
-            {conflictCount} conflict{conflictCount === 1 ? '' : 's'}
-          </span>
-          <span className="text-slate-400">match your current filters.</span>
-        </div>
+        <button
+          onClick={clearAllFilters}
+          type="button"
+          className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-500 transition hover:border-emerald-200 hover:text-emerald-600"
+        >
+          Clear all
+        </button>
       </header>
 
-      <div
-        id="conflict-filters-panel"
-        className={`space-y-6 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${
-          isPanelOpen ? 'max-h-[4000px] opacity-100' : 'pointer-events-none max-h-0 opacity-0'
-        }`}
-        aria-hidden={!isPanelOpen}
-      >
-        <section className="space-y-2">
-        <label htmlFor="conflict-search" className="text-sm font-medium text-slate-600">
-          Search conflicts
-        </label>
-        <div className="flex items-center rounded-full border border-[#dbe9e3] bg-white px-2 py-1 shadow-inner focus-within:border-[#0f766e] focus-within:ring-2 focus-within:ring-[#0f766e]/20">
-          <input
-            id="conflict-search"
-            type="text"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                handleSearch();
-              }
-            }}
-            placeholder="Search by applicant, description"
-            className="flex-1 rounded-full border-none bg-transparent px-3 py-2 text-sm text-slate-700 focus:outline-none"
-          />
-          <button
-            onClick={handleSearch}
-            type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#0f766e] text-white transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-            aria-label="Apply search filters"
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-        </div>
-        </section>
-
-        <FilterSection title="Severity" icon="alarm">
-        {severityOptions.map((severity) => (
-          <FilterCheckbox
-            key={severity}
-            label={toTitleCase(severity)}
-            checked={activeFilter.severity?.includes(severity) ?? false}
-            onChange={() => toggleArrayFilter('severity', severity, activeFilter.severity)}
-            tone={getSeverityTone(severity)}
-          />
-        ))}
-      </FilterSection>
-
-        <FilterSection title="Status" icon="chart">
-        {statusOptions.map((status) => (
-          <FilterCheckbox
-            key={status}
-            label={toTitleCase(status.replace('-', ' '))}
-            checked={activeFilter.status?.includes(status) ?? false}
-            onChange={() => toggleArrayFilter('status', status, activeFilter.status)}
-            tone={getStatusTone(status)}
-          />
-        ))}
-      </FilterSection>
-
-        <FilterSection title="Conflict type" icon="wrench">
-        {typeOptions.map((type) => (
-          <FilterCheckbox
-            key={type}
-            label={type
-              .split('-')
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(' ')}
-            checked={activeFilter.type?.includes(type) ?? false}
-            onChange={() => toggleArrayFilter('type', type, activeFilter.type)}
-            tone="text-sky-600"
-          />
-        ))}
-      </FilterSection>
-
-        <section className="space-y-3">
-        <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-600">
-          <Icon name="bolt" className="h-4 w-4 text-amber-500" />
-          Quick filters
-        </h4>
-        <div className="grid gap-2">
-          <QuickFilterButton
-            label="Critical only"
-            active={activeFilter.severity?.length === 1 && activeFilter.severity[0] === 'critical'}
-            onClick={() => updateFilter({ severity: ['critical'] })}
-          />
-          <QuickFilterButton
-            label="Active issues"
-            active={activeFilter.status?.length === 1 && activeFilter.status[0] === 'active'}
-            onClick={() => updateFilter({ status: ['active'] })}
-          />
-          <QuickFilterButton
-            label="Rule conflicts"
-            active={Boolean(activeFilter.type?.includes('rule-contradiction'))}
-            onClick={() => updateFilter({ type: ['rule-contradiction', 'overlapping-conditions'] })}
-          />
-          <QuickFilterButton
-            label="Compliance risks"
-            active={Boolean(activeFilter.type?.includes('compliance-violation'))}
-            onClick={() => updateFilter({ type: ['compliance-violation'] })}
-          />
-        </div>
-        </section>
+      <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
+        <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
+        {conflictCount} conflict{conflictCount === 1 ? '' : 's'} match your filters
       </div>
-    </div>
-  );
-}
 
-interface FilterSectionProps {
-  readonly title: string;
-  readonly icon: IconName;
-  readonly children: React.ReactNode;
-}
+      <form onSubmit={handleSearchSubmit} className="space-y-4">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <label className="sm:col-span-3">
+            <span className="block text-sm font-medium text-slate-600">Search</span>
+            <div className="mt-1 flex items-center rounded-full border border-[#dbe9e3] bg-white px-3 py-1.5 shadow-inner focus-within:border-[#0f766e] focus-within:ring-2 focus-within:ring-[#0f766e]/20">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search conflicts"
+                className="flex-1 rounded-full border-none bg-transparent px-2 py-1.5 text-sm text-slate-700 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#0f766e] text-white transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                aria-label="Apply search"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+            </div>
+          </label>
 
-function FilterSection({ title, icon, children }: FilterSectionProps): JSX.Element {
-  return (
-    <section className="space-y-3 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm">
-      <h4 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500">
-          <Icon name={icon} className="h-4 w-4" />
-        </span>
-        {title}
-      </h4>
-      <div className="space-y-2">{children}</div>
+          <label>
+            <span className="block text-sm font-medium text-slate-600">Severity</span>
+            <select
+              value={activeFilter.severity?.[0] ?? ''}
+              onChange={handleSeverityChange}
+              className="mt-1 w-full rounded-full border border-[#dbe9e3] bg-white px-3 py-2 text-sm text-slate-700 shadow-inner focus:border-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20"
+            >
+              {SEVERITY_OPTIONS.map((option) => (
+                <option key={option.label} value={option.value ?? ''}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            <span className="block text-sm font-medium text-slate-600">Status</span>
+            <select
+              value={activeFilter.status?.[0] ?? ''}
+              onChange={handleStatusChange}
+              className="mt-1 w-full rounded-full border border-[#dbe9e3] bg-white px-3 py-2 text-sm text-slate-700 shadow-inner focus:border-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20"
+            >
+              {STATUS_OPTIONS.map((option) => (
+                <option key={option.label} value={option.value ?? ''}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </form>
     </section>
   );
-}
-
-interface FilterCheckboxProps {
-  readonly label: string;
-  readonly checked: boolean;
-  readonly onChange: () => void;
-  readonly tone: string;
-}
-
-function FilterCheckbox({ label, checked, onChange, tone }: FilterCheckboxProps): JSX.Element {
-  return (
-    <label className="flex items-center justify-between rounded-xl border border-transparent px-3 py-2 transition hover:border-slate-200 hover:bg-slate-50">
-      <span className={`text-sm font-medium ${checked ? tone : 'text-slate-500'}`}>{label}</span>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-        className="h-4 w-4 rounded border-slate-300 text-emerald-500 focus:ring-emerald-400"
-      />
-    </label>
-  );
-}
-
-interface QuickFilterButtonProps {
-  readonly label: string;
-  readonly active: boolean;
-  readonly onClick: () => void;
-}
-
-function QuickFilterButton({ label, active, onClick }: QuickFilterButtonProps): JSX.Element {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`w-full rounded-2xl px-4 py-2 text-left text-sm font-semibold transition hover:shadow-sm ${
-        active
-          ? 'border border-emerald-400 bg-emerald-50 text-emerald-600'
-          : 'border border-slate-200 bg-white text-slate-500 hover:border-emerald-200'
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
-
-function toTitleCase(value: string): string {
-  return value
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
-
-function getSeverityTone(severity: ConflictSeverity): string {
-  const tones: Record<ConflictSeverity, string> = {
-    critical: 'text-rose-600',
-    high: 'text-amber-600',
-    medium: 'text-sky-600',
-    low: 'text-emerald-600',
-  };
-
-  return tones[severity];
-}
-
-function getStatusTone(status: ConflictStatus): string {
-  const tones: Record<ConflictStatus, string> = {
-    active: 'text-rose-600',
-    investigating: 'text-amber-600',
-    resolving: 'text-sky-600',
-    resolved: 'text-emerald-600',
-    ignored: 'text-slate-500',
-    'false-positive': 'text-violet-600',
-  };
-
-  return tones[status];
 }
