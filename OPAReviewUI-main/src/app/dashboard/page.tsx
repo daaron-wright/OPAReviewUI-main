@@ -172,26 +172,45 @@ export default function ConflictDashboardPage(): JSX.Element {
                   </div>
                 )}
 
-                {view === 'workflow' && selectedConflict && conflictWorkflow && (
+                {view === 'workflow' && (
                   <div className="space-y-6">
                     {analytics && (
                       <div className={panelCardClassName}>
                         <ConflictAnalyticsPanel analytics={analytics} />
                       </div>
                     )}
-                    <div className={panelCardClassName}>
-                      <ConflictListView
-                        conflicts={conflicts}
-                        onConflictSelect={handleConflictSelect}
-                        activeFilter={activeFilter}
-                      />
-                    </div>
-                  </div>
-                )}
 
-                {view === 'workflow' && (!selectedConflict || !conflictWorkflow) && (
-                  <div className="rounded-3xl border border-dashed border-[#d8e4df] bg-white/80 px-6 py-14 text-center text-sm text-slate-600">
-                    Select a conflict from the list to review its resolution workflow details.
+                    <div className="grid gap-6 xl:grid-cols-[360px,1fr]">
+                      <div className={panelCardClassName}>
+                        <ConflictListView
+                          conflicts={conflicts}
+                          onConflictSelect={handleConflictSelect}
+                          activeFilter={activeFilter}
+                        />
+                      </div>
+
+                      <div className={panelCardClassName}>
+                        {isWorkflowLoading && (
+                          <div className="flex min-h-[280px] items-center justify-center text-sm text-slate-500">
+                            Loading resolution workflow…
+                          </div>
+                        )}
+
+                        {!isWorkflowLoading && selectedConflict && conflictWorkflow && (
+                          <ConflictWorkflowDetailPanel
+                            conflict={selectedConflict}
+                            workflow={conflictWorkflow}
+                            onOpenModal={() => setIsDetailModalOpen(true)}
+                          />
+                        )}
+
+                        {!isWorkflowLoading && (!selectedConflict || !conflictWorkflow) && (
+                          <div className="flex min-h-[280px] items-center justify-center text-sm text-slate-500">
+                            Select a conflict to review its resolution workflow.
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
 
