@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 
-import { NextResponse } from 'next/server';
-
 const REMOTE_STATE_MACHINE_URL =
   'https://raw.githubusercontent.com/daaron-wright/OPAReviewUI-main/main/data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json';
 
@@ -15,7 +13,7 @@ export async function GET(): Promise<Response> {
         Accept: 'application/json',
       },
       next: {
-        revalidate: 60 * 60, // cache remote content for 1 hour on the server
+        revalidate: 60 * 60,
       },
     });
 
