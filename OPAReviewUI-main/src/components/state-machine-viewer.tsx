@@ -37,6 +37,7 @@ interface StateMachineFile {
 type JourneyTabId = string;
 
 const NEW_TRADE_NAME_JOURNEY_ID: JourneyTabId = 'new_trade_name';
+const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
 
 /*
  * Default workflow bundled locally as a fallback until the extended Arabic workflow is fetched at runtime.
@@ -142,8 +143,6 @@ interface JourneyTabConfig {
   readonly pathStates: ReadonlyArray<string>;
   readonly description?: string;
 }
-
-const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
 
 const MIN_ACTOR_SCORE = 3;
 
