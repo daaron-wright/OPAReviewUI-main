@@ -75,9 +75,7 @@ export function ConflictFilters({
 
   const handleSeverityChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     const value = event.target.value as ConflictSeverity | '';
-    updateFilter({
-      severity: value ? [value] : undefined,
-    });
+    updateFilter(value ? { severity: [value] } : {});
   };
 
   const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>): void => {
