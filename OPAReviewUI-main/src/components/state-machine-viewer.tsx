@@ -559,61 +559,73 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
       const { signal, suppressToast } = options;
 
-      try {
-        const response = await fetch(REMOTE_STATE_MACHINE_ENDPOINT, {
-          cache: 'no-store',
-          signal,
-        });
-
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        const file = (await response.json()) as StateMachineFile;
-        if (!file?.stateMachine) {
-          throw new Error('Missing stateMachine definition in fetched payload');
-        }
-
-        if (signal?.aborted) {
-          return false;
-        }
-
-        setStateMachine(processStateMachine(file.stateMachine));
-        remoteStateLoadedRef.current = true;
-
-        if (!suppressToast) {
-          toast.success(createToastContent('sparkle', 'Extended BRD workflow imported'), {
-            position: 'top-center',
+      for (let attempt = 1; attempt <= REMOTE_STATE_MACHINE_MAX_ATTEMPTS; attempt += 1) {
+        try {
+          const response = await fetch(REMOTE_STATE_MACHINE_ENDPOINT, {
+            cache: 'no-store',
+            signal,
           });
-        }
 
-        return true;
-      } catch (error) {
-        const maybeAbortError = error as { name?: string; message?: string } | undefined;
-        const message = maybeAbortError?.message?.toLowerCase() ?? '';
-        const aborted =
-          signal?.aborted ||
-          maybeAbortError?.name === 'AbortError' ||
-          message.includes('aborted') ||
-          message.includes('abort');
+          if (!response.ok) {
+            const error = new Error(`Request failed with status ${response.status}`) as FetchError;
+            error.status = response.status;
+            throw error;
+          }
 
-        if (aborted) {
+          const file = (await response.json()) as StateMachineFile;
+          if (!file?.stateMachine) {
+            throw new Error('Missing stateMachine definition in fetched payload');
+          }
+
+          if (signal?.aborted) {
+            return false;
+          }
+
+          setStateMachine(processStateMachine(file.stateMachine));
+          remoteStateLoadedRef.current = true;
+
+          if (!suppressToast) {
+            toast.success(createToastContent('sparkle', 'Extended BRD workflow imported'), {
+              position: 'top-center',
+            });
+          }
+
+          return true;
+        } catch (error) {
+          if (isAbortError(error, signal)) {
+            return false;
+          }
+
+          const status = (error as FetchError)?.status;
+          const shouldRetry =
+            attempt < REMOTE_STATE_MACHINE_MAX_ATTEMPTS &&
+            (isRetriableStatus(status) || isRetriableFetchError(error));
+
+          if (shouldRetry) {
+            const delayIndex = Math.min(
+              attempt,
+              REMOTE_STATE_MACHINE_RETRY_DELAYS_MS.length - 1
+            );
+            await delay(REMOTE_STATE_MACHINE_RETRY_DELAYS_MS[delayIndex]);
+            continue;
+          }
+
+          console.error('Failed to fetch extended BRD state machine', error);
+
+          if (!suppressToast) {
+            toast.warning(
+              createToastContent('warningTriangle', 'BRD workflow import failed; using default view'),
+              {
+                position: 'top-center',
+              }
+            );
+          }
+
           return false;
         }
-
-        console.error('Failed to fetch extended BRD state machine', error);
-
-        if (!suppressToast) {
-          toast.warning(
-            createToastContent('warningTriangle', 'BRD workflow import failed; using default view'),
-            {
-              position: 'top-center',
-            }
-          );
-        }
-
-        return false;
       }
+
+      return false;
     },
     [setStateMachine]
   );
