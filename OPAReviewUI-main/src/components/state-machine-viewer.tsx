@@ -215,24 +215,36 @@ interface StateMachineViewerProps {
 export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine }: StateMachineViewerProps = {}): JSX.Element {
   const router = useRouter();
 
-  const [selectedJourney, setSelectedJourney] = useState<JourneyTabId>(JOURNEY_TABS[0].id);
+  const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
+  const [selectedJourney, setSelectedJourney] = useState<JourneyTabId>(() => journeyTabs[0]?.id ?? '');
+
+  useEffect(() => {
+    if (journeyTabs.length === 0) {
+      return;
+    }
+    if (!selectedJourney || !journeyTabs.some((journey) => journey.id === selectedJourney)) {
+      setSelectedJourney(journeyTabs[0].id);
+    }
+  }, [journeyTabs, selectedJourney]);
 
   const journeyGraphs = useMemo(() => {
-    return JOURNEY_TABS.reduce<Record<JourneyTabId, ProcessedStateMachine>>((acc, config) => {
+    return journeyTabs.reduce<Record<JourneyTabId, ProcessedStateMachine>>((acc, config) => {
       acc[config.id] = filterStateMachineForJourney(stateMachine, config);
       return acc;
     }, {} as Record<JourneyTabId, ProcessedStateMachine>);
-  }, [stateMachine]);
+  }, [journeyTabs, stateMachine]);
 
-  const selectedJourneyGraph = journeyGraphs[selectedJourney] ?? { nodes: [], edges: [], metadata: stateMachine.metadata };
-  const journeyNodes = selectedJourneyGraph.nodes;
-  const journeyEdges = selectedJourneyGraph.edges;
+  const selectedJourneyGraph = selectedJourney ? journeyGraphs[selectedJourney] : undefined;
+  const journeyNodes = selectedJourneyGraph?.nodes ?? [];
+  const journeyEdges = selectedJourneyGraph?.edges ?? [];
   const journeyNodeIds = useMemo(() => new Set(journeyNodes.map((node) => node.id)), [journeyNodes]);
   const journeyEdgeIds = useMemo(() => new Set(journeyEdges.map((edge) => edge.id)), [journeyEdges]);
-  const selectedJourneyConfig = useMemo(
-    () => JOURNEY_TABS.find((tab) => tab.id === selectedJourney) ?? JOURNEY_TABS[0],
-    [selectedJourney]
-  );
+  const selectedJourneyConfig = useMemo(() => {
+    if (!selectedJourney) {
+      return journeyTabs[0];
+    }
+    return journeyTabs.find((tab) => tab.id === selectedJourney) ?? journeyTabs[0];
+  }, [journeyTabs, selectedJourney]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
