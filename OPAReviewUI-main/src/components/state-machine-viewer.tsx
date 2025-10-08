@@ -230,6 +230,23 @@ interface StateMachineViewerProps {
 export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine }: StateMachineViewerProps = {}): JSX.Element {
   const router = useRouter();
 
+  const [selectedJourney, setSelectedJourney] = useState<JourneyTabId>(JOURNEY_TABS[0].id);
+
+  const journeyGraphs = useMemo(() => {
+    return JOURNEY_TABS.reduce<Record<JourneyTabId, ProcessedStateMachine>>((acc, config) => {
+      acc[config.id] = filterStateMachineForJourney(stateMachine, config);
+      return acc;
+    }, {} as Record<JourneyTabId, ProcessedStateMachine>);
+  }, [stateMachine]);
+
+  const selectedJourneyGraph = journeyGraphs[selectedJourney] ?? { nodes: [], edges: [], metadata: stateMachine.metadata };
+  const journeyNodes = selectedJourneyGraph.nodes;
+  const journeyEdges = selectedJourneyGraph.edges;
+  const selectedJourneyConfig = useMemo(
+    () => JOURNEY_TABS.find((tab) => tab.id === selectedJourney) ?? JOURNEY_TABS[0],
+    [selectedJourney]
+  );
+
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<ProcessedNode | null>(null);
@@ -868,7 +885,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
           : 'Approve reviewed nodes before publishing';
     } else if (!hasPublishedToOpa) {
       step5Status = 'active';
-      step5Description = 'Ready to deploy to OPA Server �� Click Publish when ready';
+      step5Description = 'Ready to deploy to OPA Server • Click Publish when ready';
     } else {
       step5Status = 'complete';
       step5Description = 'Deployment to OPA Server completed';
