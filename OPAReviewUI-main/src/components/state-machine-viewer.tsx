@@ -462,71 +462,11 @@ interface StateMachineViewerProps {
 export function StateMachineViewer({ stateMachine: initialStateMachine }: StateMachineViewerProps = {}): JSX.Element {
   const router = useRouter();
 
-  const [stateMachine, setStateMachine] = useState<ProcessedStateMachine>(
+  const [stateMachine] = useState<ProcessedStateMachine>(
     initialStateMachine ?? defaultProcessedStateMachine
   );
-  const [isStateMachineLoading, setIsStateMachineLoading] = useState(!initialStateMachine);
-  const [stateMachineError, setStateMachineError] = useState<string | null>(null);
-  const remoteFetchAttemptedRef = useRef(false);
-
-  useEffect(() => {
-    if (initialStateMachine || remoteFetchAttemptedRef.current) {
-      return;
-    }
-
-    remoteFetchAttemptedRef.current = true;
-
-    let isActive = true;
-    const controller = new AbortController();
-
-    async function loadStateMachine(): Promise<void> {
-      try {
-        setIsStateMachineLoading(true);
-        setStateMachineError(null);
-
-        const response = await fetch(REMOTE_STATE_MACHINE_ENDPOINT, {
-          signal: controller.signal,
-          cache: 'no-store',
-        });
-
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        const file = (await response.json()) as StateMachineFile;
-
-        if (!file?.stateMachine) {
-          throw new Error('Missing stateMachine key in response payload');
-        }
-
-        if (!isActive) {
-          return;
-        }
-
-        setStateMachine(processStateMachine(file.stateMachine));
-      } catch (error) {
-        const maybeAbortError = error as { name?: string } | undefined;
-        if (controller.signal.aborted || maybeAbortError?.name === 'AbortError') {
-          return;
-        }
-
-        console.warn('Failed to load remote state machine', error);
-        const message = 'Unable to load the full Real Beneficiary workflow. Showing fallback data.';
-        setStateMachineError(message);
-      } finally {
-        if (isActive) {
-          setIsStateMachineLoading(false);
-        }
-      }
-    }
-
-    void loadStateMachine();
-
-    return () => {
-      isActive = false;
-      controller.abort();
-    };
-  }, [initialStateMachine]);
+  const [isStateMachineLoading] = useState(false);
+  const [stateMachineError] = useState<string | null>(null);
 
   const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
   const journeyTotals = useMemo(
@@ -1812,7 +1752,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         <div className="flex-1 space-y-6">
           {isStateMachineLoading && (
             <div className="rounded-3xl border border-[#dbe9e3] bg-white px-4 py-3 text-xs font-semibold text-slate-600 shadow-sm">
-              Loading extended Real Beneficiary workflow���
+              Loading extended Real Beneficiary workflow…
             </div>
           )}
           {stateMachineError && (
