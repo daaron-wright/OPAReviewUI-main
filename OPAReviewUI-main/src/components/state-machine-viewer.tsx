@@ -379,18 +379,15 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [clearWalkthroughTimers, endWalkthrough]);
 
   const initialNodes = useMemo(() => {
-    return journeyNodes.map((node) => {
-      const functions = node.metadata.functions
-        ? [...node.metadata.functions]
-        : undefined;
+    return stateMachine.nodes.map((node) => {
+      const functions = node.metadata.functions ? [...node.metadata.functions] : undefined;
       const controlAttributes = node.metadata.controlAttributes
         ? [...node.metadata.controlAttributes]
         : node.metadata.controlAttribute
         ? [node.metadata.controlAttribute]
         : undefined;
-      const transitions = node.metadata.transitions
-        ? [...node.metadata.transitions]
-        : undefined;
+      const transitions = node.metadata.transitions ? [...node.metadata.transitions] : undefined;
+      const isJourneyNode = journeyNodeIds.has(node.id);
 
       const data: CustomNodeData = {
         label: node.label,
@@ -398,6 +395,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         description: node.description,
         isFinal: node.isFinal,
         isInitial: node.isInitial,
+        journeyVisibility: isJourneyNode ? 'highlight' : 'dimmed',
         ...(functions ? { functions } : {}),
         ...(node.metadata.controlAttribute ? { controlAttribute: node.metadata.controlAttribute } : {}),
         ...(controlAttributes ? { controlAttributes } : {}),
@@ -411,7 +409,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         data,
       };
     });
-  }, [journeyNodes]);
+  }, [journeyNodeIds, stateMachine.nodes]);
 
   const initialEdges = useMemo(() => {
     const initialId = journeyNodes.find((n) => n.isInitial)?.id;
