@@ -116,7 +116,7 @@ If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
 Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
-      contentAr: `يجب الإع��ان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق ال��صويت كمست��يد حقيقي.
+      contentAr: `يجب الإع����ن عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق ال��صويت كمست��يد حقيقي.
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
@@ -125,7 +125,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال ��لى الحساب:
-إذا كان الشخص أ يمتلك 60�� من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
+إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال ��سائل أخرى.`,
@@ -537,6 +537,8 @@ export function NodeDetailModal({
 
   if (!node) return null;
 
+  const preferredLanguage = language === 'ar' ? 'ar' : 'en';
+
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
   const nodeFunctions = node.metadata?.functions ?? [];
@@ -823,7 +825,7 @@ export function NodeDetailModal({
                     ? 'إخفاء قواعد السياسة'
                     : 'Hide Policy Rules'
                   : language === 'ar'
-                    ? 'عرض ��واعد السياسة'
+                    ? 'عرض قواعد السياسة'
                     : 'View Policy Rules'}
               </span>
             </button>
@@ -1201,7 +1203,7 @@ export function NodeDetailModal({
                                         onClick={() => confirmRule(rule.id)}
                                         className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/30 hover:bg-[#e4f5f1]"
                                       >
-                                        {language === 'ar' ? 'تأكي��' : 'Mark as Confirmed'}
+                                        {language === 'ar' ? 'تأكيد' : 'Mark as Confirmed'}
                                       </button>
                                     </div>
                                   )}
