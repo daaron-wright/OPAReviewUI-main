@@ -211,7 +211,7 @@ export function JourneySummaryPanel({
             className="hidden max-w-[220px] items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-sm font-semibold text-white shadow-[0_20px_36px_-24px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e] xl:flex"
           >
             <svg
-              className={clsx('h-5 w-5 transition-transform duration-300', isOpen ? 'rotate-180' : 'rotate-0')}
+              className={clsx('h-5 w-5 flex-shrink-0 transition-transform duration-300', isOpen ? 'rotate-180' : 'rotate-0')}
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
