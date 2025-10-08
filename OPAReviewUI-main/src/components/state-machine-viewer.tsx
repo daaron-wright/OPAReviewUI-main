@@ -1689,6 +1689,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
     detailOpenTimeoutRef.current = window.setTimeout(() => {
       setIsTransitioning(false);
+      storeViewport();
       openNodeDetailById(currentNodeId);
       detailOpenTimeoutRef.current = null;
     }, 2000);
@@ -1705,6 +1706,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     nodesById,
     openNodeDetailById,
     reactFlowInstance,
+    storeViewport,
   ]);
 
   return (
