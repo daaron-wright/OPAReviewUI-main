@@ -458,8 +458,14 @@ interface StateMachineViewerProps {
   readonly stateMachine?: ProcessedStateMachine;
 }
 
-export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine }: StateMachineViewerProps = {}): JSX.Element {
+export function StateMachineViewer({ stateMachine: initialStateMachine }: StateMachineViewerProps = {}): JSX.Element {
   const router = useRouter();
+
+  const [stateMachine, setStateMachine] = useState<ProcessedStateMachine>(
+    initialStateMachine ?? defaultProcessedStateMachine
+  );
+  const [isStateMachineLoading, setIsStateMachineLoading] = useState(!initialStateMachine);
+  const [stateMachineError, setStateMachineError] = useState<string | null>(null);
 
   const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
   const journeyTotals = useMemo(
