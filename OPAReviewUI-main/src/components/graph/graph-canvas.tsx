@@ -48,7 +48,7 @@ function defaultMiniMapNodeColor(node: Node): string {
 export interface GraphCanvasProps {
   nodes: Node<CustomNodeData>[];
   edges: Edge[];
-  onNodesChange: OnNodesChange<CustomNodeData>;
+  onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onNodeClick?: NodeMouseHandler;
   onInit?: (instance: ReactFlowInstance) => void;
