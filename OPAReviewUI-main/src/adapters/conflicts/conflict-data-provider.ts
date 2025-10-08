@@ -55,7 +55,7 @@ export class ConflictDataProvider {
       activeConflicts: conflicts.filter(c => c.status === 'active').length,
       criticalConflicts: conflicts.filter(c => c.severity === 'critical').length,
       resolvedLast30Days: conflicts.filter(c => c.status === 'resolved').length,
-      averageResolutionTime: 18.5,
+      averageResolutionTime: 0.5,
       conflictsByType: {
         'rule-contradiction': 8,
         'overlapping-conditions': 5,
