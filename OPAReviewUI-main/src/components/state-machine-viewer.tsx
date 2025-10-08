@@ -681,7 +681,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   }, [setStateMachine]);
 
   const handlePolicyDocumentSelected = useCallback(
-    async (file: File) => {
+    (file: File) => {
       const uploaded = uploadPolicyDocument(file);
       if (!uploaded) {
         toast.error(createToastContent('infoCircle', 'Please select a PDF document'), {
