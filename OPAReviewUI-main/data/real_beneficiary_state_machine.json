@@ -115,6 +115,29 @@
       "routine1_digital_id_verification": {
         "type": "process",
         "description": "Verify Digital ID level (SOP2/SOP3)",
+        "journey_paths": [
+          "new_registration"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Path 1 validates SmartPass SOP2/SOP3 digital identity before processing a first-time license, as mandated by BRD 4.2.1 \"Digital Identity Verification Requirements\".",
+            "reference_id": "brd_section_4_2_1",
+            "tags": [
+              "identity",
+              "compliance"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يتحقق المسار 1 من هوية SmartPass بمستويي SOP2/SOP3 قبل معالجة رخصة لأول مرة، كما تفرضه الفقرة 4.2.1 «متطلبات التحقق من الهوية الرقمية».",
+            "reference_id": "brd_section_4_2_1",
+            "tags": [
+              "identity",
+              "compliance"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "digital_id_level in ['SOP2', 'SOP3']",
