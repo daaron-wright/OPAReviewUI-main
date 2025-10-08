@@ -390,7 +390,7 @@ export function JourneySummaryPanel({
                       className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0f766e] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59]"
                       onClick={handleUploadClick}
                     >
-                      Upload BRD Document
+                      Upload BRD
                     </button>
                   )}
 
@@ -631,7 +631,7 @@ export function JourneySummaryPanel({
                       onClick={handleUploadClick}
                       className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#0f766e] px-4 py-2 text-sm font-semibold text-[#0f766e] transition hover:bg-[#f0fdfa]"
                     >
-                      Upload BRD Document
+                      Upload BRD
                     </button>
                   </div>
                 ) : (
