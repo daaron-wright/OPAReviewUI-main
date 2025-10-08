@@ -864,11 +864,20 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [handleExitWalkthrough, isWalkthroughMode, policyDocument]);
 
   useEffect(() => {
-    if (journeyNodes.length === 0) {
+    if (journeyNodes.length === 0 || !reactFlowInstance) {
       return;
     }
-    scheduleFitView();
-  }, [journeyNodes.length, scheduleFitView, selectedJourney, isGraphExpanded]);
+
+    if (shouldAutoFitRef.current) {
+      shouldAutoFitRef.current = false;
+      scheduleFitView();
+      return;
+    }
+
+    if (lastViewportRef.current) {
+      reactFlowInstance.setViewport(lastViewportRef.current);
+    }
+  }, [journeyNodes.length, scheduleFitView, reactFlowInstance, selectedJourney, isGraphExpanded]);
 
   useEffect(() => {
     if (typeof document === 'undefined') {
