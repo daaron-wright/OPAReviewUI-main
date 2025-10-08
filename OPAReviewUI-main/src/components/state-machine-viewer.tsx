@@ -295,7 +295,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   } = useReview();
 
   const hasUploadedDocument = Boolean(policyDocument);
-  const canDisplayGraph = stateMachine.nodes.length > 0;
+  const canDisplayGraph = journeyNodes.length > 0;
 
   useEffect(() => {
     if (!hasUploadedDocument) {
