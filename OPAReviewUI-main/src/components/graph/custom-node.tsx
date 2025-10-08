@@ -214,7 +214,12 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
 
 CustomNode.displayName = 'CustomNode';
 
-function getNodeStyles(data: CustomNodeData, isReviewed: boolean, isApproved: boolean): {
+function getNodeStyles(
+  data: CustomNodeData,
+  isReviewed: boolean,
+  isApproved: boolean,
+  journeyVisibility: 'highlight' | 'dimmed'
+): {
   container: string;
   typeBadge: string;
   accentDot: string;
@@ -226,16 +231,22 @@ function getNodeStyles(data: CustomNodeData, isReviewed: boolean, isApproved: bo
       : 'border-rose-300 shadow-[0_14px_36px_-22px_rgba(244,63,94,0.45)]'
     : 'border-[#dbe9e3] shadow-sm';
 
+  const journeyAccent =
+    journeyVisibility === 'highlight'
+      ? 'ring-1 ring-[#0f766e]/20'
+      : 'opacity-55 saturate-[0.65] border-[#e3ede9] shadow-none';
+
   return {
     container: clsx(
       'relative min-w-[240px] max-w-[280px] rounded-[24px] bg-white px-4 py-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg',
-      reviewAccent
+      reviewAccent,
+      journeyAccent
     ),
     typeBadge: clsx(
       'inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em]',
-      palette.badge
+      journeyVisibility === 'dimmed' ? 'border-[#e2e8f0] bg-white text-slate-400' : palette.badge
     ),
-    accentDot: palette.accentDot,
+    accentDot: journeyVisibility === 'dimmed' ? 'bg-slate-300' : palette.accentDot,
   };
 }
 
