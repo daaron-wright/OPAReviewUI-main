@@ -5,6 +5,28 @@
 
 import { State, StateMachine, Transition } from './types';
 
+export interface ProcessedRelevantChunk {
+  readonly language: string;
+  readonly text: string;
+  readonly referenceId?: string;
+  readonly source?: string;
+  readonly section?: string;
+  readonly tags?: ReadonlyArray<string>;
+}
+
+export interface ProcessedJourneyDefinition {
+  readonly id: string;
+  readonly label: string;
+  readonly intent?: string;
+  readonly exampleScenario?: string;
+  readonly suggestedJourney?: string;
+  readonly description?: string;
+  readonly seedStates: ReadonlyArray<string>;
+  readonly routinePrefixes: ReadonlyArray<string>;
+  readonly conditionKeywords: ReadonlyArray<string>;
+  readonly pathStates: ReadonlyArray<string>;
+}
+
 export interface ProcessedNode {
   readonly id: string;
   readonly label: string;
@@ -12,6 +34,8 @@ export interface ProcessedNode {
   readonly description: string;
   readonly isFinal: boolean;
   readonly isInitial: boolean;
+  readonly journeyPaths: ReadonlyArray<string>;
+  readonly relevantChunks?: ReadonlyArray<ProcessedRelevantChunk>;
   readonly metadata: {
     readonly functions?: ReadonlyArray<string>;
     readonly nextState?: string;
@@ -49,6 +73,7 @@ export interface ProcessedStateMachine {
     readonly description: string;
     readonly totalStates: number;
     readonly totalTransitions: number;
+    readonly journeys?: ReadonlyArray<ProcessedJourneyDefinition>;
   };
 }
 
