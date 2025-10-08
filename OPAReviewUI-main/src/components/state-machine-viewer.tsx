@@ -201,11 +201,9 @@ function createActorProfile(actor: PolicyActor): ActorProfile {
   phrases.add(labelLower);
   const summaryLower = actor.summary?.toLowerCase();
 
-  const profile: ActorProfile = { actor, tokens, phrases, labelLower };
-  if (summaryLower !== undefined) {
-    profile.summaryLower = summaryLower;
-  }
-  return profile;
+  return summaryLower !== undefined
+    ? { actor, tokens, phrases, labelLower, summaryLower }
+    : { actor, tokens, phrases, labelLower };
 }
 
 function buildNodeContext(node: ProcessedNode): string {
