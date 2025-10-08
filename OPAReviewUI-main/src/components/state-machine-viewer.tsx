@@ -646,8 +646,42 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     }
   }, []);
 
+  const fetchExtendedStateMachine = useCallback(async (): Promise<boolean> => {
+    if (remoteStateLoadedRef.current) {
+      return true;
+    }
+
+    try {
+      const response = await fetch('/data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json', {
+        cache: 'no-store',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const file = (await response.json()) as StateMachineFile;
+      if (!file?.stateMachine) {
+        throw new Error('Missing stateMachine definition in fetched payload');
+      }
+
+      setStateMachine(processStateMachine(file.stateMachine));
+      remoteStateLoadedRef.current = true;
+      toast.success(createToastContent('sparkle', 'Extended BRD workflow imported'), {
+        position: 'top-center',
+      });
+      return true;
+    } catch (error) {
+      console.error('Failed to fetch extended BRD state machine', error);
+      toast.warning(createToastContent('warningTriangle', 'BRD workflow import failed; using default view'), {
+        position: 'top-center',
+      });
+      return false;
+    }
+  }, []);
+
   const handlePolicyDocumentSelected = useCallback(
-    (file: File) => {
+    async (file: File) => {
       const uploaded = uploadPolicyDocument(file);
       if (!uploaded) {
         toast.error(createToastContent('infoCircle', 'Please select a PDF document'), {
