@@ -91,7 +91,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
 • يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية والنتائج
 
-المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
+المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتح��دي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
     },
     {
@@ -891,7 +891,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'سم��ت التحكم وقيم الانتقال لهذه العقدة.'
+                          ? 'سم��ت التحكم وقيم الا��تقال لهذه العقدة.'
                           : 'Control attributes and transition values for this node.'}
                       </p>
                     </div>
@@ -1539,6 +1539,18 @@ function getTypeBadgeStyle(node: ProcessedNode): string {
     default:
       return 'border border-[#e2ede8] bg-white text-slate-600';
   }
+}
+
+function formatJourneyChipLabel(value: string): string {
+  return value
+    .split(/[-_]/g)
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
+
+function formatChunkReferenceId(value: string): string {
+  return value.replace(/_/g, ' ').toUpperCase();
 }
 
 function formatAttributeName(value: string): string {
