@@ -89,7 +89,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
-• يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية والنتائج
+• يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية والنت��ئج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
@@ -535,17 +535,10 @@ export function NodeDetailModal({
     return map;
   }, [regoRules]);
 
-  if (!node) return null;
-
   const preferredLanguage = language === 'ar' ? 'ar' : 'en';
 
-  const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
-  const transitions = node.metadata?.transitions ?? [];
-  const nodeFunctions = node.metadata?.functions ?? [];
-  const controlSummaryCount = controlAttributes.length + transitions.length;
-
   const journeyChipData = useMemo(() => {
-    if (!node.journeyPaths || node.journeyPaths.length === 0) {
+    if (!node?.journeyPaths || node.journeyPaths.length === 0) {
       return [] as Array<{ id: string; label: string }>;
     }
 
@@ -558,28 +551,33 @@ export function NodeDetailModal({
         label,
       };
     });
-  }, [node.journeyPaths, preferredLanguage]);
+  }, [node, preferredLanguage]);
 
   const { chunks: localizedRelevantChunks, isFallback: usingChunkFallback } = useMemo(() => {
-    const chunks = (node.relevantChunks ?? []) as ProcessedRelevantChunk[];
-    if (chunks.length === 0) {
+    if (!node?.relevantChunks || node.relevantChunks.length === 0) {
       return { chunks: [] as ProcessedRelevantChunk[], isFallback: false };
     }
 
-    const preferredMatches = chunks.filter((chunk) => chunk.language.toLowerCase() === preferredLanguage);
+    const chunks = Array.from(node.relevantChunks);
+
+    const preferredMatches = chunks.filter((chunk) => chunk.language?.toLowerCase?.() === preferredLanguage);
     if (preferredMatches.length > 0) {
       return { chunks: preferredMatches, isFallback: false };
     }
 
-    const englishMatches = chunks.filter((chunk) => chunk.language.toLowerCase() === 'en');
+    const englishMatches = chunks.filter((chunk) => chunk.language?.toLowerCase?.() === 'en');
     if (englishMatches.length > 0) {
       return { chunks: englishMatches, isFallback: preferredLanguage !== 'en' };
     }
 
     return { chunks, isFallback: true };
-  }, [node.relevantChunks, preferredLanguage]);
+  }, [node, preferredLanguage]);
 
   const nodeContextTokens = useMemo(() => {
+    if (!node) {
+      return [] as string[];
+    }
+
     const tokens = new Set<string>();
 
     const addValue = (value?: string | null) => {
@@ -592,6 +590,10 @@ export function NodeDetailModal({
         .filter(Boolean)
         .forEach((part) => tokens.add(part));
     };
+
+    const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
+    const transitions = node.metadata?.transitions ?? [];
+    const nodeFunctions = node.metadata?.functions ?? [];
 
     controlAttributes.forEach(addValue);
     nodeFunctions.forEach(addValue);
@@ -606,9 +608,20 @@ export function NodeDetailModal({
     addValue(node.description);
 
     return Array.from(tokens);
-  }, [controlAttributes, node.description, node.id, node.label, nodeFunctions, transitions]);
+  }, [node]);
+
+  if (!node) return null;
+
+  const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
+  const transitions = node.metadata?.transitions ?? [];
+  const nodeFunctions = node.metadata?.functions ?? [];
+  const controlSummaryCount = controlAttributes.length + transitions.length;
 
   const relevantBrdSections = useMemo(() => {
+    if (!node) {
+      return [] as BRDReferenceSection[];
+    }
+
     const tokenSet = new Set(nodeContextTokens);
 
     return brdReferences.sections.filter((section) => {
