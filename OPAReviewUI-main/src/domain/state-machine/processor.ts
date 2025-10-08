@@ -145,11 +145,13 @@ function normalizeTransition(transition: Transition): ProcessedNodeTransition {
   const controlAttributeValue =
     transition.controlAttributeValue ??
     transition.control_attribute_value;
+  const condition = typeof transition.condition === 'string' ? transition.condition.trim() : '';
+  const action = typeof transition.action === 'string' ? transition.action.trim() : '';
 
   return {
     target: transition.target,
-    action: transition.action,
-    condition: transition.condition,
+    action,
+    condition,
     ...(controlAttribute && controlAttribute.trim().length > 0
       ? { controlAttribute: controlAttribute.trim() }
       : {}),
@@ -185,8 +187,8 @@ function createEdge(
     source: sourceId,
     target: transition.target,
     label: formatTransitionLabel(normalizedTransition),
-    condition: transition.condition,
-    action: transition.action,
+    condition: normalizedTransition.condition,
+    action: transition.action ?? '',
     controlAttribute: normalizedTransition.controlAttribute,
     controlAttributeValue: normalizedTransition.controlAttributeValue,
   };
@@ -204,6 +206,11 @@ function formatTransitionLabel(transition: ProcessedNodeTransition): string {
     return transition.controlAttributeValue;
   }
 
-  const match = transition.condition.match(/(\w+)\s*==\s*['"]?([\w-]+)['"]?/);
-  return match ? match[2] : transition.condition.slice(0, 30);
+  const condition = transition.condition?.trim();
+  if (!condition) {
+    return formatLabel(transition.target);
+  }
+
+  const match = condition.match(/(\w+)\s*==\s*['"]?([\w-]+)['"]?/);
+  return match ? match[2] : condition.slice(0, 30);
 }
