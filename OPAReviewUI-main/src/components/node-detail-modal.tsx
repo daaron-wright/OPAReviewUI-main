@@ -87,7 +87,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
-• يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
+• يجب أن يكون لل��يانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
 • يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية وا��نتائج
 
@@ -143,17 +143,17 @@ const getMockBRDReferences = (): BRDReferences => ({
 });
 
 const JOURNEY_LABEL_MAP = {
-  new_registration: {
-    en: 'Path 1 · New Registration',
-    ar: 'المسار 1 · التسجيل الجديد',
+  new_trade_name: {
+    en: 'Path 1 · New Trade Name',
+    ar: 'المسار 1 · اسم تجاري جديد',
   },
-  update_compliance: {
-    en: 'Path 2 · Update / Compliance',
-    ar: 'المسار 2 · التحديث / الامتثال',
+  existing_trade_name: {
+    en: 'Path 2 · Existing Trade Name',
+    ar: 'المسار 2 · اسم تجاري قائم',
   },
-  fast_track: {
-    en: 'Path 3 · Fast-Track',
-    ar: 'المسار 3 · المسار السريع',
+  existing_trade_license: {
+    en: 'Path 3 · Existing Trade License',
+    ar: 'المسار 3 · رخصة تجارية قائمة',
   },
 } as const;
 
