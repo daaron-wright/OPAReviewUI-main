@@ -385,7 +385,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [clearWalkthroughTimers, endWalkthrough]);
 
   const initialNodes = useMemo(() => {
-    return stateMachine.nodes.map((node) => {
+    return journeyNodes.map((node) => {
       const functions = node.metadata.functions
         ? [...node.metadata.functions]
         : undefined;
@@ -417,11 +417,11 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         data,
       };
     });
-  }, [stateMachine.nodes]);
+  }, [journeyNodes]);
 
   const initialEdges = useMemo(() => {
-    const initialId = stateMachine.nodes.find((n) => n.isInitial)?.id;
-    return stateMachine.edges.map((edge) => ({
+    const initialId = journeyNodes.find((n) => n.isInitial)?.id;
+    return journeyEdges.map((edge) => ({
       id: edge.id,
       source: edge.source,
       target: edge.target,
@@ -441,7 +441,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         fillOpacity: 0.9,
       },
     }));
-  }, [stateMachine.edges, stateMachine.nodes]);
+  }, [journeyEdges, journeyNodes]);
 
   const getNodeDOMPosition = useCallback((nodeId: string) => {
     const nodeElement = document.querySelector(`[data-id="${nodeId}"]`);
