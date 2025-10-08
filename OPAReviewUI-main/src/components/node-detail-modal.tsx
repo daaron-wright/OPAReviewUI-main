@@ -839,8 +839,7 @@ export function NodeDetailModal({
                 </span>
               </div>
 
-              {isPolicyRulesExpanded ? (
-                <div className="h-full min-h-0 overflow-y-auto p-6">
+              <div className="h-full min-h-0 overflow-y-auto p-6">
                   <div className="space-y-4">
                     <div className="rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4 shadow-sm">
                       <div className="flex items-center gap-2">
@@ -1114,20 +1113,6 @@ export function NodeDetailModal({
                     </div>
                   </div>
                 </div>
-              ) : (
-                <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
-                  <p className="text-sm font-semibold text-slate-700">
-                    {language === 'ar'
-                      ? 'قواعد السياسة مطوية.'
-                      : 'Policy rules are collapsed.'}
-                  </p>
-                  <p className="max-w-xs text-xs text-slate-500">
-                    {language === 'ar'
-                      ? 'استخدم زر "توسيع قواعد السياسة" لعرض المنطق، تشغيل حالات الاختبار، ومزامنته مع BRD.'
-                      : 'Use “Expand policy rules” to review enforcement logic, run test cases, and sync with the BRD.'}
-                  </p>
-                </div>
-              )}
             </div>
           )}
         </div>
