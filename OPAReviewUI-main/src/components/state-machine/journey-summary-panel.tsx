@@ -731,9 +731,9 @@ function AccordionSection({ id, title, description, isOpen, onToggle, headerActi
   const contentId = `${id}-content`;
 
   return (
-    <section className="rounded-[28px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-36px_rgba(15,118,110,0.28)]">
-      <div className="flex flex-col items-center gap-3 px-4 pt-4 text-center sm:px-5">
-        <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+    <section className="flex flex-col items-center justify-center rounded-[28px] border border-[#e2ede8] bg-white text-center shadow-[0_24px_48px_-36px_rgba(15,118,110,0.28)]">
+      <div className="flex flex-col items-center gap-4 px-4 pt-6 pb-4 sm:px-6">
+        <div className="flex w-full flex-col items-center gap-3">
           <button
             type="button"
             id={headerId}
@@ -772,12 +772,12 @@ function AccordionSection({ id, title, description, isOpen, onToggle, headerActi
         role="region"
         aria-labelledby={headerId}
         className={clsx(
-          'overflow-hidden px-4 transition-all duration-300 ease-out sm:px-5',
+          'flex w-full justify-center overflow-hidden px-4 transition-all duration-300 ease-out sm:px-6',
           isOpen ? 'py-4 opacity-100' : 'py-0 opacity-0'
         )}
         style={{ maxHeight: isOpen ? '2000px' : '0px' }}
       >
-        <div className="space-y-4">{children}</div>
+        <div className="w-full max-w-md space-y-4">{children}</div>
       </div>
     </section>
   );
