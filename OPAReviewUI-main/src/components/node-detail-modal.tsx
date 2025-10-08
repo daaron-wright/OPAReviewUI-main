@@ -524,6 +524,7 @@ export function NodeDetailModal({
 
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
+  const nodeFunctions = node.metadata?.functions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
 
   const nodeContextTokens = useMemo(() => {
@@ -541,8 +542,7 @@ export function NodeDetailModal({
     };
 
     controlAttributes.forEach(addValue);
-    const functions = node.metadata?.functions ?? [];
-    functions.forEach(addValue);
+    nodeFunctions.forEach(addValue);
     transitions.forEach((transition) => {
       addValue(transition.controlAttribute);
       addValue(transition.controlAttributeValue);
@@ -554,7 +554,7 @@ export function NodeDetailModal({
     addValue(node.description);
 
     return Array.from(tokens);
-  }, [controlAttributes, node.description, node.id, node.label, node.metadata?.functions, transitions]);
+  }, [controlAttributes, node.description, node.id, node.label, nodeFunctions, transitions]);
 
   const relevantBrdSections = useMemo(() => {
     const tokenSet = new Set(nodeContextTokens);
