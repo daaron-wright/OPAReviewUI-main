@@ -80,7 +80,7 @@
           },
           {
             "language": "ar",
-            "text": "يفصل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم التجاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
+            "text": "يفصل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم ال��جاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
             "reference_id": "brd_table_3",
             "tags": [
               "journey",
@@ -176,7 +176,7 @@
           },
           {
             "language": "ar",
-            "text": "يؤكد الشكل القانوني، وحدود الملكية، وإقرارات المستفيدين للمتقدمين الجدد وفق الفقرة 4.3 «معايير الأهلية للرخص الجديدة».",
+            "text": "يؤكد الشكل الق��نوني، وحدود الملكية، وإقرارات المستفيدين للمتقدمين الجدد وفق الفقرة 4.3 «معايير الأهلية للرخص الجديدة».",
             "reference_id": "brd_section_4_3",
             "tags": [
               "eligibility",
@@ -695,6 +695,29 @@
       "routine3_submit_application": {
         "type": "process",
         "description": "Submit to due diligence team",
+        "journey_paths": [
+          "update_compliance"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Files the compliance update package with reassessed beneficiaries, mirroring BRD 7.3 \"Ongoing Declaration Workflow\".",
+            "reference_id": "brd_section_7_3",
+            "tags": [
+              "submission",
+              "compliance"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يقدّم حزمة تحديث الامتثال مع المستفيدين المعاد تقييمهم، طبقاً للفقرة 7.3 «سير عمل الإعلان المستمر».",
+            "reference_id": "brd_section_7_3",
+            "tags": [
+              "submission",
+              "compliance"
+            ]
+          }
+        ],
         "functions": [
           "submit_application_to_internal_system",
           "assign_application_to_employee",
