@@ -31,7 +31,9 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
   const isReviewed = isNodeReviewed(id);
   const isApproved = isNodeApproved(id);
   const isCurrentNode = currentNodeId === id && isWalkthroughMode;
-  const styles = getNodeStyles(data, isReviewed, isApproved);
+  const journeyVisibility = data.journeyVisibility ?? 'highlight';
+  const isDimmed = journeyVisibility === 'dimmed';
+  const styles = getNodeStyles(data, isReviewed, isApproved, journeyVisibility);
   const controlAttributes = data.controlAttributes ?? (data.controlAttribute ? [data.controlAttribute] : []);
   const transitions = data.transitions ?? [];
 
