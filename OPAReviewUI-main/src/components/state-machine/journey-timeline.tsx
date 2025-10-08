@@ -47,7 +47,7 @@ export function JourneyTimeline({
   progress,
   headerTitle = 'Application Journey',
   headerSubtitle = 'Follow each milestone throughout the review journey.',
-  viewMode = 'list',
+  viewMode = 'graph',
   onViewModeChange,
   graphContent,
   isWalkthroughMode,
@@ -163,41 +163,6 @@ export function JourneyTimeline({
                 </button>
               )}
 
-              {canToggleViews && (
-                <div className="flex items-center gap-3">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    View
-                  </span>
-                  <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
-                    <button
-                      type="button"
-                      onClick={() => onViewModeChange?.('graph')}
-                      aria-pressed={viewMode === 'graph'}
-                      className={clsx(
-                        'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                        viewMode === 'graph'
-                          ? 'bg-[#0f766e] text-white shadow'
-                          : 'text-slate-500 hover:bg-[#f3f8f6]'
-                      )}
-                    >
-                      Graph
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onViewModeChange?.('list')}
-                      aria-pressed={viewMode === 'list'}
-                      className={clsx(
-                        'rounded-full px-3 py-1.5 text-xs font-semibold transition',
-                        viewMode === 'list'
-                          ? 'bg-[#0f766e] text-white shadow'
-                          : 'text-slate-500 hover:bg-[#f3f8f6]'
-                      )}
-                    >
-                      Timeline
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
@@ -206,95 +171,9 @@ export function JourneyTimeline({
       </div>
 
       <div className="bg-white px-6 py-6">
-        {viewMode === 'list' ? (
-          items.length > 0 ? (
-            <div className="relative">
-              <div className="pointer-events-none absolute left-[22px] top-4 bottom-4 w-px bg-gradient-to-b from-[#c0e4da] via-[#dbe9e3] to-transparent" />
-              <ol className="space-y-4">
-                {items.map((item) => (
-                  <li key={item.node.id} className="relative pl-10">
-                    <TimelineMarker status={item.status} isSelected={item.isSelected} />
-
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => onSelect(item.node.id)}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                          event.preventDefault();
-                          onSelect(item.node.id);
-                        }
-                      }}
-                      className={clsx(
-                        'w-full text-left rounded-[26px] border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35',
-                        getContainerClasses(item)
-                      )}
-                    >
-                      <div className="p-4 sm:p-5">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="space-y-2">
-                            <StatusPill status={item.status} isNext={item.isNext} />
-                            <h3 className="text-lg font-semibold text-slate-900">
-                              {item.node.label}
-                            </h3>
-                            <p className="text-sm text-slate-600 leading-relaxed">
-                              {item.node.description || 'No description provided.'}
-                            </p>
-                          </div>
-                          <div className="flex shrink-0 flex-col items-end gap-3">
-                            <button
-                              type="button"
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                onInspect(item.node.id);
-                              }}
-                              className="inline-flex items-center gap-2 rounded-full bg-[#0f766e]/10 px-4 py-1.5 text-xs font-semibold text-[#0f766e] transition-colors hover:bg-[#0f766e]/15"
-                            >
-                              <span>Open review</span>
-                              <svg
-                                className="h-3.5 w-3.5"
-                                viewBox="0 0 14 14"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M3.5 7H10.5M10.5 7L7 3.5M10.5 7L7 10.5"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </button>
-
-                            {item.review?.reviewedAt && (
-                              <div className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
-                                Reviewed {formatDate(item.review.reviewedAt)}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {renderMetadata(item.node)}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center gap-3 rounded-[28px] border border-dashed border-[#dbe9e3] bg-[#f6faf8] px-6 py-12 text-center">
-              <span className="text-sm font-semibold text-slate-900">Upload a BRD policy PDF to populate the review timeline.</span>
-              <p className="max-w-sm text-xs text-slate-500">
-                Once the policy document is uploaded, each state transition will appear here for walkthrough and review.
-              </p>
-            </div>
-          )
-        ) : (
-          <div className="rounded-[28px] border border-[#dbe9e3] bg-[#f6faf8] p-4">
-            {graphContent}
-          </div>
-        )}
+        <div className="rounded-[28px] border border-[#dbe9e3] bg-[#f6faf8] p-4">
+          {graphContent}
+        </div>
       </div>
     </section>
   );
