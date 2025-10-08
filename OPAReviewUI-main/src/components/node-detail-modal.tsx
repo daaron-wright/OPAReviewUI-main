@@ -618,13 +618,6 @@ export function NodeDetailModal({
     return Array.from(tokens);
   }, [node]);
 
-  if (!node) return null;
-
-  const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
-  const transitions = node.metadata?.transitions ?? [];
-  const nodeFunctions = node.metadata?.functions ?? [];
-  const controlSummaryCount = controlAttributes.length + transitions.length;
-
   const relevantBrdSections = useMemo(() => {
     if (!node) {
       return [] as BRDReferenceSection[];
@@ -651,6 +644,13 @@ export function NodeDetailModal({
       return Boolean(matchesNodeId || matchesAttribute || matchesKeyword);
     });
   }, [brdReferences, node, nodeContextTokens, regoRuleMap]);
+
+  if (!node) return null;
+
+  const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
+  const transitions = node.metadata?.transitions ?? [];
+  const nodeFunctions = node.metadata?.functions ?? [];
+  const controlSummaryCount = controlAttributes.length + transitions.length;
 
   const sectionsToDisplay = relevantBrdSections.length > 0 ? relevantBrdSections : brdReferences.sections;
   const usingFallbackSections = relevantBrdSections.length === 0;
