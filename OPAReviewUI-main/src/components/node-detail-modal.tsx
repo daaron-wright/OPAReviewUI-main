@@ -89,7 +89,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
-• تقييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
+• ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال على الحساب:
@@ -565,18 +565,37 @@ export function NodeDetailModal({
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e2ede8] bg-white/90 px-6 py-4">
-          <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white shadow-inner">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setViewMode('overview')}
               aria-pressed={viewMode === 'overview'}
               className={clsx(
-                'rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
-                viewMode === 'overview' ? 'bg-[#0f766e] text-white shadow' : 'text-slate-500 hover:bg-[#f3f8f6]'
+                'rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+                viewMode === 'overview'
+                  ? 'border-transparent bg-[#0f766e] text-white shadow'
+                  : 'border-[#dbe9e3] text-slate-500 hover:bg-[#f3f8f6]'
               )}
             >
               {language === 'ar' ? 'نظرة عامة' : 'Overview'}
             </button>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+              {viewMode === 'split'
+                ? language === 'ar'
+                  ? isPolicyRulesExpanded
+                    ? 'قواعد السياسة مفتوحة'
+                    : 'قواعد السياسة مطوية'
+                  : isPolicyRulesExpanded
+                    ? 'Policy rules expanded'
+                    : 'Policy rules collapsed'
+                : language === 'ar'
+                  ? 'وضع النظرة العامة'
+                  : 'Overview mode'}
+            </span>
+
             <button
               type="button"
               onClick={() => {
@@ -585,27 +604,41 @@ export function NodeDetailModal({
               }}
               aria-pressed={viewMode === 'split'}
               className={clsx(
-                'rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
-                viewMode === 'split' ? 'bg-[#0f766e] text-white shadow' : 'text-slate-500 hover:bg-[#f3f8f6]'
+                'group inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+                viewMode === 'split'
+                  ? 'border-transparent bg-[#0f766e] text-white shadow'
+                  : 'border-[#dbe9e3] text-slate-500 hover:bg-[#f3f8f6]'
               )}
             >
-              {language === 'ar' ? 'عرض منقسم' : 'Split screen'}
+              <span
+                className={clsx(
+                  'flex h-6 w-6 items-center justify-center rounded-full border text-[#0f766e] transition',
+                  viewMode === 'split'
+                    ? 'border-white/40 bg-white/10 text-white'
+                    : 'border-[#dbe9e3] bg-white group-hover:border-[#c2d7cf]'
+                )}
+              >
+                <svg
+                  className={clsx(
+                    'h-3.5 w-3.5 translate-x-0 transform transition-transform',
+                    language === 'ar' ? 'rotate-180' : '',
+                    viewMode === 'split'
+                      ? ''
+                      : language === 'ar'
+                        ? 'group-hover:-translate-x-0.5'
+                        : 'group-hover:translate-x-0.5'
+                  )}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path d="M6 12h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <path d="M14 8l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <span>{language === 'ar' ? 'عرض منقسم' : 'Split screen'}</span>
             </button>
           </div>
-
-          <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-            {viewMode === 'split'
-              ? language === 'ar'
-                ? isPolicyRulesExpanded
-                  ? 'قواعد السياسة مفتوحة'
-                  : 'قواعد السياسة مطوية'
-                : isPolicyRulesExpanded
-                  ? 'Policy rules expanded'
-                  : 'Policy rules collapsed'
-              : language === 'ar'
-                ? 'وضع النظرة العامة'
-                : 'Overview mode'}
-          </span>
         </div>
 
         {/* Side-by-Side Content - Scrollable area */}
@@ -818,7 +851,7 @@ export function NodeDetailModal({
                   </svg>
                   {isPolicyRulesExpanded
                     ? language === 'ar'
-                      ? 'طي قواعد السياسة'
+                      ? 'طي قواع�� السياسة'
                       : 'Collapse policy rules'
                     : language === 'ar'
                       ? 'توسيع قواعد السياسة'
@@ -994,7 +1027,7 @@ export function NodeDetailModal({
                                         <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#fdecee]">
                                           <Icon name="xCircle" className="h-4 w-4 text-[#c22745]" />
                                         </span>
-                                        <span className="text-sm font-semibold">{language === 'ar' ? 'فشل الاختبار' : 'Test failed'}</span>
+                                        <span className="text-sm font-semibold">{language === 'ar' ? 'فشل الا��تبار' : 'Test failed'}</span>
                                       </div>
                                       <pre className="overflow-x-auto rounded-2xl border border-[#f4c7cf] bg-[#fdecee] p-3 text-xs font-mono text-[#c22745]">
                                         <code>{testResults[rule.id]?.actual}</code>
