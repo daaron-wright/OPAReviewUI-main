@@ -467,6 +467,65 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const [isStateMachineLoading, setIsStateMachineLoading] = useState(!initialStateMachine);
   const [stateMachineError, setStateMachineError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (initialStateMachine) {
+      return;
+    }
+
+    let isActive = true;
+    const controller = new AbortController();
+
+    async function loadStateMachine(): Promise<void> {
+      try {
+        setIsStateMachineLoading(true);
+        setStateMachineError(null);
+
+        const response = await fetch(REMOTE_STATE_MACHINE_ENDPOINT, {
+          signal: controller.signal,
+          cache: 'no-store',
+        });
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const file = (await response.json()) as StateMachineFile;
+
+        if (!file?.stateMachine) {
+          throw new Error('Missing stateMachine key in response payload');
+        }
+
+        if (!isActive) {
+          return;
+        }
+
+        setStateMachine(processStateMachine(file.stateMachine));
+      } catch (error) {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        console.error('Failed to load remote state machine', error);
+        const message = 'Unable to load the full Real Beneficiary workflow. Showing fallback data.';
+        setStateMachineError(message);
+        toast.error(createToastContent('warningTriangle', message), {
+          position: 'top-center',
+        });
+      } finally {
+        if (isActive) {
+          setIsStateMachineLoading(false);
+        }
+      }
+    }
+
+    void loadStateMachine();
+
+    return () => {
+      isActive = false;
+      controller.abort();
+    };
+  }, [initialStateMachine]);
+
   const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
   const journeyTotals = useMemo(
     () => {
