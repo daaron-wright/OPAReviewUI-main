@@ -586,5 +586,12 @@ export function Icon({ name, className, strokeWidth }: IconProps): JSX.Element {
   if (!Renderer) {
     throw new Error(`Icon '${name}' is not defined.`);
   }
-  return Renderer({ className, strokeWidth });
+  const props: BaseIconProps = {};
+  if (className !== undefined) {
+    props.className = className;
+  }
+  if (strokeWidth !== undefined) {
+    props.strokeWidth = strokeWidth;
+  }
+  return Renderer(props);
 }
