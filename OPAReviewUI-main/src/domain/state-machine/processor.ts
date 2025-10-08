@@ -42,6 +42,7 @@ export interface ProcessedNode {
     readonly controlAttribute?: string;
     readonly controlAttributes?: ReadonlyArray<string>;
     readonly transitions?: ReadonlyArray<ProcessedNodeTransition>;
+    readonly regoRules?: Record<string, string>;
   };
 }
 
