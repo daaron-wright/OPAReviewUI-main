@@ -201,7 +201,11 @@ function createActorProfile(actor: PolicyActor): ActorProfile {
   phrases.add(labelLower);
   const summaryLower = actor.summary?.toLowerCase();
 
-  return { actor, tokens, phrases, labelLower, summaryLower };
+  const profile: ActorProfile = { actor, tokens, phrases, labelLower };
+  if (summaryLower !== undefined) {
+    profile.summaryLower = summaryLower;
+  }
+  return profile;
 }
 
 function buildNodeContext(node: ProcessedNode): string {
