@@ -768,6 +768,13 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     setEdges(layoutedEdges);
   }, [hasUploadedDocument, initialEdges, initialNodes, setEdges, setNodes]);
 
+  const storeViewport = useCallback(() => {
+    if (!reactFlowInstance) {
+      return;
+    }
+    lastViewportRef.current = reactFlowInstance.getViewport();
+  }, [reactFlowInstance]);
+
   const scheduleFitView = useCallback(
     (options?: Partial<FitViewOptions>) => {
       if (!reactFlowInstance || typeof window === 'undefined') {
