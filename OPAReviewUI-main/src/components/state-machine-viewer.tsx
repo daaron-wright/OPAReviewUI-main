@@ -234,6 +234,8 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const selectedJourneyGraph = journeyGraphs[selectedJourney] ?? { nodes: [], edges: [], metadata: stateMachine.metadata };
   const journeyNodes = selectedJourneyGraph.nodes;
   const journeyEdges = selectedJourneyGraph.edges;
+  const journeyNodeIds = useMemo(() => new Set(journeyNodes.map((node) => node.id)), [journeyNodes]);
+  const journeyEdgeIds = useMemo(() => new Set(journeyEdges.map((edge) => edge.id)), [journeyEdges]);
   const selectedJourneyConfig = useMemo(
     () => JOURNEY_TABS.find((tab) => tab.id === selectedJourney) ?? JOURNEY_TABS[0],
     [selectedJourney]
@@ -287,7 +289,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   } = useReview();
 
   const hasUploadedDocument = Boolean(policyDocument);
-  const canDisplayGraph = journeyNodes.length > 0;
+  const canDisplayGraph = stateMachine.nodes.length > 0;
 
   useEffect(() => {
     if (!hasUploadedDocument) {
