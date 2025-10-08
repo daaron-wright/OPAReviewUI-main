@@ -80,7 +80,7 @@
           },
           {
             "language": "ar",
-            "text": "يفصل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم التجاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
+            "text": "ي��صل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم التجاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
             "reference_id": "brd_table_3",
             "tags": [
               "journey",
@@ -526,6 +526,29 @@
       "routine2_submit_application": {
         "type": "process",
         "description": "Submit application with due diligence team assignment",
+        "journey_paths": [
+          "fast_track"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Submits the fast-track application with pre-filled beneficiary obligations, following BRD 6.2 \"Linked Trade Name Finalization\".",
+            "reference_id": "brd_section_6_2",
+            "tags": [
+              "submission",
+              "fast_track"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يقدّم طلب المسار السريع مع التزامات المستفيد المعبأة مسبقاً، وفق الفقرة 6.2 «إنهاء الاسم التجاري المرتبط».",
+            "reference_id": "brd_section_6_2",
+            "tags": [
+              "submission",
+              "fast_track"
+            ]
+          }
+        ],
         "functions": [
           "submit_application_to_internal_system",
           "assign_application_to_employee",
