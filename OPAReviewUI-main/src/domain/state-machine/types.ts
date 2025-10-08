@@ -72,6 +72,8 @@ export interface State {
   readonly relevant_chunks?: ReadonlyArray<RelevantChunk> | Record<string, unknown>;
   readonly journeyPaths?: ReadonlyArray<string> | string;
   readonly journey_paths?: ReadonlyArray<string> | string;
+  readonly journey_id?: number | string | null;
+  readonly journeyId?: number | string | null;
 }
 
 export interface StateMachineMetadata {
