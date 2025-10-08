@@ -134,20 +134,20 @@ function OverviewTab({ conflict }: OverviewTabProps): JSX.Element {
       </div>
 
       {/* Affected Policies */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <h3 className="text-lg font-semibold text-white mb-4">Affected Policies</h3>
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white p-6 shadow-sm">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Affected Policies</h3>
         <div className="grid gap-4">
           {conflict.affectedPolicies.map((policy) => (
-            <div key={policy.id} className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
+            <div key={policy.id} className="flex items-center justify-between rounded-lg border border-[#dbe9e3] bg-[#f6fbf9] p-4">
               <div>
-                <div className="text-white font-medium">{policy.name}</div>
-                <div className="text-slate-400 text-sm">{policy.package} • v{policy.version}</div>
+                <div className="font-medium text-slate-900">{policy.name}</div>
+                <div className="text-sm text-slate-500">{policy.package} • v{policy.version}</div>
                 {policy.ruleName && (
-                  <div className="text-blue-400 text-sm">Rule: {policy.ruleName}</div>
+                  <div className="text-sm font-medium text-[#0f766e]">Rule: {policy.ruleName}</div>
                 )}
               </div>
               {policy.lineNumber && (
-                <div className="text-slate-400 text-sm">Line {policy.lineNumber}</div>
+                <div className="text-sm text-slate-500">Line {policy.lineNumber}</div>
               )}
             </div>
           ))}
@@ -155,28 +155,28 @@ function OverviewTab({ conflict }: OverviewTabProps): JSX.Element {
       </div>
 
       {/* Conflict Examples */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <h3 className="text-lg font-semibold text-white mb-4">Conflict Examples</h3>
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white p-6 shadow-sm">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Conflict Examples</h3>
         <div className="space-y-4">
           {conflict.conflictDetails.examples.map((example, index) => (
-            <div key={index} className="border border-slate-600 rounded-lg p-4">
-              <h4 className="text-white font-medium mb-2">{example.scenario}</h4>
+            <div key={index} className="rounded-xl border border-[#dbe9e3] bg-[#f6fbf9] p-4">
+              <h4 className="mb-2 font-medium text-slate-900">{example.scenario}</h4>
               <div className="grid gap-3">
                 <div>
-                  <div className="text-sm text-slate-400 mb-1">Input:</div>
-                  <pre className="bg-slate-900 p-3 rounded text-xs text-green-400 overflow-x-auto">
+                  <div className="mb-1 text-sm text-slate-500">Input:</div>
+                  <pre className="overflow-x-auto rounded-lg bg-slate-900/95 p-3 text-xs text-emerald-200">
                     {JSON.stringify(example.input, null, 2)}
                   </pre>
                 </div>
                 <div>
-                  <div className="text-sm text-slate-400 mb-1">Conflicting Outputs:</div>
+                  <div className="mb-1 text-sm text-slate-500">Conflicting Outputs:</div>
                   {example.conflictingOutputs.map((output, idx) => (
                     <div key={idx} className="mb-2">
-                      <div className="text-sm text-white font-medium">{output.policyName}:</div>
-                      <pre className="bg-slate-900 p-2 rounded text-xs text-red-400 overflow-x-auto">
+                      <div className="text-sm font-medium text-slate-900">{output.policyName}:</div>
+                      <pre className="overflow-x-auto rounded-lg bg-slate-900/95 p-2 text-xs text-rose-200">
                         {JSON.stringify(output.output, null, 2)}
                       </pre>
-                      <div className="text-xs text-slate-400 mt-1">{output.reasoning}</div>
+                      <div className="mt-1 text-xs text-slate-500">{output.reasoning}</div>
                     </div>
                   ))}
                 </div>
