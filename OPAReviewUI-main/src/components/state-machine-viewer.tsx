@@ -469,6 +469,78 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   );
   const remoteStateLoadedRef = useRef(Boolean(initialStateMachine));
 
+  const loadRemoteStateMachine = useCallback(
+    async (options: { signal?: AbortSignal; suppressToast?: boolean } = {}) => {
+      if (remoteStateLoadedRef.current) {
+        return true;
+      }
+
+      const { signal, suppressToast } = options;
+
+      try {
+        const response = await fetch(REMOTE_STATE_MACHINE_ENDPOINT, {
+          cache: 'no-store',
+          signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const file = (await response.json()) as StateMachineFile;
+        if (!file?.stateMachine) {
+          throw new Error('Missing stateMachine definition in fetched payload');
+        }
+
+        if (signal?.aborted) {
+          return false;
+        }
+
+        setStateMachine(processStateMachine(file.stateMachine));
+        remoteStateLoadedRef.current = true;
+
+        if (!suppressToast) {
+          toast.success(createToastContent('sparkle', 'Extended BRD workflow imported'), {
+            position: 'top-center',
+          });
+        }
+
+        return true;
+      } catch (error) {
+        const maybeAbortError = error as { name?: string } | undefined;
+        if (signal?.aborted || maybeAbortError?.name === 'AbortError') {
+          return false;
+        }
+
+        console.error('Failed to fetch extended BRD state machine', error);
+
+        if (!suppressToast) {
+          toast.warning(
+            createToastContent('warningTriangle', 'BRD workflow import failed; using default view'),
+            {
+              position: 'top-center',
+            }
+          );
+        }
+
+        return false;
+      }
+    },
+    [setStateMachine]
+  );
+
+  useEffect(() => {
+    if (remoteStateLoadedRef.current) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    void loadRemoteStateMachine({ signal: controller.signal, suppressToast: true });
+
+    return () => controller.abort();
+  }, [loadRemoteStateMachine]);
+
   const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
   const journeyTotals = useMemo(
     () => {
