@@ -110,9 +110,33 @@ function filterStateMachineForJourney(
     };
   }
 
-  const keywordMatchers = config.conditionKeywords.map((keyword) => keyword.toLowerCase());
+  const journeyDefinition = machine.metadata.journeys?.find((journey) => journey.id === config.id);
+  const nodeMap = new Map(machine.nodes.map((node) => [node.id, node]));
+  const seedStates = new Set<string>([...ALWAYS_INCLUDED_NODES, ...config.seedStates]);
+  const pathStates = new Set<string>(config.pathStates);
+
+  if (journeyDefinition) {
+    journeyDefinition.seedStates.forEach((stateId) => seedStates.add(stateId));
+    journeyDefinition.pathStates.forEach((stateId) => pathStates.add(stateId));
+  }
+
   const included = new Set<string>();
-  const queue: string[] = [];
+  machine.nodes.forEach((node) => {
+    if (node.journeyPaths.includes(config.id)) {
+      included.add(node.id);
+    }
+  });
+
+  seedStates.forEach((stateId) => {
+    if (nodeMap.has(stateId)) {
+      included.add(stateId);
+    }
+  });
+  pathStates.forEach((stateId) => {
+    if (nodeMap.has(stateId)) {
+      included.add(stateId);
+    }
+  });
 
   const edgesBySource = machine.edges.reduce<Map<string, ProcessedEdge[]>>((map, edge) => {
     if (!map.has(edge.source)) {
@@ -122,30 +146,31 @@ function filterStateMachineForJourney(
     return map;
   }, new Map());
 
-  const initialSeeds = new Set<string>([...config.seedNodes, ...ALWAYS_INCLUDED_NODES]);
-  initialSeeds.forEach((nodeId) => {
-    if (!included.has(nodeId)) {
-      queue.push(nodeId);
-    }
-  });
+  const queue = [...included];
 
   while (queue.length > 0) {
     const nodeId = queue.shift();
-    if (!nodeId || included.has(nodeId)) {
+    if (!nodeId) {
       continue;
     }
-    const nodeExists = machine.nodes.some((node) => node.id === nodeId);
-    if (!nodeExists) {
-      continue;
-    }
-    included.add(nodeId);
 
     const outgoing = edgesBySource.get(nodeId) ?? [];
     outgoing.forEach((edge) => {
-      if (shouldIncludeEdge(edge, nodeId, config, keywordMatchers)) {
-        if (!included.has(edge.target)) {
-          queue.push(edge.target);
-        }
+      const targetNode = nodeMap.get(edge.target);
+      if (!targetNode) {
+        return;
+      }
+
+      const targetBelongs =
+        targetNode.journeyPaths.includes(config.id) ||
+        pathStates.has(targetNode.id) ||
+        seedStates.has(targetNode.id) ||
+        ALWAYS_INCLUDED_NODES.has(targetNode.id);
+      const targetIsNeutral = targetNode.journeyPaths.length === 0;
+
+      if ((targetBelongs || targetIsNeutral) && !included.has(targetNode.id)) {
+        included.add(targetNode.id);
+        queue.push(targetNode.id);
       }
     });
   }
@@ -154,30 +179,12 @@ function filterStateMachineForJourney(
   const filteredNodeIds = new Set(filteredNodes.map((node) => node.id));
 
   const filteredEdges = machine.edges.filter(
-    (edge) =>
-      filteredNodeIds.has(edge.source) &&
-      filteredNodeIds.has(edge.target) &&
-      shouldIncludeEdge(edge, edge.source, config, keywordMatchers)
+    (edge) => filteredNodeIds.has(edge.source) && filteredNodeIds.has(edge.target)
   );
 
   const sanitizedNodes = filteredNodes.map((node) => {
     const filteredTransitions = node.metadata.transitions?.filter((transition) =>
-      filteredNodeIds.has(transition.target) &&
-      shouldIncludeEdge(
-        {
-          id: `${node.id}-${transition.target}-metadata`,
-          source: node.id,
-          target: transition.target,
-          label: transition.controlAttributeValue ?? transition.condition,
-          condition: transition.condition,
-          action: transition.action,
-          controlAttribute: transition.controlAttribute,
-          controlAttributeValue: transition.controlAttributeValue,
-        },
-        node.id,
-        config,
-        keywordMatchers
-      )
+      filteredNodeIds.has(transition.target)
     );
 
     return {
@@ -199,38 +206,6 @@ function filterStateMachineForJourney(
       totalTransitions: filteredEdges.length,
     },
   };
-}
-
-function shouldIncludeEdge(
-  edge: ProcessedEdge,
-  sourceId: string,
-  config: JourneyTabConfig,
-  keywordMatchers: readonly string[]
-): boolean {
-  const condition = edge.condition?.toLowerCase() ?? '';
-  const targetId = edge.target;
-  const sourceIsRoutine = sourceId.startsWith(config.routinePrefix);
-  const targetIsRoutine = targetId.startsWith('routine');
-
-  if (BRANCH_NODE_IDS.has(sourceId)) {
-    if (targetId.startsWith(config.routinePrefix)) {
-      return true;
-    }
-    return keywordMatchers.some((keyword) => condition.includes(keyword));
-  }
-
-  if (sourceIsRoutine) {
-    if (targetIsRoutine && !targetId.startsWith(config.routinePrefix)) {
-      return false;
-    }
-    return true;
-  }
-
-  if (targetIsRoutine && !targetId.startsWith(config.routinePrefix)) {
-    return false;
-  }
-
-  return true;
 }
 
 interface StateMachineViewerProps {
