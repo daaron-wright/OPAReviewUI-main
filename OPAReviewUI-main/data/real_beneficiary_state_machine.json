@@ -80,7 +80,7 @@
           },
           {
             "language": "ar",
-            "text": "ي��صل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم التجاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
+            "text": "يفصل من��ق التفرع بين التسجيل الجديد، وتنشيط الاسم التجاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
             "reference_id": "brd_table_3",
             "tags": [
               "journey",
@@ -567,6 +567,29 @@
       "routine3_digital_id_verification": {
         "type": "process",
         "description": "Verify Digital ID for existing license",
+        "journey_paths": [
+          "update_compliance"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Path 2 confirms authorized user levels for existing license updates, per BRD 4.2.1 digital identity controls.",
+            "reference_id": "brd_section_4_2_1",
+            "tags": [
+              "identity",
+              "compliance"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يتحقق المسار 2 من مستويات المستخدم المخول لتحديث الرخصة القائمة، استناداً إلى ضوابط الهوية الرقمية في الفقرة 4.2.1.",
+            "reference_id": "brd_section_4_2_1",
+            "tags": [
+              "identity",
+              "compliance"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "digital_id_level in ['SOP2', 'SOP3']",
