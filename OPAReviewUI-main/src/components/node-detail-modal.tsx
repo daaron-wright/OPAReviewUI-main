@@ -78,7 +78,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل ��عالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المق��ولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -115,7 +115,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
-• الملكية غير المب��شرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
+• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة ��التناسب)
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
@@ -438,7 +438,7 @@ export function NodeDetailModal({
   
   if (!node) return null;
 
-  const brdReferences = getMockBRDReferences();
+  const brdReferences = useMemo(() => getMockBRDReferences(), []);
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
