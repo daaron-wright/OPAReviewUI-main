@@ -1384,7 +1384,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
             Upload a BRD policy to unlock walkthrough reviews and publishing features.
           </p>
           <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-1.5 text-xs font-semibold text-slate-600 shadow-[0_14px_28px_-20px_rgba(15,118,110,0.25)]">
-            <Icon name="pause" className="h-4 w-4 text-[#0f766e]" />
+            <Icon name="hourglass" className="h-4 w-4 text-[#0f766e]" />
             Awaiting policy document
           </div>
         </div>
@@ -1538,7 +1538,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
               </button>
               {!policyDocument ? (
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-1.5 text-xs font-semibold text-slate-500">
-                  <Icon name="pause" className="h-4 w-4 text-[#0f766e]" />
+                  <Icon name="hourglass" className="h-4 w-4 text-[#0f766e]" />
                   Awaiting policy document
                 </span>
               ) : (
