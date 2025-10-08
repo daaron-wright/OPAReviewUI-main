@@ -8,6 +8,7 @@ import { createContext, useContext, useState, useCallback, ReactNode, useEffect,
 
 import { fetchDocumentInfo, type DocumentInfo } from '@/adapters/document-info-client';
 import { fetchPolicyActors, type PolicyActor } from '@/adapters/policy-actors-client';
+import { isAbortError } from '@/utils/fetch-error-utils';
 
 export interface NodeReviewStatus {
   nodeId: string;
@@ -289,10 +290,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       const actors = await fetchPolicyActors(controller.signal);
       setPolicyActors(actors);
     } catch (error) {
-      const isAbortError =
-        (error instanceof Error && error.name === 'AbortError') ||
-        (typeof error === 'object' && error !== null && 'name' in error && (error as { name?: unknown }).name === 'AbortError');
-      if (isAbortError) {
+      if (isAbortError(error, { signal: controller.signal })) {
         return;
       }
       console.error('Failed to load policy actors from API', error);
@@ -324,10 +322,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       const info = await fetchDocumentInfo(controller.signal);
       setDocumentInfo(info);
     } catch (error) {
-      const isAbortError =
-        (error instanceof Error && error.name === 'AbortError') ||
-        (typeof error === 'object' && error !== null && 'name' in error && (error as { name?: unknown }).name === 'AbortError');
-      if (isAbortError) {
+      if (isAbortError(error, { signal: controller.signal })) {
         return;
       }
       console.error('Failed to load document info from API', error);
