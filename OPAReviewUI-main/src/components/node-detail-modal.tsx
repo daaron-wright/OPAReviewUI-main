@@ -57,7 +57,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
-• يجب أن يكون للكيانات الت��ارية موقّع مفوض ��احد على الأقل بمستوى SOP3
+• يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
 
@@ -96,7 +96,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حت�� لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
@@ -212,7 +212,14 @@ export function NodeDetailModal({
       document.body.style.overflow = 'unset';
     };
   }, [node, onClose, isChatOpen]);
-  
+
+  useEffect(() => {
+    if (node) {
+      setViewMode('overview');
+      setIsPolicyRulesExpanded(false);
+    }
+  }, [node]);
+
   const handleBackdropClick = useCallback((e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose(false);
