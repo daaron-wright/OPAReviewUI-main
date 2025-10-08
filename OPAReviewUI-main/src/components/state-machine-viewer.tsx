@@ -880,6 +880,13 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [journeyNodes.length, scheduleFitView, reactFlowInstance, selectedJourney, isGraphExpanded]);
 
   useEffect(() => {
+    if (!hasUploadedDocument) {
+      shouldAutoFitRef.current = true;
+      lastViewportRef.current = null;
+    }
+  }, [hasUploadedDocument]);
+
+  useEffect(() => {
     if (typeof document === 'undefined') {
       return undefined;
     }
