@@ -80,9 +80,7 @@ export function ConflictFilters({
 
   const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     const value = event.target.value as ConflictStatus | '';
-    updateFilter({
-      status: value ? [value] : undefined,
-    });
+    updateFilter(value ? { status: [value] } : {});
   };
 
   return (
