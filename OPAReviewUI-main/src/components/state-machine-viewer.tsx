@@ -1106,14 +1106,43 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
           aria-label="Journey map focus view"
         >
           <div className="flex flex-col gap-4 border-b border-white/10 bg-white/95 px-6 py-6 shadow-[0_20px_60px_-20px_rgba(11,64,55,0.45)] sm:flex-row sm:items-center sm:justify-between">
-            <div className="space-y-2 text-slate-900">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
-                Journey map focus
-              </span>
-              <h2 className="text-lg font-semibold leading-snug sm:text-xl">{selectedJourneyConfig.label} Journey</h2>
-              <p className="text-xs text-slate-600">
-                Drag to pan, scroll to zoom, or use the controls. Press Esc or close to return.
-              </p>
+            <div className="flex flex-1 flex-col gap-4 text-slate-900">
+              <div className="space-y-2">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
+                  Journey map focus
+                </span>
+                <h2 className="text-lg font-semibold leading-snug sm:text-xl">{selectedJourneyConfig.label} Journey</h2>
+                <p className="text-xs text-slate-600">
+                  Drag to pan, scroll to zoom, or use the controls. Press Esc or close to return.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">
+                  Journeys
+                </span>
+                <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
+                  {JOURNEY_TABS.map((tab) => {
+                    const isActive = tab.id === selectedJourney;
+                    return (
+                      <button
+                        key={`focus-${tab.id}`}
+                        type="button"
+                        onClick={() => {
+                          setSelectedJourney(tab.id);
+                          handleFocusFit();
+                        }}
+                        className={clsx(
+                          'rounded-full px-3 py-1 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+                          isActive ? 'bg-[#0f766e] text-white shadow' : 'text-slate-500 hover:bg-[#f3f8f6]'
+                        )}
+                        aria-pressed={isActive}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <button
