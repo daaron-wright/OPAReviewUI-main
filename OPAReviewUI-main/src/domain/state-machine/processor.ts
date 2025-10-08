@@ -339,6 +339,18 @@ function normalizeJourneyPaths(
     collected.add(path);
   });
 
+  const journeyIdValue = state.journey_id ?? state.journeyId;
+  if (journeyIdValue !== undefined && journeyIdValue !== null) {
+    if (typeof journeyIdValue === 'string') {
+      collected.add(journeyIdValue);
+    } else if (typeof journeyIdValue === 'number' && journeys.length > 0) {
+      const journeyIndex = journeyIdValue - 1;
+      if (journeyIndex >= 0 && journeyIndex < journeys.length) {
+        collected.add(journeys[journeyIndex].id);
+      }
+    }
+  }
+
   if (journeys.length > 0) {
     journeys.forEach((journey) => {
       if (journey.seedStates.includes(id) || journey.pathStates.includes(id)) {
