@@ -20,8 +20,8 @@
         "description": "Determine entry path - customer portal or employee portal",
         "journey_paths": [
           "new_trade_name",
-          "existing_trade_license",
-          "existing_trade_name"
+          "existing_trade_name",
+          "existing_trade_license"
         ],
         "relevant_chunks": [
           {
@@ -65,8 +65,8 @@
         "description": "Customer selects type of application",
         "journey_paths": [
           "new_trade_name",
-          "existing_trade_license",
-          "existing_trade_name"
+          "existing_trade_name",
+          "existing_trade_license"
         ],
         "relevant_chunks": [
           {
@@ -176,7 +176,7 @@
           },
           {
             "language": "ar",
-            "text": "يؤكد الشكل الق��نوني، وحدود الملكية، وإقرارات المستفيدين للمتقدمين الجدد وفق الفقرة 4.3 «معايير الأهلية للرخص الجديدة».",
+            "text": "يؤكد الشكل الق��نوني، وحدود الملكية، وإقرارات المستفيدين للمتقدمين الجدد وفق الفقرة 4.3 «معايير الأهلية للرخص ��لجديدة».",
             "reference_id": "brd_section_4_3",
             "tags": [
               "eligibility",
