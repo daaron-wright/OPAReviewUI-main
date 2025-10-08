@@ -87,7 +87,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
-• يجب أن يكون لل��يانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
+• يج�� أن يكون لل��يانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
 • يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية وا��نتائج
 
@@ -125,7 +125,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال ��لى الحساب:
-إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
+إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من ا��كيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��س��ن السيطرة من خلال ��سائل أخرى.`,
@@ -652,7 +652,7 @@ export function NodeDetailModal({
 
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
-  const nodeFunctions = node.metadata?.functions ?? [];
+  const _nodeFunctions = node.metadata?.functions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
 
   const sectionsToDisplay = relevantBrdSections.length > 0 ? relevantBrdSections : brdReferences.sections;
@@ -895,7 +895,7 @@ export function NodeDetailModal({
                     ? 'إخفاء قواعد السياسة'
                     : 'Hide Policy Rules'
                   : language === 'ar'
-                    ? 'عرض قواعد السياسة'
+                    ? 'عرض قواعد الس��اسة'
                     : 'View Policy Rules'}
               </span>
             </button>
@@ -1421,7 +1421,7 @@ export function NodeDetailModal({
                                         : 'Confirmed'
                                       : testWorkflows[rule.id]?.status === 'reviewing'
                                         ? language === 'ar'
-                                          ? 'قيد ا��مراجعة'
+                                          ? 'قيد المراجعة'
                                           : 'In Review'
                                         : testWorkflows[rule.id]?.status === 'rejected'
                                           ? language === 'ar'
