@@ -6,7 +6,7 @@
 export type StateType = 'decision' | 'process' | 'final' | 'notify';
 
 export interface Transition {
-  readonly condition: string;
+  readonly condition?: string;
   readonly target: string;
   readonly action: string;
   readonly controlAttribute?: string;
