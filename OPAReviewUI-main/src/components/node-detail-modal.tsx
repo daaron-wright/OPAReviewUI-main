@@ -30,6 +30,9 @@ interface RegoRule {
     input: string;
     expected: string;
   };
+  relatedAttributes?: string[];
+  relatedNodeIds?: string[];
+  keywords?: string[];
 }
 
 interface BRDReferenceSection {
@@ -80,7 +83,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المست��ى الثاني للبطاقة الذكية) و SOP3 (المست��ى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلا�� للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المست��ى الثاني للبطاقة الذكية) و SOP3 (المست��ى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -117,7 +120,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
-• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
+• الملكية غير المباشر��: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
@@ -163,7 +166,15 @@ deny {
     testCase: {
       input: '{"digital_id_level": "SOP3", "user_type": "individual"}',
       expected: '{"allow": true, "deny": false}'
-    }
+    },
+    relatedAttributes: ['digital_id_level', 'digital_identity', 'identity_verification'],
+    relatedNodeIds: [
+      'routine1_digital_id_verification',
+      'routine2_digital_id_verification',
+      'routine3_digital_id_verification',
+      'digital_id_reassessment'
+    ],
+    keywords: ['digital id', 'identity', 'sop']
   },
   {
     id: 'rule_2',
@@ -187,7 +198,15 @@ risk_score := score {
     testCase: {
       input: '{"entity_id": "UAE-123456", "pep_status": false}',
       expected: '{"blacklisted": false, "risk_score": 25}'
-    }
+    },
+    relatedAttributes: ['blacklist_hit', 'risk_score', 'pep_status'],
+    relatedNodeIds: [
+      'routine1_blacklist_precheck',
+      'routine2_blacklist_precheck',
+      'alert_screening_blacklist_block',
+      'alert_screening_review_results'
+    ],
+    keywords: ['blacklist', 'screen', 'risk']
   }
 ];
 
