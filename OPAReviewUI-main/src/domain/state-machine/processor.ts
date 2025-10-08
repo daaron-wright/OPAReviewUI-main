@@ -138,6 +138,22 @@ function createNode(
   };
 }
 
+function getRelevanceLabel(similarity: unknown): string | undefined {
+  if (typeof similarity !== 'number' || !Number.isFinite(similarity)) {
+    return undefined;
+  }
+
+  if (similarity >= 0.9) {
+    return 'Very High Relevance';
+  } else if (similarity >= 0.8) {
+    return 'High Relevance';
+  } else if (similarity >= 0.7) {
+    return 'Moderate Relevance';
+  } else {
+    return 'Low Relevance';
+  }
+}
+
 function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantChunk> | undefined {
   const rawChunks = (state.relevantChunks ?? state.relevant_chunks) as unknown;
 
