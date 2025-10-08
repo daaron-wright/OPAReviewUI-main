@@ -78,7 +78,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات ��لتحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -111,13 +111,13 @@ If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
 Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
-      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
+      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمست��يد حقيقي.
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
-• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وس��طة (محسوبة بالتناسب)
+• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
-• اعتبار خاص لهياكل الأمانة وت��تيبات المرشحين
+• اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال ��لى الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
@@ -907,19 +907,22 @@ export function NodeDetailModal({
                           }`}
                         >
                           <button
-                            onClick={() => {
-                              const newExpanded = expandedRule === rule.id ? null : rule.id;
-                              setExpandedRule(newExpanded);
+                          onClick={() => {
+                            const newExpanded = expandedRule === rule.id ? null : rule.id;
+                            setExpandedRule(newExpanded);
 
-                              const ruleIndex = regoRules.findIndex((r) => r.id === rule.id);
-                              if (newExpanded && ruleIndex >= 0 && brdReferences.sections[ruleIndex]) {
-                                setExpandedBRDSection(ruleIndex);
-                              } else if (!newExpanded) {
-                                setExpandedBRDSection(null);
-                              }
-                            }}
-                            className="w-full bg-[#f9fbfa] px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
-                          >
+                            const linkedSection = brdReferences.sections.find((section) => section.ruleId === rule.id);
+
+                            if (newExpanded && linkedSection) {
+                              setExpandedBRDSection(linkedSection.id);
+                            }
+
+                            if (!newExpanded && linkedSection && expandedBRDSection === linkedSection.id) {
+                              setExpandedBRDSection(null);
+                            }
+                          }}
+                          className="w-full bg-[#f9fbfa] px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
+                        >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <svg
@@ -1036,7 +1039,7 @@ export function NodeDetailModal({
                                         onClick={() => confirmRule(rule.id)}
                                         className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/30 hover:bg-[#e4f5f1]"
                                       >
-                                        {language === 'ar' ? 'ت��كيد' : 'Mark as Confirmed'}
+                                        {language === 'ar' ? 'تأكيد' : 'Mark as Confirmed'}
                                       </button>
                                     </div>
                                   )}
@@ -1083,7 +1086,7 @@ export function NodeDetailModal({
                                   className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
                                 >
                                   <Icon name="flask" className="h-4 w-4 text-white" />
-                                  {language === 'ar' ? 'تشغيل حالة الاختبار' : 'Run Test Case'}
+                                  {language === 'ar' ? 'تش��يل حالة الاختبار' : 'Run Test Case'}
                                 </button>
                                 <button
                                   onClick={() => approveRule(rule.id)}
