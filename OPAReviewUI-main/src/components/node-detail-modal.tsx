@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 /**
  * Modal component for displaying detailed node information
  * Now with side-by-side BRD and Rego rules because Master Jedi demands it
