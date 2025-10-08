@@ -678,7 +678,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       });
       return false;
     }
-  }, []);
+  }, [setStateMachine]);
 
   const handlePolicyDocumentSelected = useCallback(
     async (file: File) => {
