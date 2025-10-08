@@ -720,7 +720,7 @@ export function NodeDetailModal({
                   ? 'عرض قواعد السياسة'
                   : 'Policy rules view'
                 : language === 'ar'
-                  ? 'وضع النظرة العا��ة'
+                  ? 'وضع النظرة العامة'
                   : 'Overview mode'}
             </span>
 
@@ -791,7 +791,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'سم��ت التحكم وقيم ا��انتقال ل��ذه العقدة.'
+                          ? 'سمات التحكم وقيم الانتقال لهذه العقدة.'
                           : 'Control attributes and transition values for this node.'}
                       </p>
                     </div>
@@ -1245,7 +1245,7 @@ export function NodeDetailModal({
                                   className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
                                 >
                                   <Icon name="flask" className="h-4 w-4 text-white" />
-                                  {language === 'ar' ? 'تش��يل حالة الاختبار' : 'Run Test Case'}
+                                  {language === 'ar' ? 'تش��ي�� حالة الاختبار' : 'Run Test Case'}
                                 </button>
                                 <button
                                   onClick={() => approveRule(rule.id)}
