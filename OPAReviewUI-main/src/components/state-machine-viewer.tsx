@@ -245,6 +245,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     }
     return journeyTabs.find((tab) => tab.id === selectedJourney) ?? journeyTabs[0];
   }, [journeyTabs, selectedJourney]);
+  const selectedJourneyLabel = selectedJourneyConfig?.label ?? 'Journey';
 
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -1002,7 +1003,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         <Icon name="arrowUp" className="h-5 w-5" />
       </div>
       <div className="space-y-2">
-        <p className="text-sm font-semibold text-slate-900">No states available for {selectedJourneyConfig.label}</p>
+        <p className="text-sm font-semibold text-slate-900">No states available for {selectedJourneyLabel}</p>
         <p className="text-xs font-medium text-slate-500">
           Update the state machine definition to include this journey’s workflow.
         </p>
@@ -1024,7 +1025,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       />
       {!hasUploadedDocument && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl bg-white/70 px-6 text-center backdrop-blur-sm">
-          <p className="text-sm font-semibold text-slate-900">Graph reflects the {selectedJourneyConfig.label.toLowerCase()} journey</p>
+          <p className="text-sm font-semibold text-slate-900">Graph reflects the {selectedJourneyLabel.toLowerCase()} journey</p>
           <p className="text-xs font-medium text-slate-500">
             Upload a BRD policy to unlock walkthrough reviews and publishing features.
           </p>
@@ -1051,7 +1052,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
             </p>
             <h3 className="text-sm font-semibold text-slate-900">Visualise state transitions</h3>
             <p className="text-xs text-slate-600">
-              Inspect the {selectedJourneyConfig.label.toLowerCase()} journey and open any node for deeper review.
+              Inspect the {selectedJourneyLabel.toLowerCase()} journey and open any node for deeper review.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
@@ -1144,7 +1145,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                 <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
                   Journey map focus
                 </span>
-                <h2 className="text-lg font-semibold leading-snug sm:text-xl">{selectedJourneyConfig.label} Journey</h2>
+                <h2 className="text-lg font-semibold leading-snug sm:text-xl">{selectedJourneyLabel} Journey</h2>
                 <p className="text-xs text-slate-600">
                   Drag to pan, scroll to zoom, or use the controls. Press Esc or close to return.
                 </p>
@@ -1239,7 +1240,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white/70 px-6 text-center backdrop-blur-sm">
                   <p className="text-base font-semibold text-slate-900">Upload a BRD policy to enable walkthrough actions.</p>
                   <p className="text-sm font-medium text-slate-500">
-                    The graph displays the {selectedJourneyConfig.label.toLowerCase()} journey in read-only mode.
+                    The graph displays the {selectedJourneyLabel.toLowerCase()} journey in read-only mode.
                   </p>
                 </div>
               )}
