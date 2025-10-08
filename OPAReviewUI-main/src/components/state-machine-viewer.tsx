@@ -862,7 +862,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       step4Description =
         totalStates > 0
           ? `Walkthrough in progress • ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
-          : 'Walkthrough in progress��';
+          : 'Walkthrough in progress…';
     } else if (walkthroughInProgress) {
       step4Status = 'active';
       step4Description =
@@ -970,9 +970,9 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         <Icon name="paperclip" className="h-5 w-5" />
       </div>
       <div className="space-y-2">
-        <p className="text-sm font-semibold text-slate-900">State machine graph unavailable</p>
+        <p className="text-sm font-semibold text-slate-900">No states available for {selectedJourneyConfig.label}</p>
         <p className="text-xs font-medium text-slate-500">
-          Add states and transitions to the configuration to generate the journey map.
+          Update the state machine definition to include this journey’s workflow.
         </p>
       </div>
     </div>
