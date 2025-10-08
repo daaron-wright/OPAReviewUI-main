@@ -35,40 +35,94 @@ export function ConflictDetailModal({
     { id: 'resolution', label: 'Resolution Actions', icon: 'bolt' },
   ];
 
-  const severityColors = {
-    critical: 'from-rose-500 to-rose-600',
-    high: 'from-amber-400 to-amber-500',
-    medium: 'from-sky-400 to-sky-500',
-    low: 'from-emerald-400 to-emerald-500',
-  };
+  const severityTokens = {
+    critical: {
+      container: 'border-rose-200 shadow-[0_24px_48px_-30px_rgba(225,29,72,0.32)]',
+      badge: 'border-rose-200 bg-rose-50 text-rose-600',
+      indicator: 'bg-rose-500',
+      iconWrap: 'border-rose-200 bg-rose-50 text-rose-600',
+    },
+    high: {
+      container: 'border-amber-200 shadow-[0_24px_48px_-30px_rgba(217,119,6,0.28)]',
+      badge: 'border-amber-200 bg-amber-50 text-amber-600',
+      indicator: 'bg-amber-500',
+      iconWrap: 'border-amber-200 bg-amber-50 text-amber-600',
+    },
+    medium: {
+      container: 'border-sky-200 shadow-[0_24px_48px_-30px_rgba(14,165,233,0.25)]',
+      badge: 'border-sky-200 bg-sky-50 text-sky-600',
+      indicator: 'bg-sky-500',
+      iconWrap: 'border-sky-200 bg-sky-50 text-sky-600',
+    },
+    low: {
+      container: 'border-emerald-200 shadow-[0_24px_48px_-30px_rgba(16,185,129,0.25)]',
+      badge: 'border-emerald-200 bg-emerald-50 text-emerald-600',
+      indicator: 'bg-emerald-500',
+      iconWrap: 'border-emerald-200 bg-emerald-50 text-emerald-600',
+    },
+  } as const;
+
+  const severityVisual = severityTokens[conflict.severity];
+  const metadataItems = [
+    { label: 'ID', value: conflict.id },
+    { label: 'Detected', value: new Date(conflict.detectedAt).toLocaleDateString() },
+    { label: 'Confidence', value: `${conflict.conflictDetails.confidence}%` },
+  ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="relative w-full max-w-6xl max-h-[90vh] rounded-[28px] border border-[#dbe9e3] bg-white text-slate-900 shadow-[0_35px_60px_-40px_rgba(15,118,110,0.45)] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className={`bg-gradient-to-r ${severityColors[conflict.severity]} p-6 text-white`}>
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="px-6 pt-6">
+          <div
+            className={clsx(
+              'flex items-start justify-between gap-6 rounded-[24px] border bg-white p-6 transition-shadow',
+              severityVisual.container
+            )}
+          >
+            <div className="flex items-start gap-5">
+              <div
+                className={clsx(
+                  'flex h-12 w-12 items-center justify-center rounded-xl border',
+                  severityVisual.iconWrap
+                )}
+                aria-hidden="true"
+              >
+                <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <div>
-                <h2 className="text-2xl font-semibold">{conflict.title}</h2>
-                <p className="mt-1 text-sm text-white/80">{conflict.description}</p>
-                <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-white/80">
-                  <span>ID: {conflict.id}</span>
-                  <span>Detected: {new Date(conflict.detectedAt).toLocaleDateString()}</span>
-                  <span>Confidence: {conflict.conflictDetails.confidence}%</span>
+              <div className="space-y-3">
+                <span
+                  className={clsx(
+                    'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em]',
+                    severityVisual.badge
+                  )}
+                >
+                  <span className={clsx('h-1.5 w-1.5 rounded-full', severityVisual.indicator)} />
+                  {conflict.severity.charAt(0).toUpperCase() + conflict.severity.slice(1)} severity
+                </span>
+                <h2 className="text-2xl font-semibold text-slate-900">{conflict.title}</h2>
+                <p className="text-sm leading-relaxed text-slate-600">{conflict.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {metadataItems.map((item) => (
+                    <span
+                      key={item.label}
+                      className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-[#f6fbf9] px-3 py-1 text-xs font-semibold text-slate-600"
+                    >
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400">{item.label}</span>
+                      <span className="text-slate-700">{item.value}</span>
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              className="rounded-full border border-[#dbe9e3] p-2 text-slate-400 transition hover:border-[#0f766e] hover:text-[#0f766e]"
+              aria-label="Close conflict details"
             >
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
