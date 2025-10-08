@@ -48,6 +48,85 @@ const RETRYABLE_HTTP_STATUS_CODES = new Set([408, 409, 425, 429, 500, 502, 503, 
 
 type FetchError = Error & { status?: number };
 
+function delay(ms: number): Promise<void> {
+  if (ms <= 0) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function isAbortError(error: unknown, signal?: AbortSignal): boolean {
+  if (signal?.aborted) {
+    return true;
+  }
+
+  if (!error) {
+    return false;
+  }
+
+  const candidate = error as { name?: string; message?: string };
+
+  const name = candidate.name?.toLowerCase();
+  if (name === 'aborterror') {
+    return true;
+  }
+
+  const message = candidate.message?.toLowerCase() ?? '';
+  if (
+    message.includes('abort') ||
+    message.includes('the operation was aborted') ||
+    message.includes('fetch is aborted') ||
+    message.includes('user aborted')
+  ) {
+    return true;
+  }
+
+  if (typeof DOMException !== 'undefined' && error instanceof DOMException) {
+    return error.name === 'AbortError';
+  }
+
+  return false;
+}
+
+function isRetriableStatus(status?: number): boolean {
+  if (typeof status !== 'number') {
+    return false;
+  }
+
+  return RETRYABLE_HTTP_STATUS_CODES.has(status);
+}
+
+function isRetriableFetchError(error: unknown): boolean {
+  if (!error) {
+    return false;
+  }
+
+  const candidate = error as { name?: string; message?: string };
+  const name = candidate.name?.toLowerCase() ?? '';
+  if (name === 'typeerror' || name === 'networkerror' || name === 'fetcherror') {
+    return true;
+  }
+
+  const message = candidate.message?.toLowerCase() ?? '';
+  if (!message) {
+    return false;
+  }
+
+  return (
+    message === 'error' ||
+    message.includes('network') ||
+    message.includes('timeout') ||
+    message.includes('temporarily') ||
+    message.includes('failed to fetch') ||
+    message.includes('load failed') ||
+    message.includes('connection') ||
+    message.includes('fetch is aborted')
+  );
+}
+
 type JourneyTabId = string;
 
 interface JourneyTabConfig {
