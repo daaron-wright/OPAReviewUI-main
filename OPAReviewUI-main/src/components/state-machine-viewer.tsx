@@ -921,7 +921,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       step4Status = 'active';
       step4Description =
         totalStates > 0
-          ? `Resume walkthrough • ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
+          ? `Resume walkthrough ��� ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
           : 'Resume walkthrough to continue reviewing states';
     } else {
       step4Status = 'active';
@@ -1386,6 +1386,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         <JourneySummaryPanel
           item={activeItem}
           metadata={stateMachine.metadata}
+          journeyTotals={journeyTotals}
           isWalkthroughMode={isWalkthroughMode}
           onStartWalkthrough={handleStartWalkthrough}
           onExitWalkthrough={handleExitWalkthrough}
