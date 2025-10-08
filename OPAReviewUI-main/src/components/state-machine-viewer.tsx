@@ -674,6 +674,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         : undefined;
       const transitions = node.metadata.transitions ? [...node.metadata.transitions] : undefined;
       const isJourneyNode = journeyNodeIds.has(node.id);
+      const nodeActors = nodeActorAssignments.get(node.id);
 
       const data: CustomNodeData = {
         label: node.label,
@@ -686,6 +687,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         ...(node.metadata.controlAttribute ? { controlAttribute: node.metadata.controlAttribute } : {}),
         ...(controlAttributes ? { controlAttributes } : {}),
         ...(transitions ? { transitions } : {}),
+        ...(nodeActors && nodeActors.length > 0 ? { actors: nodeActors } : {}),
       };
 
       return {
@@ -695,7 +697,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         data,
       };
     });
-  }, [hasUploadedDocument, journeyNodeIds, stateMachine.nodes]);
+  }, [hasUploadedDocument, journeyNodeIds, nodeActorAssignments, stateMachine.nodes]);
 
   const initialEdges = useMemo(() => {
     if (!hasUploadedDocument) {
