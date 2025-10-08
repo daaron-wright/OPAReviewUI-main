@@ -504,7 +504,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     if (reactFlowInstance) {
       reactFlowInstance.fitView({ padding: 0.2, duration: 600 });
     }
-  }, [isGraphExpanded, reactFlowInstance]);
+  }, [isGraphExpanded, journeyNodes.length, reactFlowInstance, selectedJourney]);
 
   useEffect(() => {
     if (typeof document === 'undefined') {
