@@ -981,7 +981,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       />
       {!hasUploadedDocument && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl bg-white/70 px-6 text-center backdrop-blur-sm">
-          <p className="text-sm font-semibold text-slate-900">Graph reflects the active state machine</p>
+          <p className="text-sm font-semibold text-slate-900">Graph reflects the {selectedJourneyConfig.label.toLowerCase()} journey</p>
           <p className="text-xs font-medium text-slate-500">
             Upload a BRD policy to unlock walkthrough reviews and publishing features.
           </p>
