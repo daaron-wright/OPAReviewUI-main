@@ -1406,7 +1406,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
             className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.45)] transition hover:bg-[#0c5f59]"
           >
             <Icon name="arrowUp" className="h-4 w-4" />
-            Upload BRD Document
+            Upload BRD
           </button>
         </div>
       )}
@@ -1564,7 +1564,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                   className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
                 >
                   <Icon name="arrowUp" className="h-4 w-4" />
-                  Upload BRD Document
+                  Upload BRD
                 </button>
               ) : (
                 <button
