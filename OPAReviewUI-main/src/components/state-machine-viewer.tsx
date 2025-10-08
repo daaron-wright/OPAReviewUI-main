@@ -307,6 +307,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const transitionPanTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const detailOpenTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const previousJourneyRef = useRef<JourneyTabId>(selectedJourney);
 
   const clearWalkthroughTimers = useCallback(() => {
     if (transitionPanTimeoutRef.current !== null) {
