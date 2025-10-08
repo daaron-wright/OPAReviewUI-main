@@ -89,7 +89,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
-• يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية والنت��ئج
+• يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية وا��نتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
@@ -560,12 +560,20 @@ export function NodeDetailModal({
 
     const chunks = Array.from(node.relevantChunks);
 
-    const preferredMatches = chunks.filter((chunk) => chunk.language?.toLowerCase?.() === preferredLanguage);
+    const filterByLanguage = (target: string) =>
+      chunks.filter((chunk) => {
+        if (typeof chunk.language !== 'string') {
+          return false;
+        }
+        return chunk.language.trim().toLowerCase() === target;
+      });
+
+    const preferredMatches = filterByLanguage(preferredLanguage);
     if (preferredMatches.length > 0) {
       return { chunks: preferredMatches, isFallback: false };
     }
 
-    const englishMatches = chunks.filter((chunk) => chunk.language?.toLowerCase?.() === 'en');
+    const englishMatches = filterByLanguage('en');
     if (englishMatches.length > 0) {
       return { chunks: englishMatches, isFallback: preferredLanguage !== 'en' };
     }
