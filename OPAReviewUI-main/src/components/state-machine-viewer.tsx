@@ -1439,7 +1439,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                   </span>
                 </div>
                 <div className="grid max-h-48 grid-cols-1 gap-2 overflow-y-auto md:grid-cols-2">
-                  {stateMachine.nodes.map((node) => {
+                  {journeyNodes.map((node) => {
                     const approved = isNodeApproved(node.id);
                     return (
                       <div
