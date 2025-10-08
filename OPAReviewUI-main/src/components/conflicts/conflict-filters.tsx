@@ -69,7 +69,8 @@ export function ConflictFilters({
 
   const handleSearchSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    updateFilter({ searchTerm: searchTerm.trim() || undefined });
+    const trimmed = searchTerm.trim();
+    updateFilter(trimmed ? { searchTerm: trimmed } : {});
   };
 
   const handleSeverityChange = (event: ChangeEvent<HTMLSelectElement>): void => {
