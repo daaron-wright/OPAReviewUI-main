@@ -300,38 +300,41 @@ function ResolutionTab({ conflict, onUpdate }: ResolutionTabProps): JSX.Element 
   return (
     <div className="space-y-6">
       {/* Resolution Actions */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <h3 className="text-lg font-semibold text-white mb-4">Resolution Actions</h3>
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white p-6 shadow-sm">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Resolution Actions</h3>
         <div className="space-y-3">
           {conflict.conflictDetails.suggestedActions.map((action, index) => (
-            <label key={index} className="flex items-start gap-3 cursor-pointer hover:bg-slate-700/50 p-3 rounded-lg">
+            <label
+              key={index}
+              className="flex cursor-pointer items-start gap-3 rounded-xl border border-transparent p-3 transition hover:border-[#0f766e]/40 hover:bg-[#f0fdfa]"
+            >
               <input
                 type="radio"
                 name="resolution-action"
                 value={action}
                 checked={selectedAction === action}
                 onChange={(e) => setSelectedAction(e.target.value)}
-                className="mt-1"
+                className="mt-1 text-[#0f766e] focus:ring-[#0f766e]"
               />
-              <span className="text-slate-300">{action}</span>
+              <span className="text-slate-600">{action}</span>
             </label>
           ))}
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <button
           onClick={handleResolve}
           disabled={!selectedAction}
-          className="px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors"
+          className="inline-flex items-center justify-center rounded-full bg-[#0f766e] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0c5f59] disabled:cursor-not-allowed disabled:bg-slate-300"
         >
           Implement Resolution
         </button>
-        <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+        <button className="inline-flex items-center justify-center rounded-full border border-[#0f766e] px-6 py-3 text-sm font-semibold text-[#0f766e] transition hover:bg-[#f0fdfa]">
           Assign to Team
         </button>
-        <button className="px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg transition-colors">
+        <button className="inline-flex items-center justify-center rounded-full border border-amber-300 px-6 py-3 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">
           Mark as False Positive
         </button>
       </div>
