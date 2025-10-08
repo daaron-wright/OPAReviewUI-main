@@ -61,6 +61,12 @@ export default function ConflictDashboardPage(): JSX.Element {
     try {
       const filteredConflicts = await ConflictDataProvider.getPolicyConflicts(activeFilter);
       setConflicts(filteredConflicts);
+
+      if (selectedConflict && !filteredConflicts.some((conflict) => conflict.id === selectedConflict.id)) {
+        setSelectedConflict(null);
+        setConflictWorkflow(null);
+        setIsDetailModalOpen(false);
+      }
     } catch (error) {
       console.error('Failed to load filtered conflicts:', error);
     }
