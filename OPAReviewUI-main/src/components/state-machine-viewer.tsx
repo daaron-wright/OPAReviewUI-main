@@ -537,11 +537,11 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
   const nodesById = useMemo(() => {
     const map = new Map<string, ProcessedNode>();
-    journeyNodes.forEach((node) => {
+    stateMachine.nodes.forEach((node) => {
       map.set(node.id, node);
     });
     return map;
-  }, [journeyNodes]);
+  }, [stateMachine.nodes]);
 
   const timelineItems = useMemo(() => {
     if (!hasUploadedDocument) {
