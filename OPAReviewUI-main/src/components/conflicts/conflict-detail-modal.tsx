@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import type { PolicyConflict, ConflictWorkflow } from '@/domain/conflicts/types';
 import { Icon, IconName } from '../icon';
+import { CONFLICT_SEVERITY_TOKENS, ConflictWorkflowTimeline } from './conflict-workflow-timeline';
 
 interface ConflictDetailModalProps {
   readonly conflict: PolicyConflict;
