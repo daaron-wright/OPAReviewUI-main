@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import type {
   ConflictFilter,
   ConflictSeverity,
@@ -54,19 +54,19 @@ export function ConflictFilters({
     onFilterChange({});
   };
 
-  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     updateFilter({ searchTerm: searchTerm.trim() || undefined });
   };
 
-  const handleSeverityChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+  const handleSeverityChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     const value = event.target.value as ConflictSeverity | '';
     updateFilter({
       severity: value ? [value] : undefined,
     });
   };
 
-  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+  const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     const value = event.target.value as ConflictStatus | '';
     updateFilter({
       status: value ? [value] : undefined,
