@@ -89,9 +89,9 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
-• يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الزمنية والنتائج
+• يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية والنتائج
 
-المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غس�� الأموال ومكافحة تمويل الإرهاب.`,
+المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
     },
     {
@@ -907,7 +907,7 @@ export function NodeDetailModal({
                     </svg>
                   </span>
                   <h3 className="text-sm font-semibold text-slate-900">
-                    {language === 'ar' ? 'وثيقة متطلبات الأعمال' : 'Business Requirements Document'}
+                    {language === 'ar' ? 'وثيقة متطلبات ال��عمال' : 'Business Requirements Document'}
                   </h3>
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
@@ -921,8 +921,16 @@ export function NodeDetailModal({
                   {language === 'ar' ? 'الأقسام ذات الصلة' : 'Relevant Sections'}
                 </h4>
                 <div className="space-y-2">
-                  {brdReferences.sections.map((ref) => {
-                    const linkedRule = ref.ruleId ? regoRules.find((rule) => rule.id === ref.ruleId) : undefined;
+                  {usingFallbackSections && (
+                    <p className="text-xs text-slate-500">
+                      {language === 'ar'
+                        ? 'لا توجد أقسام مباشرة مرتبطة بهذه العقدة. يتم عرض المراجع العامة للوثيقة.'
+                        : 'No direct BRD sections matched this node. Showing general document references.'}
+                    </p>
+                  )}
+
+                  {sectionsToDisplay.map((ref) => {
+                    const linkedRule = ref.ruleId ? regoRuleMap.get(ref.ruleId) : undefined;
                     const isExpanded = expandedBRDSection === ref.id;
 
                     return (
