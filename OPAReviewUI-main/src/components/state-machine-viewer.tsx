@@ -1532,7 +1532,6 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                         type="button"
                         onClick={() => {
                           setSelectedJourney(tab.id);
-                          handleFocusFit();
                         }}
                         className={clsx(
                           'rounded-full px-3 py-1 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
