@@ -176,7 +176,7 @@
           },
           {
             "language": "ar",
-            "text": "يؤكد الشكل الق��نوني، وحدود الملكية، وإقرارات المستفيدين للمتقدمين الجدد وفق الفقرة 4.3 «معايير الأهلية للرخص ��لجديدة».",
+            "text": "يؤكد الشكل الق��نوني، وحدود الملكية، وإقرارات المستفيدين للمتقدمين الجدد وفق الفقرة 4.3 «معايير الأ��لية للرخص ��لجديدة».",
             "reference_id": "brd_section_4_3",
             "tags": [
               "eligibility",
@@ -355,7 +355,7 @@
         "relevant_chunks": [
           {
             "language": "en",
-            "text": "Fast-track Path 3 re-validates SOP2/SOP3 credentials before reusing a reserved name, supporting BRD 4.2.1 safeguards for linked trade names.",
+            "text": "Existing Trade Name path re-validates SOP2/SOP3 credentials before reusing a reserved name, supporting BRD 4.2.1 safeguards for linked trade names.",
             "reference_id": "brd_section_4_2_1",
             "tags": [
               "identity",
@@ -364,7 +364,7 @@
           },
           {
             "language": "ar",
-            "text": "يعيد المسار السريع 3 التحقق من اعتماد SOP2/SOP3 قبل إعادة استخدام الاسم المحجوز، دعماً لضوابط الفقرة 4.2.1 الخاصة بالأسماء التجارية المرتبطة.",
+            "text": "يعيد مسار الاسم التجاري القائم التحقق من اعتماد SOP2/SOP3 قبل إعادة استخدام الاسم المحجوز، دعماً لضوابط الفقرة 4.2.1 الخاصة بالأسماء التجارية المرتبطة.",
             "reference_id": "brd_section_4_2_1",
             "tags": [
               "identity",
@@ -532,7 +532,7 @@
         "relevant_chunks": [
           {
             "language": "en",
-            "text": "Submits the fast-track application with pre-filled beneficiary obligations, following BRD 6.2 \"Linked Trade Name Finalization\".",
+            "text": "Submits the existing trade name application with pre-filled beneficiary obligations, following BRD 6.2 \"Linked Trade Name Finalization\".",
             "reference_id": "brd_section_6_2",
             "tags": [
               "submission",
@@ -541,7 +541,7 @@
           },
           {
             "language": "ar",
-            "text": "يقدّم طلب المسار السريع مع التزامات المستفيد المعبأة مسبقاً، وفق الفقرة 6.2 «إنهاء الاسم التجاري المرتبط».",
+            "text": "يقدّم طلب الاسم التجاري القائم مع التزامات المستفيد المعبأة مسبقاً، وفق الفقرة 6.2 «إنهاء الاسم التجاري المرتبط».",
             "reference_id": "brd_section_6_2",
             "tags": [
               "submission",
