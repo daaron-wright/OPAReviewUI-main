@@ -74,6 +74,8 @@ export interface State {
   readonly journey_paths?: ReadonlyArray<string> | string;
   readonly journey_id?: number | string | null;
   readonly journeyId?: number | string | null;
+  readonly rego_rules?: Record<string, string>;
+  readonly regoRules?: Record<string, string>;
 }
 
 export interface StateMachineMetadata {
