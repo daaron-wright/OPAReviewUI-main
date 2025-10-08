@@ -563,6 +563,11 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const hasUploadedDocument = Boolean(policyDocument);
   const canDisplayGraph = stateMachine.nodes.length > 0;
 
+  const nodeActorAssignments = useMemo(
+    () => matchActorsToNodes(stateMachine.nodes, policyActors),
+    [stateMachine.nodes, policyActors]
+  );
+
   useEffect(() => {
     if (!hasUploadedDocument) {
       setHasPublishedToOpa(false);
