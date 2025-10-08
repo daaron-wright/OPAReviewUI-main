@@ -1423,6 +1423,8 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
           isDocumentInfoLoading={isDocumentInfoLoading}
           documentInfoError={documentInfoError}
           onRefreshDocumentInfo={refreshDocumentInfo}
+          isOpen={isSummaryOpen}
+          onToggleOpen={toggleSummaryOpen}
         />
       </div>
 
