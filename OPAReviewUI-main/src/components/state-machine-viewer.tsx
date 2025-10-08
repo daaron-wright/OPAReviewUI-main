@@ -468,14 +468,26 @@ function filterStateMachineForJourney(
       filteredNodeIds.has(transition.target)
     );
 
-    return {
-      ...node,
-      metadata: {
-        ...node.metadata,
-        transitions:
-          filteredTransitions && filteredTransitions.length > 0 ? filteredTransitions : undefined,
-      },
-    };
+    const metadata = { ...node.metadata };
+    if (filteredTransitions && filteredTransitions.length > 0) {
+      return {
+        ...node,
+        metadata: {
+          ...metadata,
+          transitions: filteredTransitions,
+        },
+      };
+    }
+
+    if (metadata.transitions !== undefined) {
+      const { transitions: _transitions, ...rest } = metadata;
+      return {
+        ...node,
+        metadata: rest,
+      };
+    }
+
+    return node;
   });
 
   return {
