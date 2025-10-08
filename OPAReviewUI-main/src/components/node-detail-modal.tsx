@@ -6,7 +6,7 @@
  */
 
 import clsx from 'clsx';
-import { ProcessedNode } from '@/domain/state-machine/processor';
+import { ProcessedNode, ProcessedRelevantChunk } from '@/domain/state-machine/processor';
 import { PolicyChatInterface } from './policy-chat-interface';
 import { useReview } from '@/context/review-context';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -1233,7 +1233,7 @@ export function NodeDetailModal({
                                   className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
                                 >
                                   <Icon name="flask" className="h-4 w-4 text-white" />
-                                  {language === 'ar' ? 'تش��يل حالة الاختبار' : 'Run Test Case'}
+                                  {language === 'ar' ? 'تش��ي�� حالة الاختبار' : 'Run Test Case'}
                                 </button>
                                 <button
                                   onClick={() => approveRule(rule.id)}
