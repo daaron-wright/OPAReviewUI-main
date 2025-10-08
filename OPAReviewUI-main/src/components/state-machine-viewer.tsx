@@ -586,6 +586,8 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const detailOpenTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previousJourneyRef = useRef<JourneyTabId>(selectedJourney);
   const fitViewRafRef = useRef<number | null>(null);
+  const shouldAutoFitRef = useRef(true);
+  const lastViewportRef = useRef<Viewport | null>(null);
 
   const clearWalkthroughTimers = useCallback(() => {
     if (transitionPanTimeoutRef.current !== null) {
@@ -1208,7 +1210,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       step4Description =
         totalStates > 0
           ? `Walkthrough in progress �� ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
-          : 'Walkthrough in progress��';
+          : 'Walkthrough in progress…';
     } else if (walkthroughInProgress) {
       step4Status = 'active';
       step4Description =
