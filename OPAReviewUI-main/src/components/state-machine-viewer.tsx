@@ -464,8 +464,6 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const [stateMachine] = useState<ProcessedStateMachine>(
     initialStateMachine ?? defaultProcessedStateMachine
   );
-  const [isStateMachineLoading] = useState(false);
-  const [stateMachineError] = useState<string | null>(null);
 
   const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
   const journeyTotals = useMemo(
