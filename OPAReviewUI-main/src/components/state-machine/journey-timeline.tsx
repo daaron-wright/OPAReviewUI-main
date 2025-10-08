@@ -135,18 +135,18 @@ export function JourneyTimeline({
 
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-wrap items-center gap-3">
-              <div className="flex min-w-[240px] flex-col gap-2 rounded-full border border-[#dbe9e3] bg-white px-6 py-3 shadow-inner">
-                <div className="flex items-baseline justify-between text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <div className="flex min-w-[240px] flex-col gap-2 rounded-2xl bg-white px-4 py-3 shadow-sm">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600">
                   <span>Progress</span>
                   <span>{completionPercentage}%</span>
                 </div>
-                <div className="h-2 rounded-full bg-[#eef7f3]">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#e2ede8]">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1] transition-all"
+                    className="h-full rounded-full bg-[#0f766e] transition-[width] duration-300 ease-out"
                     style={{ width: `${completionPercentage}%` }}
                   />
                 </div>
-                <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
+                <div className="text-[11px] font-medium text-slate-500">
                   {progress.reviewed} of {progress.total} nodes reviewed
                 </div>
               </div>
