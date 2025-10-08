@@ -216,6 +216,27 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const router = useRouter();
 
   const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
+  const journeyTotals = useMemo(
+    () => {
+      if (!stateMachine.nodes.length) {
+        return journeyTabs.map((journey) => ({ id: journey.id, label: journey.label, total: 0 }));
+      }
+
+      const counts = new Map<string, number>();
+      stateMachine.nodes.forEach((node) => {
+        node.journeyPaths.forEach((journeyId) => {
+          counts.set(journeyId, (counts.get(journeyId) ?? 0) + 1);
+        });
+      });
+
+      return journeyTabs.map((journey) => ({
+        id: journey.id,
+        label: journey.label,
+        total: counts.get(journey.id) ?? 0,
+      }));
+    },
+    [journeyTabs, stateMachine.nodes]
+  );
   const [selectedJourney, setSelectedJourney] = useState<JourneyTabId>(() => journeyTabs[0]?.id ?? '');
 
   useEffect(() => {
