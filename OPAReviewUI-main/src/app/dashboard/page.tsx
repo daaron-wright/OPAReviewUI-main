@@ -89,6 +89,7 @@ export default function ConflictDashboardPage(): JSX.Element {
     } finally {
       if (workflowRequestIdRef.current === conflict.id) {
         setIsWorkflowLoading(false);
+        workflowRequestIdRef.current = null;
       }
     }
   };
