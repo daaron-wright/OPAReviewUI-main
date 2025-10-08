@@ -1025,7 +1025,10 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                   <button
                     key={tab.id}
                     type="button"
-                    onClick={() => setSelectedJourney(tab.id)}
+                    onClick={() => {
+                      setSelectedJourney(tab.id);
+                      setIsGraphExpanded(false);
+                    }}
                     className={clsx(
                       'rounded-full px-3 py-1 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
                       isActive ? 'bg-[#0f766e] text-white shadow' : 'text-slate-500 hover:bg-[#f3f8f6]'
