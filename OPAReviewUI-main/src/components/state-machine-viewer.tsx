@@ -40,6 +40,8 @@ const defaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
   (realBeneficiaryStateMachineFile as StateMachineFile).stateMachine
 );
 
+const REMOTE_STATE_MACHINE_ENDPOINT = '/data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json';
+
 type JourneyTabId = string;
 
 interface JourneyTabConfig {
