@@ -8,15 +8,10 @@ import type {
   PolicyCategory,
   ComplianceFramework,
   PolicyViolation,
-  PolicyDeployment,
   PolicyPerformanceMetrics,
-  PolicyAlert,
   PolicyEnvironment,
-  PolicyInsights,
-  PolicyTestSuite,
-  PolicyAuditLog
+  PolicyInsights
 } from '@/domain/dashboard/enterprise-types';
-import type { ServerMetric } from '@/domain/dashboard/types';
 
 export class EnterpriseDashboardDataProvider {
   /**
