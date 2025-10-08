@@ -441,6 +441,29 @@
       "routine2_select_trade_name": {
         "type": "process",
         "description": "User selects trade name and system retrieves data",
+        "journey_paths": [
+          "fast_track"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Retrieves pre-approved trade name records and links the applicant identity, mirroring BRD 5.4 \"Reserved Name Activation Workflow\".",
+            "reference_id": "brd_section_5_4",
+            "tags": [
+              "trade_name",
+              "fast_track"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يسترجع سجلات الاسم التجاري المعتمد مسبقاً ويربط هوية المتقدم، بما يعكس الفقرة 5.4 «سير عمل تنشيط الاسم المحجوز».",
+            "reference_id": "brd_section_5_4",
+            "tags": [
+              "trade_name",
+              "fast_track"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "trade_name_selected == true",
