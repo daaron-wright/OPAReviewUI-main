@@ -74,12 +74,22 @@ export default function ConflictDashboardPage(): JSX.Element {
 
   const handleConflictSelect = async (conflict: PolicyConflict): Promise<void> => {
     setSelectedConflict(conflict);
+    setConflictWorkflow(null);
+    setIsWorkflowLoading(true);
+    workflowRequestIdRef.current = conflict.id;
 
     try {
       const workflow = await ConflictDataProvider.getConflictWorkflow(conflict.id);
-      setConflictWorkflow(workflow);
+      if (workflowRequestIdRef.current === conflict.id) {
+        setConflictWorkflow(workflow);
+        setIsDetailModalOpen(true);
+      }
     } catch (error) {
       console.error('Failed to load conflict workflow:', error);
+    } finally {
+      if (workflowRequestIdRef.current === conflict.id) {
+        setIsWorkflowLoading(false);
+      }
     }
   };
 
