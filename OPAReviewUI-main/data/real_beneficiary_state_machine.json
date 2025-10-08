@@ -63,6 +63,31 @@
       "customer_application_type_selection": {
         "type": "decision",
         "description": "Customer selects type of application",
+        "journey_paths": [
+          "new_registration",
+          "update_compliance",
+          "fast_track"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Branch logic distinguishes new registration, reserved trade name activation, and existing license compliance in line with BRD Table 3 \"Applicant Journeys\".",
+            "reference_id": "brd_table_3",
+            "tags": [
+              "journey",
+              "routing"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يفصل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم التجاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
+            "reference_id": "brd_table_3",
+            "tags": [
+              "journey",
+              "routing"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "application_type == 'new_trade_name'",
