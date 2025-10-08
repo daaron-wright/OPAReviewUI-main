@@ -1,0 +1,577 @@
+{
+  "stateMachine": {
+    "name": "RealBeneficiaryDeclarationService",
+    "version": "1.0",
+    "description": "Comprehensive state machine for Abu Dhabi DED Real Beneficiary Declaration Service covering all 9 routines",
+    "initialState": "entry_point",
+    "finalStates": [
+      "application_approved",
+      "application_rejected",
+      "application_blocked",
+      "permission_denied",
+      "ineligible",
+      "duplicate_declaration",
+      "license_not_found",
+      "exit_pending_customer"
+    ],
+    "states": {
+      "entry_point": {
+        "type": "decision",
+        "description": "Determine entry path - customer portal or employee portal",
+        "transitions": [
+          {
+            "condition": "entry_type == 'customer'",
+            "target": "customer_application_type_selection",
+            "action": "log_customer_entry",
+            "source": "entry_point"
+          },
+          {
+            "condition": "entry_type == 'employee'",
+            "target": "employee_permission_check",
+            "action": "log_employee_entry",
+            "source": "entry_point"
+          }
+        ],
+        "node_id": 1,
+        "journey_id": null,
+        "relevant_chunks": [
+          {
+            "chunk_id": 11,
+            "similarity": 0.8242,
+            "arabic_original": {
+              "text": "يف صحفلا ةيلمعل ةجيتنك تاهيبنت دجوت لاو ، طسوتم وا ضفخنم ةروطخلا فينصت ناك لاح يف • نمو ةقفاوملا رادصإو بلطلا ةعجارمب ةبجاولا ةيانعلا قيرف فظوم موقي ، ةيملاعلاو ةيلحملا مئاوقلا موقي تاقيلعت دوجو حال يف وا ةقفاوملا ديكأتو بلطلا نم ققحتلاو دكأتلاب عجار ملا موقي مث . دمتعملا لسلستلا و تايحلاصلل اقبط مزلالا ءارجلاا ذاختلا فظوملا ىلا اهلاسرإب عجار ملا\n\nذاختاب ةززعملا ةبجاولا ةيانعلا قيرف موقي ،عفترم وا عفترم طسوتم ةروطخلا فينصت ناك لاح يف • كلذ بلطت نا بلطلا ىلع ضفرلا وا ةقفاوملا ءاطعلإ ايلعلا ةرادلإا عم قيسنتلاو ةمزلالا تاءارجلإا\n\n.\n\nتاءارجلإا ذاختاب ةززعملا ةبجاولا ةيانعلا قيرف فظوم موقي ،روظحم ةروطخلا فينصت ناك لاح يف • ةرادلإل بلطلا ليوحتو ضفرلا وا ةقفاوملا ءاطعلإ ريدملا ىلع بلطلا نييعتو بلطلا ةجلاعمل ةمزلالا ايلعلا\n\nليجستلا مقرب لماعتملل راعشا لاسرا متي ،ةقفاوملا يه ةيئاهنلا بلطلا ةجيتن تناك حال يف • مت ةصنمو يلخادلا ماظنلا يف لوبقم ىلا بلطلا ةلاح نييعتو دحوملا\n\nنييع��و بلطلا ضفرب لماعتملل راعشا لاسرا متي ،ضفرلا يه ةيئاهنلا بلطلا ةجيتن تناك حال يف • نل ةلاحلا هذه يفو مت ةصنم ىلع اهسكع و \"ضوفرم\" يلخادلا ماظنلا يف ةيئاهنلا بلطلا ةلاح .صيخرتلا رادصا لماعتملا عيطتسي\n\n9 | P a g e\n\nConfidential | ديقم\n\nلمعلا قاطن\n\nلمعلا قاطن لخاد\n\n:\n\nوبأ مقر رادصإو لاثتملاا ليجست \" ةمدخ ب ةقلعتملا لامعلاا تابلطتم عيمج عورشملا اذه يطغي : يف كلذ امب ، يقيقحلا ديفتسملا رارقإ ليصافت ةنمضتم \"دحوملا يبظ\n\nةمدخلا تابلطتم ليلحتو ةسارد : ةيلاحلا تايلمعلا ليلحت •\n\n.\n\nنيسحت ىلإ جاتحت يتلا تلااجملا ديدحت : ةيلاحلا لكاشملاو تانيسحتلا قاطن ديدحت • . ةمدخلا هجاوت يتلا ةيلاحلا لكاشملا ليلحتو\n\nةمدخلل فادها يبلت يتلا تايلمعلا راسم ميمصت : تايلمعلا راسم ميمصت •\n\n.\n\n:\n\nلمعلا قاطن جراخ\n\nةمدخ يف هئاعدتسا نكمملا نم ا ءزج نوكتس يتلا يراجتلا مسلاا زجح ةمدخ تابلطتم • ءزجلا يف اهتفاضا مت يت لا ديفتسملا رارقإ ةبولطملا ةيفاضلإا تانا يبلا ادع ام ليجستلا لامعلاا دعاوق ب صاخلا\n\n10 | P a g e\n\nConfidential | ديقم\n\nتاضارتفلاا\n\n:ةيلاتلا طاقنلا ضارتفاب انمق ةمدخلا لامعا تابلطتم ةشقانم للاخ تمت يتلا ةطشنلأا نم ءزجك\n\nيبظ وبأ مقر رادصإو لاثتملاا ليجست \" مسلااب ةقيثولا هذه يف ليجستلا ةمدخ ىلا ةراشلإا تمت • ديق لازلا ةمدخلل يئاهنلا مسلااو - ةدوسملا هذه ءاشنا للاخ دمتعي مل مسلاا اذه – \"دحوملا .ةجلاعملا"
+            },
+            "english_translation": {
+              "text": "As a result of alerts, there is a high, medium or low severity classification in the screening process - from approval and issuance of the request to due diligence review by the staff team, global and local lists, comments on the existence of the status in or approval and confirmation of the request, and verification by confirmation, then review by the staff member. Check the approved sequence and authority according to the necessary action to be taken by the employee to send it.\n\nThe team will take enhanced due diligence, high or medium high severity rating, or high moderate severity rating - the request for rejection or approval is required to give the senior management with the necessary coordination and actions.\n\n.\n\nThe enhanced due diligence procedures for an employee's team performing prohibited, high-risk, or medium-risk categorization were as follows - To manage the request and turn the rejection or approval to give the manager on the request and assign the request to senior management for processing.\n\nThe customer's registration number is sent to the customer notification, the approval is sent, the request is finalized, the result is finalized, the internal platform is accepted into the system and the request is assigned a standardized status.\n\nThe request is assigned a rejection status, the request is denied, the result of the request is the final status of the request, and the platform is reversed and the internal system is set to \"Rejected\" in the final status of the request. The customer can issue a license.\n\n9 | P a g e\n\nConfidential Restricted\n\nWorking scope\n\nWork Scope Within\n\n:\n\nAbu Dhabi number and issuance of compliance registration \"B service\" related to the business requirements of all the project covers this project: Including, including, real beneficiary's acknowledgment of the details included in the \"standardized Abu Dhabi\".\n\nService requirements and analysis study: Analyze current processes\n\n.\n\nIdentify areas where you need to improve: Define the scope of improvements to the current issues and issues. Analyze the current issues and analyze the service\n\nThe service meets the goals of the service design process: Processes Design Path\n\n.\n\n:\n\nWork scope outside of\n\nThe part of the service that can be summoned from the commercial part of the business will be the name of the service reservation requirements - the part in which the beneficiary was added to the beneficiary to acknowledge the additional requirements of the business, except for the special business registration rules B rules.\n\n10 | P a g e\n\nConfidential - Restricted\n\nAssumptions\n\nAs part of the following points, we have assumed that the following activities are part of the business requirements discussion during the course of the service\n\nDhabi Abu Dhabi Abu Dhabi number and version number Compliance Compliance Registration \"in the name of this document in the name of this document in the registration of the service to the reference is done - the final service is still underway and the name - this draft is not created during the creation of this name - this name is not adopted - \"standardized processing."
+            },
+            "pages_arabic": [
+              9
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                9,
+                10,
+                11
+              ],
+              "min_x": 233.1,
+              "min_y": 47.6,
+              "max_x": 1409.4,
+              "max_y": 2201.0,
+              "width": 1176.3000000000002,
+              "height": 2153.4
+            }
+          },
+          {
+            "chunk_id": 9,
+            "similarity": 0.823,
+            "arabic_original": {
+              "text": "ةيسيئرلا فادهلأا\n\nةقدب\n\nييقيقحلا نيديفتسملا عيمج قيثوتو ديدحت : ةيفافشلا\n\n.\n\n(KYC). كليمع فرعاو (AML) ف امب ،ةلصلا تاذ حئاولل لاثتملاا : لاثتملاا\n\nلاوملأا ليسغ ةحفاكم تابلطتم كلذ\n\nيمدختسملا اضر ةدايزو ةجلاعملا تقو ليلقتل ةيلمعلا تس\n\n. يسحت : ةءافكلا\n\n7 | P a g e\n\nConfidential | ديقم\n\nةمدخلا ىلع ةماع ةرظن\n\nديهمت\n\nةبولطملا ةيلهلأا تابلطتم ءافيتسا و ،\"مت\" ةصنم ىلإ لوخدلا ليجست نيمدختسملا ىلع • بجي ةيلهلاا تابلطتمب صاخلا ءزجلا ةعجارم ءاجرب .ةعباتملا نم اونكمتي ىتح ةمدخلا ىلع ميدقتلل\n\n:ةيلاتلا تارايخلا لماعتملل رهظتس و ليجستلا ةمدخ ءدب ب لماعتملا موقي •\n\nةلمتكملا ريغ تابلطلا تادوسم o\n\nاهل رارقا ميدقت متي مل يتلاو ةرداصلا صخرلاب ةمئاق o\n\n.\n\nتاشاشلا جذو من يف حضوم وه امك - ديدج لاثتما ليجست بلط ىلع ميدقتلا رايخ o\n\nةزوجحم ةيراجت ءامسا مادختساب لاثتما ليجست بلط ميدقتب لماعتملل رايخ ةحاتا o رادصا فدهب تناكو صيخرت يأ اهيلع ردصي ملو اقبسم اهيلع ةقفاوملا تمت ( ةحاتمو باسحب ةطبترم ةحاتم ةيراجت ءامسأ دوجو لاح يف رايخلا اذه ليعفت متيو . )ةديدج ةصخر .لوخدلا ليجستب ماق يذلا مدختسملا\n\nدنع \"يراجتلا مسلاا زجح \" ةمدخ ءاعدتسا متيس و ةيلوأ ةوطخك ةبولطم نوكتس ليجستلا ةمدخ ةطبترملا تاءانثتسلااو لماعتملا ةهج نم اهلاخدإ مت يتلا تانايبلا بسحو تمتؤم لكشب ةجاحلا يقيقح لا ديفتسم لا رارقإ ليصافت بلطتت لا يتلا تلااحلا ةفاضإ متيسو ةلخدملا تانايبلا هذهب جذامن ءاعدتسا متيف ،ةماع ةمهاسم ةكرش ينوناق لكشب ةصخرل ليجست بلط ميدقت ، دنع لاثم ديفتسملا تانايب لاخدا بلط )لاو متي ديفتسملاب ةصاخلا ةيفاضلاا تانايبلا (نودب يراجتلا مسلاا لمعلا دعاوقب صاخلا ءزجلا ةعجارم ءاجرب . ةيموكحلا تاكرشل ل ةبسنلاب حاللا .وككلذ ةيليصفتلا رارقإ نم ةانثتسملا تلااحلا ليصفتل ةقيثولا هذه يف ليجستلا ةمدخ ىلع ميدقتلاب ةصاخلا .يقيقحلا ديفتسملا\n\n•\n\n.\n\nديدحت نو يو ،ك كلذ بلطت نا ةمزلالا قئاثولا قافرا ةاعارم عم بلطلا ميدقتب لماعتملا موقي • تاءارجلااو تامدخلا ةفاكل ةبولطملا تادنتسملل تادادعلاا ةموظنم قيرط نع ةمزلالا تادنتسملا"
+            },
+            "english_translation": {
+              "text": "Home Objectives\n\nstrictly\n\nThe real beneficiaries are all identified and documented: Transparency\n\n.\n\n(KYC). (AML) as it relates to compliance regulations: Compliance\n\nAnti-money laundering and anti-money laundering requirements\n\nIncrease user satisfaction and processing time to minimize process six\n\n. Optimize : efficiency\n\n7 | P a g e\n\nConfidential | Restricted\n\nService on Public View\n\nBootstrap\n\nEligibility and fulfillment requirements are required, and the platform is \"done\" to log in and register users on - Eligibility must meet the requirements of the specific part Review please follow up until they are able to apply for the service.\n\nThe following options will appear for the customer to register and start the service.\n\n o Incomplete applications o Drafts of completed applications\n\n o Listed licenses issued are not submitted and are not acknowledged.\n\n.\n\nAs shown in the screenshot, the model is modeled as - o New application registration compliance on the submission option\n\nA license was issued for the purpose of providing the customer with an option to submit a request for compliance. o A license was issued for the purpose of issuing any license and was not previously approved (and available with an account associated with available commercial names). This option is activated in the case of a new license (which the user logged in to).\n\nAs a preliminary step, the service will be required to register a service associated with the exceptions and exceptions of the dealer who entered the data was automated and according to the real need of the beneficiary, the details of the beneficiary do not require the approval of the details that require the addition of the cases, and the data will be entered in these forms will be called in the form of a general, legal company contribution to a license registration application, when the example of the beneficiary data to enter the application (and the beneficiary is not the additional special data (without commercial name business rules), please review the special part of the work of the rules. For governmental companies for companies for the case of that case. Detailed declaration of the exempted cases to detail this document in the registration of the service on the special application for the real beneficiary.\n\n- - - - - - - - - - - - - - - - - - - - - - -\n\n.\n\nThe customer is required to attach the necessary documents to the application and provide the customer with the required services and procedures for all the required documents and settings of the system by means of the necessary documents"
+            },
+            "pages_arabic": [
+              7
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                7,
+                8
+              ],
+              "min_x": 246.1,
+              "min_y": 47.6,
+              "max_x": 1413.8,
+              "max_y": 2201.0,
+              "width": 1167.7,
+              "height": 2153.4
+            }
+          },
+          {
+            "chunk_id": 20,
+            "similarity": 0.8205,
+            "arabic_original": {
+              "text": ".بلطلا مدقمل ةيمقرلا ةيوهلل لوخدلا ىوتسم نم ققحتلا 1. قباس بلطتم ةيلهلاا طو رسر نم ققحتلا 2. ) . ةصخرم تغو ةرداص ( ةحاتم ةيراجت ءامسأ دوجو نم ققحتلا 3. \"ديدج لاثتما ليجست بلط\" رايخ لماعتملا راتخي 1. تلاخدملا ةمدخ ب ةصاخلا لامعلاا تابلطتمل اقبط يراجتلا مسلاا تانايب لاخدإب لماعتملا موقي 2. .لاثتملاا تابلطتم لامكتسلا ةبولطملا ةيفاضلإا تانايبلا ةفاضاو ، يراجتلا مسلاا زجح رقيقحلا ديفتسملا رارقإ رشلا تانايب متي نأ لع و ةكا لكيه تانايب لاخدإب لماعتملا موقي .ةقباسلا تاوطخلا ف ةلخدملا تانايبلا نم اهبحس ب��طلا لاسراو تانايبلا ةحصب دهعتلاو لصاوتلا لوؤسم ديدحتب لماعتملا موقي نو رتكلا ديرب بسح( و ةيصن ةلاسر ف لماعتملل ليجستلا بلط مقر لاسرا متي 3. 4. 1. تاجرخملا لخاد لمعلا قرف )تاراعشلاا تادادعا قظوم لع هنييعتو ةرئادلل لخادلا ماظنلا ف بلط ءاشنا متي .تايحلاصلا ةفوفصم بسح ةرئادلا 2. لمعلا قيرف ةهج نم صقاونلا لامكتسلا لماعتملا لىا بلطلا لاسرا ةداعإ متي دق 3. بلطلا ةجلاعم نم ءاهتنلاا دعب لماعتملا لىا ةيئاهنلا بلطلا ةجيتنب راعشا لاسرا متي 4. تاراعشلاا مسق ف اهركذ مت امك لجس ةداهشو دحوملا ليجستلا مقر رادصا متي بلطلا لع ةقفاوملا ةلاح ف رقيقحلا ديفتسملا رقيقح ديفتسم رارقإ ليجستب مقي ملو ةيلاح ةصخر لماعتملا ىدل نوكي نا اهل . ةصخرلا هذهل رداص دحوم ليجست 5. 1. ليدب رايتخا اذه مادختساب ديدج ليجست بلط مدقي نا ديريو حاتم يراجت مسا لماعتملا ىدل نوكي نا 2. .دحوم ليجست مقر رادصلإ مسلاا\n\nمقر دجوي لاو\n\n\"ديدج ليجست بلط ميدقت\" ةيلمع تاوطخ ليصافت\n\n:\n\nةمدخ رايتخاو ةيداصتقلاا ةيمنتلا ةرئاد تامدخ ىلا لوخدلاو \"مت\" ةصنم ىلا لوخدلا ليجستب لماعتملا موقي يف حضوم وه امك ةيلهلاا طورش نم ققحتلاب ماظنلا موقيو \"دحوملا يبظ وبأ مقر رادصإو لاثتملاا ليجست\" ةيلهلاا تابلطتم ب صاخلا ءزجلا\n\n1 .\n\nةمدخلا حتف متيس لهؤم لماعتملا ناك اذإ\n\na .\n\nىلع ميدقتلل هتيلها مدعب لماعتملا راطخلإ أطخ ةلاسر راهظا متيس لهؤم ريغ لماعتملا ناك اذإ b . ةمدخلا\n\nيلاتلا تارايخلا ضرع متي ةمدخلا ىلا لوخدلا دعب 2 .\n\nة :\n\nةيراجت ءامسأ دوجو نم ققحتلاب ماظنلا موقي رايخلا اذه ىلع طغضلا دنع ديدج\" \"بلط ميدقت a . ةرداص\n\nرايتخلااب موقيل لماعتملل نيرايخ ضرع متي ، ةحاتمو ةرداص ةيراجت ءامسأ كانه ناك اذإ i . .امهنيب\n\nموقي وا ًاقباس ةردا��لا ةيراجتلا ءامسلأا نم مسا مادختساب موقي نا اما لماعتملا راتخي ii . درس متيس . ديدج لاثتما ليجست بلط ىلع ميدقتلاب موقيل ديدج” “لطب ىلع ميدقتلاب يراجت مسا مادختساب ديدج ليجست بلط ميدقت( ب صاخلا ءزجلا يف ةيلمعلا تاوطخ رداص ) \""
+            },
+            "english_translation": {
+              "text": "The request is for the ID provider to enter a level of verification 1. Previous eligibility requirement and level of verification 2. ( . Licensed and Issued (Commercial Names available) Existence of verification 3. \"New Compliance Registration Request\" Customer Option Selects 1. Inputs Service B Special Businesses for requirements according to Commercial Name Data Customer Inputs 2.Compliance requirements to complete the additional required data and add the additional data, commercial name, reservation of the beneficiary's name, reservation of the beneficiary's name, declaration of evil data is made on the data structure network by entering the customer's entry. The previous steps in the data input from the withdrawal of the application and sending the data to the validity and pledge of communication, the administrator determines the customer and sends an e-mail (depending on the mail) and text message in the customer registration request number is transmitted 3. 1. 4. 1. Outputs within work teams (notifications, employee settings and assigned to the department within the system). 2. Work teams work with the customer to complete the request and send the request back. 3. The request is processed from the finalized request to the final request with the result of the notification sent 4. The notifications are mentioned in the section as the registration and certificate of registration as well as the unified registration and issuance number is requested for approval in the case of the beneficiary's rightful beneficiary's rightful beneficiary's declaration of registration and does not have a current license. The license for this license is issued for this standardized registration 5. 1. This is an alternative to selecting this option using a new registration application and wants to submit a business name to be available to the dealer. 2. Standardized registration number to issue the name.\n\nThere is no number\n\n\"New Application Registration Process Details\n\n:\n\nThe Department of Economic Development (DED), the Department of Economic Development (DED), and the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), and the Department of Economic Development (DED).\n\n1 .\n\nIf the customer's qualification will open the service\n\na .\n\nIf b, the non-dealer will be eligible to apply for the non-dealer eligibility notification error message to show the non-dealer will be eligible. Service\n\nThe next options to display the service will be logged in after 2.\n\ne :\n\nThis option verifies the presence of commercial names in the system when a new request is pressed. Issued\n\nIf there are two options for the customer to choose from, there are two options available if there are trade names issued. between them.\n\nEither the trader chooses to use a name from a previously issued trade name or the trader chooses to use a name from a previously issued trade name. The listing will be listed. \"New Application Registration Compliance to submit a new application for a new \"Champion to submit a business name using the new Application Registration to submit a new application) b part of the outgoing process steps.""
+            },
+            "pages_arabic": [
+              21
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                20
+              ],
+              "min_x": 246.7,
+              "min_y": 333.4,
+              "max_x": 1557.5,
+              "max_y": 1850.3,
+              "width": 1310.8,
+              "height": 1516.9
+            }
+          }
+        ],
+        "rego_rules": {
+          "entry_type": "customer|employee|<other_value>"
+        }
+      },
+      "customer_application_type_selection": {
+        "type": "decision",
+        "description": "Customer selects type of application",
+        "transitions": [
+          {
+            "condition": "application_type == 'new_trade_name'",
+            "target": "routine1_digital_id_verification",
+            "action": "start_routine1",
+            "source": "customer_application_type_selection"
+          },
+          {
+            "condition": "application_type == 'existing_trade_name'",
+            "target": "routine2_digital_id_verification",
+            "action": "start_routine2",
+            "source": "customer_application_type_selection"
+          },
+          {
+            "condition": "application_type == 'existing_license'",
+            "target": "routine3_digital_id_verification",
+            "action": "start_routine3",
+            "source": "customer_application_type_selection"
+          }
+        ],
+        "node_id": 2,
+        "journey_id": null,
+        "relevant_chunks": [
+          {
+            "chunk_id": 20,
+            "similarity": 0.842,
+            "arabic_original": {
+              "text": ".بلطلا مدقمل ةيمقرلا ةيوهلل لوخدلا ىوتسم نم ققحتلا 1. قباس بلطتم ةيلهلاا طو رسر نم ققحتلا 2. ) . ةصخرم تغو ةرداص ( ةحاتم ةيراجت ءامسأ دوجو نم ققحتلا 3. \"ديدج لاثتما ليجست بلط\" رايخ لماعتملا راتخي 1. تلاخدملا ةمدخ ب ةصاخلا لامعلاا تابلطتمل اقبط يراجتلا مسلاا تانايب لاخدإب لماعتملا موقي 2. .لاثتملاا تابلطتم لامكتسلا ةبولطملا ةيفاضلإا تانايبلا ةفاضاو ، يراجتلا مسلاا زجح رقيقحلا ديفتسملا رارقإ رشلا تانايب متي نأ لع و ةكا لكيه تانايب لاخدإب لماعتملا موقي .ةقباسلا تاوطخلا ف ةلخدملا تانايبلا نم اهبحس بلطلا لاسراو تانايبلا ةحصب دهعتلاو لصاوتلا لوؤسم ديدحتب لماعتملا موقي نو رتكلا ديرب بسح( و ةيصن ةلاسر ف لماعتملل ليجستلا بلط مقر لاسرا متي 3. 4. 1. تاجرخملا لخاد لمعلا قرف )تاراعشلاا تادادعا قظوم لع هنييعتو ةرئادلل لخادلا ماظنلا ف بلط ءاشنا متي .تايحلاصلا ةفوفصم بسح ةرئادلا 2. لمعلا قيرف ةهج نم صقاونلا لامكتسلا لماعتملا لىا بلطلا لاسرا ةداعإ متي دق 3. بلطلا ةجلاعم نم ءاهتنلاا دعب لماعتملا لىا ةيئاهنلا بلطلا ةجيتنب راعشا لاسرا متي 4. تاراعشلاا مسق ف اهركذ مت امك لجس ةداهشو دحوملا ليجستلا مقر رادصا متي بلطلا لع ةقفاوملا ةلاح ف رقيقحلا ديفتسملا رقيقح ديفتسم رارقإ ليجستب مقي ملو ةيلاح ةصخر لماعتملا ىدل نوكي نا اهل . ةصخرلا هذهل رداص دحوم ليجست 5. 1. ليدب رايتخا اذه مادختساب ديدج ليجست بلط مدقي نا ديريو حاتم يراجت مسا لماعتملا ىدل نوكي نا 2. .دحوم ليجست مقر رادصلإ مسلاا\n\nمقر دجوي لاو\n\n\"ديدج ليجست بلط ميدقت\" ةيلمع تاوطخ ليصافت\n\n:\n\nةمدخ رايتخاو ةيداصتقلاا ةيمنتلا ةرئاد تامدخ ىلا لوخدلاو \"مت\" ةصنم ىلا لوخدلا ليجستب لماعتملا موقي يف حضوم وه امك ةيلهلاا طورش نم ققحتلاب ماظنلا موقيو \"دحوملا يبظ وبأ مقر رادصإو لاثتملاا ليجست\" ةيلهلاا تابلطتم ب صاخلا ءزجلا\n\n1 .\n\nةمدخلا حتف متيس لهؤم لماعتملا ناك اذإ\n\na .\n\nىلع ميدقتلل هتيلها مدعب لماعتملا راطخلإ أطخ ةلاسر راهظا متيس لهؤم ريغ لماعتملا ناك اذإ b . ةمدخلا\n\nيلاتلا تارايخلا ضرع متي ةمدخلا ىلا لوخدلا دعب 2 .\n\nة :\n\nةيراجت ءامسأ دوجو نم ققحتلاب ماظنلا موقي رايخلا اذه ىلع طغضلا دنع ديدج\" \"بلط ميدقت a . ةرداص\n\nرايتخلااب موقيل لماعتملل نيرايخ ضرع متي ، ةحاتمو ةرداص ةيراجت ءامسأ كانه ناك اذإ i . .امهنيب\n\nموقي وا ًاقباس ةرداصلا ةيراجتلا ءامسلأا نم مسا مادختساب موقي نا اما لماعتملا راتخي ii . درس متيس . ديدج لاثتما ليجست بلط ىلع ميدقتلاب موقيل ديدج” “لطب ىلع ميدقتلاب يراجت مسا مادختساب ديدج ليجست بلط ميدقت( ب صاخلا ءزجلا يف ةيلمعلا تاوطخ رداص ) \""
+            },
+            "english_translation": {
+              "text": "The request is for the ID provider to enter a level of verification 1. Previous eligibility requirement and level of verification 2. ( . Licensed and Issued (Commercial Names available) Existence of verification 3. \"New Compliance Registration Request\" Customer Option Selects 1. Inputs Service B Special Businesses for requirements according to Commercial Name Data Customer Inputs 2.Compliance requirements to complete the additional required data and add the additional data, commercial name, reservation of the beneficiary's name, reservation of the beneficiary's name, declaration of evil data is made on the data structure network by entering the customer's entry. The previous steps in the data input from the withdrawal of the application and sending the data to the validity and pledge of communication, the administrator determines the customer and sends an e-mail (depending on the mail) and text message in the customer registration request number is transmitted 3. 1. 4. 1. Outputs within work teams (notifications, employee settings and assigned to the department within the system). 2. Work teams work with the customer to complete the request and send the request back. 3. The request is processed from the finalized request to the final request with the result of the notification sent 4. The notifications are mentioned in the section as the registration and certificate of registration as well as the unified registration and issuance number is requested for approval in the case of the beneficiary's rightful beneficiary's rightful beneficiary's declaration of registration and does not have a current license. The license for this license is issued for this standardized registration 5. 1. This is an alternative to selecting this option using a new registration application and wants to submit a business name to be available to the dealer. 2. Standardized registration number to issue the name.\n\nThere is no number\n\n\"New Application Registration Process Details\n\n:\n\nThe Department of Economic Development (DED), the Department of Economic Development (DED), and the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), and the Department of Economic Development (DED).\n\n1 .\n\nIf the customer's qualification will open the service\n\na .\n\nIf b, the non-dealer will be eligible to apply for the non-dealer eligibility notification error message to show the non-dealer will be eligible. Service\n\nThe next options to display the service will be logged in after 2.\n\ne :\n\nThis option verifies the presence of commercial names in the system when a new request is pressed. Issued\n\nIf there are two options for the customer to choose from, there are two options available if there are trade names issued. between them.\n\nEither the trader chooses to use a name from a previously issued trade name or the trader chooses to use a name from a previously issued trade name. The listing will be listed. \"New Application Registration Compliance to submit a new application for a new \"Champion to submit a business name using the new Application Registration to submit a new application) b part of the outgoing process steps.""
+            },
+            "pages_arabic": [
+              21
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                20
+              ],
+              "min_x": 246.7,
+              "min_y": 333.4,
+              "max_x": 1557.5,
+              "max_y": 1850.3,
+              "width": 1310.8,
+              "height": 1516.9
+            }
+          },
+          {
+            "chunk_id": 24,
+            "similarity": 0.8407,
+            "arabic_original": {
+              "text": ".بلطلا مدقمل ةيمقرلا ةيوهلل لوخدلا ىوتسم ةيلهلاا طو رسر نم ققحتلا نم ققحتلا 1. 2. ) . ةصخرم تغو ةرداص ( ةحاتم ةيراجت ءامسأ دوجو نم ققحتلا 3. ف \" اقبسم رداص يراجت مسا مادختساب \" رايخ لماعتملا راتخي نوناقلا لكشلا نم ققحتلاب ماظنلا موقي ديفتسم رارقإ بلطتي بلطلا ناك اذإ دكأتلاو رقيقح .لا ما اقباس ةلخدُملا تانايبلا ءاعدتساب ماظنلا موقيس ،ديفتسملا رارقإ بلطتي بلطلا ناك اذإ 1. 2. 3. امك ديفتسملا رارقلإ ةبولطملا تانايب لا فاب لاخدإب لماعتملا موقيسو يراجتلا مسلاا زجح لامعلاا دعاوق ف ةحضوم ه بلطلا لاسراو تانايبلا ةحصب دهعتلاو لصاوتلا لوؤسم ديدحتب لماعتملا موقي 4. بسح صتخملا فظوملا هنييعتو ةرئادلل لخادلا ماظنلا ف بلط ءاشنا متي . تايحلاصلا نو رتكلا ديربو ةيصن ةلاسر ف لماعتملل بلطلا مقر لاسرا متي 1. 2. صقاونلا لامكتسلا لماعتملا لىا بلطلا لاسرا ةداعإ متي دق 3. بلطلا ةجلاعم نم ءاهتنلاا دعب لماعتملا لىا ةيئاهنلا بلطلا ةجيتنب راعشا لاسرا متي 4. تاراعشلاا مسق ف اهركذ مت امك لجس ةداهشو دحوملا ليجستلا مقر رادصا متي بلطلا لع ةقفاوملا ةلاح ف رقيقحلا ديفتسملا رقيقح ديفتسم رارقإ ليجستب مقي ملو ةيلاح ةصخر لماعتملا ىدل نوكي نا .ةصخرلا هذهل رداص دحوم ليجست 5. 1. قباس بلطتم تلاخدملا تاجرخملا ليدب رايتخا\n\nمقر دجوي لاو اهل\n\n22 | P a g e\n\nConfidential | ديقم\n\n\"رداص يراجت مسا مادختساب ديدج لاثتما ليجست بلط ميدقت\" ةيلمع تاوطخ ليصافت\n\n:\n\nيلاتلاب ماظنلا موقي \"ديدج بلط \"رايخ ىلع طغضلاب لماعتملا ماق اذإ 1 .\n\n:\n\nبلط رايخ \" راهظا متي ،اهل ةيراجت ةصخر رادصإب مقي مل ةيراجت ءامسأ لماعتملا ىدل ناك اذإ a . ةيراجتلا ءامسلأا دحأ رايتخاب لماعتملا موق يل \"اقبسم رداص يراجت مسا ��ادختسا ب لاثتما ليجست بلطلا ميدقتب ةعباتملاو ةيلاحلا\n\nاقبسم ةلجس\n\nُملا تانايبلا ءاعدتسا متي ةيلاحلا ةيراجتلا ءامسلأا دحأ راتخا اذإ\n\nb .\n\nلا ما يقيقحلا ديفتسملا رارقإ نم يفعم نايكلا اذه ناك اذإ دكأتلاو ينوناقلا لكشلا نم ققحتلا متي c . لامعلاا دعاوقل اقبط\n\nمسلاا ةمدخ يف اهنيزخت قباسلاو ةيلاتلا تانايبلا ضرع متي رارقلإا نم يفعم ريغ نايكلا ناك اذإ d . يراجتلا\n\nينوناقلا لكشلا i .\n\nيراجتلا مسلاا ii .\n\nةكارشلا لكيه iii .\n\nمسلاا يف اهلاخدإ قبس يتلا تانايبلا ىلع وا ةكارشلا لكيه ىلع ايقفا ليدعتلا لماعتملل نكمي لا e . يك ةكرشلاو درفلا تانايب ديدحتل يقيقحلا ديفتسملا رارقإب ةصاخلا لوقحلا طقف ةفاضإ متي ، يراجتلا لامعلاا دعاوق يف ةبولطملا تانايبلا لاخدإب لماعتملا موقي"
+            },
+            "english_translation": {
+              "text": "The request is for the DSP to enter the eligibility level and verify the verification of the verification 1. 2. ) . Licensed and issued business names are available for verification. 3. V. \"Pre-issued business name\" using the \"Dealer's Choice\" option. The law chooses the form of verification system. the beneficiary requires a declaration if the application requires verification. if the previously entered data is correct. the system will call the beneficiary. the application requires a declaration if 1. 2. 3. the beneficiary requires a declaration. 3. As the beneficiary, the beneficiary will enter the required data and the merchant will enter the name and business reservation rules in the application and send the correct data and undertake to communicate with the responsible official to identify the merchant who will 4. According to the competent employee and assigned to the department within the system, the request is created. Authorizations, email and text message to the customer, request number sent to the customer 1. 2. the request may be sent back to the customer for completion of deficiencies 3. The request is processed after the customer's request is finalized and the result of the request is sent as a notification (4). Notifications are mentioned in the section as the registration and certificate of unified registration and issuance number is requested for approval of the status of the beneficiary's rightful beneficiary's rightful beneficiary's declaration of registration and the current status of the transactor's license is not current. 5. 1. Prerequisite Inputs Outputs Alternative Selection\n\nThere is a parent number\n\n22 | P a g e\n\nConfidential | Restricted\n\n\"Business Issued Name with New Use Compliance Registration Compliance Application Submission\" Process Steps Details\n\n:\n\nThe system will then click on the \"New Request\" option if the customer clicks on it if 1.\n\n:\n\nIf a customer's name is not issued by a commercial license, the system will show the option \"Show Request\" if the customer has a commercial name. The system selects one of the commercial names and selects the customer's name and then issues me a license to use the commercial name in order to comply with the current registration, submission and follow-up.\n\nAlready registered\n\nIf someone chooses to use a commercial name, the current data is called\n\n b .\n\nIf this entity is exempted from acknowledgment by the beneficiary's real mother, the legal form of verification is verified. c. According to business rules\n\nIf the following data is stored in the name of the service and the previous data is displayed, if the entity is not exempt, it will be recognized as exempt d. Business\n\n i. Legal form.\n\n ii. Commercial name\n\n iii. Partnership Structure\n\nThe data previously entered on the name or partnership structure can not be modified horizontally or vertically by the customer. e. In order to determine the true beneficiary of the data, the individual and the company can only add the required fields by entering the required data in the business rules."
+            },
+            "pages_arabic": [
+              23
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                22,
+                23
+              ],
+              "min_x": 250.1,
+              "min_y": 47.6,
+              "max_x": 1554.4,
+              "max_y": 2201.0,
+              "width": 1304.3000000000002,
+              "height": 2153.4
+            }
+          }
+        ],
+        "rego_rules": {
+          "application_type": "existing_license|existing_trade_name|new_trade_name|<other_value>"
+        }
+      },
+      "routine1_digital_id_verification": {
+        "type": "process",
+        "description": "Verify Digital ID level (SOP2/SOP3)",
+        "function": "verify_digital_id_login_level",
+        "transitions": [
+          {
+            "condition": "digital_id_level in ['SOP2', 'SOP3']",
+            "target": "routine1_eligibility_check",
+            "action": "proceed_with_verification",
+            "source": "routine1_digital_id_verification"
+          },
+          {
+            "condition": "digital_id_level not in ['SOP2', 'SOP3']",
+            "target": "ineligible",
+            "action": "notify_insufficient_digital_id",
+            "source": "routine1_digital_id_verification"
+          }
+        ],
+        "node_id": 3,
+        "journey_id": 1,
+        "relevant_chunks": [
+          {
+            "chunk_id": 11,
+            "similarity": 0.8509,
+            "arabic_original": {
+              "text": "يف صحفلا ةيلمعل ةجيتنك تاهيبنت دجوت لاو ، طسوتم وا ضفخنم ةروطخلا فينصت ناك حال يف • نمو ةقفاوملا رادصإو بلطلا ةعجارمب ةبجاولا ةيانعلا قيرف فظوم موقي ، ةيملاعلاو ةيلحملا مئاوقلا موقي تاقيلعت دوجو حال يف وا ةقفاوملا ديكأتو بلطلا نم ققحتلاو دكأتلاب عجار ملا موقي مث . دمتعملا لسلستلا و تايحلاصلل اقبط مزلالا ءارجلاا ذاختلا فظوملا ىلا اهلاسرإب عجار ملا\n\nذاختاب ةززعملا ةبجاولا ةيانعلا قيرف موقي ،عفترم وا عفترم طسوتم ةروطخلا فينصت ناك حال يف • كلذ بلطت نا بلطلا ىلع ضفرلا وا ةقفاوملا ءاطعلإ ايلعلا ةرادلإا عم قيسنتلاو ةمزلالا تاءارجلإا\n\n.\n\nتاءارجلإا ذاختاب ةززعملا ةبجاولا ةيانعلا قيرف فظوم موقي ،روظحم ةروطخلا فينصت ناك حال يف • ةرادلإل بلطلا ليوتحو ضفرلا وا ةقفاوملا ءاطعلإ ريدملا ىلع بلطلا نييعتو بلطلا ةجلاعمل ةمزلالا ايلعلا\n\nليجستلا مقرب لماعتملل راعشا لاسرا متي ،ةقفاوملا يه ةيئاهنلا بلطلا ةجيتن تناك حال يف • مت ةصنمو يلخادلا ماظنلا يف لوبقم ىلا بلطلا ةلاح نييعتو دحوملا\n\nنييعتو بلطلا ضفرب لماعتملل راعشا لاسرا متي ،ضفرلا يه ةيئاهنلا بلطلا ةجيتن تناك حال يف • نل ةلاحلا هذه يفو مت ةصنم ىلع اهسكع و \"ضوفرم\" يلخادلا ماظنلا يف ةيئاهنلا بلطلا ةلاح .صيخرتلا رادصا لماعتملا عيط��سي\n\n9 | P a g e\n\nConfidential | ديقم\n\nلمعلا قاطن\n\nلمعلا قاطن لخاد\n\n:\n\nوبأ مقر رادصإو لاثتملاا ليجست \" ةمدخ ب ةقلعتملا لامعلاا تابلطتم عيمج عورشملا اذه يطغي : يف كلذ امب ، يقيقحلا ديفتسملا رارقإ ليصافت ةنمضتم \"دحומلا يبظ\n\nةمدخلا تابلطتم ليلحتو ةسارد : ةيلاحلا تايلمعلا ليلحت •\n\n.\n\nنيسحت ىلإ جاتحت يتلا تلااجملا ديدحت : ةيلاحلا لكاشملاو تانيسحتلا قاطن ديدحت • . ةمدخلا هجاوت يتلا ةيلاحلا لكاشملا ليلحتو\n\nةمدخلل فادها يبلت يتلا تايلمعلا راسم ميمصت : تايلمعلا راسم ميمصت •\n\n.\n\n:\n\nلمعلا قاطن جراخ\n\nةمدخ يف هئاعدتسا نكمملا نم ا ءزج نوكتس يتلا يراجتلا مسلاا زجح ةمدخ تابلطتم • ءزجلا يف اهتفاضا مت يت لا ديفتسملا رارقإ ةبولطملا ةيفاضلإا تانا يبلا ادع ام ليجستلا لامعلاا دعاوق ب صاخلا\n\n10 | P a g e\n\nConfidential | ديقم\n\nتاضارتفلاا\n\n:ةيلاتلا ��اقنلا ضارتفاب انمق ةمدخلا لامعا تابلطتم ةشقانم للاخ تمت يتلا ةطشنلأا نم ءزجك\n\nيبظ وبأ مقر رادصإو لاثتملاا ليجست \" مسلااب ةقيثولا هذه يف ليجستلا ةمدخ ىلا ةراشلإا تمت • ديق لازلا ةمدخلل يئاهنلا مسلااو - ةدوسملا هذه ءاشنا للاخ دمتعي مل مسلاا اذه – \"دحوملا .ةجلاعملا"
+            },
+            "english_translation": {
+              "text": "As a result of alerts, there is a high, medium or low severity classification in the screening process - from approval and issuance of the request to due diligence review by the staff team, global and local lists, comments on the existence of the status in or approval and confirmation of the request, and verification by confirmation, then review by the staff member. Check the approved sequence and authority according to the necessary action to be taken by the employee to send it.\n\nThe team will take enhanced due diligence, high or medium high severity rating, or high moderate severity rating - the request for rejection or approval is required to give the senior management with the necessary coordination and actions.\n\n.\n\nThe enhanced due diligence procedures for an employee's team performing prohibited, high-risk, or medium-risk categorization were as follows - To manage the request and turn the rejection or approval to give the manager on the request and assign the request to senior management for processing.\n\nThe customer's registration number is sent to the customer notification, the approval is sent, the request is finalized, the result is finalized, the internal platform is accepted into the system and the request is assigned a standardized status.\n\nThe request is assigned a rejection status, the request is denied, the result of the request is the final status of the request, and the platform is reversed and the internal system is set to \"Rejected\" in the final status of the request. The customer can issue a license.\n\n9 | P a g e\n\nConfidential Restricted\n\nWorking scope\n\nWork Scope Within\n\n:\n\nAbu Dhabi number and issuance of compliance registration \"B service\" related to the business requirements of all the project covers this project: Including, including, real beneficiary's acknowledgment of the details included in the \"standardized Abu Dhabi\".\n\nService requirements and analysis study: Analyze current processes\n\n.\n\nIdentify areas where you need to improve: Define the scope of improvements to the current issues and issues. Analyze the current issues and analyze the service\n\nThe service meets the goals of the service design process: Processes Design Path\n\n.\n\n:\n\nWork scope outside of\n\nThe part of the service that can be summoned from the commercial part of the business will be the name of the service reservation requirements - the part in which the beneficiary was added to the beneficiary to acknowledge the additional requirements of the business, except for the special business registration rules B rules.\n\n10 | P a g e\n\nConfidential - Restricted\n\nAssumptions\n\nAs part of the following points, we have assumed that the following activities are part of the business requirements discussion during the course of the service\n\nDhabi Abu Dhabi Abu Dhabi number and version number Compliance Compliance Registration \"in the name of this document in the name of this document in the registration of the service to the reference is done - the final service is still underway and the name - this draft is not created during the creation of this name - this name is not adopted - \"standardized processing."
+            },
+            "pages_arabic": [
+              9
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                9,
+                10,
+                11
+              ],
+              "min_x": 233.1,
+              "min_y": 47.6,
+              "max_x": 1409.4,
+              "max_y": 2201.0,
+              "width": 1176.3000000000002,
+              "height": 2153.4
+            }
+          }
+        ],
+        "rego_rules": {
+          "digital_id_level": "SOP2|SOP3|<other_value>",
+          "application_type": "new_trade_name|<other_value>"
+        }
+      },
+      "routine1_eligibility_check": {
+        "type": "process",
+        "description": "Check eligibility requirements",
+        "function": "check_eligibility_requirements",
+        "transitions": [
+          {
+            "condition": "eligibility_check == true",
+            "target": "routine1_trade_name_check",
+            "action": "proceed_to_trade_name_check",
+            "source": "routine1_eligibility_check"
+          },
+          {
+            "condition": "eligibility_check == false",
+            "target": "ineligible",
+            "action": "notify_eligibility_failure",
+            "source": "routine1_eligibility_check"
+          }
+        ],
+        "node_id": 4,
+        "journey_id": 1,
+        "relevant_chunks": [
+          {
+            "chunk_id": 9,
+            "similarity": 0.8556,
+            "arabic_original": {
+              "text": "ةيسيئرلا فادهلأا\n\nةقدب\n\nييقيقحلا نيديفتسملا عيمج قيثوتو ديدحت : ةيفا��شلا\n\n.\n\n(KYC). كليمع فرعاو (AML) ف امب ،ةلصلا تاذ حئاولل لاثتملاا : لاثتملاا\n\nلاوملأا ليسغ ةحفاكم تابلطتم كلذ\n\nيمدختسملا اضر ةدايزو ةجلاعملا تقو ليلقتل ةيلمعلا تس\n\n. يسحت : ةءافكلا\n\n7 | P a g e\n\nConfidential | ديقم\n\nةمدخلا ىلع ةماع ةرظن\n\nديهمت\n\nةبولطملا ةيلهلأا تابلطتم ءافيتسا و ،\"مت\" ةصنم ىلإ لوخدلا ليجست نيمدختسملا ىلع • بجي ةيلهلاا تابلطتمب صاخلا ءزجلا ةعجارم ءاجرب .ةعباتملا نم اونكمتي ىتح ةمدخلا ىلع ميدقتلل\n\n:ةيلاتلا تارايخلا لماعتملل رهظتس و ليجستلا ةمدخ ءدب ب لماعتملا موقي •\n\nةلمتكملا ريغ تابلطلا تادوسم o\n\nاهل رارقا ميدقت متي مل يتلاو ةرداصلا صخرلاب ةمئاق o\n\n.\n\nتاشاشلا جذو من يف حضומ وه امك - ديدج لاثتما ليجست بلط ىلع ميدقتلا رايخ o\n\nةزوجحم ةيراجت ءامسا مادختساب لاثتما ليجست بلط ميدقتب لماعتملل رايخ ةحاتا o رادصا فدهب تناكو صيخرت يأ اهيلع ردصي ملو اقبسم اهيلع ةقفاوملا تمت ( ةحاتمو باسحب ةطبترم ةحاتم ةيراجت ءامسأ دوجو حال يف رايخلا اذه ليعفت متيو . )ةديدج ةصخر .لوخدلا ليجستب ماق يذلا مدختسملا\n\nدنع \"يراجتلا مسلاا زجح \" ةمدخ ءاعدتسا متيس و ةيلوأ ةوطخك ةبولطم نوكتس ليجستلا ةمدخ ةطبترملا تاءانثتسلااو لماعتملا ةهج نم اهلاخدإ مت يتلا تانايبلا بسحو تمتؤم لكشب ةجاحلا يقيقح لا ديفتسم لا رارقإ ليصافت بلطتت لا يتلا تلااحلا ةفاضإ متيسو ةلخدملا تانايبلا هذهب جذامن ءاعدتسا متيف ،ةماع ةمهاسم ةكرش ينوناق لكشب ةصخرل ليجست بلط ميدقت ، دنع لاثم ديفتسملا تانايب لاخدا بلط )لاو متي ديفتسملاب ةصاخلا ةيفاضلاا تانايبلا (نودب يراجتلا مسلاا لمعلا دعاوقب صاخلا ءزجلا ةعجارم ءاجرب . ةيموكحلا تاكرشل ل ةبسنلاب حاللا .وككلذ ةيليصفتلا رارقإ نم ةانثتسملا تلااحلا ليصفتل ةقيثولا هذه يف ليجستلا ةمدخ ىلع ميدقتلاب ةصاخلا .يقيقحلا ديفتسملا\n\n•\n\n.\n\nديدحت نو يو ،ك كلذ بلطت نا ةمزلالا قئاثولا قافرا ةاعارم عم بلطلا ميدقتب لماعتملا موقي • تاءارجلااو تامدخلا ةفاكل ةبولطملا تادنتسملل تادادعلاا ةموظنم قيرط نع ةمزلالا تادنتسملا"
+            },
+            "english_translation": {
+              "text": "Home Objectives\n\nstrictly\n\nThe real beneficiaries are all identified and documented: Transparency\n\n.\n\n(KYC). (AML) as it relates to compliance regulations: Compliance\n\nAnti-money laundering and anti-money laundering requirements\n\nIncrease user satisfaction and processing time to minimize process six\n\n. Optimize : efficiency\n\n7 | P a g e\n\nConfidential | Restricted\n\nService on Public View\n\nBootstrap\n\nEligibility and fulfillment requirements are required, and the platform is \"done\" to log in and register users on - Eligibility must meet the requirements of the specific part Review please follow up until they are able to apply for the service.\n\nThe following options will appear for the customer to register and start the service.\n\n o Incomplete applications o Drafts of completed applications\n\n o Listed licenses issued are not submitted and are not acknowledged.\n\n.\n\nAs shown in the screenshot, the model is modeled as - o New application registration compliance on the submission option\n\nA license was issued for the purpose of providing the customer with an option to submit a request for compliance. o A license was issued for the purpose of issuing any license and was not previously approved (and available with an account associated with available commercial names). This option is activated in the case of a new license (which the user logged in to).\n\nAs a preliminary step, the service will be required to register a service associated with the exceptions and exceptions of the dealer who entered the data was automated and according to the real need of the beneficiary, the details of the beneficiary do not require the approval of the details that require the addition of the cases, and the data will be entered in these forms will be called in the form of a general, legal company contribution to a license registration application, when the example of the beneficiary data to enter the application (and the beneficiary is not the additional special data (without commercial name business rules), please review the special part of the work of the rules. For governmental companies for companies for the case of that case. Detailed declaration of the exempted cases to detail this document in the registration of the service on the special application for the real beneficiary.\n\n- - - - - - - - - - - - - - - - - - - - - - -\n\n.\n\nThe customer is required to attach the necessary documents to the application and provide the customer with the required services and procedures for all the required documents and settings of the system by means of the necessary documents"
+            },
+            "pages_arabic": [
+              7
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                7,
+                8
+              ],
+              "min_x": 246.1,
+              "min_y": 47.6,
+              "max_x": 1413.8,
+              "max_y": 2201.0,
+              "width": 1167.7,
+              "height": 2153.4
+            }
+          },
+          {
+            "chunk_id": 11,
+            "similarity": 0.8507,
+            "arabic_original": {
+              "text": "يف صحفلا ةيلمعل ةجيتنك تاهيبنت دجوت لاو ، طسوتم وا ضفخنم ةروطخلا فينصت ناك حال يف • نمو ةقفاوملا رادصإو بلطلا ةعجارمب ةبجاولا ��يانعلا قيرف فظوم موقي ، ةيملاعلاو ةيلحملا مئاوقلا موقي تاقيلعت دوجو حال يف وا ةقفاوملا ديكأتو بلطلا نم ققحتلاو دكأتلاب عجار ملا موقي مث . دمتعملا لسلستلا و تايحلاصلل اقبط مزلالا ءارجلاا ذاختلا فظوملا ىلا اهلاسرإب عجار ملا\n\nذاختاب ةززعملا ةبجاولا ةيانعلا قيرف موقي ،عفترم وا عفترم طسوتم ةروطخلا فينصت ناك حال يف • كلذ بلطت نا بلطلا ىلع ضفرلا وا ةقفاوملا ءاطعلإ ايلعلا ةرادلإا عم قيسنتلاو ةمزلالا تاءارجلإا\n\n.\n\nتاءارجلإا ذاختاب ةززعملا ةبجاولا ةيانعلا قيرف فظوم موقي ،روظحم ةروطخلا فينصت ناك حال يف • ةرادلإل بلطلا ليوتحو ضفرلا وا ةقفاوملا ءاطعلإ ريدملا ىلع بلطلا نييعتو بلطلا ةجلاعمل ةمزلالا ايلعلا\n\nليجستلا مقرب لماعتملل راعشا لاسرا متي ،ةقفاوملا يه ةيئاهنلا بلطلا ةجيتن تناك حال يف • مت ةصنمو يلخادلا ماظنلا يف لوبقم ىلا بلطلا ةلاح نييعتو دحوملا\n\nنييعتو بلطلا ضفرب لماعتملل راعشا لاسرا متي ،ضفرلا يه ةيئاهنلا بلطلا ةجيتن تناك حال يف • نل ةلاحلا هذه يفو مت ةصنم ىلع اهسكع و \"ضوفيرm\" يلخادلا ماظنلا يف ةيئاهنلا بلطلا ةلاح .صيخرتلا رادصا لماعتملا عيطتسي\n\n9 | P a g e\n\nConfidential | ديقم\n\nلمعلا قاطن\n\nلمعلا قاطن لخاد\n\n:\n\nوبأ مقر رادصإو لاثتملاا ليجست \" ةمدخ ب ةقلعتملا لامعلاا تابلطتم عيمج عورشملا اذه يطغي : يف كلذ امب ، يقيقحلا ديفتسملا رارقإ ليصافت ةنمضتم \"دحوملا يبظ\n\nةمدخلا تابلطتم ليلحتو ةسارد : ةيلاحلا تايلمعلا ليلحت •\n\n.\n\nنيسحت ىلإ جاتحت يتلا تلااجملا ديدحت : ةيلاحلا لكاشملاو تانيسحتلا قاطن ديدحت • . ةمدخلا هجاوت يتلا ةيلاحلا لكاشملا ليلحتو\n\nةمدخلل فادها يبلت يتلا تايلمعلا راسم ميمصت : تايلمعلا راسم ميمصت •\n\n.\n\n:\n\nلمعلا قاطن جراخ\n\nةمدخ يف هئاعدتسا نكمملا نم ا ءزج نوكتس يتلا يراجتلا مسلاا زجح ةمدخ تابلطتم • ءزجلا يف اهتفاضا مت يت لا ديفتسملا رارقإ ةبولطملا ةيفاضلإا تانا يبلا ادع ام ليجستلا لامعلاا دعاوق ب صاخلا\n\n10 | P a g e\n\nConfidential | ديقم\n\nتاضارتفلاا\n\n:ةيلاتلا طاقنلا ضارتفاب انمق ةمدخلا لامعا تابلطتم ةشقانم للاخ تمت يتلا ةطشنلأا نم ءزجك\n\nيبظ وبأ مقر رادصإو لاثتملاا ليجست \" مسلااب ةقيثولا هذه يف ليجستلا ةمدخ ىلا ةراشلإا تمت • ديق لازلا ةمدخلل يئاهنلا مسلااو - ةدوسملا هذه ءاشنا للاخ دمتعي مل مسلاا اذه – \"دحوملا .ةجلاعملا"
+            },
+            "english_translation": {
+              "text": "As a result of alerts, there is a high, medium or low severity classification in the screening process - from approval and issuance of the request to due diligence review by the staff team, global and local lists, comments on the existence of the status in or approval and confirmation of the request, and verification by confirmation, then review by the staff member. Check the approved sequence and authority according to the necessary action to be taken by the employee to send it.\n\nThe team will take enhanced due diligence, high or medium high severity rating, or high moderate severity rating - the request for rejection or approval is required to give the senior management with the necessary coordination and actions.\n\n.\n\nThe enhanced due diligence procedures for an employee's team performing prohibited, high-risk, or medium-risk categorization were as follows - To manage the request and turn the rejection or approval to give the manager on the request and assign the request to senior management for processing.\n\nThe customer's registration number is sent to the customer notification, the approval is sent, the request is finalized, the result is finalized, the internal platform is accepted into the system and the request is assigned a standardized status.\n\nThe request is assigned a rejection status, the request is denied, the result of the request is the final status of the request, and the platform is reversed and the internal system is set to \"Rejected\" in the final status of the request. The customer can issue a license.\n\n9 | P a g e\n\nConfidential Restricted\n\nWorking scope\n\nWork Scope Within\n\n:\n\nAbu Dhabi number and issuance of compliance registration \"B service\" related to the business requirements of all the project covers this project: Including, including, real beneficiary's acknowledgment of the details included in the \"standardized Abu Dhabi\".\n\nService requirements and analysis study: Analyze current processes\n\n.\n\nIdentify areas where you need to improve: Define the scope of improvements to the current issues and issues. Analyze the current issues and analyze the service\n\nThe service meets the goals of the service design process: Processes Design Path\n\n.\n\n:\n\nWork scope outside of\n\nThe part of the service that can be summoned from the commercial part of the business will be the name of the service reservation requirements - the part in which the beneficiary was added to the beneficiary to acknowledge the additional requirements of the business, except for the special business registration rules B rules.\n\n10 | P a g e\n\nConfidential - Restricted\n\nAssumptions\n\nAs part of the following points, we have assumed that the following activities are part of the business requirements discussion during the course of the service\n\nDhabi Abu Dhabi Abu Dhabi number and version number Compliance Compliance Registration \"in the name of this document in the name of this document in the registration of the service to the reference is done - the final service is still underway and the name - this draft is not created during the creation of this name - this name is not adopted - \"standardized processing."
+            },
+            "pages_arabic": [
+              9
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                9,
+                10,
+                11
+              ],
+              "min_x": 233.1,
+              "min_y": 47.6,
+              "max_x": 1409.4,
+              "max_y": 2201.0,
+              "width": 1176.3000000000002,
+              "height": 2153.4
+            }
+          }
+        ],
+        "rego_rules": {
+          "eligibility_check": "false|true|<other_value>",
+          "application_type": "new_trade_name|<other_value>"
+        }
+      },
+      "routine1_trade_name_check": {
+        "type": "process",
+        "description": "Check for existing reserved trade names",
+        "function": "fetch_available_trade_names",
+        "transitions": [
+          {
+            "condition": "has_reserved_trade_names == true AND user_selects_existing == true",
+            "target": "routine2_digital_id_verification",
+            "action": "redirect_to_routine2",
+            "source": "routine1_trade_name_check"
+          },
+          {
+            "condition": "has_reserved_trade_names == false OR user_selects_new == true",
+            "target": "routine1_collect_trade_name_data",
+            "action": "proceed_with_new_trade_name",
+            "source": "routine1_trade_name_check"
+          }
+        ],
+        "node_id": 5,
+        "journey_id": 1,
+        "relevant_chunks": [
+          {
+            "chunk_id": 12,
+            "similarity": 0.8506,
+            "arabic_original": {
+              "text": "ةمدخلا نم ءزج يقيقحلا ديفتسملا رارقا نوكي نأ ىلع ةرئادلا لخاد لمعلا قرف عم قافتلاا مت • اهيف امب صيخارتلا لك تائف ةاعارم عم \"دحوملا يبظ وبأ مقر رادصإو لاثتملاا ليجست \" ةديدجلا .اقحلا ةرحلا قطانملا\n\nرارقا تابلطتم نمضتي ف��س \"دحوملا يبظ وبأ مقر رادصإو لاثتملاا ليجست\" ةمدخ راسم • متيس يتلا تانايبلاو لوقحلا كلذكو يراجتلا مسلاا زجح ةمدخ نيمضت ةيلاو يقيقحلا ديفتسملا . ليجستلا بلط ميدقت ءانث أ ةمدخلا ءاعدتسا مت لاح يف يراجتلا مسلاا زجح جذامن ىلع اهتفاضا\n\nتائف عيمج رادصلإ دحوملا ليجستلا مقر رادصا ىلع ميدقتلل ةمدختسم ليجستلا ةمدخ نوكتس • . ةرحلا قطانملا ةحاتا ةاعارم عم صيخارتلا\n\nةصاخلا لامعلاا تابلطتم ةيطغتل ةرحلا قطانملا عم قيسنتلاب ةرئادلا لخاد لمعلا قرف موقتس • . كلذ بلطت حال يف مهب\n\nميدقتلا يف همادختسا متيس يذلا دحوملا ليجستلا مقر وه ليجستلا ةمدخل يئاهنلا جتانلا نوكيس • .ةفلتخملا اهتائفب صخرلا رادصا بلط ىلع\n\nريس ماهم بسح ةيلخادلا تاقفاوملا عيمج نم ةقفاوملاب ءاهتنلاا مت حال يف دحوملا مقرلا ردصي • . لمعلا\n\نيتلا ةهجلا مسا لاسرا متي ،دحوم ليجستلا مقر رادصا دعب صيخرتلا بلط ضفر مت ةلاح يف • ًاقباس رداصلا لاثتملاا ليجست بلط حتف ةداعإ متيو لماعتملا ىلا طاشنلا مساو بلطلا تضفر متيسو ىرخأ ةرم بلطلا ميدقت ةداعإو ليجستلا ىلع ليدعتلا لماعتملا عيطتسي مث نمو ًايئاقلت .ليجستلا ىلع ليدعتلا بلطب ةصاخلا ةقيثولا يف ليصفتلاب ةطقنلا هذه ةشقانم\n\nةصاخلا تادادعلإل اقبط نيصتخملا نيفظوملا ىلا ةرشابم اهنييعت متيس تابلطلا نا ضارتفاب انمق • ةيمنتلا ةرئادل يلخادلا ماظنلا يف تابلطلل يئاقلتلا صيصختلا ريياعم بسحو فظوم لك تايحلاصب . ةيداصتقلاا\n\نثيحب ،اهيلع ريشأتلا متي يتلا صقاونلا بسح سنوكي لماعتملل بلطلا عاجرا نا ضارتفاب انمق • تانايبلاو جذامنلا ةحاتا طقف (متي اهريفوت مت يتلا تانايبلا عم تانايبلا لاخدا جذامن ةداعا متي ةحاتإو . عاجرلاا ةظحلام )عم اهحيحصت دعب اهميدقت ةداعا بولطم لا ليصافت ىلع لا يوتحت يتلا ليمحت دعاوق قيبطتو ) ، ماظنلا تادادعا يف ةفرعم ريغ ( ةيفاضإ تادنتسم بلط ةيناكمإ صيصخت متي ،بلطلا عاجرا دنعو .) ةيفاضلاا اقباس وأ ةفرعملا ( تادنتسملا ةفاك ىلع تادنتسملا عاجرلاا ةكرح ةرورض ظفح .عم لماعتملل بلطلا عاجرإب ماق )يذلا مدختسملا ( فظوملل بلطلا . بلطلا ةعجارم ةداعلإ مزلالا تقولا ريفوتل ، ةقباسلا تاظحلاملا وأ ةظحلاملاو"
+            },
+            "english_translation": {
+              "text": "The beneficiary of the service has to acknowledge the real part of the beneficiary's service, and the department has to work with the teams within the work with the agreement - including all categories of licenses, taking into account the \"unified Abu Dhabi Abu Dhabi number and issuing the new \"free zones\" registration and compliance issue.\n\nAcknowledgment of the requirements will include the \"Unified Abu Dhabi Abu Dhabi Number and Issuance of Compliance Registration\" service path - which will be the fields and data fields as well as the commercial name reservation service to include the beneficiary's real guardianship. The registration request will be added to the forms on the commercial name reservation service to provide a commendable service.\n\nThe registration service will be a service for all categories to issue a standardized registration number to be issued to apply using the registration service. Free zones with licenses are available for consideration\n\nTeams will cover the requirements to cover free zones with the coordination of the department within the work teams - . In the event that they require it\n\nThe final output will be a unified registration number, which will be used to register for the final service output - for the different categories of licenses.\n\nIn the case of a standardized license number, all approvals will be issued according to the internal workflow of all approvals. Work\n\nAfter the issuance of the license, the name of the entity is unified, the registration number is issued after the issuance of the license, the request for rejection was rejected - in the case of the previously issued compliance with the registration of a request to reopen the application to the activity and the name of the request is rejected and the request will be rejected again, and then the customer can submit and re-register on the amendment of the application and then automatically register on the amendment of the document in detail this point is discussed in detail in the document.\n\nAssuming that the requests will be assigned to the specialists according to the settings according to the staff specialists, we will start assigning them to the internal development department in the system for automatic requests for customization according to the criteria of each employee with the powers of each employee. Economic\n\nAssuming that the request is returned to the customer, the customer will be able to return the request - assuming that the data forms are only available (the data is provided with the data with the data entered and the forms are made available again. Return Note (with correction after submission) is required to return no details that do not contain downloaded rules and application settings (, system settings in non-defined) additional customizable request documents (when requesting, returning, or defining) additional documents.) All documents on the documents returned must be saved to the requesting user (who is the user). Request to review the request to return to save time, previous notes or notes."
+            },
+            "pages_arabic": [
+              11
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                11
+              ],
+              "min_x": 250.1,
+              "min_y": 530.8,
+              "max_x": 1367.0,
+              "max_y": 1955.5,
+              "width": 1116.9,
+              "height": 1424.7
+            }
+          },
+          {
+            "chunk_id": 20,
+            "similarity": 0.8461,
+            "arabic_original": {
+              "text": ".بلطلا مدقمل ةيمقرلا ةيوهلل لوخدلا ىوتسم نم ققحتلا 1. قباس بلطتم ةيلهلاا طو رسر نم ققحتلا 2. ) . ةصخرم تغو ةرداص ( ةحاتم ةيراجت ءامسأ دوجو نم ققحتلا 3. \"ديدج لاثتما ليجست بلط\" رايخ لماعتملا راتخي 1. تلاخدملا ةمدخ ب ةصاخلا لامعلاا تابلطتمل اقبط يراجتلا مسلاا تانايب لاخدإب لماعتملا موقي 2. .لاثتملاا تابلطتم لامكتسلا ةبولطملا ةيفاضلإا تانايبلا ةفاضاو ، يراجتلا مسلاا زجح رقيقحلا ديفتسملا رارقإ رشلا تانايب متي نأ لع و ةكا لكيه تانايب لاخدإب لماعتملا موقي .ةقباسلا تاوطخلا ف ةلخدملا تانايبلا نم اهبحس بلطلا لاسراو تانايبلا ةحصب دهعتلاو لصاوتلا لوؤسم ديدحت�� لماعتملا موقي نو رتكلا ديرب بسح( و ةيصن ةلاسر ف لماعتملل ليجستلا بلط مقر لاسرا متي 3. 4. 1. تاجرخملا لخاد لمعلا قرف )تاراعشلاا تادادعا قظوم لع هنييعتو ةرئادلل لخادلا ماظنلا ف بلط ءاشنا متي .تايحلاصلا ةفوفصم بسح ةرئادلا 2. لمعلا قيرف ةهج نم صقاونلا لامكتسلا لماعتملا لىا بلطلا لاسرا ةداعإ متي دق 3. بلطلا ةجلاعم نم ءاهتنلاا دبع لماعتملا لىا ةيئاهنلا بلطلا ةجيتنب راعشا لاسرا متي 4. تاراعشلاا مسق ف اهركذ مت امك لجس ةداهشو دحوملا ليجستلا مقر رادصا متي بلطلا لع ةقفاوملا ةلاح ف رقيقحلا ديفتسملا رقيقح ديفتسم رارقإ ليجستب مقي ملو ةيلاح ةصخر لماعتملا ىدل نوكي نا اهل . ةصخرلا هذهل رداص دحوم ليجست 5. 1. ليدب رايتخا اذه مادختساب ديدج ليجست بلط مدقي نا ديريو حاتم يراجت مسا لماعتملا ىدل نوكي نا 2. .دحوم ليجست مقر رادصلإ مسلاا\n\nمقر دجوي لاو\n\n\"ديدج ليجست بلط ميدقت\" ةيلمع تاوطخ ليصافت\n\n:\n\nةمدخ رايتخاو ةيداصتقلاا ةيمنتلا ةرئاد تامدخ ىلا لوخدلاو \"مت\" ةصنم ىلا لوخدلا ليجستب لماعتملا موقي يف حضوم وه امك ةيلهلاا طورش نم ققحتلاب ماظنلا موقيو \"دحوملا يبظ وبأ مقر رادصإو لاثتملاا ليجست\" ةيلهلاا تابلطتم ب صاخلا ءزجلا\n\n1 .\n\nةمدخلا حتف متيس لهؤم لماعتملا ناك اذإ\n\na .\n\nىلع ميدقتلل هتيلها مدعب لماعتملا راطخلإ أطخ ةلاسر راهظا متيس لهؤم ريغ لماعتملا ناك اذإ b . ةمدخلا\n\nيلاتلا تارايخلا ضرع متي ةمدخلا ىلا لوخدلا دعب 2 .\n\nة :\n\nةيراجت ءامسأ دوجو نم ققحتلاب ماظنلا موقي رايخلا اذه ىلع طغضلا دنع ديدج\" \"بلط ميدقت a . ةرداص\n\nرايتخلااب موقيل لماعتملل نيرايخ ضرع متي ، ةحاتمو ةرداص ةيراجت ءامسأ كانه ناك اذإ i . .امهنيب\n\nموقي وا ًاقباس ةرداصلا ةيراجتلا ءامسلأا نم مسا مادختساب موقي نا اما لماعت��لا راتخي ii . درس متيس . ديدج لاثتما ليجست بلط ىلع ميدقتلاب موقيل ديدج” “لطب ىلع ميدقتلاب يراجت مسا مادختساب ديدج ليجست بلط ميدقت( ب صاخلا ءزجلا يف ةيلمعلا تاوطخ رداص ) \""
+            },
+            "english_translation": {
+              "text": "The request is for the ID provider to enter a level of verification 1. Previous eligibility requirement and level of verification 2. ( . Licensed and Issued (Commercial Names available) Existence of verification 3. \"New Compliance Registration Request\" Customer Option Selects 1. Inputs Service B Special Businesses for requirements according to Commercial Name Data Customer Inputs 2.Compliance requirements to complete the additional required data and add the additional data, commercial name, reservation of the beneficiary's name, reservation of the beneficiary's name, declaration of evil data is made on the data structure network by entering the customer's entry. The previous steps in the data input from the withdrawal of the application and sending the data to the validity and pledge of communication, the administrator determines the customer and sends an e-mail (depending on the mail) and text message in the customer registration request number is transmitted 3. 1. 4. 1. Outputs within work teams (notifications, employee settings and assigned to the department within the system). 2. Work teams work with the customer to complete the request and send the request back. 3. The request is processed from the finalized request to the final request with the result of the notification sent 4. The notifications are mentioned in the section as the registration and certificate of registration as well as the unified registration and issuance number is requested for approval in the case of the beneficiary's rightful beneficiary's rightful beneficiary's declaration of registration and does not have a current license. The license for this license is issued for this standardized registration 5. 1. This is an alternative to selecting this option using a new registration application and wants to submit a business name to be available to the dealer. 2. Standardized registration number to issue the name.\n\nThere is no number\n\n\"New Application Registration Process Details\n\n:\n\nThe Department of Economic Development (DED), the Department of Economic Development (DED), and the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), the Department of Economic Development (DED), and the Department of Economic Development (DED).\n\n1 .\n\nIf the customer's qualification will open the service\n\na .\n\nIf b, the non-dealer will be eligible to apply for the non-dealer eligibility notification error message to show the non-dealer will be eligible. Service\n\nThe next options to display the service will be logged in after 2.\n\ne :\n\nThis option verifies the presence of commercial names in the system when a new request is pressed. Issued\n\nIf there are two options for the customer to choose from, there are two options available if there are trade names issued. between them.\n\nEither the trader chooses to use a name from a previously issued trade name or the trader chooses to use a name from a previously issued trade name. The listing will be listed. \"New Application Registration Compliance to submit a new application for a new \"Champion to submit a business name using the new Application Registration to submit a new application) b part of the outgoing process steps.""
+            },
+            "pages_arabic": [
+              20
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                20
+              ],
+              "min_x": 246.7,
+              "min_y": 333.4,
+              "max_x": 1557.5,
+              "max_y": 1850.3,
+              "width": 1310.8,
+              "height": 1516.9
+            }
+          },
+          {
+            "chunk_id": 24,
+            "similarity": 0.8452,
+            "arabic_original": {
+              "text": ".بلطلا مدقمل ةيمقرلا ةيوهلل لوخدلا ىوتسم ةيلهلاا طو رسر نم ققحتلا نم ققحتلا 1. 2. ) . ةصخرم تغو ةرداص ( ةحاتم ةيراجت ءامسأ دوجو نم ققحتلا 3. ف \" اقبسم رداص يراجت مسا مادختساب \" رايخ لماعتملا راتخي نوناقلا لكشلا نم ققحتلاب ماظنلا موقي ديفتسم رارقإ بلطتي بلطلا ناك اذإ دكأتلاو رقيقح .لا ما اقباس ةلخدُملا تانايبلا ءاعدتساب ماظنلا موقيس ،ديفتسملا رارقإ بلطتي بلطلا ناك اذإ 1. 2. 3. امك ديفتسملا رارقلإ ةبولطملا تانايب لا فاب لاخدإب لماعتملا موقيسو يراجتلا مسلاا زجح لامعلاا دعاوق ف ةحضوم ه بلطلا لاسراو تانايبلا ةحصب دهعتلاو لصاوتلا لوؤسم ديدحتب لماعتملا موقي 4. بسح صتخملا فظوملا هنييعتو ةرئادلل لخادلا ماظنلا ف بلط ءاشنا متي . تايحلاصلا نو رتكلا ديربو ةيصن ةلاسر ف لماعتملل ��لطلا مقر لاسرا متي 1. 2. صقاونلا لامكتسلا لماعتملا لىا بلطلا لاسرا ةداعإ متي دق 3. بلطلا ةجلاعم نم ءاهتنلاا دبع لماعتملا لىا ةيئاهنلا بلطلا ةجيتنب راعشا لاسرا متي 4. تاراعشلاا مسق ف اهركذ مت امك لجس ةداهشو دحوملا ليجستلا مقر رادصا متي بلطلا لع ةقفاوملا ةلاح ف رقيقحلا ديفتسملا رقيقح ديفتسم رارقإ ليجستب مقي ملو ةيلاح ةصخر لماعتملا ىدل نوكي نا .ةصخرلا هذهل رداص دحوم ليجست 5. 1. قباس بلطتم تلاخدملا تاجرخملا ليدب رايتخا\n\nمقر دجوي لاو اهل\n\n22 | P a g e\n\nConfidential | ديقم\n\n\"رداص يراجت مسا مادختساب ديدج لاثتما ليجست بلط ميدقت\" ةيلمع تاوطخ ليصافت\n\n:\n\nيلاتلاب ماظنلا موقي \"ديدج بلط \"رايخ ىلع طغضلاب لماعتملا ماق اذإ 1 .\n\n:\n\nبلط رايخ \" راهظا متي ،اهل ةيراجت ةصخر رادصإب مقي مل ةيراجت ءامسأ لماعتملا ىدل ناك اذإ a . ةيراجتلا ءامسلأا دحأ رايتخاب لماعتملا موق يل \"اقبسم رداص يراجت مسا مادختسا ب لاثتما ليجست بلطلا ميدقتب ةعباتملاو ةيلاحلا\n\nاقبسم ةلجس\n\nُملا تانايبلا ءاعدتسا متي ةيلاحلا ةيراجتلا ءامسلأا دحأ راتخا اذإ\n\nb .\n\nلا ما يقيقحلا ديفتسملا رارقإ نم يفعم نايكلا اذه ناك اذإ دكأتلاو ينوناقلا لكشلا نم ققحتلا متي c . لامعلاا دعاوقل اقبط\n\nمسلاا ةمدخ يف اهنيزخت قباسلاو ةيلاتلا تانايبلا ضرع متي رارقلإا نم يفعم ريغ نايكلا ناك اذإ d . يراجتلا\n\nينوناقلا لكشلا i .\n\نيراجتلا مسلاا ii .\n\ن ةكارشلا لكيه iii .\n\nمسلاا يف اهلاخدإ قبس يتلا تانايبلا ىلع وا ةكارشلا لكيه ىلع ايقفا ليدعتلا لماعتملل نكمي لا e . يك ةكرشلاو درفلا تانايب ديدحتل يقيقحلا ديفتسملا رارقإب ةصاخلا لوقحلا طقف ةفاضإ متي ، يراجتلا لامعلاا دعاوق يف ةبولطملا تانايبلا لاخدإب لماعتملا موقي"
+            },
+            "english_translation": {
+              "text": "The request is for the DSP to enter the eligibility level and verify the verification of the verification 1. 2. ) . Licensed and issued business names are available for verification. 3. V. \"Pre-issued business name\" using the \"Dealer's Choice\" option. The law chooses the form of verification system. the beneficiary requires a declaration if the application requires verification. if the previously entered data is correct. the system will call the beneficiary. the application requires a declaration if 1. 2. 3. the beneficiary requires a declaration. 3. As the beneficiary, the beneficiary will enter the required data and the merchant will enter the name and business reservation rules in the application and send the correct data and undertake to communicate with the responsible official to identify the merchant who will 4. According to the competent employee and assigned to the department within the system, the request is created. Authorizations, email and text message to the customer, request number sent to the customer 1. 2. the request may be sent back to the customer for completion of deficiencies 3. The request is processed after the customer's request is finalized and the result of the request is sent as a notification (4). Notifications are mentioned in the section as the registration and certificate of unified registration and issuance number is requested for approval of the status of the beneficiary's rightful beneficiary's rightful beneficiary's declaration of registration and the current status of the transactor's license is not current. 5. 1. Prerequisite Inputs Outputs Alternative Selection\n\nThere is a parent number\n\n22 | P a g e\n\nConfidential | Restricted\n\n\"Business Issued Name with New Use Compliance Registration Compliance Application Submission\" Process Steps Details\n\n:\n\nThe system will then click on the \"New Request\" option if the customer clicks on it if 1.\n\n:\n\nIf a customer's name is not issued by a commercial license, the system will show the option \"Show Request\" if the customer has a commercial name. The system selects one of the commercial names and selects the customer's name and then issues me a license to use the commercial name in order to comply with the current registration, submission and follow-up.\n\nAlready registered\n\nIf someone chooses to use a commercial name, the current data is called\n\n b .\n\nIf this entity is exempted from acknowledgment by the beneficiary's real mother, the legal form of verification is verified. c. According to business rules\n\nIf the following data is stored in the name of the service and the previous data is displayed, if the entity is not exempt, it will be recognized as exempt d. Business\n\n i. Legal form.\n\n ii. Commercial name\n\n iii. Partnership Structure\n\nThe data previously entered on the name or partnership structure can not be modified horizontally or vertically by the customer. e. In order to determine the true beneficiary of the data, the individual and the company can only add the required fields by entering the required data in the business rules."
+            },
+            "pages_arabic": [
+              23
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                22,
+                23
+              ],
+              "min_x": 250.1,
+              "min_y": 47.6,
+              "max_x": 1554.4,
+              "max_y": 2201.0,
+              "width": 1304.3000000000002,
+              "height": 2153.4
+            }
+          }
+        ],
+        "rego_rules": {
+          "has_reserved_trade_names": "false|true|<other_value>",
+          "user_selects_existing": "true|<other_value>",
+          "user_selects_new": "true|<other_value>",
+          "application_type": "new_trade_name|<other_value>"
+        }
+      },
+      "routine1_collect_trade_name_data": {
+        "type": "process",
+        "description": "Collect new trade name data",
+        "function": "invoke_trade_name_reservation_service",
+        "transitions": [
+          {
+            "condition": "trade_name_data_collected == true",
+            "target": "routine1_exemption_check",
+            "action": "proceed_to_exemption_check",
+            "source": "routine1_collect_trade_name_data"
+          }
+        ],
+        "node_id": 6,
+        "journey_id": 1,
+        "relevant_chunks": [
+          {
+            "chunk_id": 12,
+            "similarity": 0.8531,
+            "arabic_original": {
+              "text": "ةمدخلا نم ءزج يقيقحلا ديفتسملا رارقا نوكي نأ ىلع ةرئادلا لخاد لمعلا قرف عم قافتلاا مت • اهيف امب صيخارتلا لك تائف ةاعارم عم \"دحوملا يبظ وبأ مقر رادصإو لاثتملاا ليجست \" ةديدجلا .اقحلا ةرحلا قطانملا\n\nرارقا تابلطتم نمضتي فوس \"دحوملا يبظ وبأ مقر رادصإو لاثتملاا ليجست\" ةمدخ راسم • متيس يتلا تانايبلاو لوقحلا كلذكو يراجتلا مسلاا زجح ةمدخ نيمضت ةيلاو يقيقحلا ديفتسملا . ليجستلا بلط ميدقت ءانث أ ةمدخلا ءاعدتسا مت لاح يف يراجتلا مسلاا زجح جذامن ىلع اهتفاضا\n\nتائف عيمج رادصلإ دحوملا ليجستلا مقر رادصا ىلع ميدقتلل ةمدختسم ليجستلا ةمدخ نوكتس • . ةرحلا قطانملا ةحاتا ةاعارم عم صيخارتلا\n\nةصاخلا لامعلاا تابلطتم ةيطغتل ةرحلا قطانملا عم قيسنتلاب ةرئادلا لخاد لمعلا قرف موقتس • . كلذ بلطت حال يف مهب\n\nميدقتلا يف همادختسا متيس يذلا دحوملا ليجستلا مقر وه ليجستلا ةمدخل يئاهنلا جتانلا نوكيس • .ةفلتخملا اهتائفب صخرلا رادصا بلط ىلع\n\nريس ماهم بسح ةيلخادلا تاقفاوملا عيمج نم ةقفاوملاب ءاهتنلاا مت حال يف دحوملا مقرلا ردصي • . لمعلا\n\نيتلا ةهجلا مسا لاسرا متي ،دحوم ليجستلا مقر رادصا دعب صيخرتلا بلط ضفر مت ةلاح يف • ًاقباس رداصلا لاثتملاا ليجست بلط حتف ةداعإ متيو لماعتملا ىلا طاشنلا مساو بلطلا تضفر متيسو ىرخأ ةرم بلطلا ميدقت ةداعإو ليجستلا ىلع ليدعتلا لماعتملا عيطتسي مث نمو ًايئاقلت .ليجستلا ىلع ليدعتلا بلطب ةصاخلا ةقيثولا يف ليصفتلاب ةطقنلا هذه ةشقانم\n\nةصاخلا تادادعلإل اقبط نيصتخملا نيفظوملا ىلا ةرشابم اهنييعت متيس تابلطلا نا ضارتفاب انمق • ةيمنتلا ةرئادل يلخادلا ماظنلا يف تابلطلل يئاقلتلا صيصختلا ريياعم بسحو فظوم لك تايحلاصب . ةيداصتقلاا\n\نثيحب ،اهيلع ريشأتلا متي يتلا صقاونلا بسح سنوكي لماعتملل بلطلا عاجرا نا ضارتفاب انمق • تانايبلاو جذامنلا ةحاتا طقف (متي اهريفوت مت يتلا تانايبلا عم تانايبلا لاخدا جذامن ةداعا متي ةحاتإو . عاجرلاا ةظحلام )عم اهحيحصت دعب اهميدقت ةداعا بولطم لا ليصافت ىلع لا يوتحت يتلا ليمحت دعاوق قيبطتو ) ، ماظنلا تادادعا يف ةفرعم ريغ ( ةيفاضإ تادنتسم بلط ةيناكمإ صيصخت متي ،بلطلا عاجرا دنعو .) ةيفاضلاا اقباس وأ ةفرعملا ( تا��نتسملا ةفاك ىلع تادنتسملا عاجرلاا ةكرح ةرورض ظفح .عم لماعتملل بلطلا عاجرإب ماق )يذلا مدختسملا ( فظوملل بلطلا . بلطلا ةعجارم ةداعلإ مزلالا تقولا ريفوتل ، ةقباسلا تاظحلاملا وأ ةظحلاملاو"
+            },
+            "english_translation": {
+              "text": "The beneficiary of the service has to acknowledge the real part of the beneficiary's service, and the department has to work with the teams within the work with the agreement - including all categories of licenses, taking into account the \"unified Abu Dhabi Abu Dhabi number and issuing the new \"free zones\" registration and compliance issue.\n\nAcknowledgment of the requirements will include the \"Unified Abu Dhabi Abu Dhabi Number and Issuance of Compliance Registration\" service path - which will be the fields and data fields as well as the commercial name reservation service to include the beneficiary's real guardianship. The registration request will be added to the forms on the commercial name reservation service to provide a commendable service.\n\nThe registration service will be a service for all categories to issue a standardized registration number to be issued to apply using the registration service. Free zones with licenses are available for consideration\n\nTeams will cover the requirements to cover free zones with the coordination of the department within the work teams - . In the event that they require it\n\nThe final output will be a unified registration number, which will be used to register for the final service output - for the different categories of licenses.\n\nIn the case of a standardized license number, all approvals will be issued according to the internal workflow of all approvals. Work\n\nAfter the issuance of the license, the name of the entity is unified, the registration number is issued after the issuance of the license, the request for rejection was rejected - in the case of the previously issued compliance with the registration of a request to reopen the application to the activity and the name of the request is rejected and the request will be rejected again, and then the customer can submit and re-register on the amendment of the application and then automatically register on the amendment of the document in detail this point is discussed in detail in the document.\n\nAssuming that the requests will be assigned to the specialists according to the settings according to the staff specialists, we will start assigning them to the internal development department in the system for automatic requests for customization according to the criteria of each employee with the powers of each employee. Economic\n\nAssuming that the request is returned to the customer, the customer will be able to return the request - assuming that the data forms are only available (the data is provided with the data with the data entered and the forms are made available again. Return Note (with correction after submission) is required to return no details that do not contain downloaded rules and application settings (, system settings in non-defined) additional customizable request documents (when requesting, returning, or defining) additional documents.) All documents on the documents returned must be saved to the requesting user (who is the user). Request to review the request to return to save time, previous notes or notes."
+            },
+            "pages_arabic": [
+              11
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                11
+              ],
+              "min_x": 250.1,
+              "min_y": 530.8,
+              "max_x": 1367.0,
+              "max_y": 1955.5,
+              "width": 1116.9,
+              "height": 1424.7
+            }
+          },
+          {
+            "chunk_id": 9,
+            "similarity": 0.8469,
+            "arabic_original": {
+              "text": "ةيسيئرلا فادهلأا\n\nةقدب\n\nييقيقحلا نيديفتسملا عيمج قيثوتو ديدحت : ةيفافشلا\n\n.\n\n(KYC). كليمع فرعاو (AML) ف امب ��ةلصلا تاذ حئاولل لاثتملاا : لاثتملاا\n\nلاوملأا ليسغ ةحفاكم تابلطتم كلذ\n\nيمدختسملا اضر ةدايزو ةجلاعملا تقو ليلقتل ةيلمعلا تس\n\n. يسحت : ةءافكلا\n\n7 | P a g e\n\nConfidential | ديقم\n\nةمدخلا ىلع ةماع ةرظن\n\nديهمت\n\nةبولطملا ةيلهلأا تابلطتم ءافيتسا و ،\"مت\" ةصنم ىلإ لوخدلا ليجست نيمدختسملا ىلع • بجي ةيلهلاا تابلطتمب صاخلا ءزجلا ةعجارم ءاجرب .ةعباتملا نم اونكمتي ىتح ةمدخلا ىلع ميدقتلل\n\n:ةيلاتلا تارايخلا لماعتملل رهظتس و ليجستلا ةمدخ ءدب ب لماعتملا موقي •\n\nةلمتكملا ريغ تابلطلا تادوسم o\n\nاهل رارقا ميدقت متي مل يتلاو ةرداصلا صخرلاب ةمئاق o\n\n.\n\nتاشاشلا جذو من يف حضوم وه امك - ديدج لاثتما ليجست بلط ىلع ميدقتلا رايخ o\n\nةزوجحم ةيراجت ءامسا مادختساب لاثتما ليجست بلط ميدقتب لماعتملل رايخ ةحاتا o رادصا فدهب تناكو صيخرت يأ اهيلع ردصي ملو اقب��م اهيلع ةقفاوملا تمت ( ةحاتمو باسحب ةطبترم ةحاتم ةيراجت ءامسأ دوجو حال يف رايخلا اذه ليعفت متيو . )ةديدج ةصخر .لوخدلا ليجستب ماق يذلا مدختسملا\n\nدنع \"يراجتلا مسلاا زجح \" ةمدخ ءاعدتسا متيس و ةيلوأ ةوطخك ةبولطم نوكتس ليجستلا ةمدخ ةطبترملا تاءانثتسلااو لماعتملا ةهج نم اهلاخدإ مت يتلا تانايبلا بسحو تمتؤم لكشب ةجاحلا يقيقح لا ديفتسم لا رارقإ ليصافت بلطتت لا يتلا تلااحلا ةفاضإ متيسو ةلخدملا تانايبلا هذهب جذامن ءاعدتسا متيف ،ةماع ةمهاسم ةكرش ينوناق لكشب ةصخرل ليجست بلط ميدقت ، دنع لاثم ديفتسملا تانايب لاخدا بلط )لاو متي ديفتسملاب ةصاخلا ةيفاضلاا تانايبلا (نودب يراجتلا مسلاا لمعلا دعاوقب صاخلا ءزجلا ةعجارم ءاجرب . ةيموكحلا تاكرشل ل ةبسنلاب حاللا .وككلذ ةيليصفتلا رارقإ نم ةانثتسملا تلااحلا ليصفتل ةقيثولا هذه يف ليجستلا ةمدخ ىلع ميدقتلاب ةصاخلا .يقيقحلا ديفتسملا\n\n•\n\n.\n\nديدحت نو يو ،ك كلذ بلطت نا ةمزلالا قئاثولا قافرا ةاعارم عم بلطلا ميدقتب لماعتملا موقي • تاءارجلااو تامدخلا ةفاكل ةبولطملا تادنتسملل تادادعلاا ةموظنم قيرط نع ةمزلالا تادنتسملا"
+            },
+            "english_translation": {
+              "text": "Home Objectives\n\nstrictly\n\nThe real beneficiaries are all identified and documented: Transparency\n\n.\n\n(KYC). (AML) as it relates to compliance regulations: Compliance\n\nAnti-money laundering and anti-money laundering requirements\n\nIncrease user satisfaction and processing time to minimize process six\n\n. Optimize : efficiency\n\n7 | P a g e\n\nConfidential | Restricted\n\nService on Public View\n\nBootstrap\n\nEligibility and fulfillment requirements are required, and the platform is \"done\" to log in and register users on - Eligibility must meet the requirements of the specific part Review please follow up until they are able to apply for the service.\n\nThe following options will appear for the customer to register and start the service.\n\n o Incomplete applications o Drafts of completed applications\n\n o Listed licenses issued are not submitted and are not acknowledged.\n\n.\n\nAs shown in the screenshot, the model is modeled as - o New application registration compliance on the submission option\n\nA license was issued for the purpose of providing the customer with an option to submit a request for compliance. o A license was issued for the purpose of issuing any license and was not previously approved (and available with an account associated with available commercial names). This option is activated in the case of a new license (which the user logged in to).\n\nAs a preliminary step, the service will be required to register a service associated with the exceptions and exceptions of the dealer who entered the data was automated and according to the real need of the beneficiary, the details of the beneficiary do not require the approval of the details that require the addition of the cases, and the data will be entered in these forms will be called in the form of a general, legal company contribution to a license registration application, when the example of the beneficiary data to enter the application (and the beneficiary is not the additional special data (without commercial name business rules), please review the special part of the work of the rules. For governmental companies for companies for the case of that case. Detailed declaration of the exempted cases to detail this document in the registration of the service on the special application for the real beneficiary.\n\n- - - - - - - - - - - - - - - - - - - - - - -\n\n.\n\nThe customer is required to attach the necessary documents to the application and provide the customer with the required services and procedures for all the required documents and settings of the system by means of the necessary documents"
+            },
+            "pages_arabic": [
+              7
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                7,
+                8
+              ],
+              "min_x": 246.1,
+              "min_y": 47.6,
+              "max_x": 1413.8,
+              "max_y": 2201.0,
+              "width": 1167.7,
+              "height": 2153.4
+            }
+          },
+          {
+            "chunk_id": 11,
+            "similarity": 0.8455,
+            "arabic_original": {
+              "text": "يف صحفلا ةيلمعل ةجيتنك تاهيبنت دجوت لاو ، طسوتم وا ضفخنم ةروطخلا فينصت ناك حال يف • نمو ةقفاوملا رادصإو بلطلا ةعجارمب ةبجاولا ةيانعلا قيرف فظوم موقي ، ةيملاعلاو ة��لحملا مئاوقلا موقي تاقيلعت دوجو حال يف وا ةقفاوملا ديكأتو بلطلا نم ققحتلاو دكأتلاب عجار ملا موقي مث . دمتعملا لسلستلا و تايحلاصلل اقبط مزلالا ءارجلاا ذاختلا فظوملا ىلا اهلاسرإب عجار ملا\n\nذاختاب ةززعملا ةبجاولا ةيانعلا قيرف موقي ،عفترم وا عفترم طسوتم ةروطخلا فينصت ناك حال يف • كلذ بلطت نا بلطلا ىلع ضفرلا وا ةقفاوملا ءاطعلإ ايلعلا ةرادلإا عم قيسنتلاو ةمزلالا تاءارجلإا\n\n.\n\nتاءارجلإا ذاختاب ةززعملا ةبجاولا ةيانعلا قيرف فظوم موقي ،روظحم ةروطخلا فينصت ناك حال يف • ةرادلإل بلطلا ليوتحو ضفرلا وا ةقفاوملا ءاطعلإ ريدملا ىلع بلطلا نييعتو بلطلا ةجلاعمل ةمزلالا ايلعلا\n\nليجستلا مقرب لماعتملل راعشا لاسرا متي ،ةقفاوملا يه ةيئاهنلا بلطلا ةجيتن تناك حال يف • مت ةصنمو يلخادلا ماظنلا يف لوبقم ىلا بلطلا ةلاح نييعتو دحوملا\n\nنييعتو بلطلا ��فرب لماعتملل راعشا لاسرا متي ،ضفرلا يه ةيئاهنلا بلطلا ةجيتن تناك حال يف • نل ةلاحلا هذه يفو مت ةصنم ىلع اهسكع و \"ضوفيرm\" يلخادلا ماظنلا يف ةيئاهنلا بلطلا ةلاح .صيخرتلا رادصا لماعتملا عيطتسي\n\n9 | P a g e\n\nConfidential | ديقم\n\nلمعلا قاطن\n\nلمعلا قاطن لخاد\n\n:\n\nوبأ مقر رادصإو لاثتملاا ليجست \" ةمدخ ب ةقلعتملا لامعلاا تابلطتم عيمج عورشملا اذه يطغي : يف كلذ امب ، يقيقحلا ديفتسملا رارقإ ليصافت ةنمضتم \"دحوملا يبظ\n\nةمدخلا تابلطتم ليلحتو ةسارد : ةيلاحلا تايلمعلا ليلحت •\n\n.\n\nنيسحت ىلإ جاتحت يتلا تلااجملا ديدحت : ةيلاحلا لكاشملاو تانيسحتلا قاطن ديدحت • . ةمدخلا هجاوت يتلا ةيلاحلا لكاشملا ليلحتو\n\nةمدخلل فادها يبلت يتلا تايلمعلا راسم ميمصت : تايلمعلا راسم ميمصت •\n\n.\n\n:\n\nلمعلا قاطن جراخ\n\nةمدخ يف هئاعدتسا نكمملا نم ا ءزج نوكتس يتلا ير��جتلا مسلاا زجح ةمدخ تابلطتم • ءزجلا يف اهتفاضا مت يت لا ديفتسملا رارقإ ةبولطملا ةيفاضلإا تانا يبلا ادع ام ليجستلا لامعلاا دعاوق ب صاخلا\n\n10 | P a g e\n\nConfidential | ديقم\n\nتاضارتفلاا\n\n:ةيلاتلا طاقنلا ضارتفاب انمق ةمدخلا لامعا تابلطتم ةشقانم للاخ تمت يتلا ةطشنلأا نم ءزجك\n\nيبظ وبأ مقر رادصإو لاثتملاا ليجست \" مسلااب ةقيثولا هذه يف ليجستلا ةمدخ ىلا ةراشلإا تمت • ديق لازلا ةمدخلل يئاهنلا مسلااو - ةدوسملا هذه ءاشنا للاخ دمتعي مل مسلاا اذه – \"دحوملا .ةجلاعملا"
+            },
+            "english_translation": {
+              "text": "As a result of alerts, there is a high, medium or low severity classification in the screening process - from approval and issuance of the request to due diligence review by the staff team, global and local lists, comments on the existence of the status in or approval and confirmation of the request, and verification by confirmation, then review by the staff member. Check the approved sequence and authority according to the necessary action to be taken by the employee to send it.\n\nThe team will take enhanced due diligence, high or medium high severity rating, or high moderate severity rating - the request for rejection or approval is required to give the senior management with the necessary coordination and actions.\n\n.\n\nThe enhanced due diligence procedures for an employee's team performing prohibited, high-risk, or medium-risk categorization were as follows - To manage the request and turn the rejection or approval to give the manager on the request and assign the request to senior management for processing.\n\nThe customer's registration number is sent to the customer notification, the approval is sent, the request is finalized, the result is finalized, the internal platform is accepted into the system and the request is assigned a standardized status.\n\nThe request is assigned a rejection status, the request is denied, the result of the request is the final status of the request, and the platform is reversed and the internal system is set to \"Rejected\" in the final status of the request. The customer can issue a license.\n\n9 | P a g e\n\nConfidential Restricted\n\nWorking scope\n\nWork Scope Within\n\n:\n\nAbu Dhabi number and issuance of compliance registration \"B service\" related to the business requirements of all the project covers this project: Including, including, real beneficiary's acknowledgment of the details included in the \"standardized Abu Dhabi\".\n\nService requirements and analysis study: Analyze current processes\n\n.\n\nIdentify areas where you need to improve: Define the scope of improvements to the current issues and issues. Analyze the current issues and analyze the service\n\nThe service meets the goals of the service design process: Processes Design Path\n\n.\n\n:\n\nWork scope outside of\n\nThe part of the service that can be summoned from the commercial part of the business will be the name of the service reservation requirements - the part in which the beneficiary was added to the beneficiary to acknowledge the additional requirements of the business, except for the special business registration rules B rules.\n\n10 | P a g e\n\nConfidential - Restricted\n\nAssumptions\n\nAs part of the following points, we have assumed that the following activities are part of the business requirements discussion during the course of the service\n\nDhabi Abu Dhabi Abu Dhabi number and version number Compliance Compliance Registration \"in the name of this document in the name of this document in the registration of the service to the reference is done - the final service is still underway and the name - this draft is not created during the creation of this name - this name is not adopted - \"standardized processing."
+            },
+            "pages_arabic": [
+              9
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                9,
+                10,
+                11
+              ],
+              "min_x": 233.1,
+              "min_y": 47.6,
+              "max_x": 1409.4,
+              "max_y": 2201.0,
+              "width": 1176.3000000000002,
+              "height": 2153.4
+            }
+          }
+        ],
+        "rego_rules": {
+          "trade_name_data_collected": "true|<other_value>",
+          "application_type": "new_trade_name|<other_value>"
+        }
+      },
+      "routine1_exemption_check": {
+        "type": "decision",
+        "description": "Check if legal form is exempt from beneficiary declaration",
+        "function": "check_exemption_rules",
+        "transitions": [
+          {
+            "condition": "is_exempt == true",
+            "target": "routine1_blacklist_precheck",
+            "action": "skip_beneficiary_collection",
+            "source": "routine1_exemption_check"
+          },
+          {
+            "condition": "is_exempt == false",
+            "target": "routine1_collect_beneficiary_data",
+            "action": "proceed_to_beneficiary_collection",
+            "source": "routine1_exemption_check"
+          }
+        ],
+        "node_id": 7,
+        "journey_id": 1,
+        "relevant_chunks": [
+          {
+            "chunk_id": 9,
+            "similarity": 0.8532,
+            "arabic_original": {
+              "text": "ةيسيئرلا فادهلأا\n\nةقدب\n\nييقيقحلا نيديفتسملا عيمج قيثوتو ديدحت : ةيفافشلا\n\n.\n\n(KYC). كليمع فرعاو (AML) ف امب ،ةلصلا تاذ حئاولل لاثتملاا : لاثتملاا\n\nلاوملأا ليسغ ةحفاكم تابلطتم كلذ\n\nيمدختسملا اضر ةدايزو ةجلاعملا تقو ليلقتل ةيلمعلا تس\n\n. يسحت : ةءافكلا\n\n7 | P a g e\n\nConfidential | ديقم\n\nةمدخلا ىلع ةماع ةرظن\n\نديهمت\n\نةبولطملا ةيلهلأا تابلطتم ءافيتسا و ،\"مت\" ةصنم ىلإ لوخدلا ليجست نيمدختسملا ىلع • بجي ةيلهلاا تابلطتمب صاخلا ءزجلا ةعجارم ءاجرب .ةعباتملا نم اونكمتي ىتح ةمدخلا ىلع ميدقتلل\n\н:ةيلاتلا تارايخلا لماعتملل رهظتس و ليجستلا ةمدخ ءدب ب لماعتملا موقي •\n\nةلمتكملا ريغ تابلطلا تادوسم o\n\нاهل ��ارقا ميدقت متي مل يتلاو ةرداصلا صخرلاب ةمئاق o\n\n.\n\нتاشاشلا جذو من يف حضوم وه امك - ديدج لاثتما ليجست بلط ىلع ميدقتلا رايخ o\n\нةزوجحم ةيراجت ءامسا مادختساب لاثتما ليجست بلط ميدقتب لماعتملل رايخ ةحاتا o رادصا فدهب تناكو صيخرت يأ اهيلع ردصي ملو اقبسم اهيلع ةقفاوملا تمت ( ةحاتمو باسحب ةطبترم ةحاتم ةيراجت ءامسأ دوجو حال يف رايخلا اذه ليعفت متيو . )ةديدج ةصخر .لوخدلا ليجستب ماق يذلا مدختسملا\n\нدنع \"يراجتلا مسلاا زجح \" ةمدخ ءاعدتسا متيس و ةيلوأ ةوطخك ةبولطم نوكتس ليجستلا ةمدخ ةطبترملا تاءانثتسلااو لماعتملا ةهج نم اهلاخدإ مت يتلا تانايبلا بسحو تمتؤم لكشب ةجاحلا يقيقح لا ديفتسم لا رارقإ ليصافت بلطتت لا يتلا تلااحلا ةفاضإ متيسو ةلخدملا تانايبلا هذهب جذامن ءاعدتسا متيف ،ةماع ةمهاسم ةكرش ينوناق لكشب ةصخرل ليجست بلط ميدقت ، دنع لاثم ديفت��ملا تانايب لاخدا بلط )لاو متي ديفتسملاب ةصاخلا ةيفاضلاا تانايبلا (نودب يراجتلا مسلاا لمعلا دعاوقب صاخلا ءزجلا ةعجارم ءاجرب . ةيموكحلا تاكرشل ل ةبسنلاب حاللا .وككلذ ةيليصفتلا رارقإ نم ةانثتسملا تلااحلا ليصفتل ةقيثولا هذه يف ليجستلا ةمدخ ىلع ميدقتلاب ةصاخلا .يقيقحلا ديفتسملا\n\н•\n\н.\n\нديدحت نو يو ،ك كلذ بلطت نا ةمزلالا قئاثولا قافرا ةاعارم عم بلطلا ميدقتب لماعتملا موقي • تاءارجلااو تامدخلا ةفاكل ةبولطملا تادنتسملل تادادعلاا ةموظنم قيرط نع ةمزلالا تادنتسملا"
+            },
+            "english_translation": {
+              "text": "Home Objectives\n\nstrictly\n\nThe real beneficiaries are all identified and documented: Transparency\n\n.\n\n(KYC). (AML) as it relates to compliance regulations: Compliance\n\nAnti-money laundering and anti-money laundering requirements\n\nIncrease user satisfaction and processing time to minimize process six\n\n. Optimize : efficiency\n\n7 | P a g e\n\nConfidential | Restricted\n\nService on Public View\n\nBootstrap\n\nEligibility and fulfillment requirements are required, and the platform is \"done\" to log in and register users on - Eligibility must meet the requirements of the specific part Review please follow up until they are able to apply for the service.\n\nThe following options will appear for the customer to register and start the service.\n\n o Incomplete applications o Drafts of completed applications\n\n o Listed licenses issued are not submitted and are not acknowledged.\n\n.\n\nAs shown in the screenshot, the model is modeled as - o New application registration compliance on the submission option\n\nA license was issued for the purpose of providing the customer with an option to submit a request for compliance. o A license was issued for the purpose of issuing any license and was not previously approved (and available with an account associated with available commercial names). This option is activated in the case of a new license (which the user logged in to).\n\nAs a preliminary step, the service will be required to register a service associated with the exceptions and exceptions of the dealer who entered the data was automated and according to the real need of the beneficiary, the details of the beneficiary do not require the approval of the details that require the addition of the cases, and the data will be entered in these forms will be called in the form of a general, legal company contribution to a license registration application, when the example of the beneficiary data to enter the application (and the beneficiary is not the additional special data (without commercial name business rules), please review the special part of the work of the rules. For governmental companies for companies for the case of that case. Detailed declaration of the exempted cases to detail this document in the registration of the service on the special application for the real beneficiary.\n\n- - - - - - - - - - - - - - - - - - - - - - -\n\n.\n\nThe customer is required to attach the necessary documents to the application and provide the customer with the required services and procedures for all the required documents and settings of the system by means of the necessary documents"
+            },
+            "pages_arabic": [
+              7
+            ],
+            "bounding_box": {
+              "page_numbers": [
+                7,
+                8
+              ],
+              "min_x": 246.1,
+              "min_y": 47.6,
+              "max_x": 1413.8,
+              "max_y": 2201.0,
+              "width": 1167.7,
+              "height": 2153.4
+            }
+          },
+          {
+            "chunk_id": 15,
+            "similarity": 0.8499,
+            "arabic_original": {
+              "text": "13 | P a g e\n\nConfidential | ديقم\n\nءافعلاا ت لااح يف يعيبط صخشك هرابتعا متيو يقيقحلا ديفتسملا رارقإ نم يفعم يعافتنلاا لكيهلا ينوناقلا لكشلا لمعلا دعاوق بسح ةيموكح ةكرش\n\nوه امك اهتجلاعم متيسو ديفتسملا رارقإ ميدقت نم ةيفعملا ريغ ةصاخلا تلااحلا ضعب كانه 5. :يلاتلا لودجلا يف حضوم\n\nءارجلاا رابتعا متي نكلو ،يقيقحلا ديفتسملا رارقإ نم يفعم ريغ نم تانايبلا عيمج لاخدا متيو ايئاقلت كلاملا وه ديفتسملا . يراجتلا مسلاا زجح دنع دارفلاا تانايب للاخ مسلاا زجح دنع اهتاعارم بجي يتلا ةيفاضلإا تانايبلا : دارفلاا تانايبل يراجتلا ةليدبلا ةيسنجلا 1- ناونعلا 2- ايسايس فشكنم 3- دلايملا ناكم 6- لمعلا ةهج 8- ارتفا %ضي ًا 100 صصحلا ميقة باستحا متي 9- ناك اذإ نكلو ،يقيقحلا ديفتسملا رارقإ نم يفعم ريغ ناك اذإو يقيقحلا ديفتسملا وه هرابتعا متي ًادرف كلاملا لكيهلا يف درفلا يقيقحلا ديفتسملا عبتت متي ةكرش كلاملا ةكرشلل يقيقحلا ديفتسملا وه هرابتعاو ةيكلملل دقعملا ملاا مسلاا زجح دنع اهتاعارم بجي يتلا ةيفاضلإا تانايبلا : دارفلاا تانايبل يراجتلا ةليدبلا ةيسنجلا 1- ناونعلا 2- ايسايس فشكنم 3- رطيسم وضع 4- تيوصتلا قوقح 5- دلايملا ناكم 6- نوناقلا لكشلا ةيدرف ةسسؤم .م م ذ دحاولا صخشلا ةكرش\n\n14 | P a g e\n\nConfidential | ديقم\n\nءارجلاا نوناقلا لكشلا ةرادلإا سلجم وضع 7- لمعلا ةهج 8- صصحلا ةميق 9- يقيقحلا ديفتسملل ليثمتلا ةفص 10 -\n\nلمعلا ةهج 8-\n\nصصحلا ةميق 9-\n\nءارجلاا عورفلا صخر متيو ،ملاا ةصخرلل دحوملا ليجستلا مقر سفن مادختسا متي يبظ وبأ ةراما يلحم عرف ملاا ةصخرلل يقيقحلا ديفتسملا رارقإ تانايب سفن ءاعدتسا تانايب يف رييغتلاب لماعتملل حامسلا متي نلو ��اظنلا نم .عرفلا ريدم تانايب رييغت لماعتملل حاتي طقفو ءاكرشلا تايصوتلا يفو ،يقيقحلا ديفتسملا رارقإ نم يفعم ريغ ىرخا ةراما عرف ثدحي املثم يئاقلت لكشب تانايبلا بحس متيس طبرلا ةلاح ةيلحملا عورفلا عم تايصوتلا يف ةفاضإ ،يقيقحلا ديفتسملا رارقإ نم يفعم ريغ ةرح ةقطنم عرف املثم يئاقلت لكشب تانايبلا بحس متيس طبرلا ةلاح يف هنا ةيلحملا عورفلا عم ثدحي\n\nيف هنا\n\nمسلاا زجح نم لمعلا ريس ماهم ةفاك ق لاغاو ةقفاوملا نم دبلا دحوملا ليجستلا مقر ىلع لوصحلل 6. . تاوطخ نم هيلع بترتي امو لاثتملاا ليجست و تاوطخ نم هعبتي امو يراجتلا\n\nليجستلا مقر سفن ىلع ةصخر نم رثكأ نييعت نكمي لاو ةصخر لكل اديرف دحوملا مقرلا نوكي 7. ةصخرلل دحوملا مقرلا سفن مادختسا متي ثيح يبظ وبأ ةراما يلحم عرف ةصخر ءانثتسا 
