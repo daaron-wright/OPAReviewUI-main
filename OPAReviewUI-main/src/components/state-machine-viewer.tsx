@@ -740,25 +740,40 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
     reactFlowInstance?.fitView({ padding: 0.18, duration: 600 });
   }, [reactFlowInstance]);
 
-  const graphPlaceholder = (
+  const graphUnavailablePlaceholder = (
     <div className="flex h-[520px] flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-[#cbe6dc] bg-white px-6 text-center">
       <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0f766e]/10 text-[#0f766e]">
         <Icon name="paperclip" className="h-5 w-5" />
       </div>
       <div className="space-y-2">
-        <p className="text-sm font-semibold text-slate-900">Upload a BRD policy PDF to generate the journey map</p>
+        <p className="text-sm font-semibold text-slate-900">State machine graph unavailable</p>
         <p className="text-xs font-medium text-slate-500">
-          The graph, policy actors, and document insights appear after the upload is complete.
+          Add states and transitions to the configuration to generate the journey map.
         </p>
       </div>
-      <button
-        type="button"
-        onClick={handleOverlayUploadClick}
-        className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.45)] transition hover:bg-[#0c5f59]"
-      >
-        <Icon name="paperclip" className="h-4 w-4" />
-        BRD Policy Upload
-      </button>
+    </div>
+  );
+
+  const graphCanvas = (
+    <div className="relative">
+      <GraphCanvas
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onNodeClick={handleNodeClick}
+        onInit={setReactFlowInstance}
+        height={520}
+        containerClassName="transition-all duration-500 ease-in-out"
+      />
+      {!hasUploadedDocument && (
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl bg-white/70 px-6 text-center backdrop-blur-sm">
+          <p className="text-sm font-semibold text-slate-900">Graph reflects the active state machine</p>
+          <p className="text-xs font-medium text-slate-500">
+            Upload a BRD policy to unlock walkthrough reviews and publishing features.
+          </p>
+        </div>
+      )}
     </div>
   );
 
@@ -779,10 +794,10 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             type="button"
             onClick={handleToggleGraphSize}
             aria-expanded={isGraphExpanded}
-            disabled={!hasUploadedDocument}
+            disabled={!canDisplayGraph}
             className={clsx(
               'inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
-              hasUploadedDocument
+              canDisplayGraph
                 ? isGraphExpanded
                   ? 'border-[#bfded4] bg-white text-[#0f766e] hover:border-[#a9d5c6]'
                   : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
@@ -802,31 +817,22 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
         </div>
       </div>
       {isGraphExpanded ? (
-        hasUploadedDocument ? (
+        canDisplayGraph ? (
           <div className="flex h-[520px] items-center justify-center rounded-2xl border border-dashed border-[#cbe6dc] bg-white text-sm font-semibold text-slate-500">
             Graph open in focus view
           </div>
         ) : (
-          graphPlaceholder
+          graphUnavailablePlaceholder
         )
-      ) : hasUploadedDocument ? (
-        <GraphCanvas
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onNodeClick={handleNodeClick}
-          onInit={setReactFlowInstance}
-          height={520}
-          containerClassName="transition-all duration-500 ease-in-out"
-        />
+      ) : canDisplayGraph ? (
+        graphCanvas
       ) : (
-        graphPlaceholder
+        graphUnavailablePlaceholder
       )}
     </div>
   );
 
-  const fullscreenGraphOverlay = !isGraphExpanded || !hasUploadedDocument
+  const fullscreenGraphOverlay = !isGraphExpanded || !canDisplayGraph
     ? null
     : (
         <div
@@ -888,20 +894,30 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
             </div>
           </div>
           <div className="relative flex-1 bg-white">
-            <GraphCanvas
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onNodeClick={handleNodeClick}
-              onInit={setReactFlowInstance}
-              height="100%"
-              containerClassName="h-full !rounded-none !border-none !shadow-none"
-              graphClassName="bg-white"
-              controlsClassName="!border-[#dbe9e3] !shadow-xl"
-              miniMapClassName="!border-[#dbe9e3] !shadow-xl"
-              backgroundColor="#e2ede8"
-            />
+            <div className="relative h-full">
+              <GraphCanvas
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onNodeClick={handleNodeClick}
+                onInit={setReactFlowInstance}
+                height="100%"
+                containerClassName="h-full !rounded-none !border-none !shadow-none"
+                graphClassName="bg-white"
+                controlsClassName="!border-[#dbe9e3] !shadow-xl"
+                miniMapClassName="!border-[#dbe9e3] !shadow-xl"
+                backgroundColor="#e2ede8"
+              />
+              {!hasUploadedDocument && (
+                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white/70 px-6 text-center backdrop-blur-sm">
+                  <p className="text-base font-semibold text-slate-900">Upload a BRD policy to enable walkthrough actions.</p>
+                  <p className="text-sm font-medium text-slate-500">
+                    The graph displays the current state machine structure.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       );
