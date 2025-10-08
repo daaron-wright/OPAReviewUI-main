@@ -156,7 +156,8 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     setIsWalkthroughPaused(false);
     setIsWalkthroughMode(true);
     if (nodeSequence.length > 0) {
-      setCurrentNodeId(nodeSequence[0]);
+      const firstNode = nodeSequence[0];
+      setCurrentNodeId(firstNode ?? null);
     }
   }, [nodeSequence]);
 
