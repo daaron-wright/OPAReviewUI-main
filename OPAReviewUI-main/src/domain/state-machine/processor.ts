@@ -119,6 +119,7 @@ function createNode(
   const transitions = state.transitions?.map((transition) => normalizeTransition(transition));
   const journeyPaths = normalizeJourneyPaths(id, state, journeys);
   const relevantChunks = normalizeRelevantChunks(state);
+  const regoRules = state.rego_rules ?? state.regoRules;
 
   return {
     id,
@@ -135,6 +136,7 @@ function createNode(
       controlAttribute: controlAttributes.primary ?? undefined,
       controlAttributes: controlAttributes.all.length > 0 ? controlAttributes.all : undefined,
       transitions: transitions?.length ? transitions : undefined,
+      regoRules: regoRules && Object.keys(regoRules).length > 0 ? regoRules : undefined,
     },
   };
 }
