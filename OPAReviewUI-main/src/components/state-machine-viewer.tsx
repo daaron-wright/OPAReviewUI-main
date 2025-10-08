@@ -104,11 +104,12 @@ function filterStateMachineForJourney(
     return map;
   }, new Map());
 
-  for (const nodeId of config.seedNodes) {
+  const initialSeeds = new Set<string>([...config.seedNodes, ...ALWAYS_INCLUDED_NODES]);
+  initialSeeds.forEach((nodeId) => {
     if (!included.has(nodeId)) {
       queue.push(nodeId);
     }
-  }
+  });
 
   while (queue.length > 0) {
     const nodeId = queue.shift();
@@ -130,18 +131,6 @@ function filterStateMachineForJourney(
       }
     });
   }
-
-  ALWAYS_INCLUDED_NODES.forEach((nodeId) => {
-    if (machine.nodes.some((node) => node.id === nodeId)) {
-      included.add(nodeId);
-      const outgoing = edgesBySource.get(nodeId) ?? [];
-      outgoing.forEach((edge) => {
-        if (shouldIncludeEdge(edge, nodeId, config, keywordMatchers)) {
-          included.add(edge.target);
-        }
-      });
-    }
-  });
 
   const filteredNodes = machine.nodes.filter((node) => included.has(node.id));
   const filteredNodeIds = new Set(filteredNodes.map((node) => node.id));
@@ -687,7 +676,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
               <div className="flex items-center gap-3">
                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 <div>
-                  <div className="font-semibold">Publishing state machine…</div>
+                  <div className="font-semibold">Publishing state machine���</div>
                   <div className="text-xs opacity-90">
                     Deploying {stats.approved} approved states to production
                   </div>
