@@ -435,7 +435,6 @@ export function NodeDetailModal({
     onClose(false);
   }, [node, setNodeReviewed, onClose]);
 
-  const brdReferences = useMemo(() => getMockBRDReferences(), []);
   const regoRuleMap = useMemo(() => {
     const map = new Map<string, RegoRule>();
     regoRules.forEach((rule) => map.set(rule.id, rule));
@@ -525,32 +524,6 @@ export function NodeDetailModal({
     return Array.from(tokens);
   }, [node]);
 
-  const relevantBrdSections = useMemo(() => {
-    if (!node) {
-      return [] as BRDReferenceSection[];
-    }
-
-    const tokenSet = new Set(nodeContextTokens);
-
-    return brdReferences.sections.filter((section) => {
-      if (!section.ruleId) {
-        return false;
-      }
-      const linkedRule = regoRuleMap.get(section.ruleId);
-      if (!linkedRule) {
-        return false;
-      }
-
-      const matchesNodeId = linkedRule.relatedNodeIds?.some((id) => id === node.id);
-      const matchesAttribute = linkedRule.relatedAttributes?.some((attr) => tokenSet.has(attr.toLowerCase()));
-      const matchesKeyword = linkedRule.keywords?.some((keyword) => {
-        const normalizedKeyword = keyword.toLowerCase();
-        return nodeContextTokens.some((token) => token.includes(normalizedKeyword));
-      });
-
-      return Boolean(matchesNodeId || matchesAttribute || matchesKeyword);
-    });
-  }, [brdReferences, node, nodeContextTokens, regoRuleMap]);
 
   if (!node) return null;
 
@@ -558,8 +531,7 @@ export function NodeDetailModal({
   const transitions = node.metadata?.transitions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
 
-  const sectionsToDisplay = relevantBrdSections.length > 0 ? relevantBrdSections : brdReferences.sections;
-  const usingFallbackSections = relevantBrdSections.length === 0;
+  const hasRelevantChunks = localizedRelevantChunks.length > 0;
   const isSplitView = viewMode === 'split';
   const contentLayoutClasses = clsx(
     'grid flex-1 min-h-0 overflow-hidden',
