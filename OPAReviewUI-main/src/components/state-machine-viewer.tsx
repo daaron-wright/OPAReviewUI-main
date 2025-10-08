@@ -17,6 +17,7 @@ import { CustomNodeData } from './graph/custom-node';
 import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
 import {
+  ProcessedEdge,
   ProcessedNode,
   ProcessedStateMachine,
   processStateMachine,
