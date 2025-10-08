@@ -732,21 +732,21 @@ function AccordionSection({ id, title, description, isOpen, onToggle, headerActi
 
   return (
     <section className="rounded-[28px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-36px_rgba(15,118,110,0.28)]">
-      <div className="flex flex-col gap-3 px-4 pt-4 sm:px-5">
-        <div className="flex items-start gap-3">
+      <div className="flex flex-col items-center gap-3 px-4 pt-4 text-center sm:px-5">
+        <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
           <button
             type="button"
             id={headerId}
             onClick={() => onToggle(id)}
             aria-expanded={isOpen}
             aria-controls={contentId}
-            className="flex flex-1 items-center justify-between rounded-2xl border border-transparent bg-[#f6faf8] px-4 py-3 text-left transition hover:bg-[#eef5f2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/25 focus-visible:ring-offset-2"
+            className="inline-flex items-center justify-center gap-3 rounded-2xl border border-transparent bg-[#f6faf8] px-6 py-3 text-center transition hover:bg-[#eef5f2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/25 focus-visible:ring-offset-2"
           >
             <span>
               <span className="block text-sm font-semibold text-slate-900">{title}</span>
               {description && <span className="mt-0.5 block text-xs text-slate-500">{description}</span>}
             </span>
-            <span className="ml-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#dbe9e3] bg-white text-[#0f766e]">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#dbe9e3] bg-white text-[#0f766e]">
               <svg
                 className={clsx('h-4 w-4 transition-transform duration-200', isOpen ? 'rotate-180' : 'rotate-0')}
                 viewBox="0 0 16 16"
@@ -760,7 +760,7 @@ function AccordionSection({ id, title, description, isOpen, onToggle, headerActi
             </span>
           </button>
           {headerActions ? (
-            <div className="hidden shrink-0 items-center gap-2 sm:flex">{headerActions}</div>
+            <div className="flex items-center justify-center gap-2 sm:flex">{headerActions}</div>
           ) : null}
         </div>
         {headerActions ? (
