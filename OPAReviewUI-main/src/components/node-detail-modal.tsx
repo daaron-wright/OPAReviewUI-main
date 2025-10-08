@@ -806,7 +806,7 @@ export function NodeDetailModal({
                   {controlAttributes.length > 0 && (
                     <div className="mt-3 space-y-2">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                        {language === 'ar' ? 'سمات التحكم' : 'Control attributes'}
+                        {language === 'ar' ? 'سما�� التحكم' : 'Control attributes'}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {controlAttributes.map((attribute) => (
@@ -1209,7 +1209,7 @@ export function NodeDetailModal({
                                         <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#fdecee]">
                                           <Icon name="xCircle" className="h-4 w-4 text-[#c22745]" />
                                         </span>
-                                        <span className="text-sm font-semibold">{language === 'ar' ? 'فشل الا��تبار' : 'Test failed'}</span>
+                                        <span className="text-sm font-semibold">{language === 'ar' ? 'فشل الاختبار' : 'Test failed'}</span>
                                       </div>
                                       <pre className="overflow-x-auto rounded-2xl border border-[#f4c7cf] bg-[#fdecee] p-3 text-xs font-mono text-[#c22745]">
                                         <code>{testResults[rule.id]?.actual}</code>
