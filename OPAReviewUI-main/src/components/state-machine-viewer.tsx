@@ -766,6 +766,37 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     setEdges(layoutedEdges);
   }, [hasUploadedDocument, initialEdges, initialNodes, setEdges, setNodes]);
 
+  const scheduleFitView = useCallback(
+    (options?: Partial<FitViewOptions>) => {
+      if (!reactFlowInstance || typeof window === 'undefined') {
+        return;
+      }
+
+      if (fitViewRafRef.current !== null) {
+        window.cancelAnimationFrame(fitViewRafRef.current);
+        fitViewRafRef.current = null;
+      }
+
+      const queueFitView = () => {
+        const nextOptions: FitViewOptions = {
+          padding: 0.2,
+          duration: options?.duration,
+          includeHiddenNodes: options?.includeHiddenNodes,
+          maxZoom: options?.maxZoom,
+          minZoom: options?.minZoom,
+        };
+
+        fitViewRafRef.current = window.requestAnimationFrame(() => {
+          reactFlowInstance.fitView(nextOptions);
+          fitViewRafRef.current = null;
+        });
+      };
+
+      fitViewRafRef.current = window.requestAnimationFrame(queueFitView);
+    },
+    [reactFlowInstance]
+  );
+
   useEffect(() => {
     applyLayout();
     if (hasUploadedDocument) {
@@ -1281,33 +1312,6 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const handleCollapseGraph = useCallback(() => {
     setIsGraphExpanded(false);
   }, []);
-
-  const scheduleFitView = useCallback(
-    (options?: Partial<FitViewOptions>) => {
-      if (!reactFlowInstance || typeof window === 'undefined') {
-        return;
-      }
-
-      if (fitViewRafRef.current !== null) {
-        window.cancelAnimationFrame(fitViewRafRef.current);
-        fitViewRafRef.current = null;
-      }
-
-      const queueFitView = () => {
-        const { duration: _duration, ...restOptions } = options ?? {};
-        fitViewRafRef.current = window.requestAnimationFrame(() => {
-          reactFlowInstance.fitView({
-            padding: 0.2,
-            ...restOptions,
-          });
-          fitViewRafRef.current = null;
-        });
-      };
-
-      fitViewRafRef.current = window.requestAnimationFrame(queueFitView);
-    },
-    [reactFlowInstance]
-  );
 
   const handleFocusFit = useCallback(() => {
     scheduleFitView({ padding: 0.18 });
