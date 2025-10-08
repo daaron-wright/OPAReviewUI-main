@@ -228,7 +228,7 @@ export function JourneySummaryPanel({
         <div
           id={panelId}
           className={clsx(
-            'relative w-full overflow-hidden transition-all duration-500 ease-out xl:fixed xl:right-6 xl:top-32 xl:z-30 xl:w-[min(90vw,420px)]',
+            'relative w-full overflow-hidden transition-all duration-500 ease-out xl:fixed xl:right-6 xl:top-32 xl:z-30 xl:w-[min(90vw,420px)] xl:max-w-[420px]',
             isOpen
               ? 'max-h-[3200px] opacity-100 pointer-events-auto xl:translate-y-0'
               : 'max-h-0 opacity-0 pointer-events-none xl:translate-y-2'
