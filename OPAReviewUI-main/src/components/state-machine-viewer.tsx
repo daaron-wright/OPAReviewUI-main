@@ -471,9 +471,9 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
   useEffect(() => {
     applyLayout();
-    const sequence = stateMachine.nodes.map((node) => node.id);
+    const sequence = journeyNodes.map((node) => node.id);
     setNodeSequence(sequence);
-  }, [applyLayout, setNodeSequence, stateMachine.nodes]);
+  }, [applyLayout, journeyNodes, setNodeSequence]);
 
   useEffect(() => () => clearWalkthroughTimers(), [clearWalkthroughTimers]);
 
