@@ -251,8 +251,8 @@ function WorkflowTab({ workflow }: WorkflowTabProps): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Workflow Progress */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <h3 className="text-lg font-semibold text-white mb-4">Resolution Progress</h3>
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white p-6 shadow-sm">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Resolution Progress</h3>
         <div className="space-y-4">
           {workflow.steps.map((step, index) => (
             <WorkflowStep key={step.id} step={step} isActive={step.id === workflow.currentStep.id} />
@@ -262,15 +262,15 @@ function WorkflowTab({ workflow }: WorkflowTabProps): JSX.Element {
 
       {/* Blockers */}
       {workflow.blockers.length > 0 && (
-        <div className="bg-red-900/20 border border-red-500/50 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-red-300 mb-4">Active Blockers</h3>
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 shadow-sm">
+          <h3 className="mb-4 text-lg font-semibold text-rose-600">Active Blockers</h3>
           <div className="space-y-3">
             {workflow.blockers.map((blocker) => (
               <div key={blocker.id} className="flex items-start gap-3">
-                <span className="text-red-400 mt-1">⚠️</span>
+                <span className="mt-1 text-rose-500">⚠️</span>
                 <div>
-                  <div className="text-red-200 font-medium">{blocker.description}</div>
-                  <div className="text-red-300 text-sm">
+                  <div className="font-medium text-rose-700">{blocker.description}</div>
+                  <div className="text-sm text-rose-500">
                     {blocker.type} • {blocker.severity} • Reported by {blocker.reportedBy}
                   </div>
                 </div>
@@ -367,11 +367,11 @@ interface WorkflowStepProps {
 
 function WorkflowStep({ step, isActive }: WorkflowStepProps): JSX.Element {
   const statusColors = {
-    pending: 'text-slate-400',
-    'in-progress': 'text-blue-400',
-    completed: 'text-green-400',
-    blocked: 'text-red-400',
-    skipped: 'text-yellow-400'
+    pending: 'text-slate-500',
+    'in-progress': 'text-sky-600',
+    completed: 'text-emerald-600',
+    blocked: 'text-rose-600',
+    skipped: 'text-amber-600',
   };
 
   const statusIcons: Record<string, IconName> = {
@@ -383,23 +383,29 @@ function WorkflowStep({ step, isActive }: WorkflowStepProps): JSX.Element {
   };
 
   return (
-    <div className={`flex items-start gap-4 p-4 rounded-lg ${isActive ? 'bg-blue-900/30 border border-blue-500/50' : 'bg-slate-700/30'}`}>
-      <span className="text-xl text-white/80">
+    <div
+      className={`flex items-start gap-4 rounded-xl border ${
+        isActive
+          ? 'border-[#0f766e] bg-white shadow-[0_12px_30px_-20px_rgba(15,118,110,0.55)]'
+          : 'border-[#dbe9e3] bg-white'
+      } p-4 transition-shadow`}
+    >
+      <span className="text-xl text-[#0f766e]">
         <Icon name={statusIcons[step.status as keyof typeof statusIcons]} className="h-5 w-5" />
       </span>
       <div className="flex-1">
-        <div className="flex items-center justify-between mb-1">
-          <h4 className="text-white font-medium">{step.name}</h4>
-          <span className={`text-sm font-medium ${statusColors[step.status as keyof typeof statusColors]}`}>
-            {step.status.toUpperCase()}
+        <div className="mb-1 flex items-center justify-between">
+          <h4 className="font-medium text-slate-900">{step.name}</h4>
+          <span className={`text-sm font-semibold uppercase tracking-wide ${statusColors[step.status as keyof typeof statusColors]}`}>
+            {step.status.replace('-', ' ')}
           </span>
         </div>
-        <p className="text-slate-400 text-sm mb-2">{step.description}</p>
+        <p className="mb-2 text-sm text-slate-600">{step.description}</p>
         {step.assignedTo && (
           <div className="text-xs text-slate-500">Assigned to: {step.assignedTo}</div>
         )}
         {step.notes && (
-          <div className="text-xs text-slate-400 mt-1 italic">Notes: {step.notes}</div>
+          <div className="mt-1 text-xs italic text-slate-500">Notes: {step.notes}</div>
         )}
       </div>
     </div>
