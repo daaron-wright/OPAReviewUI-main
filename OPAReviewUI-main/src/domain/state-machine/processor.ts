@@ -198,16 +198,66 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
   if (Array.isArray(rawChunks)) {
     rawChunks.forEach((entry) => {
       if (isRecord(entry)) {
-        registerChunk(
-          getRecordValue(entry, 'language', 'lang', 'locale'),
-          getRecordValue(entry, 'text', 'content', 'value'),
-          {
-            referenceId: getRecordValue(entry, 'referenceId', 'reference_id', 'id'),
-            source: getRecordValue(entry, 'source', 'origin'),
-            section: getRecordValue(entry, 'section', 'sectionLabel', 'section_label'),
-            tags: getRecordValue(entry, 'tags'),
+        // Check for the specific structure: { chunk_id, arabic_original: { text }, english_translation: { text } }
+        const arabicOriginal = getRecordValue(entry, 'arabic_original');
+        const englishTranslation = getRecordValue(entry, 'english_translation');
+        const chunkId = getRecordValue(entry, 'chunk_id');
+        const pagesArabic = getRecordValue(entry, 'pages_arabic');
+        const similarity = getRecordValue(entry, 'similarity');
+
+        if (isRecord(arabicOriginal) || isRecord(englishTranslation)) {
+          // Handle arabic_original
+          if (isRecord(arabicOriginal)) {
+            const arabicText = getRecordValue(arabicOriginal, 'text');
+            if (arabicText) {
+              const pageInfo = Array.isArray(pagesArabic) && pagesArabic.length > 0
+                ? `Page ${pagesArabic.join(', ')}`
+                : undefined;
+              registerChunk(
+                'ar',
+                arabicText,
+                {
+                  referenceId: chunkId,
+                  source: pageInfo,
+                  section: pageInfo,
+                  tags: similarity ? [`similarity: ${similarity}`] : undefined,
+                }
+              );
+            }
           }
-        );
+
+          // Handle english_translation
+          if (isRecord(englishTranslation)) {
+            const englishText = getRecordValue(englishTranslation, 'text');
+            if (englishText) {
+              const pageInfo = Array.isArray(pagesArabic) && pagesArabic.length > 0
+                ? `Page ${pagesArabic.join(', ')}`
+                : undefined;
+              registerChunk(
+                'en',
+                englishText,
+                {
+                  referenceId: chunkId,
+                  source: pageInfo,
+                  section: pageInfo,
+                  tags: similarity ? [`similarity: ${similarity}`] : undefined,
+                }
+              );
+            }
+          }
+        } else {
+          // Fallback to original logic
+          registerChunk(
+            getRecordValue(entry, 'language', 'lang', 'locale'),
+            getRecordValue(entry, 'text', 'content', 'value'),
+            {
+              referenceId: getRecordValue(entry, 'referenceId', 'reference_id', 'id', 'chunk_id'),
+              source: getRecordValue(entry, 'source', 'origin'),
+              section: getRecordValue(entry, 'section', 'sectionLabel', 'section_label'),
+              tags: getRecordValue(entry, 'tags'),
+            }
+          );
+        }
       } else {
         registerChunk('en', entry);
       }
