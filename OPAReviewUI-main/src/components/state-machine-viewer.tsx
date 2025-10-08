@@ -103,6 +103,20 @@ function getErrorDetails(error: unknown): NormalizedErrorDetails {
   }
 }
 
+function messageIndicatesAbort(message: string): boolean {
+  if (!message) {
+    return false;
+  }
+
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes('abort') ||
+    normalized.includes('the operation was aborted') ||
+    normalized.includes('fetch is aborted') ||
+    normalized.includes('user aborted')
+  );
+}
+
 function delay(ms: number): Promise<void> {
   if (ms <= 0) {
     return Promise.resolve();
@@ -139,12 +153,7 @@ function isAbortError(error: unknown, signal?: AbortSignal): boolean {
     return false;
   }
 
-  if (
-    normalizedMessage.includes('abort') ||
-    normalizedMessage.includes('the operation was aborted') ||
-    normalizedMessage.includes('fetch is aborted') ||
-    normalizedMessage.includes('user aborted')
-  ) {
+  if (messageIndicatesAbort(normalizedMessage)) {
     return true;
   }
 
@@ -173,6 +182,10 @@ function isRetriableFetchError(error: unknown): boolean {
     return false;
   }
 
+  if (messageIndicatesAbort(normalizedMessage)) {
+    return false;
+  }
+
   if (normalizedName === 'typeerror' || normalizedName === 'networkerror' || normalizedName === 'fetcherror') {
     return true;
   }
@@ -193,7 +206,6 @@ function isRetriableFetchError(error: unknown): boolean {
     normalizedMessage.includes('failed to fetch') ||
     normalizedMessage.includes('load failed') ||
     normalizedMessage.includes('connection') ||
-    normalizedMessage.includes('fetch is aborted') ||
     normalizedMessage.includes('reset by peer')
   );
 }
