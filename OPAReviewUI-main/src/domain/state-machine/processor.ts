@@ -138,6 +138,256 @@ function createNode(
   };
 }
 
+function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantChunk> | undefined {
+  const rawChunks = (state.relevantChunks ?? state.relevant_chunks) as unknown;
+
+  if (!rawChunks) {
+    return undefined;
+  }
+
+  const collected = new Map<string, ProcessedRelevantChunk>();
+
+  const registerChunk = (
+    languageInput: unknown,
+    textInput: unknown,
+    options: {
+      referenceId?: unknown;
+      source?: unknown;
+      section?: unknown;
+      tags?: unknown;
+    } = {}
+  ): void => {
+    const text = toNonEmptyString(textInput);
+    if (!text) {
+      return;
+    }
+
+    const language = normalizeLanguageCode(languageInput ?? 'en');
+    const referenceId = toNonEmptyString(options.referenceId);
+    const source = toNonEmptyString(options.source);
+    const section = toNonEmptyString(options.section);
+    const tags = sanitizeTags(options.tags);
+
+    const key = `${language}::${text}::${referenceId ?? ''}::${section ?? ''}::${source ?? ''}`;
+    const existing = collected.get(key);
+
+    if (existing) {
+      if (tags.length > 0) {
+        const merged = new Set<string>([
+          ...(existing.tags ?? []),
+          ...tags,
+        ]);
+        collected.set(key, {
+          ...existing,
+          tags: Array.from(merged),
+        });
+      }
+      return;
+    }
+
+    collected.set(key, {
+      language,
+      text,
+      ...(referenceId ? { referenceId } : {}),
+      ...(source ? { source } : {}),
+      ...(section ? { section } : {}),
+      ...(tags.length > 0 ? { tags } : {}),
+    });
+  };
+
+  if (Array.isArray(rawChunks)) {
+    rawChunks.forEach((entry) => {
+      if (isRecord(entry)) {
+        registerChunk(
+          getRecordValue(entry, 'language', 'lang', 'locale'),
+          getRecordValue(entry, 'text', 'content', 'value'),
+          {
+            referenceId: getRecordValue(entry, 'referenceId', 'reference_id', 'id'),
+            source: getRecordValue(entry, 'source', 'origin'),
+            section: getRecordValue(entry, 'section', 'sectionLabel', 'section_label'),
+            tags: getRecordValue(entry, 'tags'),
+          }
+        );
+      } else {
+        registerChunk('en', entry);
+      }
+    });
+  } else if (isRecord(rawChunks)) {
+    Object.entries(rawChunks).forEach(([languageKey, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (isRecord(item)) {
+            registerChunk(
+              languageKey,
+              getRecordValue(item, 'text', 'content', 'value'),
+              {
+                referenceId: getRecordValue(item, 'referenceId', 'reference_id', 'id'),
+                source: getRecordValue(item, 'source', 'origin'),
+                section: getRecordValue(item, 'section', 'sectionLabel', 'section_label'),
+                tags: getRecordValue(item, 'tags'),
+              }
+            );
+          } else {
+            registerChunk(languageKey, item);
+          }
+        });
+      } else if (isRecord(value)) {
+        registerChunk(
+          languageKey,
+          getRecordValue(value, 'text', 'content', 'value'),
+          {
+            referenceId: getRecordValue(value, 'referenceId', 'reference_id', 'id'),
+            source: getRecordValue(value, 'source', 'origin'),
+            section: getRecordValue(value, 'section', 'sectionLabel', 'section_label'),
+            tags: getRecordValue(value, 'tags'),
+          }
+        );
+      } else {
+        registerChunk(languageKey, value);
+      }
+    });
+  } else {
+    registerChunk('en', rawChunks);
+  }
+
+  if (collected.size === 0) {
+    return undefined;
+  }
+
+  return Array.from(collected.values()).map((chunk) => ({
+    ...chunk,
+    ...(chunk.tags ? { tags: Object.freeze(chunk.tags.slice()) } : {}),
+  }));
+}
+
+function normalizeJourneys(machine: StateMachine): ReadonlyArray<ProcessedJourneyDefinition> {
+  const rawJourneys = (machine.journeys ?? machine.journeyDefinitions) as unknown;
+
+  if (!Array.isArray(rawJourneys)) {
+    return [];
+  }
+
+  const normalized = rawJourneys
+    .map((journey) => {
+      if (!isRecord(journey)) {
+        return null;
+      }
+
+      const record = journey as Record<string, unknown>;
+      const id = toNonEmptyString(getRecordValue(record, 'id'));
+      if (!id) {
+        return null;
+      }
+
+      const label =
+        toNonEmptyString(getRecordValue(record, 'label', 'name', 'title')) ??
+        toNonEmptyString(getRecordValue(record, 'suggestedJourney', 'suggested_journey')) ??
+        formatLabel(id);
+
+      const intent = toNonEmptyString(getRecordValue(record, 'intent')) ?? label;
+      const exampleScenario = toNonEmptyString(getRecordValue(record, 'exampleScenario', 'example_scenario')) ?? undefined;
+      const suggestedJourney =
+        toNonEmptyString(getRecordValue(record, 'suggestedJourney', 'suggested_journey')) ?? label;
+      const description = toNonEmptyString(getRecordValue(record, 'description', 'summary')) ?? undefined;
+
+      const seedStates = dedupeStrings([
+        ...ensureStringArray(getRecordValue(record, 'seedStates', 'seed_states')),
+        ...ensureStringArray(getRecordValue(record, 'entryStates', 'entry_states')),
+      ]);
+      const routinePrefixes = dedupeStrings(
+        ensureStringArray(getRecordValue(record, 'routinePrefixes', 'routine_prefixes'))
+      );
+      const conditionKeywords = dedupeStrings(
+        ensureStringArray(getRecordValue(record, 'conditionKeywords', 'condition_keywords'))
+      );
+      const pathStates = dedupeStrings(
+        ensureStringArray(getRecordValue(record, 'pathStates', 'path_states'))
+      );
+
+      return {
+        id,
+        label,
+        intent,
+        exampleScenario,
+        suggestedJourney,
+        description,
+        seedStates,
+        routinePrefixes,
+        conditionKeywords,
+        pathStates,
+      } as ProcessedJourneyDefinition;
+    })
+    .filter((journey): journey is ProcessedJourneyDefinition => journey !== null);
+
+  return normalized.map((journey) => ({
+    ...journey,
+    seedStates: Object.freeze(journey.seedStates.slice()),
+    routinePrefixes: Object.freeze(journey.routinePrefixes.slice()),
+    conditionKeywords: Object.freeze(journey.conditionKeywords.slice()),
+    pathStates: Object.freeze(journey.pathStates.slice()),
+  }));
+}
+
+function normalizeJourneyPaths(
+  id: string,
+  state: State,
+  journeys: ReadonlyArray<ProcessedJourneyDefinition>
+): ReadonlyArray<string> {
+  const collected = new Set<string>();
+
+  ensureStringArray(state.journeyPaths ?? state.journey_paths).forEach((path) => {
+    collected.add(path);
+  });
+
+  if (journeys.length > 0) {
+    journeys.forEach((journey) => {
+      if (journey.seedStates.includes(id) || journey.pathStates.includes(id)) {
+        collected.add(journey.id);
+        return;
+      }
+
+      if (journey.routinePrefixes.some((prefix) => id.startsWith(prefix))) {
+        collected.add(journey.id);
+      }
+    });
+  }
+
+  if (collected.size === 0 && journeys.length === 0) {
+    if (id.startsWith('routine1_')) {
+      collected.add('new_registration');
+    } else if (id.startsWith('routine2_')) {
+      collected.add('fast_track');
+    } else if (id.startsWith('routine3_')) {
+      collected.add('update_compliance');
+    }
+  }
+
+  if ((id === 'entry_point' || id === 'customer_application_type_selection') && journeys.length > 0) {
+    journeys.forEach((journey) => collected.add(journey.id));
+  }
+
+  if (collected.size === 0) {
+    return [];
+  }
+
+  const ordering = new Map<string, number>();
+  journeys.forEach((journey, index) => ordering.set(journey.id, index));
+
+  const ordered = Array.from(collected);
+  ordered.sort((a, b) => {
+    const orderA = ordering.get(a) ?? Number.MAX_SAFE_INTEGER;
+    const orderB = ordering.get(b) ?? Number.MAX_SAFE_INTEGER;
+
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+
+    return a.localeCompare(b);
+  });
+
+  return Object.freeze(ordered);
+}
+
 function normalizeControlAttributes(state: State): { primary: string | null; all: string[] } {
   const primaryCandidate =
     state.controlAttribute ??
