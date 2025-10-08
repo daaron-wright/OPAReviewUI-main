@@ -46,12 +46,25 @@ export function ConflictFilters({
   }, [activeFilter.searchTerm]);
 
   const updateFilter = (updates: Partial<ConflictFilter>): void => {
-    onFilterChange({ ...activeFilter, ...updates });
+    const merged = { ...activeFilter } as ConflictFilter & Record<string, unknown>;
+
+    (Object.entries(updates) as Array<[
+      keyof ConflictFilter,
+      ConflictFilter[keyof ConflictFilter]
+    ]>).forEach(([key, value]) => {
+      if (typeof value === 'undefined') {
+        delete merged[key as string];
+      } else {
+        merged[key as string] = value;
+      }
+    });
+
+    onFilterChange(merged as ConflictFilter);
   };
 
   const clearAllFilters = (): void => {
     setSearchTerm('');
-    onFilterChange({});
+    onFilterChange({} as ConflictFilter);
   };
 
   const handleSearchSubmit = (event: FormEvent<HTMLFormElement>): void => {
