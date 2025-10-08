@@ -501,7 +501,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
         setStateMachine(processStateMachine(file.stateMachine));
       } catch (error) {
-        if (controller.signal.aborted) {
+        const maybeAbortError = error as { name?: string } | undefined;
+        if (controller.signal.aborted || maybeAbortError?.name === 'AbortError') {
           return;
         }
 
