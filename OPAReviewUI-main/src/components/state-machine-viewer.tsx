@@ -2,7 +2,7 @@
 
 'use client';
 
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
