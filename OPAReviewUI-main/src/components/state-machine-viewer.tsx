@@ -37,11 +37,13 @@ interface StateMachineFile {
 }
 
 /*
- * Remote state machine is bundled directly to avoid fetch aborts in strict mode environments.
+ * Default workflow bundled locally as a fallback until the extended Arabic workflow is fetched at runtime.
  */
 const defaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
   (realBeneficiaryStateMachineFile as StateMachineFile).stateMachine
 );
+
+const REMOTE_STATE_MACHINE_ENDPOINT = '/data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json';
 
 type JourneyTabId = string;
 
