@@ -39,6 +39,190 @@ const defaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
   (realBeneficiaryStateMachineFile as StateMachineFile).stateMachine
 );
 
+type JourneyTabId = 'new-trade-name' | 'existing-trade-name' | 'existing-trade-license';
+
+interface JourneyTabConfig {
+  readonly id: JourneyTabId;
+  readonly label: string;
+  readonly routinePrefix: string;
+  readonly conditionKeywords: readonly string[];
+  readonly seedNodes: readonly string[];
+}
+
+const JOURNEY_TABS: JourneyTabConfig[] = [
+  {
+    id: 'new-trade-name',
+    label: 'New Trade Name',
+    routinePrefix: 'routine1_',
+    conditionKeywords: ['customer', 'new_trade_name'],
+    seedNodes: ['entry_point', 'customer_application_type_selection', 'routine1_digital_id_verification'],
+  },
+  {
+    id: 'existing-trade-name',
+    label: 'Existing Trade Name',
+    routinePrefix: 'routine2_',
+    conditionKeywords: ['customer', 'existing_trade_name'],
+    seedNodes: ['entry_point', 'customer_application_type_selection', 'routine2_digital_id_verification'],
+  },
+  {
+    id: 'existing-trade-license',
+    label: 'Existing Trade License',
+    routinePrefix: 'routine3_',
+    conditionKeywords: ['customer', 'existing_license'],
+    seedNodes: ['entry_point', 'customer_application_type_selection', 'routine3_digital_id_verification'],
+  },
+];
+
+const BRANCH_NODE_IDS = new Set(['entry_point', 'customer_application_type_selection']);
+const ALWAYS_INCLUDED_NODES = ['entry_point', 'customer_application_type_selection'] as const;
+
+function filterStateMachineForJourney(
+  machine: ProcessedStateMachine,
+  config: JourneyTabConfig
+): ProcessedStateMachine {
+  if (!machine.nodes.length) {
+    return {
+      nodes: [],
+      edges: [],
+      metadata: {
+        ...machine.metadata,
+        totalStates: 0,
+        totalTransitions: 0,
+      },
+    };
+  }
+
+  const keywordMatchers = config.conditionKeywords.map((keyword) => keyword.toLowerCase());
+  const included = new Set<string>();
+  const queue: string[] = [];
+
+  const edgesBySource = machine.edges.reduce<Map<string, ProcessedEdge[]>>((map, edge) => {
+    if (!map.has(edge.source)) {
+      map.set(edge.source, []);
+    }
+    map.get(edge.source)!.push(edge);
+    return map;
+  }, new Map());
+
+  for (const nodeId of config.seedNodes) {
+    if (!included.has(nodeId)) {
+      queue.push(nodeId);
+    }
+  }
+
+  while (queue.length > 0) {
+    const nodeId = queue.shift();
+    if (!nodeId || included.has(nodeId)) {
+      continue;
+    }
+    const nodeExists = machine.nodes.some((node) => node.id === nodeId);
+    if (!nodeExists) {
+      continue;
+    }
+    included.add(nodeId);
+
+    const outgoing = edgesBySource.get(nodeId) ?? [];
+    outgoing.forEach((edge) => {
+      if (shouldIncludeEdge(edge, nodeId, config, keywordMatchers)) {
+        if (!included.has(edge.target)) {
+          queue.push(edge.target);
+        }
+      }
+    });
+  }
+
+  ALWAYS_INCLUDED_NODES.forEach((nodeId) => {
+    if (machine.nodes.some((node) => node.id === nodeId)) {
+      included.add(nodeId);
+      const outgoing = edgesBySource.get(nodeId) ?? [];
+      outgoing.forEach((edge) => {
+        if (shouldIncludeEdge(edge, nodeId, config, keywordMatchers)) {
+          included.add(edge.target);
+        }
+      });
+    }
+  });
+
+  const filteredNodes = machine.nodes.filter((node) => included.has(node.id));
+  const filteredNodeIds = new Set(filteredNodes.map((node) => node.id));
+
+  const filteredEdges = machine.edges.filter(
+    (edge) =>
+      filteredNodeIds.has(edge.source) &&
+      filteredNodeIds.has(edge.target) &&
+      shouldIncludeEdge(edge, edge.source, config, keywordMatchers)
+  );
+
+  const sanitizedNodes = filteredNodes.map((node) => ({
+    ...node,
+    metadata: {
+      ...node.metadata,
+      transitions: node.metadata.transitions
+        ?.filter((transition) =>
+          filteredNodeIds.has(transition.target) &&
+          shouldIncludeEdge(
+            {
+              id: `${node.id}-${transition.target}-metadata`,
+              source: node.id,
+              target: transition.target,
+              label: transition.controlAttributeValue ?? transition.condition,
+              condition: transition.condition,
+              action: transition.action,
+              controlAttribute: transition.controlAttribute,
+              controlAttributeValue: transition.controlAttributeValue,
+            },
+            node.id,
+            config,
+            keywordMatchers
+          )
+        )
+        .slice(0) ?? undefined,
+    },
+  }));
+
+  return {
+    nodes: sanitizedNodes,
+    edges: filteredEdges,
+    metadata: {
+      ...machine.metadata,
+      totalStates: sanitizedNodes.length,
+      totalTransitions: filteredEdges.length,
+    },
+  };
+}
+
+function shouldIncludeEdge(
+  edge: ProcessedEdge,
+  sourceId: string,
+  config: JourneyTabConfig,
+  keywordMatchers: readonly string[]
+): boolean {
+  const condition = edge.condition?.toLowerCase() ?? '';
+  const targetId = edge.target;
+  const sourceIsRoutine = sourceId.startsWith(config.routinePrefix);
+  const targetIsRoutine = targetId.startsWith('routine');
+
+  if (BRANCH_NODE_IDS.has(sourceId)) {
+    if (targetId.startsWith(config.routinePrefix)) {
+      return true;
+    }
+    return keywordMatchers.some((keyword) => condition.includes(keyword));
+  }
+
+  if (sourceIsRoutine) {
+    if (targetIsRoutine && !targetId.startsWith(config.routinePrefix)) {
+      return false;
+    }
+    return true;
+  }
+
+  if (targetIsRoutine && !targetId.startsWith(config.routinePrefix)) {
+    return false;
+  }
+
+  return true;
+}
+
 interface StateMachineViewerProps {
   readonly stateMachine?: ProcessedStateMachine;
 }
@@ -684,7 +868,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
           : 'Approve reviewed nodes before publishing';
     } else if (!hasPublishedToOpa) {
       step5Status = 'active';
-      step5Description = 'Ready to deploy to OPA Server • Click Publish when ready';
+      step5Description = 'Ready to deploy to OPA Server �� Click Publish when ready';
     } else {
       step5Status = 'complete';
       step5Description = 'Deployment to OPA Server completed';
