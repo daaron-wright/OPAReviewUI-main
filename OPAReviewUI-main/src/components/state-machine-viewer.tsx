@@ -994,7 +994,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const graphUnavailablePlaceholder = (
     <div className="flex h-[520px] flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-[#cbe6dc] bg-white px-6 text-center">
       <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#0f766e]/10 text-[#0f766e]">
-        <Icon name="paperclip" className="h-5 w-5" />
+        <Icon name="arrowUp" className="h-5 w-5" />
       </div>
       <div className="space-y-2">
         <p className="text-sm font-semibold text-slate-900">No states available for {selectedJourneyConfig.label}</p>
