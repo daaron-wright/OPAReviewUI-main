@@ -115,7 +115,7 @@ export function GraphCanvas({
           fitView={fitView}
           fitViewOptions={resolvedFitViewOptions}
           attributionPosition="bottom-left"
-          className={clsx('transition-all duration-300', graphClassName)}
+          className={clsx(graphClassName)}
         >
           <Background variant={backgroundVariant} gap={backgroundGap} size={backgroundSize} color={backgroundColor} />
           {controlsEnabled && (
