@@ -116,7 +116,7 @@ If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
 Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
-      contentAr: `يجب الإع����ن عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق ال��صويت كمست��يد حقيقي.
+      contentAr: `يجب الإع��ان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق ال��صويت كمست��يد حقيقي.
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
@@ -126,7 +126,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 مثال ��لى الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
-ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
+ملكية الشخص أ غ��ر المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال ��سائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
@@ -544,6 +544,40 @@ export function NodeDetailModal({
   const nodeFunctions = node.metadata?.functions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
 
+  const journeyChipData = useMemo(() => {
+    if (!node.journeyPaths || node.journeyPaths.length === 0) {
+      return [] as Array<{ id: string; label: string }>;
+    }
+
+    return node.journeyPaths.map((journeyId) => {
+      const resolved = JOURNEY_LABEL_MAP[journeyId as keyof typeof JOURNEY_LABEL_MAP];
+      const label = resolved ? resolved[preferredLanguage] : formatJourneyChipLabel(journeyId);
+      return {
+        id: journeyId,
+        label,
+      };
+    });
+  }, [node.journeyPaths, preferredLanguage]);
+
+  const { chunks: localizedRelevantChunks, isFallback: usingChunkFallback } = useMemo(() => {
+    const chunks = (node.relevantChunks ?? []) as ProcessedRelevantChunk[];
+    if (chunks.length === 0) {
+      return { chunks: [] as ProcessedRelevantChunk[], isFallback: false };
+    }
+
+    const preferredMatches = chunks.filter((chunk) => chunk.language.toLowerCase() === preferredLanguage);
+    if (preferredMatches.length > 0) {
+      return { chunks: preferredMatches, isFallback: false };
+    }
+
+    const englishMatches = chunks.filter((chunk) => chunk.language.toLowerCase() === 'en');
+    if (englishMatches.length > 0) {
+      return { chunks: englishMatches, isFallback: preferredLanguage !== 'en' };
+    }
+
+    return { chunks, isFallback: true };
+  }, [node.relevantChunks, preferredLanguage]);
+
   const nodeContextTokens = useMemo(() => {
     const tokens = new Set<string>();
 
@@ -825,7 +859,7 @@ export function NodeDetailModal({
                     ? 'إخفاء قواعد السياسة'
                     : 'Hide Policy Rules'
                   : language === 'ar'
-                    ? 'عرض قواعد السياسة'
+                    ? 'عرض قواعد السيا��ة'
                     : 'View Policy Rules'}
               </span>
             </button>
