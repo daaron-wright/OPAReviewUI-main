@@ -1341,6 +1341,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       } else {
         shouldAutoFitRef.current = true;
       }
+      lastViewportRef.current = instance.getViewport();
     },
     [setReactFlowInstance]
   );
