@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import type { ConflictWorkflow, PolicyConflict, WorkflowStep } from '@/domain/conflicts/types';
 
 import { Icon } from '../icon';
+import type { IconName } from '../icon';
 
 export const CONFLICT_SEVERITY_TOKENS: Record<PolicyConflict['severity'], {
   readonly container: string;
