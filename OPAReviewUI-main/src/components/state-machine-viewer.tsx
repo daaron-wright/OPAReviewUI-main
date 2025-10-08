@@ -280,7 +280,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [primaryView, setPrimaryView] = useState<'list' | 'graph'>('graph');
   const [isGraphExpanded, setIsGraphExpanded] = useState(false);
-  const [isSummaryOpen, setIsSummaryOpen] = useState(true);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
   const {
     reviewStatus,
