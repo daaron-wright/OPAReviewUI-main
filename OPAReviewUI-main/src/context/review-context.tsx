@@ -106,7 +106,7 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
         nodeId,
         reviewed: true,
         approved,
-        notes,
+        ...(notes !== undefined ? { notes } : {}),
         reviewedAt: new Date(),
         reviewedBy: 'Master Jedi Barney', // Would come from auth in real app
       },
