@@ -453,6 +453,12 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, []);
 
   const applyLayout = useCallback(() => {
+    if (!hasUploadedDocument) {
+      setNodes([]);
+      setEdges([]);
+      return;
+    }
+
     const { nodes: layoutedNodes, edges: layoutedEdges } = calculateLayout(
       initialNodes as unknown as Node[],
       initialEdges as Edge[],
@@ -466,13 +472,17 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     );
     setNodes(layoutedNodes as Node<CustomNodeData>[]);
     setEdges(layoutedEdges);
-  }, [initialEdges, initialNodes, setEdges, setNodes]);
+  }, [hasUploadedDocument, initialEdges, initialNodes, setEdges, setNodes]);
 
   useEffect(() => {
     applyLayout();
-    const sequence = journeyNodes.map((node) => node.id);
-    setNodeSequence(sequence);
-  }, [applyLayout, journeyNodes, setNodeSequence]);
+    if (hasUploadedDocument) {
+      const sequence = journeyNodes.map((node) => node.id);
+      setNodeSequence(sequence);
+    } else {
+      setNodeSequence([]);
+    }
+  }, [applyLayout, hasUploadedDocument, journeyNodes, setNodeSequence]);
 
   useEffect(() => () => clearWalkthroughTimers(), [clearWalkthroughTimers]);
 
