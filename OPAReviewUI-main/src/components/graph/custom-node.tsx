@@ -364,12 +364,12 @@ function formatAttributeName(name: string): string {
 
 function formatConditionOutcome(condition: string): string {
   const equalityMatch = condition.match(/==\s*['"]?([\w-]+)['"]?/);
-  if (equalityMatch) {
+  if (equalityMatch && equalityMatch[1]) {
     return equalityMatch[1];
   }
 
   const booleanMatch = condition.match(/\b(true|false)\b/i);
-  if (booleanMatch) {
+  if (booleanMatch && booleanMatch[1]) {
     return booleanMatch[1].toLowerCase();
   }
 
