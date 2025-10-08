@@ -188,16 +188,18 @@ export function JourneySummaryPanel({
           className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-3 py-1.5 text-xs font-semibold text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e]"
         >
           <span>{toggleLabel}</span>
-          <svg
-            className={clsx('h-4 w-4 transition-transform duration-300', isOpen ? '' : 'rotate-180')}
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            aria-hidden
-          >
-            <path d="M5.5 4.5L10 8l-4.5 3.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-white/90">
+            <svg
+              className={clsx('h-3.5 w-3.5 transition-transform duration-300', isOpen ? '' : 'rotate-180')}
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              aria-hidden
+            >
+              <path d="M5.5 4.5L10 8l-4.5 3.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
         </button>
       </div>
 
@@ -211,17 +213,18 @@ export function JourneySummaryPanel({
             className="hidden max-w-[220px] items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-sm font-semibold text-white shadow-[0_20px_36px_-24px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e] xl:flex"
           >
             <span className="sr-only">Toggle overview panel</span>
-            <svg
-              className={clsx('h-5 w-5 flex-shrink-0 transition-transform duration-300', isOpen ? 'rotate-180' : 'rotate-0')}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.5}
-              aria-hidden
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 8h.01M11.4 10.5h1.2v5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <span className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/15 text-white/90">
+              <svg
+                className={clsx('h-4 w-4 transition-transform duration-300', isOpen ? 'rotate-180' : 'rotate-0')}
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                aria-hidden
+              >
+                <path d="M5.5 4.5L10 8l-4.5 3.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
             <span aria-hidden className="inline-flex items-center gap-1">
               <svg
                 className="h-4 w-4"
