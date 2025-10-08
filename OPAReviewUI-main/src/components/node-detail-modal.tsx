@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { ProcessedNode } from '@/domain/state-machine/processor';
 import { PolicyChatInterface } from './policy-chat-interface';
 import { useReview } from '@/context/review-context';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Icon } from './icon';
 import { createToastContent } from './toast-content';
@@ -114,7 +114,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
       contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
-• ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
+• ا��ملكية المب��شرة: الأسهم المملوكة باسم الشخص نفسه
 • الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
@@ -123,7 +123,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون ��لسيطرة من خلال ��سائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال ��سائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
