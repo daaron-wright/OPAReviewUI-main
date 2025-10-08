@@ -882,7 +882,7 @@ export function NodeDetailModal({
                   {usingChunkFallback && (
                     <p className="mb-3 text-xs text-slate-500">
                       {language === 'ar'
-                        ? 'يتم ��رض المقتطف باللغة الإنجليزية لعدم توفر مقتطف عربي حالياً.'
+                        ? 'يتم عرض المقتطف باللغة الإنجليزية لعدم توفر مقتطف عربي حالياً.'
                         : 'Showing English excerpt because an Arabic snippet is not yet available.'}
                     </p>
                   )}
