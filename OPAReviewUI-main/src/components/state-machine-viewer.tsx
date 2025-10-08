@@ -499,6 +499,24 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     }, {} as Record<JourneyTabId, ProcessedStateMachine>);
   }, [journeyTabs, stateMachine]);
 
+  const journeyNodeMap = useMemo(() => {
+    const map = new Map<JourneyTabId, string[]>();
+    journeyTabs.forEach((journey) => {
+      map.set(journey.id, []);
+    });
+
+    stateMachine.nodes.forEach((node) => {
+      node.journeyPaths.forEach((journeyId) => {
+        const target = map.get(journeyId as JourneyTabId);
+        if (target) {
+          target.push(node.id);
+        }
+      });
+    });
+
+    return map;
+  }, [journeyTabs, stateMachine.nodes]);
+
   const selectedJourneyGraph = selectedJourney ? journeyGraphs[selectedJourney] : undefined;
   const journeyNodes = selectedJourneyGraph?.nodes ?? [];
   const journeyEdges = selectedJourneyGraph?.edges ?? [];
@@ -562,6 +580,28 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
   const hasUploadedDocument = Boolean(policyDocument);
   const canDisplayGraph = stateMachine.nodes.length > 0;
+
+  const hasCompletedJourney = useMemo(() => {
+    if (!hasUploadedDocument) {
+      return false;
+    }
+
+    for (const journey of journeyTabs) {
+      const nodeIds = journeyNodeMap.get(journey.id) ?? [];
+      if (nodeIds.length === 0) {
+        continue;
+      }
+
+      const allReviewed = nodeIds.every((nodeId) => reviewStatus[nodeId]?.reviewed);
+      if (allReviewed) {
+        return true;
+      }
+    }
+
+    return false;
+  }, [hasUploadedDocument, journeyNodeMap, journeyTabs, reviewStatus]);
+
+  const canOpenDashboard = hasCompletedJourney;
 
   const nodeActorAssignments = useMemo(
     () => matchActorsToNodes(stateMachine.nodes, policyActors),
@@ -1453,8 +1493,20 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
           </button>
           <button
             type="button"
-            onClick={() => router.push('/dashboard')}
-            className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.45)] transition hover:bg-[#0c5f59]"
+            onClick={() => {
+              if (!canOpenDashboard) {
+                return;
+              }
+              router.push('/dashboard');
+            }}
+            disabled={!canOpenDashboard}
+            aria-disabled={!canOpenDashboard}
+            className={clsx(
+              'inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+              canOpenDashboard
+                ? 'bg-[#0f766e] text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.45)] hover:bg-[#0c5f59] focus-visible:ring-[#0f766e]/35'
+                : 'cursor-not-allowed bg-[#e8f0ec] text-slate-400 shadow-none focus-visible:ring-[#0f766e]/20'
+            )}
           >
             Open dashboard
           </button>
