@@ -1385,7 +1385,10 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeClick={handleNodeClick}
-        onInit={setReactFlowInstance}
+        onInit={handleGraphInit}
+        onMoveStart={handleViewportMoveStart}
+        onMove={handleViewportMove}
+        onMoveEnd={handleViewportMoveEnd}
         height={520}
         containerClassName="transition-all duration-500 ease-in-out"
       />
