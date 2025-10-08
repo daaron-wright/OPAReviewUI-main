@@ -229,6 +229,7 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
               const pageInfo = Array.isArray(pagesArabic) && pagesArabic.length > 0
                 ? `Page ${pagesArabic.join(', ')}`
                 : undefined;
+              const relevanceLabel = getRelevanceLabel(similarity);
               registerChunk(
                 'ar',
                 arabicText,
@@ -236,7 +237,7 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
                   referenceId: chunkId,
                   source: pageInfo,
                   section: pageInfo,
-                  tags: similarity ? [`similarity: ${similarity}`] : undefined,
+                  tags: relevanceLabel ? [relevanceLabel] : undefined,
                 }
               );
             }
@@ -249,6 +250,7 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
               const pageInfo = Array.isArray(pagesArabic) && pagesArabic.length > 0
                 ? `Page ${pagesArabic.join(', ')}`
                 : undefined;
+              const relevanceLabel = getRelevanceLabel(similarity);
               registerChunk(
                 'en',
                 englishText,
@@ -256,7 +258,7 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
                   referenceId: chunkId,
                   source: pageInfo,
                   section: pageInfo,
-                  tags: similarity ? [`similarity: ${similarity}`] : undefined,
+                  tags: relevanceLabel ? [relevanceLabel] : undefined,
                 }
               );
             }
