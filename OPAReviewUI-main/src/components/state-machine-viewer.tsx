@@ -477,14 +477,18 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   useEffect(() => () => clearWalkthroughTimers(), [clearWalkthroughTimers]);
 
   useEffect(() => {
+    const hasJourneyChanged = previousJourneyRef.current !== selectedJourney;
+    previousJourneyRef.current = selectedJourney;
+
     if (!journeyNodes.length) {
       setFocusedNodeId(null);
       return;
     }
-    if (!focusedNodeId || !journeyNodes.some((node) => node.id === focusedNodeId)) {
+
+    if (!focusedNodeId || (hasJourneyChanged && !journeyNodeIds.has(focusedNodeId))) {
       setFocusedNodeId(journeyNodes[0]?.id ?? null);
     }
-  }, [focusedNodeId, journeyNodes]);
+  }, [focusedNodeId, journeyNodeIds, journeyNodes, selectedJourney]);
 
   useEffect(() => {
     if (!focusedNodeId && nodeSequence.length > 0) {
