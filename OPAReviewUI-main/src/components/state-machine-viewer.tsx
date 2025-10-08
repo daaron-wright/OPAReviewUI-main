@@ -1345,16 +1345,16 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     [setReactFlowInstance]
   );
 
-  const handleViewportMoveStart = useCallback(() => {
+  const handleViewportMoveStart = useCallback((_: MouseEvent | TouchEvent | null) => {
     shouldAutoFitRef.current = false;
   }, []);
 
-  const handleViewportMove = useCallback((_: unknown, viewport: Viewport) => {
+  const handleViewportMove = useCallback((_: MouseEvent | TouchEvent | null, viewport: Viewport) => {
     shouldAutoFitRef.current = false;
     lastViewportRef.current = viewport;
   }, []);
 
-  const handleViewportMoveEnd = useCallback((_: unknown, viewport: Viewport) => {
+  const handleViewportMoveEnd = useCallback((_: MouseEvent | TouchEvent | null, viewport: Viewport) => {
     shouldAutoFitRef.current = false;
     lastViewportRef.current = viewport;
   }, []);
