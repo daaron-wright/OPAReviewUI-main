@@ -348,14 +348,14 @@ interface ImpactCardProps {
 
 function ImpactCard({ title, content, icon, color }: ImpactCardProps): JSX.Element {
   return (
-    <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-xl text-white/80">
+    <div className="rounded-xl border border-[#dbe9e3] bg-white p-4 shadow-sm">
+      <div className="mb-2 flex items-center gap-2">
+        <span className="text-xl text-[#0f766e]">
           <Icon name={icon} className="h-5 w-5" />
         </span>
         <h4 className={`font-semibold ${color}`}>{title}</h4>
       </div>
-      <p className="text-slate-300 text-sm">{content}</p>
+      <p className="text-sm text-slate-600">{content}</p>
     </div>
   );
 }
