@@ -11,6 +11,7 @@ import { UploadedPolicyDocument } from '@/context/review-context';
 interface JourneySummaryPanelProps {
   readonly item: TimelineNodeItem | null;
   readonly metadata: ProcessedStateMachine['metadata'];
+  readonly journeyTotals: ReadonlyArray<{ id: string; label: string; total: number }>;
   readonly isWalkthroughMode: boolean;
   readonly onStartWalkthrough: () => void;
   readonly onExitWalkthrough: () => void;
