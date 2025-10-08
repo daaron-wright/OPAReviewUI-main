@@ -36,34 +36,7 @@ export function ConflictDetailModal({
     { id: 'resolution', label: 'Resolution Actions', icon: 'bolt' },
   ];
 
-  const severityTokens = {
-    critical: {
-      container: 'border-rose-200 shadow-[0_24px_48px_-30px_rgba(225,29,72,0.32)]',
-      badge: 'border-rose-200 bg-rose-50 text-rose-600',
-      indicator: 'bg-rose-500',
-      iconWrap: 'border-rose-200 bg-rose-50 text-rose-600',
-    },
-    high: {
-      container: 'border-amber-200 shadow-[0_24px_48px_-30px_rgba(217,119,6,0.28)]',
-      badge: 'border-amber-200 bg-amber-50 text-amber-600',
-      indicator: 'bg-amber-500',
-      iconWrap: 'border-amber-200 bg-amber-50 text-amber-600',
-    },
-    medium: {
-      container: 'border-sky-200 shadow-[0_24px_48px_-30px_rgba(14,165,233,0.25)]',
-      badge: 'border-sky-200 bg-sky-50 text-sky-600',
-      indicator: 'bg-sky-500',
-      iconWrap: 'border-sky-200 bg-sky-50 text-sky-600',
-    },
-    low: {
-      container: 'border-emerald-200 shadow-[0_24px_48px_-30px_rgba(16,185,129,0.25)]',
-      badge: 'border-emerald-200 bg-emerald-50 text-emerald-600',
-      indicator: 'bg-emerald-500',
-      iconWrap: 'border-emerald-200 bg-emerald-50 text-emerald-600',
-    },
-  } as const;
-
-  const severityVisual = severityTokens[conflict.severity];
+  const severityVisual = CONFLICT_SEVERITY_TOKENS[conflict.severity];
   const metadataItems = [
     { label: 'ID', value: conflict.id },
     { label: 'Detected', value: new Date(conflict.detectedAt).toLocaleDateString() },
