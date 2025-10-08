@@ -161,6 +161,29 @@
       "routine1_eligibility_check": {
         "type": "process",
         "description": "Check eligibility requirements",
+        "journey_paths": [
+          "new_registration"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Confirms legal form, ownership thresholds, and beneficiary declarations for new applicants per BRD 4.3 \"Eligibility Criteria for New Licenses\".",
+            "reference_id": "brd_section_4_3",
+            "tags": [
+              "eligibility",
+              "new_registration"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يؤكد الشكل القانوني، وحدود الملكية، وإقرارات المستفيدين للمتقدمين الجدد وفق الفقرة 4.3 «معايير الأهلية للرخص الجديدة».",
+            "reference_id": "brd_section_4_3",
+            "tags": [
+              "eligibility",
+              "new_registration"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "eligibility_check == true",
