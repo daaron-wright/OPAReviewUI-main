@@ -45,88 +45,6 @@ interface DisplayChunk {
   tags?: string[];
 }
 
-const BRD_REFERENCE_SOURCE: BRDReferences = {
-  documentVersion: 'v2.3.1',
-  lastUpdated: '2024-01-15',
-  approvedBy: 'Director of Digital Transformation',
-  approvedByAr: '��دير التحول الرقمي',
-  sections: [
-    {
-      id: 'brd_section_identity',
-      ruleId: 'rule_1',
-      page: 18,
-      section: '4.2.1',
-      title: 'Digital Identity Verification Requirements',
-      titleAr: 'متطلبات الت��قق من الهوية الرقمية',
-      location: 'Chapter 4: Core Business Rules',
-      locationAr: 'الفصل 4: قواعد الأعم��ل الأساسية',
-      content: `The system SHALL verify the digital identity level of all applicants prior to processing any beneficiary declaration. Acceptable verification levels include SOP2 (Smart Pass Level 2) and SOP3 (Smart Pass Level 3) as defined by the UAE Digital Identity Authority.
-
-Key Requirements:
-• Applicants with SOP1 verification SHALL be rejected with appropriate messaging
-• Business entities MUST have at least one authorized signatory with SOP3 level
-• Individual applicants MAY proceed with SOP2 if they have completed additional KYC verification
-• System SHALL log all verification attempts with timestamps and outcomes
-
-Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلا�� للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المست��ى الثاني للبطاقة الذكية) و SOP3 (المست��ى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
-
-المتطلبات الرئيسية:
-��� يجب رفض ا��متقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
-• يجب أن يكون لل��يانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
-• قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
-• يجب على النظا�� تسجيل ج��يع مح��ولات التحقق مع الطوابع الز��نية وا��نتائج
-
-المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
-      tags: ['Compliance', 'Security', 'Mandatory']
-    },
-    {
-      id: 'brd_section_beneficial_ownership',
-      ruleId: 'rule_2',
-      page: 42,
-      section: '5.1.2',
-      title: 'Beneficiary Ownership Thresholds',
-      titleAr: 'حدود ملكية المستفيد',
-      location: 'Chapter 5: Declaration Requirements',
-      locationAr: 'الفصل 5: متطلبات الإعلان',
-      content: `Any natural person who directly or indirectly owns or controls 25% or more of the capital or voting rights SHALL be declared as a beneficial owner.
-
-Calculation Rules:
-• Direct ownership: Shares held in the person's own name
-• Indirect ownership: Shares held through intermediate entities (calculated proportionally)
-• Control assessment: Voting rights, veto powers, or appointment rights
-• Special consideration for trust structures and nominee arrangements
-
-Example Calculation:
-If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
-Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
-
-Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
-      contentAr: `يجب الإع��ان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق ال��صويت كمست��يد حقيقي.
-
-قواعد الحساب:
-• ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
-• الملكية غير المباشر��: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
-• ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
-• اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
-
-مثال ��لى الحساب:
-إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
-ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
-
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��س��ن السيطرة من خلال ��سائل أخرى.`,
-      tags: ['Legal', 'Calculation', 'Critical']
-    }
-  ],
-  stakeholders: ['Legal Team', 'Compliance Officer', 'Product Owner', 'Risk Management Head'],
-  complianceFrameworks: ['UAE AML/CFT Regulations', 'FATF Recommendations', 'Basel III Framework']
-};
-
-// Mock BRD references - with bilingual content for our international Master Jedi
-const getMockBRDReferences = (): BRDReferences => ({
-  ...BRD_REFERENCE_SOURCE,
-  sections: BRD_REFERENCE_SOURCE.sections.map((section) => ({ ...section }))
-});
 
 const JOURNEY_LABEL_MAP = {
   new_trade_name: {
@@ -1048,7 +966,7 @@ export function NodeDetailModal({
                   </h3>
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                  {language === 'ar' ? 'الإصدار' : 'Version'} {brdReferences.documentVersion} •
+                  {language === 'ar' ? 'الإصدار' : 'Version'} {brdReferences.documentVersion} ���
                   {language === 'ar' ? ' آخر تحديث: ' : ' Last Updated: '} {brdReferences.lastUpdated}
                 </p>
               </div>
