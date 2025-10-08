@@ -18,8 +18,8 @@ export async function fetchPolicyActors(signal?: AbortSignal): Promise<PolicyAct
     headers: {
       Accept: 'application/json',
     },
-    signal,
     cache: 'no-store',
+    ...(signal ? { signal } : {}),
   });
 
   if (!response.ok) {
@@ -50,12 +50,17 @@ function normalisePolicyActor(item: unknown, index: number): PolicyActor {
   const id = extractId(record, index);
   const attributes = extractAttributes(record);
 
-  return {
+  const actor: PolicyActor = {
     id,
     label,
-    summary,
     attributes,
   };
+
+  if (summary) {
+    Object.assign(actor, { summary });
+  }
+
+  return actor;
 }
 
 function extractId(record: Record<string, unknown>, index: number): string {
