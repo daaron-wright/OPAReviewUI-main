@@ -774,25 +774,18 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
       if (fitViewRafRef.current !== null) {
         window.cancelAnimationFrame(fitViewRafRef.current);
-        fitViewRafRef.current = null;
       }
 
-      const queueFitView = () => {
-        const nextOptions: FitViewOptions = {
-          padding: 0.2,
-          duration: options?.duration,
-          includeHiddenNodes: options?.includeHiddenNodes,
-          maxZoom: options?.maxZoom,
-          minZoom: options?.minZoom,
-        };
-
-        fitViewRafRef.current = window.requestAnimationFrame(() => {
-          reactFlowInstance.fitView(nextOptions);
-          fitViewRafRef.current = null;
-        });
+      const nextOptions: FitViewOptions = {
+        padding: 0.2,
+        duration: 600,
+        ...(options ?? {}),
       };
 
-      fitViewRafRef.current = window.requestAnimationFrame(queueFitView);
+      fitViewRafRef.current = window.requestAnimationFrame(() => {
+        reactFlowInstance.fitView(nextOptions);
+        fitViewRafRef.current = null;
+      });
     },
     [reactFlowInstance]
   );
