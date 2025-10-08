@@ -55,7 +55,7 @@ export function ConflictDetailModal({
               </div>
               <div>
                 <h2 className="text-2xl font-semibold">{conflict.title}</h2>
-                <p className="mt-1 text-sm text-white/85">{conflict.description}</p>
+                <p className="mt-1 text-sm text-white/80">{conflict.description}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-white/80">
                   <span>ID: {conflict.id}</span>
                   <span>Detected: {new Date(conflict.detectedAt).toLocaleDateString()}</span>
