@@ -1,4 +1,5 @@
 import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import clsx from 'clsx';
 import ReactFlow, {
   Background,
@@ -11,6 +12,9 @@ import ReactFlow, {
   NodeMouseHandler,
   NodeTypes,
   OnEdgesChange,
+  OnMove,
+  OnMoveEnd,
+  OnMoveStart,
   OnNodesChange,
   ReactFlowInstance,
   ReactFlowProvider,
@@ -49,6 +53,9 @@ export interface GraphCanvasProps {
   onEdgesChange: OnEdgesChange;
   onNodeClick?: NodeMouseHandler;
   onInit?: (instance: ReactFlowInstance) => void;
+  onMove?: OnMove;
+  onMoveStart?: OnMoveStart;
+  onMoveEnd?: OnMoveEnd;
   containerClassName?: string;
   graphClassName?: string;
   height?: number | string;
@@ -75,6 +82,9 @@ export function GraphCanvas({
   onEdgesChange,
   onNodeClick,
   onInit,
+  onMove,
+  onMoveStart,
+  onMoveEnd,
   containerClassName,
   graphClassName,
   height = 520,
@@ -112,6 +122,9 @@ export function GraphCanvas({
           onNodeClick={onNodeClick}
           nodeTypes={resolvedNodeTypes}
           onInit={onInit}
+          onMove={onMove}
+          onMoveStart={onMoveStart}
+          onMoveEnd={onMoveEnd}
           fitView={fitView}
           fitViewOptions={resolvedFitViewOptions}
           attributionPosition="bottom-left"
