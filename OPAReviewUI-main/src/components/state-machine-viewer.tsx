@@ -417,6 +417,10 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [hasUploadedDocument, journeyNodeIds, stateMachine.nodes]);
 
   const initialEdges = useMemo(() => {
+    if (!hasUploadedDocument) {
+      return [];
+    }
+
     const initialId = stateMachine.nodes.find((n) => n.isInitial)?.id;
     return stateMachine.edges.map((edge) => {
       const isJourneyEdge = journeyEdgeIds.has(edge.id);
@@ -444,7 +448,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
         },
       };
     });
-  }, [journeyEdgeIds, stateMachine.edges, stateMachine.nodes]);
+  }, [hasUploadedDocument, journeyEdgeIds, stateMachine.edges, stateMachine.nodes]);
 
   const getNodeDOMPosition = useCallback((nodeId: string) => {
     const nodeElement = document.querySelector(`[data-id="${nodeId}"]`);
