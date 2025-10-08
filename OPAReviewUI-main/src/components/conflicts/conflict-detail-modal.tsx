@@ -35,28 +35,28 @@ export function ConflictDetailModal({
   ];
 
   const severityColors = {
-    critical: 'from-red-600 to-red-800',
-    high: 'from-orange-600 to-orange-800',
-    medium: 'from-yellow-600 to-yellow-800',
-    low: 'from-blue-600 to-blue-800'
+    critical: 'from-rose-500 to-rose-600',
+    high: 'from-amber-400 to-amber-500',
+    medium: 'from-sky-400 to-sky-500',
+    low: 'from-emerald-400 to-emerald-500',
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-6xl max-h-[90vh] bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="relative w-full max-w-6xl max-h-[90vh] rounded-[28px] border border-[#dbe9e3] bg-white text-slate-900 shadow-[0_35px_60px_-40px_rgba(15,118,110,0.45)] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className={`bg-gradient-to-r ${severityColors[conflict.severity]} p-6`}>
+        <div className={`bg-gradient-to-r ${severityColors[conflict.severity]} p-6 text-white`}>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">{conflict.title}</h2>
-                <p className="text-white/80 text-sm mt-1">{conflict.description}</p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-white/70">
+                <h2 className="text-2xl font-semibold">{conflict.title}</h2>
+                <p className="mt-1 text-sm text-white/85">{conflict.description}</p>
+                <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-white/80">
                   <span>ID: {conflict.id}</span>
                   <span>Detected: {new Date(conflict.detectedAt).toLocaleDateString()}</span>
                   <span>Confidence: {conflict.conflictDetails.confidence}%</span>
@@ -75,15 +75,15 @@ export function ConflictDetailModal({
         </div>
 
         {/* Navigation Tabs */}
-        <nav className="flex bg-slate-800 border-b border-slate-700">
+        <nav className="flex border-b border-[#dbe9e3] bg-[#f6fbf9]">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 px-4 py-3 font-medium transition-colors flex items-center justify-center gap-2 ${
                 activeTab === tab.id
-                  ? 'bg-slate-700 text-white border-b-2 border-red-500'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                  ? 'bg-white text-[#0f766e] border-b-2 border-[#0f766e]'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-white'
               }`}
             >
               <Icon name={tab.icon} className="h-4 w-4" />
@@ -93,7 +93,7 @@ export function ConflictDetailModal({
         </nav>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto bg-[#f9fbfa] p-6">
           {activeTab === 'overview' && <OverviewTab conflict={conflict} />}
           {activeTab === 'technical' && <TechnicalTab conflict={conflict} />}
           {activeTab === 'workflow' && <WorkflowTab workflow={workflow} />}
