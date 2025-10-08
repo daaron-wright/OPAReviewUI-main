@@ -52,6 +52,249 @@ interface JourneyTabConfig {
 
 const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
 
+const MIN_ACTOR_SCORE = 3;
+
+const TOKEN_EXPANSIONS: Record<string, string[]> = {
+  edd: ['enhanced', 'due', 'diligence'],
+  aml: ['anti', 'money', 'laundering'],
+  kyc: ['know', 'your', 'customer'],
+  ubo: ['beneficial', 'owner'],
+  brd: ['business', 'requirements', 'document'],
+  opa: ['open', 'policy', 'agent'],
+};
+
+const ALIAS_IGNORED_TOKENS = new Set([
+  'team',
+  'system',
+  'employee',
+  'staff',
+  'officer',
+  'representative',
+  'committee',
+  'management',
+  'unit',
+  'department',
+  'platform',
+  'provider',
+  'group',
+  'user',
+]);
+
+function tokenizeToSet(value: string, target: Set<string>): void {
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .forEach((token) => {
+      const trimmed = token.trim();
+      if (trimmed.length >= 3) {
+        target.add(trimmed);
+      }
+    });
+}
+
+function addTokens(value: string | undefined | null, target: Set<string>): void {
+  if (!value) {
+    return;
+  }
+  tokenizeToSet(value.replace(/[_/]+/g, ' '), target);
+}
+
+function expandTokenSet(tokens: Set<string>): void {
+  const additions: string[] = [];
+  tokens.forEach((token) => {
+    const expansions = TOKEN_EXPANSIONS[token];
+    if (expansions) {
+      expansions.forEach((expansion) => {
+        const normalized = expansion.toLowerCase();
+        if (!tokens.has(normalized)) {
+          additions.push(normalized);
+        }
+      });
+    }
+  });
+  additions.forEach((token) => tokens.add(token));
+}
+
+interface ActorProfile {
+  readonly actor: PolicyActor;
+  readonly tokens: Set<string>;
+  readonly phrases: Set<string>;
+  readonly labelLower: string;
+  readonly summaryLower?: string;
+}
+
+function createActorProfile(actor: PolicyActor): ActorProfile {
+  const tokens = new Set<string>();
+  addTokens(actor.label, tokens);
+  if (actor.summary) {
+    addTokens(actor.summary, tokens);
+  }
+  actor.attributes.forEach((attribute) => {
+    addTokens(attribute.key, tokens);
+    addTokens(attribute.value, tokens);
+  });
+  expandTokenSet(tokens);
+
+  const labelTokenSet = new Set<string>();
+  addTokens(actor.label, labelTokenSet);
+  const labelTokens = Array.from(labelTokenSet);
+
+  const phrases = new Set<string>();
+  if (labelTokens.length >= 2) {
+    for (let length = Math.min(3, labelTokens.length); length >= 2; length -= 1) {
+      for (let index = 0; index <= labelTokens.length - length; index += 1) {
+        const phrase = labelTokens.slice(index, index + length).join(' ');
+        if (phrase.length >= 5) {
+          phrases.add(phrase);
+        }
+      }
+    }
+  }
+
+  const aliasBaseTokens = labelTokens.filter((token) => !ALIAS_IGNORED_TOKENS.has(token));
+  if (aliasBaseTokens.length >= 2) {
+    const acronym = aliasBaseTokens.map((token) => token.charAt(0)).join('');
+    if (acronym.length >= 2) {
+      phrases.add(acronym.toLowerCase());
+    }
+  }
+  aliasBaseTokens.forEach((token) => {
+    const expansions = TOKEN_EXPANSIONS[token];
+    expansions?.forEach((expansion) => {
+      const normalized = expansion.toLowerCase();
+      if (normalized.length >= 3) {
+        phrases.add(normalized);
+      }
+    });
+  });
+
+  const labelLower = actor.label.toLowerCase();
+  phrases.add(labelLower);
+  const summaryLower = actor.summary?.toLowerCase();
+
+  return { actor, tokens, phrases, labelLower, summaryLower };
+}
+
+function buildNodeContext(node: ProcessedNode): string {
+  const parts: string[] = [];
+  const push = (value?: string | null) => {
+    if (value && value.trim().length > 0) {
+      parts.push(value.replace(/[_/]+/g, ' '));
+    }
+  };
+
+  push(node.id);
+  push(node.label);
+  push(node.description);
+
+  if (node.metadata.controlAttribute) {
+    push(node.metadata.controlAttribute);
+  }
+
+  (node.metadata.controlAttributes ?? []).forEach(push);
+  (node.metadata.functions ?? []).forEach(push);
+  (node.metadata.transitions ?? []).forEach((transition) => {
+    push(transition.action);
+    push(transition.condition);
+    push(transition.target);
+  });
+  node.journeyPaths.forEach(push);
+
+  return parts.join(' ').toLowerCase();
+}
+
+function buildNodeTokens(node: ProcessedNode): Set<string> {
+  const tokens = new Set<string>();
+  addTokens(node.id, tokens);
+  addTokens(node.label, tokens);
+  addTokens(node.description, tokens);
+  if (node.metadata.controlAttribute) {
+    addTokens(node.metadata.controlAttribute, tokens);
+  }
+  (node.metadata.controlAttributes ?? []).forEach((attribute) => addTokens(attribute, tokens));
+  (node.metadata.functions ?? []).forEach((fn) => addTokens(fn, tokens));
+  (node.metadata.transitions ?? []).forEach((transition) => {
+    addTokens(transition.action, tokens);
+    addTokens(transition.condition, tokens);
+    addTokens(transition.target, tokens);
+  });
+  node.journeyPaths.forEach((journey) => addTokens(journey, tokens));
+  expandTokenSet(tokens);
+  return tokens;
+}
+
+function matchActorsToNodes(
+  nodes: ReadonlyArray<ProcessedNode>,
+  actors: ReadonlyArray<PolicyActor>
+): Map<string, ReadonlyArray<NodeActorSummary>> {
+  const assignments = new Map<string, ReadonlyArray<NodeActorSummary>>();
+  if (!nodes.length || !actors.length) {
+    return assignments;
+  }
+
+  const actorProfiles = actors.map((actor) => createActorProfile(actor));
+
+  nodes.forEach((node) => {
+    const nodeContext = buildNodeContext(node);
+    if (!nodeContext) {
+      return;
+    }
+    const nodeTokens = buildNodeTokens(node);
+
+    const matches: Array<{ actor: PolicyActor; score: number }> = [];
+
+    actorProfiles.forEach((profile) => {
+      let score = 0;
+
+      if (profile.labelLower && nodeContext.includes(profile.labelLower)) {
+        score += 8;
+      }
+      if (profile.summaryLower && nodeContext.includes(profile.summaryLower)) {
+        score += 3;
+      }
+
+      profile.phrases.forEach((phrase) => {
+        if (phrase && nodeContext.includes(phrase)) {
+          score += phrase.length >= 6 ? 3 : 2;
+        }
+      });
+
+      profile.tokens.forEach((token) => {
+        if (nodeTokens.has(token)) {
+          score += token.length >= 6 ? 2 : 1;
+        }
+      });
+
+      if (score >= MIN_ACTOR_SCORE) {
+        matches.push({ actor: profile.actor, score });
+      }
+    });
+
+    if (matches.length === 0) {
+      return;
+    }
+
+    matches.sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      return a.actor.label.localeCompare(b.actor.label);
+    });
+
+    const selected = matches.slice(0, 4).map((match) => ({
+      id: match.actor.id,
+      label: match.actor.label,
+      summary: match.actor.summary,
+      confidence: Math.min(1, match.score / 12),
+    }));
+
+    assignments.set(node.id, selected);
+  });
+
+  return assignments;
+}
+
 function formatJourneyTitle(journeyId: string): string {
   return journeyId
     .split(/[-_]/g)
