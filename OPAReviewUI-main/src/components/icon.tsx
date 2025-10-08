@@ -324,6 +324,18 @@ const ICONS: Record<IconName, IconRenderer> = {
       />
     </svg>
   ),
+  arrowUp: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M12 19V7" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M6.5 12.5 12 7l5.5 5.5" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
   save: ({ className, strokeWidth = 1.8 }) => (
     <svg
       className={clsx('h-5 w-5 stroke-current', className)}
