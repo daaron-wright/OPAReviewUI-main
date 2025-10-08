@@ -725,6 +725,19 @@
           "request_vip_approval"
         ]
       },
+      "alert_screening_record_reason": {
+        "type": "process",
+        "description": "Record justification for clearing an alert",
+        "transitions": [
+          {
+            "condition": "record_logged == true",
+            "target": "alert_screening_complete",
+            "action": "log_negative_alert_outcome",
+            "source": "alert_screening_record_reason",
+            "control_attribute": "record_logged"
+          }
+        ]
+      },
       "alert_screening_blacklist_block": {
         "type": "process",
         "description": "Block application due to blacklist hit",
