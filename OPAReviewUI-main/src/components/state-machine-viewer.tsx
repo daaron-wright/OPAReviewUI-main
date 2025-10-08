@@ -1028,7 +1028,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
             onClick={handleOverlayUploadClick}
             className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.45)] transition hover:bg-[#0c5f59]"
           >
-            <Icon name="paperclip" className="h-4 w-4" />
+            <Icon name="arrowUp" className="h-4 w-4" />
             BRD Policy Upload
           </button>
         </div>
