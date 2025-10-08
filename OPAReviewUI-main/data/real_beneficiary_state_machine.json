@@ -230,6 +230,29 @@
       "routine1_collect_trade_name_data": {
         "type": "process",
         "description": "Collect new trade name data",
+        "journey_paths": [
+          "new_registration"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Collects proposed trade name details and reservation evidence to complete new registration dossiers, reflecting BRD 5.2 \"Trade Name Data Capture\".",
+            "reference_id": "brd_section_5_2",
+            "tags": [
+              "trade_name",
+              "data_collection"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يجمع تفاصيل الاسم التجاري المقترح وأدلة الحجز لاستكمال ملف التسجيل الجديد، بما ينسجم مع الفقرة 5.2 «جمع بيانات الاسم التجاري».",
+            "reference_id": "brd_section_5_2",
+            "tags": [
+              "trade_name",
+              "data_collection"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "trade_name_data_collected == true",
