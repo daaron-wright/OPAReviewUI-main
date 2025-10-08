@@ -791,7 +791,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'سم��ت التحكم وقيم الانتقال ل��ذه العقدة.'
+                          ? 'سم��ت التحكم وقيم ا��انتقال ل��ذه العقدة.'
                           : 'Control attributes and transition values for this node.'}
                       </p>
                     </div>
@@ -1079,16 +1079,6 @@ export function NodeDetailModal({
                           onClick={() => {
                             const newExpanded = expandedRule === rule.id ? null : rule.id;
                             setExpandedRule(newExpanded);
-
-                            const linkedSection = brdReferences.sections.find((section) => section.ruleId === rule.id);
-
-                            if (newExpanded && linkedSection) {
-                              setExpandedBRDSection(linkedSection.id);
-                            }
-
-                            if (!newExpanded && linkedSection && expandedBRDSection === linkedSection.id) {
-                              setExpandedBRDSection(null);
-                            }
                           }}
                           className="w-full bg-[#f9fbfa] px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
                         >
