@@ -125,7 +125,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال ��لى الحساب:
-إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
+إذا كان الشخص أ يمتلك 60�� من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال ��سائل أخرى.`,
@@ -141,6 +141,21 @@ const getMockBRDReferences = (): BRDReferences => ({
   ...BRD_REFERENCE_SOURCE,
   sections: BRD_REFERENCE_SOURCE.sections.map((section) => ({ ...section }))
 });
+
+const JOURNEY_LABEL_MAP = {
+  new_registration: {
+    en: 'Path 1 · New Registration',
+    ar: 'المسار 1 · التسجيل الجديد',
+  },
+  update_compliance: {
+    en: 'Path 2 · Update / Compliance',
+    ar: 'المسار 2 · التحديث / الامتثال',
+  },
+  fast_track: {
+    en: 'Path 3 · Fast-Track',
+    ar: 'المسار 3 · المسار السريع',
+  },
+} as const;
 
 // Mock Rego rules - because Master Jedi needs to see the styling
 const getMockRegoRules = (): RegoRule[] => [
@@ -808,7 +823,7 @@ export function NodeDetailModal({
                     ? 'إخفاء قواعد السياسة'
                     : 'Hide Policy Rules'
                   : language === 'ar'
-                    ? 'عرض قواعد السياسة'
+                    ? 'عرض ��واعد السياسة'
                     : 'View Policy Rules'}
               </span>
             </button>
@@ -1186,7 +1201,7 @@ export function NodeDetailModal({
                                         onClick={() => confirmRule(rule.id)}
                                         className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/30 hover:bg-[#e4f5f1]"
                                       >
-                                        {language === 'ar' ? 'تأكيد' : 'Mark as Confirmed'}
+                                        {language === 'ar' ? 'تأكي��' : 'Mark as Confirmed'}
                                       </button>
                                     </div>
                                   )}
@@ -1233,7 +1248,7 @@ export function NodeDetailModal({
                                   className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
                                 >
                                   <Icon name="flask" className="h-4 w-4 text-white" />
-                                  {language === 'ar' ? 'تش��ي�� حالة الاختبار' : 'Run Test Case'}
+                                  {language === 'ar' ? 'تش��يل حالة الاختبار' : 'Run Test Case'}
                                 </button>
                                 <button
                                   onClick={() => approveRule(rule.id)}
