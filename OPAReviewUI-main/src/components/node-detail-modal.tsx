@@ -126,7 +126,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 مثال ��لى الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
-ملكية الشخص أ غ��ر المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
+ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال ��سائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
@@ -704,6 +704,17 @@ export function NodeDetailModal({
                     <span className="h-1.5 w-1.5 rounded-full bg-current/70" />
                     {node.type}
                   </span>
+                  {journeyChipData.map((journey) => (
+                    <span
+                      key={journey.id}
+                      className="inline-flex items-center gap-1 rounded-full bg-[#0f766e]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]"
+                    >
+                      <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 16 16">
+                        <path d="M2.5 12.5 6 9l2 2 5-5" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      {journey.label}
+                    </span>
+                  ))}
                   {node.isInitial && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-[#effaf6] px-3 py-1 text-[11px] font-semibold uppercase text-[#0f766e]">
                       <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 16 16">
@@ -859,7 +870,7 @@ export function NodeDetailModal({
                     ? 'إخفاء قواعد السياسة'
                     : 'Hide Policy Rules'
                   : language === 'ar'
-                    ? 'عرض قواعد السيا��ة'
+                    ? 'عر�� قواعد السياسة'
                     : 'View Policy Rules'}
               </span>
             </button>
