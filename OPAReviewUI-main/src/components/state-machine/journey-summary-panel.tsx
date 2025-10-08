@@ -579,7 +579,9 @@ export function JourneySummaryPanel({
             <div>
               <h3 className="text-sm font-semibold text-slate-900">Publication readiness</h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                {progress.approved} approved · {progress.reviewed - progress.approved} pending · {progress.rejected} flagged
+                {hasDocument
+                  ? `${progress.approved} approved · ${pendingCount} pending · ${progress.rejected} flagged`
+                  : 'Upload the BRD policy document to unlock publication readiness insights.'}
               </p>
             </div>
           </header>
