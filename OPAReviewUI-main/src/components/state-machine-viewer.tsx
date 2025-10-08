@@ -876,6 +876,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
     if (lastViewportRef.current) {
       reactFlowInstance.setViewport(lastViewportRef.current);
+      storeViewport();
     }
   }, [journeyNodes.length, scheduleFitView, reactFlowInstance, selectedJourney, isGraphExpanded]);
 
