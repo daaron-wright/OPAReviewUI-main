@@ -48,6 +48,7 @@ interface JourneySummaryPanelProps {
 export function JourneySummaryPanel({
   item,
   metadata,
+  journeyTotals,
   isWalkthroughMode,
   onStartWalkthrough,
   onExitWalkthrough,
