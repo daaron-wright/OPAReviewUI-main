@@ -915,7 +915,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'سم��ت التحكم وقيم الانتقال لهذه العقدة.'
+                          ? 'سم��ت التحكم وقيم الانتقال ل��ذه العقدة.'
                           : 'Control attributes and transition values for this node.'}
                       </p>
                     </div>
@@ -1588,12 +1588,12 @@ function formatAttributeName(value: string): string {
 
 function formatConditionOutcome(condition: string): string {
   const equalityMatch = condition.match(/==\s*['"]?([\w-]+)['"]?/);
-  if (equalityMatch) {
+  if (equalityMatch && equalityMatch[1]) {
     return equalityMatch[1];
   }
 
   const booleanMatch = condition.match(/\b(true|false)\b/i);
-  if (booleanMatch) {
+  if (booleanMatch && booleanMatch[1]) {
     return booleanMatch[1].toLowerCase();
   }
 
