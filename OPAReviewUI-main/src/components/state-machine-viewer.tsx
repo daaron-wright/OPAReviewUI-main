@@ -74,20 +74,20 @@ function deriveJourneyTabs(machine: ProcessedStateMachine): JourneyTabConfig[] {
 
   return [
     {
-      id: 'new_registration',
-      label: 'New Registration Flow',
+      id: 'new_trade_name',
+      label: 'New Trade Name',
       seedStates: ['entry_point', 'customer_application_type_selection'],
       pathStates: [],
     },
     {
-      id: 'update_compliance',
-      label: 'Update / Compliance Flow',
+      id: 'existing_trade_name',
+      label: 'Existing Trade Name',
       seedStates: ['entry_point', 'customer_application_type_selection'],
       pathStates: [],
     },
     {
-      id: 'fast_track',
-      label: 'Fast-Track / Linked Trade Name Flow',
+      id: 'existing_trade_license',
+      label: 'Existing Trade License',
       seedStates: ['entry_point', 'customer_application_type_selection'],
       pathStates: [],
     },
