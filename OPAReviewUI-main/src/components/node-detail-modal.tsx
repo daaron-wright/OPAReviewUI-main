@@ -86,8 +86,8 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلا�� للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المست��ى الثاني للبطاقة الذكية) و SOP3 (المست��ى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
-��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
-• يج�� أن يكون لل��يانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
+��� يجب رفض ا��متقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
+• يجب أن يكون لل��يانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
 • يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الز��نية وا��نتائج
 
@@ -125,7 +125,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
 مثال ��لى الحساب:
-إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من ا��كيان المسته��ف:
+إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
 ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��س��ن السيطرة من خلال ��سائل أخرى.`,
@@ -652,7 +652,6 @@ export function NodeDetailModal({
 
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
-  const _nodeFunctions = node.metadata?.functions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
 
   const sectionsToDisplay = relevantBrdSections.length > 0 ? relevantBrdSections : brdReferences.sections;
@@ -895,7 +894,7 @@ export function NodeDetailModal({
                     ? 'إخفاء قواعد السياسة'
                     : 'Hide Policy Rules'
                   : language === 'ar'
-                    ? 'عرض قواعد الس��اسة'
+                    ? 'عرض قواعد السياسة'
                     : 'View Policy Rules'}
               </span>
             </button>
@@ -1007,7 +1006,7 @@ export function NodeDetailModal({
                   {usingChunkFallback && (
                     <p className="mb-3 text-xs text-slate-500">
                       {language === 'ar'
-                        ? 'يتم عرض المقتطف باللغة الإنجليزية لعدم توفر مقتطف عربي حالياً.'
+                        ? 'يتم ��رض المقتطف باللغة الإنجليزية لعدم توفر مقتطف عربي حالياً.'
                         : 'Showing English excerpt because an Arabic snippet is not yet available.'}
                     </p>
                   )}
