@@ -21,6 +21,42 @@ export interface StateFunction {
   readonly returns?: string | ReadonlyArray<string>;
 }
 
+export interface RelevantChunk {
+  readonly id?: string;
+  readonly language: string;
+  readonly text: string;
+  readonly referenceId?: string;
+  readonly reference_id?: string;
+  readonly source?: string;
+  readonly tags?: ReadonlyArray<string>;
+  readonly section?: string;
+  readonly sectionLabel?: string;
+  readonly section_label?: string;
+}
+
+export interface JourneyDefinition {
+  readonly id: string;
+  readonly label?: string;
+  readonly name?: string;
+  readonly intent?: string;
+  readonly exampleScenario?: string;
+  readonly example_scenario?: string;
+  readonly suggestedJourney?: string;
+  readonly suggested_journey?: string;
+  readonly description?: string;
+  readonly summary?: string;
+  readonly conditionKeywords?: ReadonlyArray<string>;
+  readonly condition_keywords?: ReadonlyArray<string>;
+  readonly seedStates?: ReadonlyArray<string>;
+  readonly seed_states?: ReadonlyArray<string>;
+  readonly entryStates?: ReadonlyArray<string>;
+  readonly entry_states?: ReadonlyArray<string>;
+  readonly routinePrefixes?: ReadonlyArray<string>;
+  readonly routine_prefixes?: ReadonlyArray<string>;
+  readonly pathStates?: ReadonlyArray<string>;
+  readonly path_states?: ReadonlyArray<string>;
+}
+
 export interface State {
   readonly type: StateType;
   readonly description: string;
@@ -32,6 +68,10 @@ export interface State {
   readonly control_attribute?: string;
   readonly controlAttributes?: ReadonlyArray<string>;
   readonly control_attributes?: ReadonlyArray<string>;
+  readonly relevantChunks?: ReadonlyArray<RelevantChunk> | Record<string, unknown>;
+  readonly relevant_chunks?: ReadonlyArray<RelevantChunk> | Record<string, unknown>;
+  readonly journeyPaths?: ReadonlyArray<string> | string;
+  readonly journey_paths?: ReadonlyArray<string> | string;
 }
 
 export interface StateMachineMetadata {
@@ -68,4 +108,6 @@ export interface StateMachine {
   readonly riskMatrix?: RiskCategory;
   readonly exemptionRules?: unknown;
   readonly metadata?: StateMachineMetadata;
+  readonly journeys?: ReadonlyArray<JourneyDefinition>;
+  readonly journeyDefinitions?: ReadonlyArray<JourneyDefinition>;
 }
