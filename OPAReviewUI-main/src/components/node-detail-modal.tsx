@@ -53,13 +53,13 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقب��لة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
-• يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
+• يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الزمنية والنتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
       tags: ['Compliance', 'Security', 'Mandatory']
@@ -563,9 +563,53 @@ export function NodeDetailModal({
             </div>
           </div>
         </div>
-        
+
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e2ede8] bg-white/90 px-6 py-4">
+          <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white shadow-inner">
+            <button
+              type="button"
+              onClick={() => setViewMode('overview')}
+              aria-pressed={viewMode === 'overview'}
+              className={clsx(
+                'rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+                viewMode === 'overview' ? 'bg-[#0f766e] text-white shadow' : 'text-slate-500 hover:bg-[#f3f8f6]'
+              )}
+            >
+              {language === 'ar' ? 'نظرة عامة' : 'Overview'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setViewMode('split');
+                setIsPolicyRulesExpanded(false);
+              }}
+              aria-pressed={viewMode === 'split'}
+              className={clsx(
+                'rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+                viewMode === 'split' ? 'bg-[#0f766e] text-white shadow' : 'text-slate-500 hover:bg-[#f3f8f6]'
+              )}
+            >
+              {language === 'ar' ? 'عرض منقسم' : 'Split screen'}
+            </button>
+          </div>
+
+          <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+            {viewMode === 'split'
+              ? language === 'ar'
+                ? isPolicyRulesExpanded
+                  ? 'قواعد السياسة مفتوحة'
+                  : 'قواعد السياسة مطوية'
+                : isPolicyRulesExpanded
+                  ? 'Policy rules expanded'
+                  : 'Policy rules collapsed'
+              : language === 'ar'
+                ? 'وضع النظرة العامة'
+                : 'Overview mode'}
+          </span>
+        </div>
+
         {/* Side-by-Side Content - Scrollable area */}
-        <div className="grid flex-1 min-h-0 overflow-hidden grid-cols-1 divide-y divide-[#e2ede8] lg:grid-cols-2 lg:divide-y-0 lg:divide-x lg:divide-[#e2ede8]">
+        <div className={contentLayoutClasses}>
           {/* Left Panel - BRD References - Independent scroll */}
           <div className="h-full min-h-0 overflow-y-auto p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="space-y-4">
