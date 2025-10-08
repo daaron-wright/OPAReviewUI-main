@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEdgesState, useNodesState } from 'reactflow';
 import type { Edge, FitViewOptions, Node, ReactFlowInstance, Viewport } from 'reactflow';
+import { toast } from 'react-toastify';
 
 import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
 import { GraphCanvas } from './graph/graph-canvas';
