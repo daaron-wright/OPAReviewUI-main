@@ -294,7 +294,9 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       if (isAbortError(error, { signal: controller.signal })) {
         return;
       }
-      console.error('Failed to load policy actors from API', error);
+      if (!controller.signal.aborted) {
+        console.error('Failed to load policy actors from API', error);
+      }
       setPolicyActorsError('Unable to load policy actors. Please try again.');
     } finally {
       if (policyActorsControllerRef.current === controller) {
@@ -326,7 +328,9 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       if (isAbortError(error, { signal: controller.signal })) {
         return;
       }
-      console.error('Failed to load document info from API', error);
+      if (!controller.signal.aborted) {
+        console.error('Failed to load document info from API', error);
+      }
       setDocumentInfoError('Unable to load document information. Please try again.');
     } finally {
       if (documentInfoControllerRef.current === controller) {
