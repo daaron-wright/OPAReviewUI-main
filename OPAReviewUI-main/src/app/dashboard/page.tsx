@@ -109,6 +109,16 @@ export default function ConflictDashboardPage(): JSX.Element {
 
   const hasActiveFilter = useMemo(() => Object.keys(activeFilter).length > 0, [activeFilter]);
 
+  useEffect(() => {
+    if (selectedConflict && !conflicts.some((conflict) => conflict.id === selectedConflict.id)) {
+      setSelectedConflict(null);
+      setConflictWorkflow(null);
+      setIsDetailModalOpen(false);
+      setIsWorkflowLoading(false);
+      workflowRequestIdRef.current = null;
+    }
+  }, [conflicts, selectedConflict]);
+
   return (
     <div className="min-h-screen bg-[#f4f8f6]">
       <ConflictDashboardHeader analytics={analytics} activeView={view} onViewChange={setView} />
