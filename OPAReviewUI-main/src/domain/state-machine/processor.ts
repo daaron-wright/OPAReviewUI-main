@@ -423,6 +423,87 @@ function normalizeControlAttributes(state: State): { primary: string | null; all
   };
 }
 
+function sanitizeTags(value: unknown): string[] {
+  return dedupeStrings(ensureStringArray(value));
+}
+
+function ensureStringArray(value: unknown): string[] {
+  if (value === undefined || value === null) {
+    return [];
+  }
+
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => toNonEmptyString(item))
+      .filter((item): item is string => item !== null);
+  }
+
+  const single = toNonEmptyString(value);
+  return single ? [single] : [];
+}
+
+function toNonEmptyString(value: unknown): string | null {
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : null;
+  }
+
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return String(value);
+  }
+
+  if (typeof value === 'boolean') {
+    return value ? 'true' : 'false';
+  }
+
+  return null;
+}
+
+function normalizeLanguageCode(value: unknown): string {
+  const input = toNonEmptyString(value)?.toLowerCase();
+
+  if (!input) {
+    return 'en';
+  }
+
+  if (input === 'arabic' || input.startsWith('ar')) {
+    return 'ar';
+  }
+
+  if (input === 'english' || input.startsWith('en')) {
+    return 'en';
+  }
+
+  return input;
+}
+
+function dedupeStrings(values: Iterable<string>): string[] {
+  const unique = new Set<string>();
+
+  for (const value of values) {
+    const normalized = value.trim();
+    if (normalized.length > 0) {
+      unique.add(normalized);
+    }
+  }
+
+  return Array.from(unique);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function getRecordValue(record: Record<string, unknown>, ...keys: string[]): unknown {
+  for (const key of keys) {
+    if (key in record) {
+      return record[key];
+    }
+  }
+
+  return undefined;
+}
+
 function normalizeTransition(transition: Transition): ProcessedNodeTransition {
   const controlAttribute =
     transition.controlAttribute ??
