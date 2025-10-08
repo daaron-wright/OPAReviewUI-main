@@ -30,15 +30,40 @@ interface RegoRule {
   };
 }
 
-// Mock BRD references - with bilingual content for our international Master Jedi
-const getMockBRDReferences = (): any => ({
+interface BRDReferenceSection {
+  id: string;
+  ruleId?: string;
+  page: number;
+  section: string;
+  title: string;
+  titleAr: string;
+  location: string;
+  locationAr: string;
+  content: string;
+  contentAr: string;
+  tags: string[];
+}
+
+interface BRDReferences {
+  documentVersion: string;
+  lastUpdated: string;
+  approvedBy: string;
+  approvedByAr: string;
+  sections: BRDReferenceSection[];
+  stakeholders: string[];
+  complianceFrameworks: string[];
+}
+
+const BRD_REFERENCE_SOURCE: BRDReferences = {
   documentVersion: 'v2.3.1',
   lastUpdated: '2024-01-15',
   approvedBy: 'Director of Digital Transformation',
   approvedByAr: '��دير التحول الرقمي',
   sections: [
     {
-      page: Math.floor(Math.random() * 20) + 10,
+      id: 'brd_section_identity',
+      ruleId: 'rule_1',
+      page: 18,
       section: '4.2.1',
       title: 'Digital Identity Verification Requirements',
       titleAr: 'متطلبات الت��قق من الهوية الرقمية',
@@ -65,7 +90,9 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
       tags: ['Compliance', 'Security', 'Mandatory']
     },
     {
-      page: Math.floor(Math.random() * 20) + 35,
+      id: 'brd_section_beneficial_ownership',
+      ruleId: 'rule_2',
+      page: 42,
       section: '5.1.2',
       title: 'Beneficiary Ownership Thresholds',
       titleAr: 'حدود ملكية المستفيد',
@@ -96,12 +123,18 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال ��سائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون ��لسيطرة من خلال ��سائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
   stakeholders: ['Legal Team', 'Compliance Officer', 'Product Owner', 'Risk Management Head'],
   complianceFrameworks: ['UAE AML/CFT Regulations', 'FATF Recommendations', 'Basel III Framework']
+};
+
+// Mock BRD references - with bilingual content for our international Master Jedi
+const getMockBRDReferences = (): BRDReferences => ({
+  ...BRD_REFERENCE_SOURCE,
+  sections: BRD_REFERENCE_SOURCE.sections.map((section) => ({ ...section }))
 });
 
 // Mock Rego rules - because Master Jedi needs to see the styling
