@@ -36,11 +36,12 @@ interface StateMachineFile {
   readonly stateMachine: StateMachine;
 }
 
+/*
+ * Remote state machine is bundled directly to avoid fetch aborts in strict mode environments.
+ */
 const defaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
   (realBeneficiaryStateMachineFile as StateMachineFile).stateMachine
 );
-
-const REMOTE_STATE_MACHINE_ENDPOINT = '/data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json';
 
 type JourneyTabId = string;
 
@@ -1811,7 +1812,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         <div className="flex-1 space-y-6">
           {isStateMachineLoading && (
             <div className="rounded-3xl border border-[#dbe9e3] bg-white px-4 py-3 text-xs font-semibold text-slate-600 shadow-sm">
-              Loading extended Real Beneficiary workflow…
+              Loading extended Real Beneficiary workflow���
             </div>
           )}
           {stateMachineError && (
