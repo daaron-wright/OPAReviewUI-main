@@ -91,7 +91,6 @@ export function StateMachineViewer({ stateMachine }: StateMachineViewerProps): J
   useEffect(() => {
     if (!hasUploadedDocument) {
       setIsGraphExpanded(false);
-      setPrimaryView('list');
     }
   }, [hasUploadedDocument]);
 
