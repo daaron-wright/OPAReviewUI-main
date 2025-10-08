@@ -34,11 +34,19 @@ interface StateMachineFile {
   readonly stateMachine: StateMachine;
 }
 
+type JourneyTabId = string;
+
+const NEW_TRADE_NAME_JOURNEY_ID: JourneyTabId = 'new_trade_name';
+
 /*
  * Default workflow bundled locally as a fallback until the extended Arabic workflow is fetched at runtime.
  */
-const defaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
+const rawDefaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
   (realBeneficiaryStateMachineFile as StateMachineFile).stateMachine
+);
+const defaultProcessedStateMachine = restrictStateMachineToJourney(
+  rawDefaultProcessedStateMachine,
+  NEW_TRADE_NAME_JOURNEY_ID
 );
 
 const REMOTE_STATE_MACHINE_ENDPOINT = '/data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json';
