@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { ProcessedNode } from '@/domain/state-machine/processor';
+import { NodeReviewStatus } from '@/context/review-context';
 import type { JourneyProcessStep } from './journey-process-status';
 import { JourneyProcessStatusBar } from './journey-process-status-bar';
 
