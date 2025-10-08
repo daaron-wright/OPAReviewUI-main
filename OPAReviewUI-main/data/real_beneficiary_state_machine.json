@@ -1562,7 +1562,93 @@
         "returns": [
           "beneficiary_data_collected"
         ]
+      },
+    "journeys": [
+      {
+        "id": "new_registration",
+        "label": "New Registration Flow",
+        "intent": "New License Registration",
+        "example_scenario": "First-time applicant",
+        "suggested_journey": "Path 1: New Registration Flow",
+        "description": "Guides first-time applicants through routine 1 from identity verification to submission.",
+        "seed_states": [
+          "entry_point",
+          "customer_application_type_selection",
+          "routine1_digital_id_verification"
+        ],
+        "routine_prefixes": [
+          "routine1_"
+        ],
+        "condition_keywords": [
+          "customer",
+          "new_trade_name"
+        ],
+        "path_states": [
+          "routine1_digital_id_verification",
+          "routine1_eligibility_check",
+          "routine1_collect_trade_name_data",
+          "routine1_collect_beneficiary_data",
+          "routine1_blacklist_precheck",
+          "routine1_submit_application"
+        ]
+      },
+      {
+        "id": "update_compliance",
+        "label": "Update / Compliance Flow",
+        "intent": "Existing License Compliance Update",
+        "example_scenario": "Existing entity submitting beneficiary declaration",
+        "suggested_journey": "Path 2: Update / Compliance Flow",
+        "description": "Supports licensed entities refreshing declarations and compliance artifacts via routine 3.",
+        "seed_states": [
+          "entry_point",
+          "customer_application_type_selection",
+          "routine3_digital_id_verification"
+        ],
+        "routine_prefixes": [
+          "routine3_"
+        ],
+        "condition_keywords": [
+          "existing_license",
+          "compliance"
+        ],
+        "path_states": [
+          "routine3_digital_id_verification",
+          "routine3_eligibility_check",
+          "routine3_license_prompt",
+          "routine3_collect_beneficiary_data",
+          "routine3_submit_application"
+        ]
+      },
+      {
+        "id": "fast_track",
+        "label": "Fast-Track / Linked Trade Name Flow",
+        "intent": "Reserved Trade Name Activation",
+        "example_scenario": "Applicant with pre-approved trade name",
+        "suggested_journey": "Path 3: Fast-Track / Linked Trade Name Flow",
+        "description": "Fast-tracks applicants that already hold a reserved trade name through routine 2.",
+        "seed_states": [
+          "entry_point",
+          "customer_application_type_selection",
+          "routine2_digital_id_verification"
+        ],
+        "routine_prefixes": [
+          "routine2_"
+        ],
+        "condition_keywords": [
+          "existing_trade_name",
+          "reserved_name"
+        ],
+        "path_states": [
+          "routine2_digital_id_verification",
+          "routine2_eligibility_check",
+          "routine2_check_issued_names",
+          "routine2_select_trade_name",
+          "routine2_exemption_check",
+          "routine2_blacklist_precheck",
+          "routine2_submit_application"
+        ]
       }
-    }
+    ]
   }
+}
 }
