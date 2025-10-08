@@ -3,6 +3,7 @@
  * Now with side-by-side BRD and Rego rules because Master Jedi demands it
  */
 
+import clsx from 'clsx';
 import { ProcessedNode } from '@/domain/state-machine/processor';
 import { PolicyChatInterface } from './policy-chat-interface';
 import { useReview } from '@/context/review-context';
@@ -56,7 +57,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
-• يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
+• يجب أن يكون للكيانات الت��ارية موقّع مفوض ��احد على الأقل بمستوى SOP3
 • قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
 • يجب على النظا�� تسجيل جميع محاولات التحقق مع الطوابع الزمنية والنتائج
 
@@ -95,7 +96,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
+ملاحظ��: حت�� لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
@@ -186,7 +187,9 @@ export function NodeDetailModal({
   const [expandedBRDSection, setExpandedBRDSection] = useState<number | null>(null);
   const [language, setLanguage] = useState<'ar' | 'en'>('ar'); // Arabic default as requested
   const [regoRules, setRegoRules] = useState(() => getMockRegoRules());
-  
+  const [viewMode, setViewMode] = useState<'overview' | 'split'>('overview');
+  const [isPolicyRulesExpanded, setIsPolicyRulesExpanded] = useState(false);
+
   const {
     setNodeReviewed,
     isNodeReviewed,
