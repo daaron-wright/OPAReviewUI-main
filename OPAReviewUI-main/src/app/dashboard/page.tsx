@@ -23,6 +23,9 @@ export default function ConflictDashboardPage(): JSX.Element {
   const [analytics, setAnalytics] = useState<ConflictAnalytics | null>(null);
   const [selectedConflict, setSelectedConflict] = useState<PolicyConflict | null>(null);
   const [conflictWorkflow, setConflictWorkflow] = useState<ConflictWorkflow | null>(null);
+  const [isWorkflowLoading, setIsWorkflowLoading] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const workflowRequestIdRef = useRef<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<ConflictFilter>({});
   const [isLoading, setIsLoading] = useState(true);
   const [view, setView] = useState<'list' | 'analytics' | 'workflow'>('list');
