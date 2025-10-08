@@ -5,7 +5,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 import { useEdgesState, useNodesState } from 'reactflow';
 import type { Edge, FitViewOptions, Node, ReactFlowInstance, Viewport } from 'reactflow';
 
