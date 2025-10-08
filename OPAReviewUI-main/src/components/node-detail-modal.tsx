@@ -58,7 +58,7 @@ Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 2
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
 • يجب أن يكون للكيانات الت��ارية موقّع مفوض واحد على الأقل بمستوى SOP3
-• قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق الإضافي من KYC
+• قد ��تابع المتقدمون ال��فراد مع SOP2 إذا أكملوا التحقق ��لإضافي من KYC
 • يجب على النظا�� تسجيل ج��يع محاولات التحقق مع الطوابع الزمنية والنتائج
 
 المبرر: يضمن هذا المتطلب الامتثال للمرسوم بقانون اتحادي رقم 20 لسنة 2018 بشأن مكافحة غسل الأموال ومكافحة تمويل الإرهاب.`,
@@ -96,7 +96,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
-ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال وسائل أخرى.`,
+ملاحظ��: حتى لو كانت الملكية أقل من 25٪، يجب تحديد الأ��خاص الذين يما��سون السيطرة من خلال ��سائل أخرى.`,
       tags: ['Legal', 'Calculation', 'Critical']
     }
   ],
@@ -786,252 +786,337 @@ export function NodeDetailModal({
             </div>
           </div>
           
-          {/* Right Panel - Policy Rules - Independent scroll */}
-          <div className="h-full min-h-0 overflow-y-auto p-6">
-            <div className="space-y-4">
-              <div className="rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4 shadow-sm">
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#e4f5f1] text-[#0f766e]">
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </span>
-                  <h3 className="text-sm font-semibold text-slate-900">Policy Enforcement Rules (Rego)</h3>
+          {isSplitView && (
+            <div className="flex h-full min-h-0 flex-col bg-white">
+              <div className="flex items-center justify-between gap-3 border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-4">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
+                    {language === 'ar' ? 'قواعد السياسة' : 'Policy rules'}
+                  </p>
+                  <h3 className="text-sm font-semibold text-slate-900">
+                    {language === 'ar'
+                      ? 'مراجعة قواعد الإنفاذ وتشغيل الاختبارات.'
+                      : 'Review enforcement rules and run validations.'}
+                  </h3>
                 </div>
-                <p className="mt-2 text-sm text-slate-600">
-                  Click a rule to run test cases and sync with the BRD reference.
-                </p>
-              </div>
-              
-              <div className="space-y-3">
-                {regoRules.map((rule) => (
-                  <div
-                    key={rule.id}
-                    className={`overflow-hidden rounded-2xl border border-[#d8e4df] bg-white/95 shadow-[0_12px_30px_-24px_rgba(11,64,55,0.24)] transition-all ${
-                      expandedRule === rule.id ? 'ring-2 ring-[#0f766e]/20' : ''
-                    }`}
+                <button
+                  type="button"
+                  onClick={() => setIsPolicyRulesExpanded((prev) => !prev)}
+                  aria-expanded={isPolicyRulesExpanded}
+                  className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#c5ded5] hover:bg-[#f3f8f6]"
+                >
+                  <svg
+                    className={clsx(
+                      'h-3.5 w-3.5 text-slate-400 transition-transform',
+                      isPolicyRulesExpanded ? 'rotate-180' : 'rotate-0'
+                    )}
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <button
-                      onClick={() => {
-                        const newExpanded = expandedRule === rule.id ? null : rule.id;
-                        setExpandedRule(newExpanded);
+                    <path d="M4.5 6.5 8 10l3.5-3.5" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {isPolicyRulesExpanded
+                    ? language === 'ar'
+                      ? 'طي قواعد السياسة'
+                      : 'Collapse policy rules'
+                    : language === 'ar'
+                      ? 'توسيع قواعد السياسة'
+                      : 'Expand policy rules'}
+                </button>
+              </div>
 
-                        const ruleIndex = regoRules.findIndex((r) => r.id === rule.id);
-                        if (newExpanded && ruleIndex >= 0 && brdReferences.sections[ruleIndex]) {
-                          setExpandedBRDSection(ruleIndex);
-                        } else if (!newExpanded) {
-                          setExpandedBRDSection(null);
-                        }
-                      }}
-                      className="w-full bg-[#f9fbfa] px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <svg
-                            className={`h-3 w-3 text-slate-400 transition-transform ${
-                              expandedRule === rule.id ? 'rotate-90' : ''
-                            }`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              {isPolicyRulesExpanded ? (
+                <div className="h-full min-h-0 overflow-y-auto p-6">
+                  <div className="space-y-4">
+                    <div className="rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#e4f5f1] text-[#0f766e]">
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                           </svg>
-                          <div>
-                            <h4 className="font-mono text-sm font-semibold text-[#0f766e]">
-                              {rule.name}
-                            </h4>
-                            <p className="mt-0.5 text-xs text-slate-500">
-                              {rule.description}
-                            </p>
-                          </div>
-                        </div>
-                        <span className="rounded-full bg-[#e4f5f1] px-2 py-0.5 text-xs font-semibold text-[#0f766e]">
-                          Active
                         </span>
+                        <h3 className="text-sm font-semibold text-slate-900">Policy Enforcement Rules (Rego)</h3>
                       </div>
-                    </button>
-                    
-                    {expandedRule === rule.id && (
-                      <div className="space-y-3 border-t border-[#d8e4df] bg-white/95 px-4 py-3">
-                        <div>
-                          <div className="mb-2 flex items-center justify-between">
-                            <h5 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                              Policy Rule
-                            </h5>
-                            <button
-                              onClick={() => copyToClipboard(rule.rule, rule.id)}
-                              className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-[#0f766e]/30 hover:text-[#0f766e]"
-                            >
-                              {copiedRule === rule.id ? (
-                                <>
-                                  <Icon name="check" className="h-4 w-4 text-[#0f766e]" />
-                                  Copied
-                                </>
-                              ) : (
-                                <>
-                                  <Icon name="clipboard" className="h-4 w-4 text-slate-500" />
-                                  Copy
-                                </>
-                              )}
-                            </button>
-                          </div>
-                          <pre className="overflow-x-auto rounded-2xl border border-[#1f2937] bg-[#0b1726] p-3 text-[11px] leading-relaxed text-emerald-200">
-                            <code>{rule.rule}</code>
-                          </pre>
-                        </div>
+                      <p className="mt-2 text-sm text-slate-600">
+                        {language === 'ar'
+                          ? 'انقر على أي قاعدة لتشغيل حالات الاختبار ومزامنتها مع مرجع BRD.'
+                          : 'Click a rule to run test cases and sync with the BRD reference.'}
+                      </p>
+                    </div>
 
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          <div>
-                            <h6 className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Test Input</h6>
-                            <pre className="overflow-x-auto rounded-2xl border border-[#d8e4df] bg-[#f2f6f5] p-3 text-xs font-mono text-slate-700">
-                              <code>{rule.testCase.input}</code>
-                            </pre>
-                          </div>
-                          <div>
-                            <h6 className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Expected Output</h6>
-                            <pre className="overflow-x-auto rounded-2xl border border-[#d8e4df] bg-[#eef6ff] p-3 text-xs font-mono text-slate-700">
-                              <code>{rule.testCase.expected}</code>
-                            </pre>
-                          </div>
-                        </div>
+                    <div className="space-y-3">
+                      {regoRules.map((rule) => (
+                        <div
+                          key={rule.id}
+                          className={`overflow-hidden rounded-2xl border border-[#d8e4df] bg-white/95 shadow-[0_12px_30px_-24px_rgba(11,64,55,0.24)] transition-all ${
+                            expandedRule === rule.id ? 'ring-2 ring-[#0f766e]/20' : ''
+                          }`}
+                        >
+                          <button
+                            onClick={() => {
+                              const newExpanded = expandedRule === rule.id ? null : rule.id;
+                              setExpandedRule(newExpanded);
 
-                        {testResults[rule.id] && testResults[rule.id]?.status !== 'idle' && (
-                          <div className="animate-slide-up rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4">
-                            {testResults[rule.id]?.status === 'running' && (
-                              <div className="space-y-3">
-                                <div className="flex items-center gap-2">
-                                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" />
-                                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#0f766e]">
-                                    {testResults[rule.id]?.message || 'Running test case...'}
-                                  </span>
-                                </div>
-                                <div className="rounded-2xl border border-[#d8e4df] bg-white px-3 py-2 text-xs text-slate-600">
-                                  <div className="font-semibold text-slate-700">Executing Test Case</div>
-                                  <div className="mt-2 grid gap-3 sm:grid-cols-2">
-                                    <div>
-                                      <span className="text-slate-500">Input</span>
-                                      <pre className="mt-1 overflow-x-auto rounded-xl border border-[#d8e4df] bg-[#eef6ff] p-2 font-mono text-slate-700">
-                                        {rule.testCase.input}
-                                      </pre>
-                                    </div>
-                                    <div>
-                                      <span className="text-slate-500">Expected</span>
-                                      <pre className="mt-1 overflow-x-auto rounded-xl border border-[#d8e4df] bg-[#f2f6f5] p-2 font-mono text-slate-700">
-                                        {rule.testCase.expected}
-                                      </pre>
-                                    </div>
-                                  </div>
+                              const ruleIndex = regoRules.findIndex((r) => r.id === rule.id);
+                              if (newExpanded && ruleIndex >= 0 && brdReferences.sections[ruleIndex]) {
+                                setExpandedBRDSection(ruleIndex);
+                              } else if (!newExpanded) {
+                                setExpandedBRDSection(null);
+                              }
+                            }}
+                            className="w-full bg-[#f9fbfa] px-4 py-3 text-left transition hover:bg-[#f4f8f6]"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <svg
+                                  className={`h-3 w-3 text-slate-400 transition-transform ${
+                                    expandedRule === rule.id ? 'rotate-90' : ''
+                                  }`}
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                                <div>
+                                  <h4 className="font-mono text-sm font-semibold text-[#0f766e]">
+                                    {rule.name}
+                                  </h4>
+                                  <p className="mt-0.5 text-xs text-slate-500">
+                                    {rule.description}
+                                  </p>
                                 </div>
                               </div>
-                            )}
+                              <span className="rounded-full bg-[#e4f5f1] px-2 py-0.5 text-xs font-semibold text-[#0f766e]">
+                                Active
+                              </span>
+                            </div>
+                          </button>
 
-                            {testResults[rule.id]?.status === 'pass' && (
-                              <div className="space-y-3">
-                                <div className="flex items-center gap-2 text-[#0f766e]">
-                                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#e4f5f1]">
-                                    <Icon name="checkCircle" className="h-4 w-4 text-[#0f766e]" />
-                                  </span>
-                                  <span className="text-sm font-semibold">All assertions passed</span>
+                          {expandedRule === rule.id && (
+                            <div className="space-y-3 border-t border-[#d8e4df] bg-white/95 px-4 py-3">
+                              <div>
+                                <div className="mb-2 flex items-center justify-between">
+                                  <h5 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                                    Policy Rule
+                                  </h5>
+                                  <button
+                                    onClick={() => copyToClipboard(rule.rule, rule.id)}
+                                    className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-[#0f766e]/30 hover:text-[#0f766e]"
+                                  >
+                                    {copiedRule === rule.id ? (
+                                      <>
+                                        <Icon name="check" className="h-4 w-4 text-[#0f766e]" />
+                                        Copied
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Icon name="clipboard" className="h-4 w-4 text-slate-500" />
+                                        Copy
+                                      </>
+                                    )}
+                                  </button>
                                 </div>
-                                <pre className="overflow-x-auto rounded-2xl border border-[#b7e1d4] bg-[#e4f5f1] p-3 text-xs font-mono text-[#0f766e]">
-                                  <code>{testResults[rule.id]?.actual}</code>
+                                <pre className="overflow-x-auto rounded-2xl border border-[#1f2937] bg-[#0b1726] p-3 text-[11px] leading-relaxed text-emerald-200">
+                                  <code>{rule.rule}</code>
                                 </pre>
+                              </div>
+
+                              <div className="grid gap-3 sm:grid-cols-2">
+                                <div>
+                                  <h6 className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Test Input</h6>
+                                  <pre className="overflow-x-auto rounded-2xl border border-[#d8e4df] bg-[#f2f6f5] p-3 text-xs font-mono text-slate-700">
+                                    <code>{rule.testCase.input}</code>
+                                  </pre>
+                                </div>
+                                <div>
+                                  <h6 className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Expected Output</h6>
+                                  <pre className="overflow-x-auto rounded-2xl border border-[#d8e4df] bg-[#eef6ff] p-3 text-xs font-mono text-slate-700">
+                                    <code>{rule.testCase.expected}</code>
+                                  </pre>
+                                </div>
+                              </div>
+
+                              {testResults[rule.id] && testResults[rule.id]?.status !== 'idle' && (
+                                <div className="animate-slide-up rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4">
+                                  {testResults[rule.id]?.status === 'running' && (
+                                    <div className="space-y-3">
+                                      <div className="flex items-center gap-2">
+                                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" />
+                                        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#0f766e]">
+                                          {testResults[rule.id]?.message || 'Running test case...'}
+                                        </span>
+                                      </div>
+                                      <div className="rounded-2xl border border-[#d8e4df] bg-white px-3 py-2 text-xs text-slate-600">
+                                        <div className="font-semibold text-slate-700">Executing Test Case</div>
+                                        <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                                          <div>
+                                            <span className="text-slate-500">Input</span>
+                                            <pre className="mt-1 overflow-x-auto rounded-xl border border-[#d8e4df] bg-[#eef6ff] p-2 font-mono text-slate-700">
+                                              {rule.testCase.input}
+                                            </pre>
+                                          </div>
+                                          <div>
+                                            <span className="text-slate-500">Expected</span>
+                                            <pre className="mt-1 overflow-x-auto rounded-xl border border-[#d8e4df] bg-[#f2f6f5] p-2 font-mono text-slate-700">
+                                              {rule.testCase.expected}
+                                            </pre>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {testResults[rule.id]?.status === 'pass' && (
+                                    <div className="space-y-3">
+                                      <div className="flex items-center gap-2 text-[#0f766e]">
+                                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#e4f5f1]">
+                                          <Icon name="checkCircle" className="h-4 w-4 text-[#0f766e]" />
+                                        </span>
+                                        <span className="text-sm font-semibold">All assertions passed</span>
+                                      </div>
+                                      <pre className="overflow-x-auto rounded-2xl border border-[#b7e1d4] bg-[#e4f5f1] p-3 text-xs font-mono text-[#0f766e]">
+                                        <code>{testResults[rule.id]?.actual}</code>
+                                      </pre>
+                                      <button
+                                        onClick={() => confirmRule(rule.id)}
+                                        className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/30 hover:bg-[#e4f5f1]"
+                                      >
+                                        {language === 'ar' ? 'تأكيد' : 'Mark as Confirmed'}
+                                      </button>
+                                    </div>
+                                  )}
+
+                                  {testResults[rule.id]?.status === 'fail' && (
+                                    <div className="space-y-3">
+                                      <div className="flex items-center gap-2 text-[#c22745]">
+                                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#fdecee]">
+                                          <Icon name="xCircle" className="h-4 w-4 text-[#c22745]" />
+                                        </span>
+                                        <span className="text-sm font-semibold">{language === 'ar' ? 'فشل الاختبار' : 'Test failed'}</span>
+                                      </div>
+                                      <pre className="overflow-x-auto rounded-2xl border border-[#f4c7cf] bg-[#fdecee] p-3 text-xs font-mono text-[#c22745]">
+                                        <code>{testResults[rule.id]?.actual}</code>
+                                      </pre>
+                                      <div className="flex flex-wrap gap-2">
+                                        <button
+                                          onClick={() => runTestCase(rule)}
+                                          className="inline-flex items-center gap-2 rounded-full border border-[#f4c7cf] bg-white px-3 py-1 text-xs font-semibold text-[#c22745] transition hover:bg-[#fdecee]"
+                                        >
+                                          {language === 'ar' ? 'إعادة التشغيل' : 'Re-run Test'}
+                                        </button>
+                                        <button
+                                          onClick={() => openReworkChat(rule)}
+                                          className="inline-flex items-center gap-2 rounded-full border border-[#b7e6d8] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:bg-[#e4f5f1]"
+                                        >
+                                          {language === 'ar' ? 'مساعد الذكاء الاصطناعي' : 'Open AI Assistant'}
+                                        </button>
+                                        <button
+                                          onClick={() => rejectRule(rule.id)}
+                                          className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:bg-[#f4f8f6]"
+                                        >
+                                          {language === 'ar' ? 'رفض للمراجعة' : 'Mark for Revision'}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+
+                              <div className="flex flex-wrap items-center gap-3">
                                 <button
-                                  onClick={() => confirmRule(rule.id)}
-                                  className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/30 hover:bg-[#e4f5f1]"
+                                  onClick={() => runTestCase(rule)}
+                                  className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
                                 >
-                                  Mark as Confirmed
+                                  <Icon name="flask" className="h-4 w-4 text-white" />
+                                  {language === 'ar' ? 'تشغيل حالة الاختبار' : 'Run Test Case'}
+                                </button>
+                                <button
+                                  onClick={() => approveRule(rule.id)}
+                                  className="inline-flex items-center gap-2 rounded-full border border-[#b7e6d8] bg-[#effaf6] px-3 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:bg-[#e4f5f1]"
+                                >
+                                  <Icon name="check" className="h-4 w-4 text-[#0f766e]" />
+                                  {language === 'ar' ? 'اعتماد القاعدة' : 'Approve Rule'}
+                                </button>
+                                <button
+                                  onClick={() => rejectRule(rule.id)}
+                                  className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-100"
+                                >
+                                  <Icon name="x" className="h-4 w-4 text-rose-500" />
+                                  {language === 'ar' ? 'رفض' : 'Reject'}
+                                </button>
+                                <button
+                                  onClick={() => openReworkChat(rule)}
+                                  className="inline-flex items-center gap-2 rounded-full border border-[#b7e6d8] bg-white px-3 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:bg-[#effaf6]"
+                                >
+                                  <Icon name="chatBubble" className="h-4 w-4 text-[#0f766e]" />
+                                  {language === 'ar' ? 'فتح محادثة الذكاء الاصطناعي' : 'Open AI Rework'}
                                 </button>
                               </div>
-                            )}
 
-                            {testResults[rule.id]?.status === 'fail' && (
-                              <div className="space-y-3">
-                                <div className="flex items-center gap-2 text-[#c22745]">
-                                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#fdecee]">
-                                    <Icon name="xCircle" className="h-4 w-4 text-[#c22745]" />
+                              <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4">
+                                <div className="flex flex-1 items-center gap-2 text-xs text-slate-600">
+                                  <Icon name="refresh" className="h-4 w-4 text-[#0f766e]" />
+                                  <span>
+                                    {language === 'ar' ? 'حالة سير العمل:' : 'Workflow Status:'}{' '}
+                                    {testWorkflows[rule.id]?.status === 'confirmed'
+                                      ? language === 'ar'
+                                        ? 'مؤكد'
+                                        : 'Confirmed'
+                                      : testWorkflows[rule.id]?.status === 'reviewing'
+                                        ? language === 'ar'
+                                          ? 'قيد المراجعة'
+                                          : 'In Review'
+                                        : testWorkflows[rule.id]?.status === 'rejected'
+                                          ? language === 'ar'
+                                            ? 'مرفوض'
+                                            : 'Rejected'
+                                          : language === 'ar'
+                                            ? 'قيد الاختبار'
+                                            : 'Testing'}
                                   </span>
-                                  <span className="text-sm font-semibold">Test failed</span>
                                 </div>
-                                <pre className="overflow-x-auto rounded-2xl border border-[#f4c7cf] bg-[#fdecee] p-3 text-xs font-mono text-[#c22745]">
-                                  <code>{testResults[rule.id]?.actual}</code>
-                                </pre>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex gap-2">
                                   <button
-                                    onClick={() => runTestCase(rule)}
-                                    className="inline-flex items-center gap-2 rounded-full border border-[#f4c7cf] bg-white px-3 py-1 text-xs font-semibold text-[#c22745] transition hover:bg-[#fdecee]"
+                                    onClick={() => updateWorkflow(rule.id, 'reviewing')}
+                                    className="inline-flex items-center gap-2 rounded-full border border-[#f0ad4e] bg-[#fff3cd] px-3 py-1 text-[11px] font-semibold text-[#c77c11]"
                                   >
-                                    Re-run Test
+                                    <Icon name="hourglass" className="h-4 w-4 text-[#c77c11]" />
+                                    {language === 'ar' ? 'وضع قيد المراجعة' : 'Mark Reviewing'}
                                   </button>
                                   <button
-                                    onClick={() => openReworkChat(rule)}
-                                    className="inline-flex items-center gap-2 rounded-full border border-[#b7e6d8] bg-white px-3 py-1 text-xs font-semibold text-[#0f766e] transition hover:bg-[#e4f5f1]"
+                                    onClick={() => updateWorkflow(rule.id, 'confirmed')}
+                                    className="inline-flex items-center gap-2 rounded-full border border-[#b7e6d8] bg-[#effaf6] px-3 py-1 text-[11px] font-semibold text-[#0f766e]"
                                   >
-                                    Open AI Assistant
-                                  </button>
-                                  <button
-                                    onClick={() => rejectRule(rule.id)}
-                                    className="inline-flex items-center gap-2 rounded-full border border-[#d8e4df] bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:bg-[#f4f8f6]"
-                                  >
-                                    Mark for Revision
+                                    <Icon name="checkCircle" className="h-4 w-4 text-[#0f766e]" />
+                                    {language === 'ar' ? 'تأكيد' : 'Confirm'}
                                   </button>
                                 </div>
                               </div>
-                            )}
-
-                            {testWorkflows[rule.id] && testWorkflows[rule.id]?.status === 'reviewing' && (
-                              <div className="mt-3 border-t border-[#d8e4df] pt-3">
-                                <div className="flex flex-wrap gap-2">
-                                  <button
-                                    onClick={() => confirmRule(rule.id)}
-                                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#0f766e] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0c635d]"
-                                  >
-                                    Confirm
-                                  </button>
-                                  <button
-                                    onClick={() => rejectRule(rule.id)}
-                                    className="inline-flex flex-1 items-center justify-center rounded-full bg-[#c22745] px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#a01f39]"
-                                  >
-                                    Reject
-                                  </button>
-                                  <button
-                                    onClick={() => openReworkChat(rule)}
-                                    className="relative inline-flex flex-1 items-center justify-center overflow-hidden rounded-full border border-[#9fd7ca] bg-[#e8f6f3] px-3 py-2 text-xs font-semibold text-[#0f5e57] transition hover:border-[#0f766e] hover:text-[#0c5f59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f766e]"
-                                  >
-                                    <span
-                                      aria-hidden="true"
-                                      className="absolute inset-0 opacity-80"
-                                      style={{
-                                        backgroundImage:
-                                          'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.6) 0, rgba(255,255,255,0.6) 1.2px, transparent 1.2px), radial-gradient(circle at 4px 4px, rgba(15,118,110,0.25) 0, rgba(15,118,110,0.25) 1.2px, transparent 1.2px)',
-                                        backgroundSize: '9px 9px',
-                                        backgroundPosition: '0 0,4.5px 4.5px'
-                                      }}
-                                    />
-                                    <span className="relative">Rework</span>
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {(!testResults[rule.id] || testResults[rule.id]?.status === 'idle') && (
-                          <button
-                            onClick={() => runTestCase(rule)}
-                            className="w-full rounded-full bg-[#0f766e] px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0c5f59]"
-                          >
-                            Run Test Case →
-                          </button>
-                        )}
-                      </div>
-                    )}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ) : (
+                <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
+                  <p className="text-sm font-semibold text-slate-700">
+                    {language === 'ar'
+                      ? 'قواعد السياسة مطوية.'
+                      : 'Policy rules are collapsed.'}
+                  </p>
+                  <p className="max-w-xs text-xs text-slate-500">
+                    {language === 'ar'
+                      ? 'استخدم زر "توسيع قواعد السياسة" لعرض المنطق، تشغيل حالات الاختبار، ومزامنته مع BRD.'
+                      : 'Use “Expand policy rules” to review enforcement logic, run test cases, and sync with the BRD.'}
+                  </p>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
         
         {/* Review Actions Bar - Always show, adapt based on current status */}
