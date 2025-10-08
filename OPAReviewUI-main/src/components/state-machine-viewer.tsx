@@ -13,9 +13,10 @@ import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
 import { GraphCanvas } from './graph/graph-canvas';
 import { createToastContent } from './toast-content';
 import { Icon, IconName } from './icon';
-import { CustomNodeData } from './graph/custom-node';
+import { CustomNodeData, NodeActorSummary } from './graph/custom-node';
 import { NodeDetailModal } from './node-detail-modal';
 import { useReview } from '@/context/review-context';
+import type { PolicyActor } from '@/adapters/policy-actors-client';
 import {
   ProcessedEdge,
   ProcessedNode,
