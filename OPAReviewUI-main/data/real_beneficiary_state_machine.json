@@ -349,6 +349,29 @@
       "routine2_digital_id_verification": {
         "type": "process",
         "description": "Verify Digital ID level for existing trade name",
+        "journey_paths": [
+          "fast_track"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Fast-track Path 3 re-validates SOP2/SOP3 credentials before reusing a reserved name, supporting BRD 4.2.1 safeguards for linked trade names.",
+            "reference_id": "brd_section_4_2_1",
+            "tags": [
+              "identity",
+              "fast_track"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يعيد المسار السريع 3 التحقق من اعتماد SOP2/SOP3 قبل إعادة استخدام الاسم المحجوز، دعماً لضوابط الفقرة 4.2.1 الخاصة بالأسماء التجارية المرتبطة.",
+            "reference_id": "brd_section_4_2_1",
+            "tags": [
+              "identity",
+              "fast_track"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "digital_id_level in ['SOP2', 'SOP3']",
