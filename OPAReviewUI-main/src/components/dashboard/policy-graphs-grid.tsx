@@ -12,7 +12,7 @@ interface PolicyGraphsGridProps {
   readonly title: string;
 }
 
-export function PolicyGraphsGrid({ graphs, categories, title }: PolicyGraphsGridProps): JSX.Element {
+export function PolicyGraphsGrid({ graphs, categories: _categories, title }: PolicyGraphsGridProps): JSX.Element {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
