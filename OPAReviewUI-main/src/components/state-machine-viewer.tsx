@@ -501,67 +501,6 @@ function filterStateMachineForJourney(
   };
 }
 
-function _restrictStateMachineToJourney(
-  machine: ProcessedStateMachine,
-  journeyId: JourneyTabId
-): ProcessedStateMachine {
-  const journeyTabs = deriveJourneyTabs(machine);
-  const targetJourney =
-    journeyTabs.find((journey) => journey.id === journeyId) ??
-    ({
-      id: journeyId,
-      label: formatJourneyTitle(journeyId),
-      seedStates: [],
-      pathStates: [],
-    } satisfies JourneyTabConfig);
-
-  const filtered = filterStateMachineForJourney(machine, targetJourney);
-  const journeys = filtered.metadata.journeys?.filter((journey) => journey.id === journeyId);
-
-  const withJourneyMetadata = (() => {
-    if (journeys && journeys.length > 0) {
-      return {
-        ...filtered,
-        metadata: {
-          ...filtered.metadata,
-          journeys,
-        },
-      };
-    }
-
-    if (filtered.metadata.journeys && filtered.metadata.journeys.length > 0) {
-      return filtered;
-    }
-
-    const fallbackJourney = Object.freeze({
-      id: journeyId,
-      label: targetJourney.label,
-      intent: targetJourney.label,
-      exampleScenario: undefined,
-      suggestedJourney: targetJourney.label,
-      description: targetJourney.description,
-      seedStates: Object.freeze(Array.from(targetJourney.seedStates)),
-      routinePrefixes: Object.freeze([] as string[]),
-      conditionKeywords: Object.freeze([] as string[]),
-      pathStates: Object.freeze(Array.from(targetJourney.pathStates)),
-    });
-
-    return {
-      ...filtered,
-      metadata: {
-        ...filtered.metadata,
-        journeys: [fallbackJourney],
-      },
-    };
-  })();
-
-  if (journeyId === NEW_TRADE_NAME_JOURNEY_ID) {
-    return focusProcessedStateMachine(withJourneyMetadata, NEW_TRADE_NAME_FOCUS_NODE_IDS);
-  }
-
-  return withJourneyMetadata;
-}
-
 function focusProcessedStateMachine(
   machine: ProcessedStateMachine,
   allowedNodes: ReadonlySet<string>
