@@ -71,7 +71,7 @@ const STATUS_TOKENS: Record<WorkflowStep['status'], {
   },
 };
 
-const STATUS_ICONS: Record<WorkflowStep['status'], Icon['name']> = {
+const STATUS_ICONS: Record<WorkflowStep['status'], IconName> = {
   pending: 'hourglass',
   'in-progress': 'refresh',
   completed: 'checkCircle',
