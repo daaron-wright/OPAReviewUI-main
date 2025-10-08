@@ -13,8 +13,8 @@ export async function fetchDocumentInfo(signal?: AbortSignal): Promise<DocumentI
     headers: {
       Accept: 'application/json',
     },
-    signal,
     cache: 'no-store',
+    ...(signal ? { signal } : {}),
   });
 
   if (!response.ok) {
