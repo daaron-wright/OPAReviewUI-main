@@ -862,7 +862,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       step4Description =
         totalStates > 0
           ? `Walkthrough in progress • ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
-          : 'Walkthrough in progress…';
+          : 'Walkthrough in progress��';
     } else if (walkthroughInProgress) {
       step4Status = 'active';
       step4Description =
@@ -1012,14 +1012,40 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const graphContent = (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 rounded-[28px] border border-[#dbe9e3] bg-[#f6faf8] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
-            Journey map
-          </p>
-          <h3 className="text-sm font-semibold text-slate-900">Visualise state transitions</h3>
-          <p className="text-xs text-slate-600">
-            Inspect the underlying graph and open any node for deeper review.
-          </p>
+        <div className="flex flex-col gap-3">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
+              Journey map
+            </p>
+            <h3 className="text-sm font-semibold text-slate-900">Visualise state transitions</h3>
+            <p className="text-xs text-slate-600">
+              Inspect the {selectedJourneyConfig.label.toLowerCase()} journey and open any node for deeper review.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.26em] text-slate-400">
+              Journeys
+            </span>
+            <div className="inline-flex rounded-full border border-[#dbe9e3] bg-white p-1 shadow-inner">
+              {JOURNEY_TABS.map((tab) => {
+                const isActive = tab.id === selectedJourney;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setSelectedJourney(tab.id)}
+                    className={clsx(
+                      'rounded-full px-3 py-1 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+                      isActive ? 'bg-[#0f766e] text-white shadow' : 'text-slate-500 hover:bg-[#f3f8f6]'
+                    )}
+                    aria-pressed={isActive}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:ml-auto sm:justify-end">
           <button
