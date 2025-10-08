@@ -19,9 +19,9 @@
         "type": "initial",
         "description": "Determine entry path - customer portal or employee portal",
         "journey_paths": [
-          "new_registration",
-          "update_compliance",
-          "fast_track"
+          "new_trade_name",
+          "existing_trade_license",
+          "existing_trade_name"
         ],
         "relevant_chunks": [
           {
@@ -64,9 +64,9 @@
         "type": "decision",
         "description": "Customer selects type of application",
         "journey_paths": [
-          "new_registration",
-          "update_compliance",
-          "fast_track"
+          "new_trade_name",
+          "existing_trade_license",
+          "existing_trade_name"
         ],
         "relevant_chunks": [
           {
@@ -80,7 +80,7 @@
           },
           {
             "language": "ar",
-            "text": "يفصل منطق التفرع ب��ن التسجيل الجديد، وتنشيط الاسم ال��جاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
+            "text": "يفصل منطق التفرع بين التسجيل الجديد، وتنشيط الاسم ال��جاري المحجوز، وامتثال الرخصة القائمة وفق جدول 3 «رحلات المتقدمين» في وثيقة المتطلبات.",
             "reference_id": "brd_table_3",
             "tags": [
               "journey",
@@ -116,7 +116,7 @@
         "type": "process",
         "description": "Verify Digital ID level (SOP2/SOP3)",
         "journey_paths": [
-          "new_registration"
+          "new_trade_name"
         ],
         "relevant_chunks": [
           {
@@ -162,7 +162,7 @@
         "type": "process",
         "description": "Check eligibility requirements",
         "journey_paths": [
-          "new_registration"
+          "new_trade_name"
         ],
         "relevant_chunks": [
           {
@@ -171,7 +171,7 @@
             "reference_id": "brd_section_4_3",
             "tags": [
               "eligibility",
-              "new_registration"
+              "new_trade_name"
             ]
           },
           {
@@ -180,7 +180,7 @@
             "reference_id": "brd_section_4_3",
             "tags": [
               "eligibility",
-              "new_registration"
+              "new_trade_name"
             ]
           }
         ],
@@ -231,7 +231,7 @@
         "type": "process",
         "description": "Collect new trade name data",
         "journey_paths": [
-          "new_registration"
+          "new_trade_name"
         ],
         "relevant_chunks": [
           {
@@ -350,7 +350,7 @@
         "type": "process",
         "description": "Verify Digital ID level for existing trade name",
         "journey_paths": [
-          "fast_track"
+          "existing_trade_name"
         ],
         "relevant_chunks": [
           {
@@ -359,7 +359,7 @@
             "reference_id": "brd_section_4_2_1",
             "tags": [
               "identity",
-              "fast_track"
+              "existing_trade_name"
             ]
           },
           {
@@ -368,7 +368,7 @@
             "reference_id": "brd_section_4_2_1",
             "tags": [
               "identity",
-              "fast_track"
+              "existing_trade_name"
             ]
           }
         ],
@@ -442,7 +442,7 @@
         "type": "process",
         "description": "User selects trade name and system retrieves data",
         "journey_paths": [
-          "fast_track"
+          "existing_trade_name"
         ],
         "relevant_chunks": [
           {
@@ -451,7 +451,7 @@
             "reference_id": "brd_section_5_4",
             "tags": [
               "trade_name",
-              "fast_track"
+              "existing_trade_name"
             ]
           },
           {
@@ -460,7 +460,7 @@
             "reference_id": "brd_section_5_4",
             "tags": [
               "trade_name",
-              "fast_track"
+              "existing_trade_name"
             ]
           }
         ],
@@ -527,7 +527,7 @@
         "type": "process",
         "description": "Submit application with due diligence team assignment",
         "journey_paths": [
-          "fast_track"
+          "existing_trade_name"
         ],
         "relevant_chunks": [
           {
@@ -536,7 +536,7 @@
             "reference_id": "brd_section_6_2",
             "tags": [
               "submission",
-              "fast_track"
+              "existing_trade_name"
             ]
           },
           {
@@ -545,7 +545,7 @@
             "reference_id": "brd_section_6_2",
             "tags": [
               "submission",
-              "fast_track"
+              "existing_trade_name"
             ]
           }
         ],
@@ -568,7 +568,7 @@
         "type": "process",
         "description": "Verify Digital ID for existing license",
         "journey_paths": [
-          "update_compliance"
+          "existing_trade_license"
         ],
         "relevant_chunks": [
           {
@@ -614,7 +614,7 @@
         "type": "process",
         "description": "Check eligibility for existing license",
         "journey_paths": [
-          "update_compliance"
+          "existing_trade_license"
         ],
         "relevant_chunks": [
           {
@@ -696,7 +696,7 @@
         "type": "process",
         "description": "Submit to due diligence team",
         "journey_paths": [
-          "update_compliance"
+          "existing_trade_license"
         ],
         "relevant_chunks": [
           {
