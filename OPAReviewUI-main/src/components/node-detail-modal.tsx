@@ -78,7 +78,7 @@ Key Requirements:
 • System SHALL log all verification attempts with timestamps and outcomes
 
 Rationale: This requirement ensures compliance with UAE Federal Decree-Law No. 20 of 2018 concerning Anti-Money Laundering and Combating the Financing of Terrorism.`,
-      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل معالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
+      contentAr: `يجب على النظام ال��حقق من مستوى الهوية الرقمية لجميع المتقدمين قبل ��عالجة أي إعلان للمستفيد. تشمل مستويات التحقق المقبولة SOP2 (المستوى الثاني للبطاقة الذكية) و SOP3 (المستوى الثالث للبطاقة الذكية) كما هو محدد من قبل هيئة الهوية الرقمية ��لإماراتية.
 
 المتطلبات الرئيسية:
 ��� يجب رفض المتقدمين الذين لديهم تحقق SOP1 مع رسالة مناسبة
@@ -114,8 +114,8 @@ Note: Even if ownership is below 25%, persons exercising control through other m
       contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمستفيد حقيقي.
 
 قواعد الحساب:
-• ا��ملكية المب��شرة: الأسهم المملوكة باسم الشخص نفسه
-• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
+• ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
+• الملكية غير المب��شرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
@@ -217,7 +217,7 @@ export function NodeDetailModal({
   const [testWorkflows, setTestWorkflows] = useState<Record<string, TestWorkflow>>({});
   const [chatContext, setChatContext] = useState<any>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [expandedBRDSection, setExpandedBRDSection] = useState<number | null>(null);
+  const [expandedBRDSection, setExpandedBRDSection] = useState<string | null>(null);
   const [language, setLanguage] = useState<'ar' | 'en'>('ar'); // Arabic default as requested
   const [regoRules, setRegoRules] = useState(() => getMockRegoRules());
   const [viewMode, setViewMode] = useState<'overview' | 'split'>('overview');
