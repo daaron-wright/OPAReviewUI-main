@@ -39,42 +39,60 @@ const defaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
   (realBeneficiaryStateMachineFile as StateMachineFile).stateMachine
 );
 
-type JourneyTabId = 'new-trade-name' | 'existing-trade-name' | 'existing-trade-license';
+type JourneyTabId = string;
 
 interface JourneyTabConfig {
   readonly id: JourneyTabId;
   readonly label: string;
-  readonly routinePrefix: string;
-  readonly conditionKeywords: readonly string[];
-  readonly seedNodes: readonly string[];
+  readonly seedStates: ReadonlyArray<string>;
+  readonly pathStates: ReadonlyArray<string>;
+  readonly description?: string;
 }
 
-const JOURNEY_TABS: JourneyTabConfig[] = [
-  {
-    id: 'new-trade-name',
-    label: 'New Trade Name',
-    routinePrefix: 'routine1_',
-    conditionKeywords: ['customer', 'new_trade_name'],
-    seedNodes: ['entry_point', 'customer_application_type_selection', 'routine1_digital_id_verification'],
-  },
-  {
-    id: 'existing-trade-name',
-    label: 'Existing Trade Name',
-    routinePrefix: 'routine2_',
-    conditionKeywords: ['customer', 'existing_trade_name'],
-    seedNodes: ['entry_point', 'customer_application_type_selection', 'routine2_digital_id_verification'],
-  },
-  {
-    id: 'existing-trade-license',
-    label: 'Existing Trade License',
-    routinePrefix: 'routine3_',
-    conditionKeywords: ['customer', 'existing_license'],
-    seedNodes: ['entry_point', 'customer_application_type_selection', 'routine3_digital_id_verification'],
-  },
-];
+const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
 
-const BRANCH_NODE_IDS = new Set(['entry_point', 'customer_application_type_selection']);
-const ALWAYS_INCLUDED_NODES = ['entry_point', 'customer_application_type_selection'] as const;
+function formatJourneyTitle(journeyId: string): string {
+  return journeyId
+    .split(/[-_]/g)
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ');
+}
+
+function deriveJourneyTabs(machine: ProcessedStateMachine): JourneyTabConfig[] {
+  const journeys = machine.metadata.journeys ?? [];
+
+  if (journeys.length > 0) {
+    return journeys.map((journey) => ({
+      id: journey.id,
+      label: journey.label ?? formatJourneyTitle(journey.id),
+      seedStates: journey.seedStates.length > 0 ? Array.from(journey.seedStates) : [],
+      pathStates: journey.pathStates.length > 0 ? Array.from(journey.pathStates) : [],
+      description: journey.description ?? journey.suggestedJourney,
+    }));
+  }
+
+  return [
+    {
+      id: 'new_registration',
+      label: 'New Registration Flow',
+      seedStates: ['entry_point', 'customer_application_type_selection'],
+      pathStates: [],
+    },
+    {
+      id: 'update_compliance',
+      label: 'Update / Compliance Flow',
+      seedStates: ['entry_point', 'customer_application_type_selection'],
+      pathStates: [],
+    },
+    {
+      id: 'fast_track',
+      label: 'Fast-Track / Linked Trade Name Flow',
+      seedStates: ['entry_point', 'customer_application_type_selection'],
+      pathStates: [],
+    },
+  ];
+}
 
 function filterStateMachineForJourney(
   machine: ProcessedStateMachine,
