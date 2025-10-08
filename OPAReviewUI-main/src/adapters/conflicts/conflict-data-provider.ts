@@ -7,10 +7,7 @@ import type {
   PolicyConflict,
   ConflictAnalytics,
   ConflictFilter,
-  ConflictWorkflow,
-  ConflictType,
-  ConflictSeverity,
-  ConflictStatus
+  ConflictWorkflow
 } from '@/domain/conflicts/types';
 
 export class ConflictDataProvider {
