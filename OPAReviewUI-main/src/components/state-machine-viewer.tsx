@@ -793,10 +793,11 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
       fitViewRafRef.current = window.requestAnimationFrame(() => {
         reactFlowInstance.fitView(nextOptions);
+        storeViewport();
         fitViewRafRef.current = null;
       });
     },
-    [reactFlowInstance]
+    [reactFlowInstance, storeViewport]
   );
 
   useEffect(() => {
