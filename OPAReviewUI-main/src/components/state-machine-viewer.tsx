@@ -312,12 +312,16 @@ function matchActorsToNodes(
       return a.actor.label.localeCompare(b.actor.label);
     });
 
-    const selected = matches.slice(0, 4).map((match) => ({
-      id: match.actor.id,
-      label: match.actor.label,
-      summary: match.actor.summary,
-      confidence: Math.min(1, match.score / 12),
-    }));
+    const selected = matches.slice(0, 4).map((match) => {
+      const base = {
+        id: match.actor.id,
+        label: match.actor.label,
+        confidence: Math.min(1, match.score / 12),
+      };
+      return match.actor.summary !== undefined
+        ? { ...base, summary: match.actor.summary }
+        : base;
+    });
 
     assignments.set(node.id, selected);
   });
