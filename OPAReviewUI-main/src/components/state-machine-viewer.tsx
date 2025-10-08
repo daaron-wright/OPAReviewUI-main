@@ -1808,6 +1808,16 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     <div className="min-h-screen bg-[#f4f8f6] py-10">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 lg:px-8 xl:flex-row xl:items-start">
         <div className="flex-1 space-y-6">
+          {isStateMachineLoading && (
+            <div className="rounded-3xl border border-[#dbe9e3] bg-white px-4 py-3 text-xs font-semibold text-slate-600 shadow-sm">
+              Loading extended Real Beneficiary workflow…
+            </div>
+          )}
+          {stateMachineError && (
+            <div className="rounded-3xl border border-amber-300 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-800 shadow-sm">
+              {stateMachineError}
+            </div>
+          )}
           <JourneyTimeline
             items={timelineItems}
             onSelect={handleTimelineSelect}
