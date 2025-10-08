@@ -102,6 +102,9 @@ export default function ConflictDashboardPage(): JSX.Element {
     void loadConflictData();
     setSelectedConflict(null);
     setConflictWorkflow(null);
+    setIsDetailModalOpen(false);
+    setIsWorkflowLoading(false);
+    workflowRequestIdRef.current = null;
   };
 
   const hasActiveFilter = useMemo(() => Object.keys(activeFilter).length > 0, [activeFilter]);
