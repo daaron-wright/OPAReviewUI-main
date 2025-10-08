@@ -635,7 +635,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       return;
     }
     if (!selectedJourney || !journeyTabs.some((journey) => journey.id === selectedJourney)) {
-      setSelectedJourney(journeyTabs[0].id);
+      const firstJourney = journeyTabs[0];
+      if (firstJourney) {
+        setSelectedJourney(firstJourney.id);
+      }
     }
   }, [journeyTabs, selectedJourney]);
 
