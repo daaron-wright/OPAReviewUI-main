@@ -197,36 +197,36 @@ function TechnicalTab({ conflict }: TechnicalTabProps): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Technical Description */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <h3 className="text-lg font-semibold text-white mb-4">Technical Analysis</h3>
-        <p className="text-slate-300 leading-relaxed">{conflict.conflictDetails.technicalDescription}</p>
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white p-6 shadow-sm">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Technical Analysis</h3>
+        <p className="leading-relaxed text-slate-600">{conflict.conflictDetails.technicalDescription}</p>
       </div>
 
       {/* Detection Method */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <h3 className="text-lg font-semibold text-white mb-4">Detection Method</h3>
-        <div className="grid grid-cols-2 gap-4">
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white p-6 shadow-sm">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Detection Method</h3>
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <div className="text-sm text-slate-400 mb-1">Detection Type</div>
-            <div className="text-white font-medium capitalize">{conflict.conflictDetails.detectionMethod.type.replace('-', ' ')}</div>
+            <div className="mb-1 text-sm text-slate-500">Detection Type</div>
+            <div className="capitalize font-medium text-slate-900">{conflict.conflictDetails.detectionMethod.type.replace('-', ' ')}</div>
           </div>
           {conflict.conflictDetails.detectionMethod.tool && (
             <div>
-              <div className="text-sm text-slate-400 mb-1">Tool</div>
-              <div className="text-white font-medium">{conflict.conflictDetails.detectionMethod.tool}</div>
+              <div className="mb-1 text-sm text-slate-500">Tool</div>
+              <div className="font-medium text-slate-900">{conflict.conflictDetails.detectionMethod.tool}</div>
             </div>
           )}
         </div>
       </div>
 
       {/* Suggested Actions */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <h3 className="text-lg font-semibold text-white mb-4">Suggested Actions</h3>
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white p-6 shadow-sm">
+        <h3 className="mb-4 text-lg font-semibold text-slate-900">Suggested Actions</h3>
         <ul className="space-y-2">
           {conflict.conflictDetails.suggestedActions.map((action, index) => (
             <li key={index} className="flex items-start gap-3">
-              <span className="text-green-400 mt-1">•</span>
-              <span className="text-slate-300">{action}</span>
+              <span className="mt-1 text-[#0f766e]">•</span>
+              <span className="text-slate-600">{action}</span>
             </li>
           ))}
         </ul>
