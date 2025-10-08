@@ -31,11 +31,18 @@ interface ComplianceFrameworkCardProps {
 }
 
 function ComplianceFrameworkCard({ framework, detailed }: ComplianceFrameworkCardProps): JSX.Element {
-  const statusColors = {
+  const frameworkStatusColors = {
     compliant: 'text-green-400',
     partial: 'text-yellow-400',
     'non-compliant': 'text-red-400',
     pending: 'text-blue-400'
+  };
+
+  const requirementStatusColors = {
+    met: 'text-green-400',
+    partial: 'text-yellow-400',
+    'not-met': 'text-red-400',
+    'not-applicable': 'text-slate-400'
   };
 
   const statusBgColors = {
@@ -52,33 +59,33 @@ function ComplianceFrameworkCard({ framework, detailed }: ComplianceFrameworkCar
           <h4 className="font-semibold text-white">{framework.name}</h4>
           <span className="text-sm text-slate-400">{framework.version}</span>
         </div>
-        <div className={`text-sm font-medium ${statusColors[framework.status]}`}>
+        <div className={`text-sm font-medium ${frameworkStatusColors[framework.status]}`}>
           {framework.status.toUpperCase()}
         </div>
       </div>
-      
+
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-slate-300">Coverage</span>
         <span className="text-sm font-medium text-white">{framework.coveragePercentage.toFixed(1)}%</span>
       </div>
-      
+
       <div className="w-full bg-slate-700 rounded-full h-2 mb-3">
-        <div 
+        <div
           className={`h-2 rounded-full ${
-            framework.coveragePercentage >= 90 ? 'bg-green-500' : 
+            framework.coveragePercentage >= 90 ? 'bg-green-500' :
             framework.coveragePercentage >= 70 ? 'bg-yellow-500' : 'bg-red-500'
           }`}
           style={{ width: `${framework.coveragePercentage}%` }}
         />
       </div>
-      
+
       {detailed && (
         <div className="space-y-2">
           <div className="text-sm text-slate-400">Requirements:</div>
           {framework.requirements.map((req) => (
             <div key={req.id} className="flex items-center justify-between text-sm">
               <span className="text-slate-300 truncate">{req.title}</span>
-              <span className={`font-medium ${statusColors[req.status]}`}>
+              <span className={`font-medium ${requirementStatusColors[req.status]}`}>
                 {req.status.toUpperCase()}
               </span>
             </div>
