@@ -693,8 +693,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       toast.success(createToastContent('checkCircle', `${uploaded.fileName} uploaded successfully`), {
         position: 'top-center',
       });
+
+      void fetchExtendedStateMachine();
     },
-    [uploadPolicyDocument]
+    [fetchExtendedStateMachine, uploadPolicyDocument]
   );
 
   const handlePolicyDocumentRemoval = useCallback(() => {
