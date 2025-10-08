@@ -222,7 +222,20 @@ export function JourneySummaryPanel({
               <circle cx="12" cy="12" r="9" />
               <path d="M12 8h.01M11.4 10.5h1.2v5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span aria-hidden>Upload BRD</span>
+            <span aria-hidden className="inline-flex items-center gap-1">
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.4}
+                aria-hidden
+              >
+                <path d="M8 3.5v9M8 3.5 4.5 7M8 3.5l3.5 3.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3.5 12.5h9" strokeLinecap="round" />
+              </svg>
+              Upload BRD
+            </span>
           </button>
         </div>
 
