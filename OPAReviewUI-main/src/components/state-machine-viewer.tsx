@@ -1395,7 +1395,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                 />
                 <PublishStatCard
                   label="Transitions"
-                  value={stateMachine.edges.length}
+                  value={journeyEdges.length}
                   tone="purple"
                   icon="refresh"
                   helper="Path connections"
