@@ -92,7 +92,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
-مثال على الحساب:
+مثال ��لى الحساب:
 إذا كان الشخص أ يمتلك 60٪ من الشركة س، والشركة س تمتلك 50٪ من الكيان المسته��ف:
 ملكية الشخص أ غير المباشرة = 60٪ × 50٪ = 30٪ (يتطلب الإعلان)
 
@@ -657,7 +657,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'سمات التحكم وقيم الانتقال لهذه العقدة.'
+                          ? 'سم��ت التحكم وقيم الانتقال لهذه العقدة.'
                           : 'Control attributes and transition values for this node.'}
                       </p>
                     </div>
@@ -834,31 +834,9 @@ export function NodeDetailModal({
                       : 'Review enforcement rules and run validations.'}
                   </h3>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsPolicyRulesExpanded((prev) => !prev)}
-                  aria-expanded={isPolicyRulesExpanded}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#c5ded5] hover:bg-[#f3f8f6]"
-                >
-                  <svg
-                    className={clsx(
-                      'h-3.5 w-3.5 text-slate-400 transition-transform',
-                      isPolicyRulesExpanded ? 'rotate-180' : 'rotate-0'
-                    )}
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M4.5 6.5 8 10l3.5-3.5" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  {isPolicyRulesExpanded
-                    ? language === 'ar'
-                      ? 'طي قواع�� السياسة'
-                      : 'Collapse policy rules'
-                    : language === 'ar'
-                      ? 'توسيع قواعد السياسة'
-                      : 'Expand policy rules'}
-                </button>
+                <span className="inline-flex items-center rounded-full border border-[#dbe9e3] bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  {language === 'ar' ? 'عرض مباشر' : 'Live view'}
+                </span>
               </div>
 
               {isPolicyRulesExpanded ? (
