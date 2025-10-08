@@ -60,7 +60,12 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-2">
             <span className={styles.typeBadge}>{badgeLabel}</span>
-            <h3 className="text-sm font-semibold text-slate-900 leading-snug">
+            <h3
+              className={clsx(
+                'text-sm font-semibold leading-snug',
+                isDimmed ? 'text-slate-500' : 'text-slate-900'
+              )}
+            >
               {data.label}
             </h3>
           </div>
@@ -93,22 +98,32 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
           )}
         </div>
 
-        <p className="mt-3 text-xs leading-relaxed text-slate-500">
+        <p className={clsx('mt-3 text-xs leading-relaxed', isDimmed ? 'text-slate-400' : 'text-slate-500')}>
           {data.description}
         </p>
 
         {controlAttributes.length > 0 && (
           <div className="mt-3">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            <p
+              className={clsx(
+                'text-[11px] font-semibold uppercase tracking-[0.16em]',
+                isDimmed ? 'text-slate-400/80' : 'text-slate-400'
+              )}
+            >
               Control attributes
             </p>
             <div className="mt-1 flex flex-wrap gap-1.5">
               {controlAttributes.map((attribute) => (
                 <span
                   key={attribute}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#c7e5f4] bg-[#f0f8fd] px-2.5 py-1 text-[10px] font-semibold text-[#1d7fb3]"
+                  className={clsx(
+                    'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold',
+                    isDimmed
+                      ? 'border border-slate-200 bg-white text-slate-400'
+                      : 'border border-[#c7e5f4] bg-[#f0f8fd] text-[#1d7fb3]'
+                  )}
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#1d7fb3]" />
+                  <span className={clsx('h-1.5 w-1.5 rounded-full', isDimmed ? 'bg-slate-300' : 'bg-[#1d7fb3]')} />
                   {formatAttributeName(attribute)}
                 </span>
               ))}
@@ -118,20 +133,30 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
 
         {transitions.length > 0 && (
           <div className="mt-3">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            <p
+              className={clsx(
+                'text-[11px] font-semibold uppercase tracking-[0.16em]',
+                isDimmed ? 'text-slate-400/80' : 'text-slate-400'
+              )}
+            >
               Transition values
             </p>
             <div className="mt-1 space-y-1">
               {transitions.slice(0, 2).map((transition, index) => (
                 <div
                   key={`${transition.target}-${transition.controlAttributeValue ?? transition.condition}-${index}`}
-                  className="flex items-center justify-between rounded-xl border border-[#dbe9e3] bg-white px-2.5 py-1.5 text-[10px] font-semibold text-slate-600"
+                  className={clsx(
+                    'flex items-center justify-between rounded-xl px-2.5 py-1.5 text-[10px] font-semibold',
+                    isDimmed
+                      ? 'border border-slate-200 bg-white text-slate-400'
+                      : 'border border-[#dbe9e3] bg-white text-slate-600'
+                  )}
                 >
-                  <span className="inline-flex items-center gap-1 text-[#0f766e]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#0f766e]" />
+                  <span className={clsx('inline-flex items-center gap-1', isDimmed ? 'text-slate-400' : 'text-[#0f766e]')}>
+                    <span className={clsx('h-1.5 w-1.5 rounded-full', isDimmed ? 'bg-slate-300' : 'bg-[#0f766e]')} />
                     {transition.controlAttributeValue ?? formatConditionOutcome(transition.condition)}
                   </span>
-                  <span className="text-slate-400">
+                  <span className={clsx(isDimmed ? 'text-slate-300' : 'text-slate-400')}>
                     {formatAttributeName(transition.target)}
                   </span>
                 </div>
@@ -147,14 +172,22 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
 
         {data.functions && data.functions.length > 0 && (
           <div className="mt-3">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            <p
+              className={clsx(
+                'text-[11px] font-semibold uppercase tracking-[0.16em]',
+                isDimmed ? 'text-slate-400/80' : 'text-slate-400'
+              )}
+            >
               Automation
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {data.functions.slice(0, 3).map((fn) => (
                 <span
                   key={fn}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600"
+                  className={clsx(
+                    'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium',
+                    isDimmed ? 'border-slate-200 bg-white text-slate-400' : 'border-slate-200 bg-slate-50 text-slate-600'
+                  )}
                 >
                   <span className={clsx('h-1.5 w-1.5 rounded-full', styles.accentDot)} />
                   {formatFunctionName(fn)}
