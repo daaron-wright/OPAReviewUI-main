@@ -88,7 +88,7 @@ Note: Even if ownership is below 25%, persons exercising control through other m
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
-• الملكية غير المباشرة: الأسهم المملوكة من خلال كيانات وسيطة (محسوبة بالتناسب)
+• الملكية غير المباشرة: الأسهم المملوكة من خلا�� كيانات وسيطة (محسوبة بالتناسب)
 • ت��ييم السيطرة: حقوق التصويت، حقوق النقض، أو حقوق التعيين
 • اعتبار خاص لهياكل الأمانة وترتيبات المرشحين
 
@@ -188,7 +188,6 @@ export function NodeDetailModal({
   const [language, setLanguage] = useState<'ar' | 'en'>('ar'); // Arabic default as requested
   const [regoRules, setRegoRules] = useState(() => getMockRegoRules());
   const [viewMode, setViewMode] = useState<'overview' | 'split'>('overview');
-  const [isPolicyRulesExpanded, setIsPolicyRulesExpanded] = useState(false);
 
   const {
     setNodeReviewed,
@@ -216,7 +215,6 @@ export function NodeDetailModal({
   useEffect(() => {
     if (node) {
       setViewMode('overview');
-      setIsPolicyRulesExpanded(false);
     }
   }, [node]);
 
@@ -851,7 +849,7 @@ export function NodeDetailModal({
                   </svg>
                   {isPolicyRulesExpanded
                     ? language === 'ar'
-                      ? 'طي قواع�� السياسة'
+                      ? 'طي قواع�� السياس��'
                       : 'Collapse policy rules'
                     : language === 'ar'
                       ? 'توسيع قواعد السياسة'
