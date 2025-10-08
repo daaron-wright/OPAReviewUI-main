@@ -18,6 +18,31 @@
       "entry_point": {
         "type": "initial",
         "description": "Determine entry path - customer portal or employee portal",
+        "journey_paths": [
+          "new_registration",
+          "update_compliance",
+          "fast_track"
+        ],
+        "relevant_chunks": [
+          {
+            "language": "en",
+            "text": "Applicants are routed into customer or employee intake branches before journey selection, aligning with BRD section 2.1 \"Channel Intake Alignment\".",
+            "reference_id": "brd_section_2_1",
+            "tags": [
+              "journey",
+              "entry"
+            ]
+          },
+          {
+            "language": "ar",
+            "text": "يتم توجيه المتقدمين إلى مسار دخول العملاء أو الموظفين قبل اختيار الرحلة، بما يتماشى مع القسم 2.1 من وثيقة المتطلبات «مواءمة قنوات الدخول».",
+            "reference_id": "brd_section_2_1",
+            "tags": [
+              "journey",
+              "entry"
+            ]
+          }
+        ],
         "transitions": [
           {
             "condition": "entry_type == 'customer'",
