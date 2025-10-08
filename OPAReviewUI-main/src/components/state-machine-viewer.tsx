@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useEdgesState, useNodesState } from 'reactflow';
-import type { Edge, FitViewOptions, Node, ReactFlowInstance } from 'reactflow';
+import type { Edge, FitViewOptions, Node, ReactFlowInstance, Viewport } from 'reactflow';
 
 import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
 import { GraphCanvas } from './graph/graph-canvas';
@@ -1208,7 +1208,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       step4Description =
         totalStates > 0
           ? `Walkthrough in progress �� ${Math.min(reviewedStates, totalStates)} of ${totalStates} states reviewed`
-          : 'Walkthrough in progress…';
+          : 'Walkthrough in progress��';
     } else if (walkthroughInProgress) {
       step4Status = 'active';
       step4Description =
