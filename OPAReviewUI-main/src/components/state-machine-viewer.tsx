@@ -556,7 +556,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
           return true;
         } catch (error) {
-          if (isAbortError(error, { signal })) {
+          if (isAbortError(error, signal ? { signal } : undefined)) {
             return false;
           }
 
