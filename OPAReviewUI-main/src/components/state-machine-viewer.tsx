@@ -501,7 +501,7 @@ function filterStateMachineForJourney(
   };
 }
 
-function restrictStateMachineToJourney(
+function _restrictStateMachineToJourney(
   machine: ProcessedStateMachine,
   journeyId: JourneyTabId
 ): ProcessedStateMachine {
