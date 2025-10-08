@@ -466,11 +466,14 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   );
   const [isStateMachineLoading, setIsStateMachineLoading] = useState(!initialStateMachine);
   const [stateMachineError, setStateMachineError] = useState<string | null>(null);
+  const remoteFetchAttemptedRef = useRef(false);
 
   useEffect(() => {
-    if (initialStateMachine) {
+    if (initialStateMachine || remoteFetchAttemptedRef.current) {
       return;
     }
+
+    remoteFetchAttemptedRef.current = true;
 
     let isActive = true;
     const controller = new AbortController();
@@ -506,12 +509,9 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
           return;
         }
 
-        console.error('Failed to load remote state machine', error);
+        console.warn('Failed to load remote state machine', error);
         const message = 'Unable to load the full Real Beneficiary workflow. Showing fallback data.';
         setStateMachineError(message);
-        toast.error(createToastContent('warningTriangle', message), {
-          position: 'top-center',
-        });
       } finally {
         if (isActive) {
           setIsStateMachineLoading(false);
