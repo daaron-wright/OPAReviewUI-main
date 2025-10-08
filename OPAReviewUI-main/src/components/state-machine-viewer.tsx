@@ -142,32 +142,35 @@ function filterStateMachineForJourney(
       shouldIncludeEdge(edge, edge.source, config, keywordMatchers)
   );
 
-  const sanitizedNodes = filteredNodes.map((node) => ({
-    ...node,
-    metadata: {
-      ...node.metadata,
-      transitions: node.metadata.transitions
-        ?.filter((transition) =>
-          filteredNodeIds.has(transition.target) &&
-          shouldIncludeEdge(
-            {
-              id: `${node.id}-${transition.target}-metadata`,
-              source: node.id,
-              target: transition.target,
-              label: transition.controlAttributeValue ?? transition.condition,
-              condition: transition.condition,
-              action: transition.action,
-              controlAttribute: transition.controlAttribute,
-              controlAttributeValue: transition.controlAttributeValue,
-            },
-            node.id,
-            config,
-            keywordMatchers
-          )
-        )
-        .slice(0) ?? undefined,
-    },
-  }));
+  const sanitizedNodes = filteredNodes.map((node) => {
+    const filteredTransitions = node.metadata.transitions?.filter((transition) =>
+      filteredNodeIds.has(transition.target) &&
+      shouldIncludeEdge(
+        {
+          id: `${node.id}-${transition.target}-metadata`,
+          source: node.id,
+          target: transition.target,
+          label: transition.controlAttributeValue ?? transition.condition,
+          condition: transition.condition,
+          action: transition.action,
+          controlAttribute: transition.controlAttribute,
+          controlAttributeValue: transition.controlAttributeValue,
+        },
+        node.id,
+        config,
+        keywordMatchers
+      )
+    );
+
+    return {
+      ...node,
+      metadata: {
+        ...node.metadata,
+        transitions:
+          filteredTransitions && filteredTransitions.length > 0 ? filteredTransitions : undefined,
+      },
+    };
+  });
 
   return {
     nodes: sanitizedNodes,
