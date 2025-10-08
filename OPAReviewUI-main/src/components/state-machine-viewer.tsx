@@ -43,7 +43,7 @@ const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type
  * Default workflow bundled locally as a fallback until the extended Arabic workflow is fetched at runtime.
  */
 const rawDefaultProcessedStateMachine: ProcessedStateMachine = processStateMachine(
-  (realBeneficiaryStateMachineFile as StateMachineFile).stateMachine
+  (realBeneficiaryStateMachineFile as any).stateMachine
 );
 const defaultProcessedStateMachine = rawDefaultProcessedStateMachine;
 
