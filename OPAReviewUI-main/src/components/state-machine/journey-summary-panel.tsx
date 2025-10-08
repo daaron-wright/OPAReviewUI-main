@@ -587,52 +587,95 @@ export function JourneySummaryPanel({
           </header>
 
           <div className="space-y-3">
-            <div className="rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-                <span>Overall progress</span>
-                <span>
-                  {progress.reviewed} / {progress.total}
-                </span>
+            {!hasDocument ? (
+              <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-5 py-6 text-center">
+                <p className="text-sm font-semibold text-slate-800">Awaiting policy document</p>
+                <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                  Upload the BRD policy PDF to view journey coverage and publication readiness metrics.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleUploadClick}
+                  className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#0f766e] px-4 py-2 text-sm font-semibold text-[#0f766e] transition hover:bg-[#f0fdfa]"
+                >
+                  Upload BRD policy
+                </button>
               </div>
-              <div className="mt-2 h-2 overflow-hidden rounded-full border border-white bg-white">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1]"
-                  style={{
-                    width: `${progress.total === 0 ? 0 : Math.min(100, (progress.reviewed / progress.total) * 100)}%`,
-                  }}
-                />
-              </div>
-              <div className="mt-3 text-xs text-slate-500 flex items-center justify-between">
-                <span>Version {metadata.version}</span>
-                <span>{metadata.totalStates} total states</span>
-              </div>
-            </div>
+            ) : (
+              <>
+                <div className="rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3">
+                  <div className="flex items-center justify-between text-xs font-medium text-slate-500">
+                    <span>Overall progress</span>
+                    <span>
+                      {progress.reviewed} / {progress.total}
+                    </span>
+                  </div>
+                  <div className="mt-2 h-2 overflow-hidden rounded-full border border-white bg-white">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-[#0f766e] via-[#1f8f83] to-[#3fb7a1]"
+                      style={{
+                        width: `${progress.total === 0 ? 0 : Math.min(100, (progress.reviewed / progress.total) * 100)}%`,
+                      }}
+                    />
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+                    <span>Version {metadata.version}</span>
+                    <span>{progress.total} total states</span>
+                  </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                className="rounded-xl border border-[#dbe9e3] bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#c5ded5]"
-                onClick={onApproveAll}
-              >
-                Approve all
-              </button>
-              <button
-                type="button"
-                onClick={onPublish}
-                disabled={!canPublish}
-                className={clsx(
-                  'flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition',
-                  canPublish
-                    ? 'bg-[#0f766e] text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)] hover:bg-[#0c5f59]'
-                    : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                )}
-              >
-                Publish
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor">
-                  <path d="M8 3.5v8.5M8 3.5L5 6.5M8 3.5l3 3" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
+                  {journeyBreakdown.length > 0 ? (
+                    <div className="mt-4 space-y-2">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                        Journey coverage
+                      </p>
+                      <div className="space-y-2">
+                        {journeyBreakdown.map((journey) => (
+                          <div
+                            key={journey.id}
+                            className="flex items-center justify-between rounded-xl border border-white bg-white px-3 py-2"
+                          >
+                            <span className="text-sm font-semibold text-slate-800">{journey.label}</span>
+                            <span className="text-xs font-semibold text-slate-500">
+                              {journey.total} state{journey.total === 1 ? '' : 's'}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-xs text-slate-500">
+                      Journey totals will appear once states are mapped.
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    className="rounded-xl border border-[#dbe9e3] bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-[#c5ded5]"
+                    onClick={onApproveAll}
+                  >
+                    Approve all
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onPublish}
+                    disabled={!canPublish}
+                    className={clsx(
+                      'flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition',
+                      canPublish
+                        ? 'bg-[#0f766e] text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)] hover:bg-[#0c5f59]'
+                        : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                    )}
+                  >
+                    Publish
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor">
+                      <path d="M8 3.5v8.5M8 3.5L5 6.5M8 3.5l3 3" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </section>
       </div>
