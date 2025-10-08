@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Modal component for displaying detailed node information
  * Now with side-by-side BRD and Rego rules because Master Jedi demands it
@@ -111,7 +113,7 @@ If Person A owns 60% of Company X, and Company X owns 50% of the target entity:
 Person A's indirect ownership = 60% × 50% = 30% (requires declaration)
 
 Note: Even if ownership is below 25%, persons exercising control through other means MUST be identified.`,
-      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق التصويت كمست��يد حقيقي.
+      contentAr: `يجب الإعلان عن أي شخص طبيعي يمتلك أو يسيطر بشكل مباشر أو غير مباشر على 25٪ أو أكثر من رأس المال أو حقوق ال��صويت كمست��يد حقيقي.
 
 قواعد الحساب:
 • ا��ملكية المباشرة: الأسهم المملوكة باسم الشخص نفسه
