@@ -202,34 +202,33 @@ export function JourneySummaryPanel({
       </div>
 
       <div className="flex w-full xl:w-auto xl:flex-row">
-        <button
-          type="button"
-          onClick={onToggleOpen}
-          aria-expanded={isOpen}
-          aria-controls={panelId}
-          className="hidden h-full w-14 shrink-0 flex-col items-center justify-center rounded-l-[28px] rounded-r-3xl bg-[#0f766e] text-white shadow-[0_22px_42px_-28px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e] xl:flex"
-        >
-          <span className="[writing-mode:vertical-rl] text-[10px] font-semibold uppercase tracking-[0.32em]">
-            Overview
-          </span>
-          <svg
-            className={clsx('mt-4 h-4 w-4 transition-transform duration-300', isOpen ? 'rotate-90' : '-rotate-90')}
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            aria-hidden
+        <div className="pointer-events-auto xl:fixed xl:right-6 xl:top-[calc(theme(spacing.24))] xl:z-30">
+          <button
+            type="button"
+            onClick={onToggleOpen}
+            aria-expanded={isOpen}
+            aria-controls={panelId}
+            className="hidden h-12 w-12 items-center justify-center rounded-full bg-[#0f766e] text-white shadow-[0_22px_42px_-28px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e] xl:flex"
           >
-            <path d="M6 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span className="sr-only">Toggle overview panel</span>
-        </button>
+            <span className="sr-only">Toggle overview panel</span>
+            <svg
+              className={clsx('h-5 w-5 transition-transform duration-300', isOpen ? 'rotate-45' : 'rotate-0')}
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.6}
+              aria-hidden
+            >
+              <path d="M5 7.5h10M5 12.5h6" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
 
         <div
           id={panelId}
           className={clsx(
-            'relative w-full overflow-hidden transition-all duration-500 ease-out xl:w-auto xl:flex-none',
-            isOpen ? 'xl:ml-6 opacity-100' : 'pointer-events-none opacity-0'
+            'relative w-full overflow-hidden transition-all duration-500 ease-out xl:absolute xl:right-12 xl:top-28 xl:w-[min(90vw,420px)] xl:translate-y-0 xl:rounded-[32px] xl:shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)]',
+            isOpen ? 'xl:pointer-events-auto xl:opacity-100' : 'pointer-events-none opacity-0'
           )}
           style={{
             width: isOpen ? '100%' : '0px',
