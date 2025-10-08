@@ -1160,7 +1160,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white/70 px-6 text-center backdrop-blur-sm">
                   <p className="text-base font-semibold text-slate-900">Upload a BRD policy to enable walkthrough actions.</p>
                   <p className="text-sm font-medium text-slate-500">
-                    The graph displays the current state machine structure.
+                    The graph displays the {selectedJourneyConfig.label.toLowerCase()} journey in read-only mode.
                   </p>
                 </div>
               )}
