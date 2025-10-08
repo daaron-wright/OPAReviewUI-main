@@ -37,37 +37,6 @@ interface StateMachineFile {
 
 type JourneyTabId = string;
 
-const DEFAULT_JOURNEY_PATHS: Readonly<Record<JourneyTabId, ReadonlyArray<string>>> = Object.freeze({
-  new_trade_name: Object.freeze([
-    'routine1_digital_id_verification',
-    'routine1_eligibility_check',
-    'routine1_trade_name_check',
-    'routine1_collect_trade_name_data',
-    'routine1_exemption_check',
-    'routine1_collect_beneficiary_data',
-    'routine1_blacklist_precheck',
-    'routine1_submit_application',
-  ]),
-  existing_trade_name: Object.freeze([
-    'routine2_digital_id_verification',
-    'routine2_eligibility_check',
-    'routine2_check_issued_names',
-    'routine2_select_trade_name',
-    'routine2_exemption_check',
-    'routine2_collect_beneficiary_extras',
-    'routine2_partner_companies_check',
-    'routine2_blacklist_precheck',
-    'routine2_submit_application',
-  ]),
-  existing_trade_license: Object.freeze([
-    'routine3_digital_id_verification',
-    'routine3_eligibility_check',
-    'routine3_license_prompt',
-    'routine3_declaration_check',
-    'routine3_collect_beneficiary_data',
-    'routine3_submit_application',
-  ]),
-});
 const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
 
 /*
