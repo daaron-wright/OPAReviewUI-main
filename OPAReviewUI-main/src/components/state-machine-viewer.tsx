@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useEdgesState, useNodesState } from 'reactflow';
-import type { Edge, Node, ReactFlowInstance } from 'reactflow';
+import type { Edge, FitViewOptions, Node, ReactFlowInstance } from 'reactflow';
 
 import { calculateLayout } from '@/adapters/graph-layout/dagre-layout';
 import { GraphCanvas } from './graph/graph-canvas';
@@ -585,6 +585,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   const transitionPanTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const detailOpenTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previousJourneyRef = useRef<JourneyTabId>(selectedJourney);
+  const fitViewRafRef = useRef<number | null>(null);
 
   const clearWalkthroughTimers = useCallback(() => {
     if (transitionPanTimeoutRef.current !== null) {
@@ -777,6 +778,16 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
   useEffect(() => () => clearWalkthroughTimers(), [clearWalkthroughTimers]);
 
+  useEffect(
+    () => () => {
+      if (typeof window !== 'undefined' && fitViewRafRef.current !== null) {
+        window.cancelAnimationFrame(fitViewRafRef.current);
+        fitViewRafRef.current = null;
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     if (!hasUploadedDocument) {
       setFocusedNodeId(null);
@@ -819,10 +830,11 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [handleExitWalkthrough, isWalkthroughMode, policyDocument]);
 
   useEffect(() => {
-    if (reactFlowInstance) {
-      reactFlowInstance.fitView({ padding: 0.2, duration: 600 });
+    if (journeyNodes.length === 0) {
+      return;
     }
-  }, [isGraphExpanded, journeyNodes.length, reactFlowInstance, selectedJourney]);
+    scheduleFitView();
+  }, [journeyNodes.length, scheduleFitView, selectedJourney, isGraphExpanded]);
 
   useEffect(() => {
     if (typeof document === 'undefined') {
@@ -1270,9 +1282,36 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
     setIsGraphExpanded(false);
   }, []);
 
+  const scheduleFitView = useCallback(
+    (options?: Partial<FitViewOptions>) => {
+      if (!reactFlowInstance || typeof window === 'undefined') {
+        return;
+      }
+
+      if (fitViewRafRef.current !== null) {
+        window.cancelAnimationFrame(fitViewRafRef.current);
+        fitViewRafRef.current = null;
+      }
+
+      const queueFitView = () => {
+        const { duration: _duration, ...restOptions } = options ?? {};
+        fitViewRafRef.current = window.requestAnimationFrame(() => {
+          reactFlowInstance.fitView({
+            padding: 0.2,
+            ...restOptions,
+          });
+          fitViewRafRef.current = null;
+        });
+      };
+
+      fitViewRafRef.current = window.requestAnimationFrame(queueFitView);
+    },
+    [reactFlowInstance]
+  );
+
   const handleFocusFit = useCallback(() => {
-    reactFlowInstance?.fitView({ padding: 0.18, duration: 600 });
-  }, [reactFlowInstance]);
+    scheduleFitView({ padding: 0.18 });
+  }, [scheduleFitView]);
 
   const graphUnavailablePlaceholder = (
     <div className="flex h-[520px] flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-[#cbe6dc] bg-white px-6 text-center">
