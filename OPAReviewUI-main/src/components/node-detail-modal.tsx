@@ -442,14 +442,17 @@ export function NodeDetailModal({
       }));
       setTestResults((prev) => {
         const existing = prev[ruleId];
+        const result: TestResult = {
+          ruleId,
+          status: 'pass',
+          message: language === 'ar' ? 'تم اعتماد القاعدة' : 'Rule approved',
+        };
+        if (existing?.actual !== undefined) {
+          result.actual = existing.actual;
+        }
         return {
           ...prev,
-          [ruleId]: {
-            ruleId,
-            status: 'pass',
-            actual: existing?.actual,
-            message: language === 'ar' ? 'تم اعتماد القاعدة' : 'Rule approved',
-          },
+          [ruleId]: result,
         };
       });
       toast.success(createToastContent('checkCircle', language === 'ar' ? 'تم اعتماد القاعدة' : 'Rule approved successfully'), {
@@ -1418,7 +1421,7 @@ export function NodeDetailModal({
                                         : 'Confirmed'
                                       : testWorkflows[rule.id]?.status === 'reviewing'
                                         ? language === 'ar'
-                                          ? 'قيد المراجعة'
+                                          ? 'قيد ا��مراجعة'
                                           : 'In Review'
                                         : testWorkflows[rule.id]?.status === 'rejected'
                                           ? language === 'ar'
