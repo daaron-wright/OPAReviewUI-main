@@ -760,7 +760,7 @@ function AccordionSection({ id, title, description, isOpen, onToggle, headerActi
             </span>
           </button>
           {headerActions ? (
-            <div className="flex items-center justify-center gap-2 sm:flex">{headerActions}</div>
+            <div className="hidden items-center justify-center gap-2 sm:flex">{headerActions}</div>
           ) : null}
         </div>
         {headerActions ? (
