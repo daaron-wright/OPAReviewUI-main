@@ -71,6 +71,38 @@ const RETRYABLE_HTTP_STATUS_CODES = new Set([408, 409, 425, 429, 500, 502, 503, 
 
 type FetchError = Error & { status?: number };
 
+interface NormalizedErrorDetails {
+  readonly name: string;
+  readonly message: string;
+  readonly code?: string;
+}
+
+function getErrorDetails(error: unknown): NormalizedErrorDetails {
+  if (!error) {
+    return { name: '', message: '' };
+  }
+
+  if (typeof error === 'string') {
+    const trimmed = error.trim();
+    return { name: '', message: trimmed };
+  }
+
+  const candidate = error as { name?: unknown; message?: unknown; code?: unknown };
+  const name = typeof candidate.name === 'string' ? candidate.name : '';
+  const message = typeof candidate.message === 'string' ? candidate.message : '';
+  const code = typeof candidate.code === 'string' ? candidate.code : undefined;
+
+  if (name || message || code) {
+    return { name, message, code };
+  }
+
+  try {
+    return { name: '', message: JSON.stringify(error) };
+  } catch {
+    return { name: '', message: String(error) };
+  }
+}
+
 function delay(ms: number): Promise<void> {
   if (ms <= 0) {
     return Promise.resolve();
@@ -86,29 +118,34 @@ function isAbortError(error: unknown, signal?: AbortSignal): boolean {
     return true;
   }
 
-  if (!error) {
+  if (typeof DOMException !== 'undefined' && error instanceof DOMException) {
+    return error.name === 'AbortError';
+  }
+
+  const { name, message, code } = getErrorDetails(error);
+  const normalizedName = name.toLowerCase();
+  const normalizedCode = code?.toLowerCase();
+  const normalizedMessage = message.toLowerCase();
+
+  if (normalizedName === 'aborterror') {
+    return true;
+  }
+
+  if (normalizedCode === 'abort_err' || normalizedCode === 'aborted' || normalizedCode === 'ecanceled') {
+    return true;
+  }
+
+  if (!normalizedMessage) {
     return false;
   }
 
-  const candidate = error as { name?: string; message?: string };
-
-  const name = candidate.name?.toLowerCase();
-  if (name === 'aborterror') {
-    return true;
-  }
-
-  const message = candidate.message?.toLowerCase() ?? '';
   if (
-    message.includes('abort') ||
-    message.includes('the operation was aborted') ||
-    message.includes('fetch is aborted') ||
-    message.includes('user aborted')
+    normalizedMessage.includes('abort') ||
+    normalizedMessage.includes('the operation was aborted') ||
+    normalizedMessage.includes('fetch is aborted') ||
+    normalizedMessage.includes('user aborted')
   ) {
     return true;
-  }
-
-  if (typeof DOMException !== 'undefined' && error instanceof DOMException) {
-    return error.name === 'AbortError';
   }
 
   return false;
@@ -127,26 +164,37 @@ function isRetriableFetchError(error: unknown): boolean {
     return false;
   }
 
-  const candidate = error as { name?: string; message?: string };
-  const name = candidate.name?.toLowerCase() ?? '';
-  if (name === 'typeerror' || name === 'networkerror' || name === 'fetcherror') {
+  const { name, message, code } = getErrorDetails(error);
+  const normalizedName = name.toLowerCase();
+  const normalizedCode = code?.toLowerCase();
+  const normalizedMessage = message.toLowerCase();
+
+  if (normalizedName === 'aborterror' || normalizedCode === 'abort_err') {
+    return false;
+  }
+
+  if (normalizedName === 'typeerror' || normalizedName === 'networkerror' || normalizedName === 'fetcherror') {
     return true;
   }
 
-  const message = candidate.message?.toLowerCase() ?? '';
-  if (!message) {
+  if (normalizedCode === 'etimedout' || normalizedCode === 'econnreset' || normalizedCode === 'ecanceled') {
+    return true;
+  }
+
+  if (!normalizedMessage) {
     return false;
   }
 
   return (
-    message === 'error' ||
-    message.includes('network') ||
-    message.includes('timeout') ||
-    message.includes('temporarily') ||
-    message.includes('failed to fetch') ||
-    message.includes('load failed') ||
-    message.includes('connection') ||
-    message.includes('fetch is aborted')
+    normalizedMessage === 'error' ||
+    normalizedMessage.includes('network') ||
+    normalizedMessage.includes('timeout') ||
+    normalizedMessage.includes('temporarily') ||
+    normalizedMessage.includes('failed to fetch') ||
+    normalizedMessage.includes('load failed') ||
+    normalizedMessage.includes('connection') ||
+    normalizedMessage.includes('fetch is aborted') ||
+    normalizedMessage.includes('reset by peer')
   );
 }
 
