@@ -23,7 +23,7 @@ import {
 } from '@/domain/state-machine/processor';
 import type { StateMachine } from '@/domain/state-machine/types';
 import { isAbortError, isRetriableFetchError } from '@/utils/fetch-error-utils';
-import realBeneficiaryStateMachineFile from '../../data/real_beneficiary_state_machine.json';
+import realBeneficiaryStateMachineFile from '../../data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json';
 import {
   JourneyTimeline,
   TimelineNodeItem,
