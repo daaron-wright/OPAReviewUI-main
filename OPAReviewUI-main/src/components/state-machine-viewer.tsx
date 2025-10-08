@@ -1104,16 +1104,20 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
           </button>
         </div>
       </div>
-      {isGraphExpanded ? (
-        canDisplayGraph ? (
-          <div className="flex h-[520px] items-center justify-center rounded-2xl border border-dashed border-[#cbe6dc] bg-white text-sm font-semibold text-slate-500">
-            Graph open in focus view
-          </div>
+      {hasUploadedDocument ? (
+        isGraphExpanded ? (
+          canDisplayGraph ? (
+            <div className="flex h-[520px] items-center justify-center rounded-2xl border border-dashed border-[#cbe6dc] bg-white text-sm font-semibold text-slate-500">
+              Graph open in focus view
+            </div>
+          ) : (
+            graphUnavailablePlaceholder
+          )
+        ) : canDisplayGraph ? (
+          graphCanvas
         ) : (
           graphUnavailablePlaceholder
         )
-      ) : canDisplayGraph ? (
-        graphCanvas
       ) : (
         graphUnavailablePlaceholder
       )}
