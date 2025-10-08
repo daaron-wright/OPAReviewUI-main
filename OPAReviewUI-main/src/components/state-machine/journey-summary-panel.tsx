@@ -617,7 +617,7 @@ export function JourneySummaryPanel({
                       onClick={handleUploadClick}
                       className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#0f766e] px-4 py-2 text-sm font-semibold text-[#0f766e] transition hover:bg-[#f0fdfa]"
                     >
-                      Upload BRD policy
+                      Upload BRD Document
                     </button>
                   </div>
                 ) : (
