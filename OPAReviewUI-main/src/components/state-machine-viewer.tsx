@@ -878,7 +878,7 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       reactFlowInstance.setViewport(lastViewportRef.current);
       storeViewport();
     }
-  }, [journeyNodes.length, scheduleFitView, reactFlowInstance, selectedJourney, isGraphExpanded]);
+  }, [journeyNodes.length, scheduleFitView, reactFlowInstance, selectedJourney, isGraphExpanded, storeViewport]);
 
   useEffect(() => {
     if (!hasUploadedDocument) {
