@@ -574,9 +574,11 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
             continue;
           }
 
-          console.error('Failed to fetch extended BRD state machine', error);
+          if (!signal?.aborted) {
+            console.error('Failed to fetch extended BRD state machine', error);
+          }
 
-          if (!suppressToast) {
+          if (!suppressToast && !signal?.aborted) {
             toast.warning(
               createToastContent('warningTriangle', 'BRD workflow import failed; using default view'),
               {
