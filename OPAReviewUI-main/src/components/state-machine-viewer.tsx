@@ -135,8 +135,6 @@ function isRetriableFetchError(error: unknown): boolean {
   );
 }
 
-type JourneyTabId = string;
-
 interface JourneyTabConfig {
   readonly id: JourneyTabId;
   readonly label: string;
