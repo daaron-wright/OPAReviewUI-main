@@ -581,7 +581,6 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [hasUploadedDocument]);
 
   const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const transitionPanTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const detailOpenTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previousJourneyRef = useRef<JourneyTabId>(selectedJourney);
@@ -626,22 +625,6 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
       position: 'top-center',
     });
   }, [policyDocument, removePolicyDocument]);
-
-  const handleOverlayUploadClick = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
-
-  const handleOverlayFileChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (!file) {
-        return;
-      }
-      handlePolicyDocumentSelected(file);
-      event.target.value = '';
-    },
-    [handlePolicyDocumentSelected]
-  );
 
   const toggleSummaryOpen = useCallback(() => {
     setIsSummaryOpen((previous) => !previous);
@@ -1704,13 +1687,6 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
 
   return (
     <div className="min-h-screen bg-[#f4f8f6] py-10">
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="application/pdf"
-        className="hidden"
-        onChange={handleOverlayFileChange}
-      />
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 lg:px-8 xl:flex-row xl:items-start">
         <div className="flex-1 space-y-6">
           <JourneyTimeline
