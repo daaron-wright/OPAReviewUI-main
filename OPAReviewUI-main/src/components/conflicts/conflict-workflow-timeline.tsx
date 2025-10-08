@@ -203,7 +203,12 @@ export function ConflictWorkflowDetailPanel({
 
   return (
     <div className="space-y-6">
-      <header className="flex flex-wrap items-start justify-between gap-6 rounded-[24px] border border-[#dbe9e3] bg-white p-6 shadow-sm">
+      <header
+        className={clsx(
+          'flex flex-wrap items-start justify-between gap-6 rounded-[24px] border bg-white p-6 transition-shadow',
+          severityVisual.container
+        )}
+      >
         <div className="space-y-3">
           <span
             className={clsx(
