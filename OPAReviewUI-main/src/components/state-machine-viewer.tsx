@@ -507,8 +507,15 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
         return true;
       } catch (error) {
-        const maybeAbortError = error as { name?: string } | undefined;
-        if (signal?.aborted || maybeAbortError?.name === 'AbortError') {
+        const maybeAbortError = error as { name?: string; message?: string } | undefined;
+        const message = maybeAbortError?.message?.toLowerCase() ?? '';
+        const aborted =
+          signal?.aborted ||
+          maybeAbortError?.name === 'AbortError' ||
+          message.includes('aborted') ||
+          message.includes('abort');
+
+        if (aborted) {
           return false;
         }
 
