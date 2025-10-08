@@ -81,9 +81,10 @@ export interface ProcessedStateMachine {
  * Processes raw state machine data into graph-renderable format
  */
 export function processStateMachine(machine: StateMachine): ProcessedStateMachine {
-  const nodes = createNodes(machine);
+  const journeys = normalizeJourneys(machine);
+  const nodes = createNodes(machine, journeys);
   const edges = createEdges(machine);
-  
+
   return {
     nodes,
     edges,
@@ -93,23 +94,30 @@ export function processStateMachine(machine: StateMachine): ProcessedStateMachin
       description: machine.description,
       totalStates: nodes.length,
       totalTransitions: edges.length,
+      journeys: journeys.length > 0 ? journeys : undefined,
     },
   };
 }
 
-function createNodes(machine: StateMachine): ReadonlyArray<ProcessedNode> {
-  return Object.entries(machine.states).map(([stateId, state]) => 
-    createNode(stateId, state, machine)
+function createNodes(
+  machine: StateMachine,
+  journeys: ReadonlyArray<ProcessedJourneyDefinition>
+): ReadonlyArray<ProcessedNode> {
+  return Object.entries(machine.states).map(([stateId, state]) =>
+    createNode(stateId, state, machine, journeys)
   );
 }
 
 function createNode(
-  id: string, 
-  state: State, 
-  machine: StateMachine
+  id: string,
+  state: State,
+  machine: StateMachine,
+  journeys: ReadonlyArray<ProcessedJourneyDefinition>
 ): ProcessedNode {
   const controlAttributes = normalizeControlAttributes(state);
   const transitions = state.transitions?.map((transition) => normalizeTransition(transition));
+  const journeyPaths = normalizeJourneyPaths(id, state, journeys);
+  const relevantChunks = normalizeRelevantChunks(state);
 
   return {
     id,
@@ -118,6 +126,8 @@ function createNode(
     description: state.description,
     isFinal: machine.finalStates.includes(id),
     isInitial: machine.initialState === id,
+    journeyPaths,
+    ...(relevantChunks ? { relevantChunks } : {}),
     metadata: {
       functions: state.functions || (state.function ? [state.function] : undefined),
       nextState: state.nextState,
