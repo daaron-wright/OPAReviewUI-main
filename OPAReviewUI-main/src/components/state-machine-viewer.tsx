@@ -501,36 +501,6 @@ function filterStateMachineForJourney(
   };
 }
 
-function focusProcessedStateMachine(
-  machine: ProcessedStateMachine,
-  allowedNodes: ReadonlySet<string>
-): ProcessedStateMachine {
-  if (machine.nodes.length === 0) {
-    return machine;
-  }
-
-  const prioritized = machine.nodes.filter((node) => allowedNodes.has(node.id));
-
-  if (prioritized.length === 0) {
-    return machine;
-  }
-
-  const includedIds = new Set(prioritized.map((node) => node.id));
-  const edges = machine.edges.filter(
-    (edge) => includedIds.has(edge.source) && includedIds.has(edge.target)
-  );
-
-  return {
-    nodes: prioritized,
-    edges,
-    metadata: {
-      ...machine.metadata,
-      totalStates: prioritized.length,
-      totalTransitions: edges.length,
-    },
-  };
-}
-
 interface StateMachineViewerProps {
   readonly stateMachine?: ProcessedStateMachine;
 }
