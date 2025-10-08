@@ -13,6 +13,7 @@ import { ConflictAnalyticsPanel } from '@/components/conflicts/conflict-analytic
 import { ConflictListView } from '@/components/conflicts/conflict-list-view';
 import { ConflictDetailModal } from '@/components/conflicts/conflict-detail-modal';
 import { ConflictFilters } from '@/components/conflicts/conflict-filters';
+import { ConflictWorkflowDetailPanel } from '@/components/conflicts/conflict-workflow-timeline';
 
 const panelCardClassName =
   'rounded-3xl border border-[#d8e4df] bg-white/95 p-6 shadow-[0_20px_48px_-28px_rgba(11,64,55,0.28)]';
