@@ -412,28 +412,34 @@ export function StateMachineViewer({ stateMachine = defaultProcessedStateMachine
   }, [journeyNodeIds, stateMachine.nodes]);
 
   const initialEdges = useMemo(() => {
-    const initialId = journeyNodes.find((n) => n.isInitial)?.id;
-    return journeyEdges.map((edge) => ({
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
-      label: edge.label,
-      type: 'smoothstep',
-      animated: edge.source === initialId,
-      style: {
-        stroke: '#6B7280',
-        strokeWidth: 2,
-      },
-      labelStyle: {
-        fontSize: 11,
-        fontWeight: 500,
-      },
-      labelBgStyle: {
-        fill: '#ffffff',
-        fillOpacity: 0.9,
-      },
-    }));
-  }, [journeyEdges, journeyNodes]);
+    const initialId = stateMachine.nodes.find((n) => n.isInitial)?.id;
+    return stateMachine.edges.map((edge) => {
+      const isJourneyEdge = journeyEdgeIds.has(edge.id);
+      return {
+        id: edge.id,
+        source: edge.source,
+        target: edge.target,
+        label: edge.label,
+        type: 'smoothstep',
+        animated: Boolean(isJourneyEdge && edge.source === initialId),
+        style: {
+          stroke: isJourneyEdge ? '#0f766e' : '#cddeda',
+          strokeWidth: isJourneyEdge ? 2.4 : 1.4,
+          opacity: isJourneyEdge ? 0.95 : 0.4,
+          transition: 'stroke 0.3s ease, opacity 0.3s ease',
+        },
+        labelStyle: {
+          fontSize: 11,
+          fontWeight: isJourneyEdge ? 600 : 500,
+          color: isJourneyEdge ? '#0f766e' : '#9ca3af',
+        },
+        labelBgStyle: {
+          fill: '#ffffff',
+          fillOpacity: isJourneyEdge ? 0.9 : 0.45,
+        },
+      };
+    });
+  }, [journeyEdgeIds, stateMachine.edges, stateMachine.nodes]);
 
   const getNodeDOMPosition = useCallback((nodeId: string) => {
     const nodeElement = document.querySelector(`[data-id="${nodeId}"]`);
