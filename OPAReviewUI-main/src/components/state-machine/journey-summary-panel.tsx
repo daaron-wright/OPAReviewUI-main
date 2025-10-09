@@ -156,6 +156,28 @@ export function JourneySummaryPanel({
     setActiveTab(tabId);
   }, []);
 
+  const documentEndpoint = useMemo(
+    () =>
+      documentInfo
+        ? selectDocumentEndpoint(
+            documentInfo.document_endpoint,
+            documentInfo.pdf_url,
+            documentInfo.documentUrl
+          )
+        : null,
+    [documentInfo]
+  );
+
+  const displayedDocumentName = useMemo(() => {
+    const uploadedName = policyDocument?.fileName?.trim();
+    if (uploadedName && uploadedName.length > 0) {
+      return uploadedName;
+    }
+
+    const infoName = documentInfo?.filename?.trim();
+    return infoName && infoName.length > 0 ? infoName : null;
+  }, [policyDocument?.fileName, documentInfo?.filename]);
+
   const openNodeReviewButton = (
     <button
       type="button"
