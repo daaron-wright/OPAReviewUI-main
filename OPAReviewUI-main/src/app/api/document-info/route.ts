@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 
-import { NextResponse } from 'next/server';
-
 const UPSTREAM_ENDPOINT = 'https://brd-db-api.fly.dev/document_info';
 const PDF_FILENAME = 'V3.0_Reviewed_translation_EN_full.pdf';
 const PDF_ENDPOINT = `https://brd-db-api.fly.dev/document/${encodeURIComponent(PDF_FILENAME)}`;
