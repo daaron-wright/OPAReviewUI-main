@@ -1068,7 +1068,7 @@ export function NodeDetailModal({
                       </div>
                       <p className="mt-2 text-sm text-slate-600">
                         {language === 'ar'
-                          ? 'انقر على أي قاعدة لتشغيل حالات الاختبار ومزام��تها مع مرجع BRD.'
+                          ? 'انقر على أي قاعدة لتشغيل حالات الاختبار ومزامنتها مع مرجع BRD.'
                           : 'Click a rule to run test cases and sync with the BRD reference.'}
                       </p>
                     </div>
@@ -1430,6 +1430,185 @@ function getTypeBadgeStyle(node: ProcessedNode): string {
     default:
       return 'border border-[#e2ede8] bg-white text-slate-600';
   }
+}
+
+function buildRegoRulesFromNode(node: ProcessedNode | null): RegoRule[] {
+  if (!node?.metadata.regoRules) {
+    return [];
+  }
+
+  const results: RegoRule[] = [];
+  let ordinal = 0;
+
+  for (const [attribute, rawValue] of Object.entries(node.metadata.regoRules)) {
+    if (typeof rawValue !== 'string' || rawValue.trim().length === 0) {
+      continue;
+    }
+
+    ordinal += 1;
+
+    const values = rawValue
+      .split('|')
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    const allowedValues = values.filter((value) => value !== '<other_value>');
+    const includesFallback = values.length !== allowedValues.length || allowedValues.length === 0;
+
+    const packageSegment = sanitizeIdentifier(node.id || `state_${ordinal}`);
+    const attributeIdentifier = sanitizeIdentifier(attribute);
+    const ruleName = `decision_${attributeIdentifier}`;
+    const packageName = REGO_PACKAGE_PREFIX
+      ? `${REGO_PACKAGE_PREFIX}.${packageSegment}`
+      : packageSegment;
+
+    const defaultDecision = allowedValues.length > 0 ? '"reject"' : '"review"';
+    const ruleLines: string[] = [
+      `package ${packageName}`,
+      '',
+      `default ${ruleName} = ${defaultDecision}`,
+    ];
+
+    allowedValues.forEach((value) => {
+      ruleLines.push(
+        '',
+        `${ruleName} = "allow" {`,
+        `  input.${attribute} == ${formatRegoValue(value)}`,
+        `}`
+      );
+    });
+
+    if (includesFallback) {
+      const reviewConditions =
+        allowedValues.length > 0
+          ? allowedValues.map((value) => `  input.${attribute} != ${formatRegoValue(value)}`)
+          : [];
+      ruleLines.push(
+        '',
+        `${ruleName} = "review" {`,
+        `  input.${attribute} != null`,
+        ...reviewConditions,
+        `}`
+      );
+    }
+
+    const descriptionSegments: string[] = [];
+    if (allowedValues.length > 0) {
+      descriptionSegments.push(
+        `Accepts ${formatRegoValueList(allowedValues)} for ${formatAttributeName(attribute)}.`
+      );
+    }
+    if (includesFallback) {
+      descriptionSegments.push('Other values require manual review.');
+    }
+    if (descriptionSegments.length === 0) {
+      descriptionSegments.push(`Capture ${formatAttributeName(attribute)} for policy review.`);
+    }
+
+    const primaryValue = allowedValues[0] ?? 'REVIEW_REQUIRED';
+    const testInputValue = inferTestInputValue(primaryValue);
+    const testInput = formatTestInput(attribute, testInputValue);
+    const expectedDecision = allowedValues.length > 0 ? 'allow' : 'review';
+    const expected = `{
+  "${ruleName}": "${expectedDecision}"
+}`;
+
+    const keywordsSet = new Set<string>();
+    allowedValues.forEach((value) => keywordsSet.add(value));
+    if (includesFallback) {
+      keywordsSet.add('review');
+    }
+
+    results.push({
+      id: `${node.id}_${attributeIdentifier}`,
+      name: `validate_${attributeIdentifier}`,
+      description: descriptionSegments.join(' '),
+      rule: ruleLines.join('\n'),
+      testCase: {
+        input: testInput,
+        expected,
+      },
+      relatedAttributes: [attribute],
+      relatedNodeIds: [node.id],
+      keywords: Array.from(keywordsSet),
+    });
+  }
+
+  return results;
+}
+
+function sanitizeIdentifier(value: string): string {
+  const normalized = value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return normalized.length > 0 ? normalized : 'value';
+}
+
+function formatRegoValue(value: string): string {
+  const trimmed = value.trim();
+
+  if (trimmed === '<other_value>') {
+    return '"<other_value>"';
+  }
+
+  if (/^(true|false)$/i.test(trimmed)) {
+    return trimmed.toLowerCase();
+  }
+
+  if (/^-?\d+(?:\.\d+)?$/.test(trimmed)) {
+    return trimmed;
+  }
+
+  return `"${trimmed.replace(/"/g, '\\"')}"`;
+}
+
+function inferTestInputValue(rawValue: string): unknown {
+  const trimmed = rawValue.trim();
+
+  if (trimmed === 'REVIEW_REQUIRED') {
+    return trimmed;
+  }
+
+  if (/^(true|false)$/i.test(trimmed)) {
+    return trimmed.toLowerCase() === 'true';
+  }
+
+  if (/^-?\d+(?:\.\d+)?$/.test(trimmed)) {
+    return Number(trimmed);
+  }
+
+  return trimmed;
+}
+
+function formatTestInput(attribute: string, value: unknown): string {
+  return JSON.stringify({ [attribute]: value }, null, 2);
+}
+
+function formatRegoValueList(values: string[]): string {
+  if (values.length === 0) {
+    return '';
+  }
+
+  const formatted = values.map((value) => {
+    const trimmed = value.trim();
+
+    if (/^(true|false)$/i.test(trimmed)) {
+      return trimmed.toLowerCase();
+    }
+
+    if (/^-?\d+(?:\.\d+)?$/.test(trimmed)) {
+      return trimmed;
+    }
+
+    return `"${trimmed}"`;
+  });
+
+  if (formatted.length === 1) {
+    return formatted[0];
+  }
+
+  return `${formatted.slice(0, -1).join(', ')} or ${formatted[formatted.length - 1]}`;
 }
 
 function formatJourneyChipLabel(value: string): string {
