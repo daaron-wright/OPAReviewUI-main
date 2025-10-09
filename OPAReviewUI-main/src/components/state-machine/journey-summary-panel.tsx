@@ -782,7 +782,7 @@ export function JourneySummaryPanel({
                 aria-labelledby={`${panelId}-${activeTab}-tab`}
                 className="flex-1 overflow-y-auto px-6 py-6"
               >
-                <div className="space-y-5">{tabContent}</div>
+                {tabContent}
               </div>
             </div>
           </div>
