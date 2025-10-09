@@ -870,7 +870,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'قواعد التحقق من السياسة لهذه العقدة.'
+                          ? 'قواعد التحقق من السيا��ة لهذه العقدة.'
                           : 'Policy validation rules for this node.'}
                       </p>
                     </div>
@@ -986,12 +986,9 @@ export function NodeDetailModal({
                     </svg>
                   </span>
                   <h3 className="text-sm font-semibold text-slate-900">
-                    {language === 'ar' ? 'المقاطع ذات الصلة' : 'Relevant Chunks'}
+                    {language === 'ar' ? 'أين تجدها في المستند' : 'Where to find in the Document'}
                   </h3>
                 </div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                  {language === 'ar' ? 'من آلة الحالة' : 'From State Machine JSON'}
-                </p>
               </div>
 
               <div>
@@ -1304,7 +1301,7 @@ export function NodeDetailModal({
                                   className="inline-flex items-center gap-2 rounded-full border border-[#b7e6d8] bg-[#effaf6] px-3 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:bg-[#e4f5f1]"
                                 >
                                   <Icon name="check" className="h-4 w-4 text-[#0f766e]" />
-                                  {language === 'ar' ? 'اعتماد القاعدة' : 'Approve Rule'}
+                                  {language === 'ar' ? 'ا��تماد القاعدة' : 'Approve Rule'}
                                 </button>
                                 <button
                                   onClick={() => rejectRule(rule.id)}
