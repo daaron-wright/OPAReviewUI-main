@@ -287,7 +287,7 @@ export function JourneySummaryPanel({
 
       <section className="rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
         <p className="text-sm font-semibold text-slate-900">Journey coverage</p>
-        {journeyBreakdown.length > 0 ? (
+        {hasDocument && journeyBreakdown.length > 0 ? (
           <ul className="mt-3 space-y-2">
             {journeyBreakdown.map((journey) => (
               <li
@@ -303,7 +303,7 @@ export function JourneySummaryPanel({
           </ul>
         ) : (
           <p className="mt-2 text-xs text-slate-500">
-            Journey totals will appear once states are mapped to this workflow.
+            Upload the BRD policy PDF to view journey coverage totals.
           </p>
         )}
       </section>
