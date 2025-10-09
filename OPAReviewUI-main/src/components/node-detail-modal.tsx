@@ -57,7 +57,7 @@ const JOURNEY_LABEL_MAP = {
   },
   existing_trade_license: {
     en: 'Path 3 · Existing Trade License',
-    ar: 'المسار 3 · رخصة تجارية قائمة',
+    ar: 'ال��سار 3 · رخصة تجارية قائمة',
   },
 } as const;
 
@@ -92,8 +92,31 @@ export function NodeDetailModal({
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [expandedBRDSection, setExpandedBRDSection] = useState<string | null>(null);
   const [language, setLanguage] = useState<'ar' | 'en'>('ar'); // Arabic default as requested
-  const [regoRules, setRegoRules] = useState(() => getMockRegoRules());
+  const [regoRules, setRegoRules] = useState<RegoRule[]>([]);
   const [viewMode, setViewMode] = useState<'overview' | 'split'>('overview');
+
+  const derivedRegoRules = useMemo(() => buildRegoRulesFromNode(node), [node]);
+
+  useEffect(() => {
+    if (!node) {
+      setRegoRules([]);
+      setExpandedRule(null);
+      setCopiedRule(null);
+      setChatContext(null);
+      setIsChatOpen(false);
+      setTestResults({});
+      setTestWorkflows({});
+      return;
+    }
+
+    setRegoRules(derivedRegoRules);
+    setExpandedRule(null);
+    setCopiedRule(null);
+    setChatContext(null);
+    setIsChatOpen(false);
+    setTestResults({});
+    setTestWorkflows({});
+  }, [node, derivedRegoRules]);
 
   const {
     setNodeReviewed,
@@ -1018,7 +1041,7 @@ export function NodeDetailModal({
               <div className="flex items-center justify-between gap-3 border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-4">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
-                    {language === 'ar' ? 'قواعد السياسة' : 'Policy rules'}
+                    {language === 'ar' ? 'قواعد ��لسياسة' : 'Policy rules'}
                   </p>
                   <h3 className="text-sm font-semibold text-slate-900">
                     {language === 'ar'
