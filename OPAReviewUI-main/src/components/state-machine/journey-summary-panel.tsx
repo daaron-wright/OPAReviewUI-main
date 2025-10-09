@@ -8,6 +8,8 @@ import { TimelineNodeItem } from './journey-timeline';
 import { ProcessedStateMachine } from '@/domain/state-machine/processor';
 import { UploadedPolicyDocument } from '@/context/review-context';
 
+type SummaryTabId = 'overview' | 'workflow' | 'document' | 'publication';
+
 interface JourneySummaryPanelProps {
   readonly item: TimelineNodeItem | null;
   readonly metadata: ProcessedStateMachine['metadata'];
