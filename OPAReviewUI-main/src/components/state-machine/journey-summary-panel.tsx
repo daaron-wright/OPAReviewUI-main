@@ -343,7 +343,7 @@ export function JourneySummaryPanel({
           </button>
         ) : (
           <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-500">
-            Upload the BRD policy PDF from the Overview tab to begin the guided walkthrough.
+            Upload the BRD policy PDF to begin the guided walkthrough.
           </div>
         )}
 
