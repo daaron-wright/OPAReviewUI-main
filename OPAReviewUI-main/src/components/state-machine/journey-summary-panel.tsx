@@ -176,7 +176,7 @@ export function JourneySummaryPanel({
 
     const infoName = documentInfo?.filename?.trim();
     return infoName && infoName.length > 0 ? infoName : null;
-  }, [policyDocument?.fileName, documentInfo?.filename]);
+  }, [policyDocument, documentInfo]);
 
   const openNodeReviewButton = (
     <button
