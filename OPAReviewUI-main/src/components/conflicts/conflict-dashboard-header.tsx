@@ -34,8 +34,6 @@ export function ConflictDashboardHeader({
       'https://cdn.builder.io/api/v1/image/assets%2F4f55495a54b1427b9bd40ba1c8f3c8aa%2Fc053ea3ff8b6499b884ed87c87f941eb?format=webp&width=200',
   } as const;
 
-  const licenseDeskLabel = 'License review desk';
-
   return (
     <header className="border-b border-transparent bg-[#f4f8f6]">
       <div className="mx-auto max-w-7xl px-4 pt-10 pb-6 lg:px-8">
