@@ -576,7 +576,7 @@ export function JourneySummaryPanel({
                 </button>
               </div>
             ) : documentInfo ? (
-              <DocumentInfoCard info={documentInfo} />
+              <DocumentInfoCard info={documentInfo} overrideFilename={displayedDocumentName ?? undefined} />
             ) : (
               <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-500">
                 No document metadata was returned.
