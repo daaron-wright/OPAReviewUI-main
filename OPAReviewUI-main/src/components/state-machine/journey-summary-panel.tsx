@@ -301,11 +301,7 @@ export function JourneySummaryPanel({
                 {formatFileSize(policyDocument.fileSize)} • Uploaded {formatUploadedAt(policyDocument.uploadedAt)}
               </span>
             </div>
-          ) : (
-            <span>
-              Upload the BRD policy PDF from the Overview tab to enable guided walkthrough mode.
-            </span>
-          )}
+          ) : null}
         </div>
 
         {isWalkthroughMode ? (
