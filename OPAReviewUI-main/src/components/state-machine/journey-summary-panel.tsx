@@ -745,6 +745,13 @@ export function JourneySummaryPanel({
             </div>
 
             <div className="flex h-full flex-col overflow-hidden">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="application/pdf"
+                className="hidden"
+                onChange={handleFileChange}
+              />
               <div className="border-b border-[#e2ede8] bg-white px-6 pt-4 pb-3">
                 <ul role="tablist" className="flex flex-wrap gap-2">
                   {tabs.map((tab) => {
