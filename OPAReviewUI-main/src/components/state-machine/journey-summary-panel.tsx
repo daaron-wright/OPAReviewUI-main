@@ -514,35 +514,47 @@ export function JourneySummaryPanel({
         {documentAccordion.metadata ? (
           <div className="space-y-4 border-t border-[#e2ede8] px-5 py-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <button
-                type="button"
-                onClick={handleRefreshDocumentInfo}
-                disabled={isDocumentInfoLoading}
-                className={clsx(
-                  'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition',
-                  isDocumentInfoLoading
-                    ? 'cursor-wait border-[#dbe9e3] bg-[#f6faf8] text-slate-400'
-                    : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
-                )}
-              >
-                {isDocumentInfoLoading ? (
-                  <span className="flex items-center gap-2">
-                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
-                    Refreshing…
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <span className="inline-flex h-3 w-3 items-center justify-center">
-                      <svg className="h-3 w-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden>
-                        <path d="M4.5 4.5l-1 3 3 1" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M11.5 11.5l1-3-3-1" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M4.5 4.5a5 5 0 0 1 7.5 0M4.5 11.5a5 5 0 0 0 7.5 0" strokeLinecap="round" />
-                      </svg>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleRefreshDocumentInfo}
+                  disabled={isDocumentInfoLoading}
+                  className={clsx(
+                    'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition',
+                    isDocumentInfoLoading
+                      ? 'cursor-wait border-[#dbe9e3] bg-[#f6faf8] text-slate-400'
+                      : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
+                  )}
+                >
+                  {isDocumentInfoLoading ? (
+                    <span className="flex items-center gap-2">
+                      <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
+                      Refreshing…
                     </span>
-                    Refresh
-                  </span>
-                )}
-              </button>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <span className="inline-flex h-3 w-3 items-center justify-center">
+                        <svg className="h-3 w-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden>
+                          <path d="M4.5 4.5l-1 3 3 1" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M11.5 11.5l1-3-3-1" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M4.5 4.5a5 5 0 0 1 7.5 0M4.5 11.5a5 5 0 0 0 7.5 0" strokeLinecap="round" />
+                        </svg>
+                      </span>
+                      Refresh
+                    </span>
+                  )}
+                </button>
+                {documentEndpoint ? (
+                  <a
+                    href={documentEndpoint}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#0f766e]/20 bg-[#0f766e]/5 px-3 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/40 hover:bg-[#0f766e]/10"
+                  >
+                    View official PDF
+                  </a>
+                ) : null}
+              </div>
             </div>
 
             {isDocumentInfoLoading ? (
