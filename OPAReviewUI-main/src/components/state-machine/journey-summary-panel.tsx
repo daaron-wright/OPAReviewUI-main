@@ -880,17 +880,36 @@ export function JourneySummaryPanel({
 }
 
 function DocumentInfoCard({ info }: { info: DocumentInfo }): JSX.Element {
-  const { filename, caption, context, ...additionalFields } = info;
+  const { filename, caption, context, document_endpoint, pdf_url, documentUrl, ...additionalFields } = info;
   const title = typeof filename === 'string' && filename.trim().length > 0 ? filename.trim() : 'Policy document';
   const description = typeof caption === 'string' && caption.trim().length > 0 ? caption.trim() : null;
   const narrative = typeof context === 'string' && context.trim().length > 0 ? context.trim() : null;
+  const documentEndpoint = selectDocumentEndpoint(document_endpoint, pdf_url, documentUrl);
   const extraEntries = Object.entries(additionalFields ?? {}).filter(([, value]) => value !== null && typeof value !== 'undefined');
 
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-4">
-      <div className="space-y-2">
-        <p className="text-sm font-semibold text-slate-900">{title}</p>
-        {description && <p className="text-xs leading-relaxed text-slate-600">{description}</p>}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-2">
+          <p className="text-sm font-semibold text-slate-900">{title}</p>
+          {description && <p className="text-xs leading-relaxed text-slate-600">{description}</p>}
+        </div>
+        {documentEndpoint && (
+          <a
+            href={documentEndpoint}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
+          >
+            <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden>
+              <path d="M5.5 5.5l5 5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M11 5H6a2 2 0 0 0-2 2v3" strokeLinecap="round" />
+              <path d="M11 5v3" strokeLinecap="round" />
+              <path d="M11 5H8" strokeLinecap="round" />
+            </svg>
+            View official PDF
+          </a>
+        )}
       </div>
 
       {narrative && (
