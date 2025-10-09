@@ -453,6 +453,39 @@ export function JourneySummaryPanel({
 
   const documentContent = policyDocument ? (
     <div className="space-y-4">
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">Uploaded policy document</p>
+        <div className="mt-2 flex flex-col gap-1">
+          <span className="truncate text-sm font-semibold text-slate-900">{displayedDocumentName ?? policyDocument.fileName}</span>
+          <span className="text-xs text-slate-500">
+            {formatFileSize(policyDocument.fileSize)} • Uploaded {formatUploadedAt(policyDocument.uploadedAt)}
+          </span>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <a
+            href={policyDocument.previewUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-[#0f766e]/20 bg-[#0f766e]/5 px-3 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/40 hover:bg-[#0f766e]/10"
+          >
+            View uploaded PDF
+          </a>
+          <button
+            type="button"
+            onClick={handleUploadClick}
+            className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#c5ded5]"
+          >
+            Replace
+          </button>
+          <button
+            type="button"
+            onClick={onRemovePolicyDocument}
+            className="inline-flex items-center gap-2 rounded-full border border-transparent bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-100"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
       <div className="rounded-2xl border border-[#dbe9e3] bg-white">
         <button
           type="button"
