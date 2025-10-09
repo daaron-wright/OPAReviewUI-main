@@ -168,7 +168,66 @@ export function JourneySummaryPanel({
 
   const overviewContent = (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
+      <section className="space-y-4 rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-slate-900">Policy document</p>
+            <p className="text-xs text-slate-500">
+              Upload the BRD policy PDF to enable guided walkthrough mode and document insights.
+            </p>
+          </div>
+          {!policyDocument && (
+            <button
+              type="button"
+              onClick={handleUploadClick}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
+            >
+              Upload BRD
+            </button>
+          )}
+        </div>
+
+        {policyDocument ? (
+          <div className="flex flex-col gap-3 rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3 text-sm text-slate-700">
+            <div className="flex flex-col gap-1">
+              <span className="truncate text-sm font-semibold text-slate-900">{policyDocument.fileName}</span>
+              <span className="text-xs text-slate-500">
+                {formatFileSize(policyDocument.fileSize)} • Uploaded {formatUploadedAt(policyDocument.uploadedAt)}
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={policyDocument.previewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-[#0f766e]/20 bg-[#0f766e]/5 px-3 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:border-[#0f766e]/40 hover:bg-[#0f766e]/10"
+              >
+                View PDF
+              </a>
+              <button
+                type="button"
+                onClick={handleUploadClick}
+                className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#c5ded5]"
+              >
+                Replace
+              </button>
+              <button
+                type="button"
+                onClick={onRemovePolicyDocument}
+                className="inline-flex items-center gap-2 rounded-full border border-transparent bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-100"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-[#f6faf8] px-4 py-4 text-sm text-slate-600">
+            Upload the BRD policy PDF to unlock walkthrough controls, policy actors, and metadata.
+          </div>
+        )}
+      </section>
+
+      <section className="rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
         <p className="text-sm font-semibold text-slate-900">Review progress</p>
         <p className="mt-1 text-xs text-slate-500">
           {progress.total === 0
@@ -189,9 +248,9 @@ export function JourneySummaryPanel({
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">Flagged</p>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
+      <section className="rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
         <p className="text-sm font-semibold text-slate-900">Journey coverage</p>
         {journeyBreakdown.length > 0 ? (
           <ul className="mt-3 space-y-2">
@@ -212,7 +271,7 @@ export function JourneySummaryPanel({
             Journey totals will appear once states are mapped to this workflow.
           </p>
         )}
-      </div>
+      </section>
     </div>
   );
 
