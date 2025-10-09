@@ -4,6 +4,9 @@ export interface DocumentInfo {
   readonly filename?: string;
   readonly caption?: string;
   readonly context?: string;
+  readonly document_endpoint?: string;
+  readonly pdf_url?: string;
+  readonly documentUrl?: string;
   readonly [key: string]: unknown;
 }
 
