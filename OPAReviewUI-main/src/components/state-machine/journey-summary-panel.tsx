@@ -935,6 +935,15 @@ function DocumentInfoCard({ info }: { info: DocumentInfo }): JSX.Element {
   );
 }
 
+function selectDocumentEndpoint(...candidates: (unknown | undefined)[]): string | null {
+  for (const candidate of candidates) {
+    if (typeof candidate === 'string' && candidate.trim().length > 0) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
 function formatInfoValue(value: unknown): string {
   if (typeof value === 'string') {
     return value;
