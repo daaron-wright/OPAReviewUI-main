@@ -269,7 +269,7 @@ export function NodeDetailModal({
     (status: TestWorkflow['status']) => {
       switch (status) {
         case 'confirmed':
-          return language === 'ar' ? 'تم تأكيد حالة سير العمل' : 'Workflow marked confirmed';
+          return language === 'ar' ? 'تم تأكي�� حالة سير العمل' : 'Workflow marked confirmed';
         case 'reviewing':
           return language === 'ar' ? 'تم التعيين للمراجعة' : 'Workflow set to reviewing';
         case 'rejected':
@@ -674,7 +674,7 @@ export function NodeDetailModal({
             <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
               {viewMode === 'split'
                 ? language === 'ar'
-                  ? 'عرض قواعد السياسة'
+                  ? 'عرض قواع�� السياسة'
                   : 'Policy rules view'
                 : language === 'ar'
                   ? 'وضع النظرة العامة'
@@ -909,9 +909,9 @@ export function NodeDetailModal({
                             </svg>
                             {chunk.language === 'ar' ? 'العربية' : 'English'}
                           </span>
-                          {chunk.referenceId && (
+                          {(chunk.section ?? chunk.source) && (
                             <span className="inline-flex items-center gap-1 rounded-full border border-[#d1e3dc] bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-600">
-                              BRD • {formatChunkReferenceId(chunk.referenceId)}
+                              BRD • {chunk.section ?? chunk.source}
                             </span>
                           )}
                           {chunk.tags?.map((tag) => (
