@@ -1282,7 +1282,7 @@ export function NodeDetailModal({
                                         : 'Confirmed'
                                       : testWorkflows[rule.id]?.status === 'reviewing'
                                         ? language === 'ar'
-                                          ? 'قيد المراجعة'
+                                          ? 'قيد الم��اجعة'
                                           : 'In Review'
                                         : testWorkflows[rule.id]?.status === 'rejected'
                                           ? language === 'ar'
@@ -1612,10 +1612,6 @@ function formatJourneyChipLabel(value: string): string {
     .filter(Boolean)
     .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
     .join(' ');
-}
-
-function formatChunkReferenceId(value: string): string {
-  return value.replace(/_/g, ' ').toUpperCase();
 }
 
 function formatAttributeName(value: string): string {
