@@ -132,6 +132,13 @@ export function JourneySummaryPanel({
   );
 
   const [activeTab, setActiveTab] = useState<SummaryTabId>('overview');
+  const [documentAccordion, setDocumentAccordion] = useState<{ metadata: boolean; actors: boolean }>(
+    () => ({ metadata: true, actors: false })
+  );
+
+  const toggleDocumentAccordion = useCallback((section: keyof typeof documentAccordion) => {
+    setDocumentAccordion((previous) => ({ ...previous, [section]: !previous[section] }));
+  }, []);
 
   useEffect(() => {
     if (!tabs.some((tab) => tab.id === activeTab)) {
