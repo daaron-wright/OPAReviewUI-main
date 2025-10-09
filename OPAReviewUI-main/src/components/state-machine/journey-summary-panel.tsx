@@ -303,7 +303,7 @@ export function JourneySummaryPanel({
             </div>
           ) : (
             <span>
-              Upload the BRD policy PDF from the Overview tab or use the button below to enable guided walkthrough mode.
+              Upload the BRD policy PDF from the Overview tab to enable guided walkthrough mode.
             </span>
           )}
         </div>
