@@ -947,7 +947,9 @@ export function JourneySummaryPanel({
 }
 
 function DocumentInfoCard({ info, overrideFilename }: { info: DocumentInfo; overrideFilename?: string | null }): JSX.Element {
-  const { filename, caption, context, document_endpoint, pdf_url, documentUrl, ...additionalFields } = info;
+  const { filename, caption, context, ...rawAdditional } = info;
+  const { document_endpoint: _documentEndpoint, pdf_url: _pdfUrl, documentUrl: _documentUrl, ...additionalFields } =
+    rawAdditional as Record<string, unknown>;
   const overrideTitle = typeof overrideFilename === 'string' ? overrideFilename.trim() : '';
   const baseTitle = typeof filename === 'string' ? filename.trim() : '';
   const title = overrideTitle.length > 0 ? overrideTitle : baseTitle.length > 0 ? baseTitle : 'Policy document';
