@@ -146,6 +146,12 @@ export function JourneySummaryPanel({
     }
   }, [activeTab, tabs]);
 
+  useEffect(() => {
+    if (!policyDocument) {
+      setDocumentAccordion({ metadata: true, actors: false });
+    }
+  }, [policyDocument]);
+
   const handleTabSelect = useCallback((tabId: SummaryTabId) => {
     setActiveTab(tabId);
   }, []);
