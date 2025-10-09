@@ -45,6 +45,7 @@ interface DisplayChunk {
   tags?: string[];
 }
 
+const REGO_PACKAGE_PREFIX = 'beneficiary';
 
 const JOURNEY_LABEL_MAP = {
   new_trade_name: {
@@ -57,7 +58,7 @@ const JOURNEY_LABEL_MAP = {
   },
   existing_trade_license: {
     en: 'Path 3 · Existing Trade License',
-    ar: 'ال��سار 3 · رخصة تجارية قائمة',
+    ar: 'المسار 3 · رخصة تجارية قائمة',
   },
 } as const;
 
@@ -1041,7 +1042,7 @@ export function NodeDetailModal({
               <div className="flex items-center justify-between gap-3 border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-4">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
-                    {language === 'ar' ? 'قواعد ��لسياسة' : 'Policy rules'}
+                    {language === 'ar' ? 'قواعد السياسة' : 'Policy rules'}
                   </p>
                   <h3 className="text-sm font-semibold text-slate-900">
                     {language === 'ar'
@@ -1067,7 +1068,7 @@ export function NodeDetailModal({
                       </div>
                       <p className="mt-2 text-sm text-slate-600">
                         {language === 'ar'
-                          ? 'انقر على أي قاعدة لتشغيل حالات الاختبار ومزامنتها مع مرجع BRD.'
+                          ? 'انقر على أي قاعدة لتشغيل حالات الاختبار ومزام��تها مع مرجع BRD.'
                           : 'Click a rule to run test cases and sync with the BRD reference.'}
                       </p>
                     </div>
