@@ -92,12 +92,12 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   const [policyActors, setPolicyActors] = useState<PolicyActor[]>([]);
   const [isPolicyActorsLoading, setIsPolicyActorsLoading] = useState(false);
   const [policyActorsError, setPolicyActorsError] = useState<string | null>(null);
-  const policyActorsControllerRef = useRef<AbortController | null>(null);
+  const policyActorsRequestIdRef = useRef(0);
 
   const [documentInfo, setDocumentInfo] = useState<DocumentInfo | null>(null);
   const [isDocumentInfoLoading, setIsDocumentInfoLoading] = useState(false);
   const [documentInfoError, setDocumentInfoError] = useState<string | null>(null);
-  const documentInfoControllerRef = useRef<AbortController | null>(null);
+  const documentInfoRequestIdRef = useRef(0);
 
   const setNodeReviewed = useCallback((nodeId: string, approved: boolean, notes?: string) => {
     setReviewStatus((prev) => ({
@@ -273,77 +273,75 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
   }, [reviewStatus, nodeSequence]);
 
   const refreshPolicyActors = useCallback(async () => {
+    const requestId = policyActorsRequestIdRef.current + 1;
+    policyActorsRequestIdRef.current = requestId;
+
     if (!policyDocument) {
-      policyActorsControllerRef.current?.abort();
       setPolicyActors([]);
       setIsPolicyActorsLoading(false);
       setPolicyActorsError(null);
       return;
     }
 
-    policyActorsControllerRef.current?.abort();
-    const controller = new AbortController();
-    policyActorsControllerRef.current = controller;
     setIsPolicyActorsLoading(true);
     setPolicyActorsError(null);
 
     try {
-      const actors = await fetchPolicyActors(controller.signal);
-      setPolicyActors(actors);
-    } catch (error) {
-      if (isAbortError(error, { signal: controller.signal })) {
+      const actors = await fetchPolicyActors();
+      if (policyActorsRequestIdRef.current !== requestId) {
         return;
       }
-      if (!controller.signal.aborted) {
-        console.error('Failed to load policy actors from API', error);
+      setPolicyActors(actors);
+    } catch (error) {
+      if (policyActorsRequestIdRef.current !== requestId || isAbortError(error)) {
+        return;
       }
+      console.error('Failed to load policy actors from API', error);
       setPolicyActorsError('Unable to load policy actors. Please try again.');
     } finally {
-      if (policyActorsControllerRef.current === controller) {
-        policyActorsControllerRef.current = null;
+      if (policyActorsRequestIdRef.current === requestId) {
+        setIsPolicyActorsLoading(false);
       }
-      setIsPolicyActorsLoading(false);
     }
   }, [policyDocument]);
 
   const refreshDocumentInfo = useCallback(async () => {
+    const requestId = documentInfoRequestIdRef.current + 1;
+    documentInfoRequestIdRef.current = requestId;
+
     if (!policyDocument) {
-      documentInfoControllerRef.current?.abort();
       setDocumentInfo(null);
       setIsDocumentInfoLoading(false);
       setDocumentInfoError(null);
       return;
     }
 
-    documentInfoControllerRef.current?.abort();
-    const controller = new AbortController();
-    documentInfoControllerRef.current = controller;
     setIsDocumentInfoLoading(true);
     setDocumentInfoError(null);
 
     try {
-      const info = await fetchDocumentInfo(controller.signal);
-      setDocumentInfo(info);
-    } catch (error) {
-      if (isAbortError(error, { signal: controller.signal })) {
+      const info = await fetchDocumentInfo();
+      if (documentInfoRequestIdRef.current !== requestId) {
         return;
       }
-      if (!controller.signal.aborted) {
-        console.error('Failed to load document info from API', error);
+      setDocumentInfo(info);
+    } catch (error) {
+      if (documentInfoRequestIdRef.current !== requestId || isAbortError(error)) {
+        return;
       }
+      console.error('Failed to load document info from API', error);
       setDocumentInfoError('Unable to load document information. Please try again.');
     } finally {
-      if (documentInfoControllerRef.current === controller) {
-        documentInfoControllerRef.current = null;
+      if (documentInfoRequestIdRef.current === requestId) {
+        setIsDocumentInfoLoading(false);
       }
-      setIsDocumentInfoLoading(false);
     }
   }, [policyDocument]);
 
   useEffect(() => {
     if (!policyDocument) {
-      policyActorsControllerRef.current?.abort();
-      documentInfoControllerRef.current?.abort();
+      policyActorsRequestIdRef.current += 1;
+      documentInfoRequestIdRef.current += 1;
       setPolicyActors([]);
       setIsPolicyActorsLoading(false);
       setPolicyActorsError(null);
@@ -351,8 +349,8 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
       setIsDocumentInfoLoading(false);
       setDocumentInfoError(null);
       return () => {
-        policyActorsControllerRef.current?.abort();
-        documentInfoControllerRef.current?.abort();
+        policyActorsRequestIdRef.current += 1;
+        documentInfoRequestIdRef.current += 1;
       };
     }
 
@@ -360,8 +358,8 @@ export function ReviewProvider({ children }: { children: ReactNode }) {
     void refreshDocumentInfo();
 
     return () => {
-      policyActorsControllerRef.current?.abort();
-      documentInfoControllerRef.current?.abort();
+      policyActorsRequestIdRef.current += 1;
+      documentInfoRequestIdRef.current += 1;
     };
   }, [policyDocument, refreshPolicyActors, refreshDocumentInfo]);
 
