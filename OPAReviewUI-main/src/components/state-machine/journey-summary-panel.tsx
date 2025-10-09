@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import type { DocumentInfo } from '@/adapters/document-info-client';
