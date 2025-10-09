@@ -5,7 +5,7 @@
 import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { Inter } from 'next/font/google';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { ToastProvider } from '@/components/toast-provider';
 import { Providers } from './providers';
@@ -20,7 +20,11 @@ export const metadata: Metadata = {
   description: 'Interactive visualization of Abu Dhabi DED Real Beneficiary Declaration Service state machine',
   keywords: ['state machine', 'visualization', 'workflow', 'Abu Dhabi', 'DED'],
   authors: [{ name: 'DED Abu Dhabi' }],
-  viewport: 'width=device-width, initial-scale=1',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#111827' },
