@@ -22,7 +22,7 @@ import {
   processStateMachine,
 } from '@/domain/state-machine/processor';
 import type { StateMachine } from '@/domain/state-machine/types';
-import { isAbortError, isRetriableFetchError } from '@/utils/fetch-error-utils';
+import { isRetriableFetchError } from '@/utils/fetch-error-utils';
 import realBeneficiaryStateMachineFile from '../../data/real_beneficiary_state_machine.json';
 import {
   JourneyTimeline,
@@ -512,21 +512,27 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     initialStateMachine ?? defaultProcessedStateMachine
   );
   const remoteStateLoadedRef = useRef(Boolean(initialStateMachine));
+  const remoteStateRequestIdRef = useRef(0);
 
   const loadRemoteStateMachine = useCallback(
-    async (options: { signal?: AbortSignal; suppressToast?: boolean } = {}) => {
+    async ({ suppressToast = false, requestId }: { suppressToast?: boolean; requestId: number }) => {
       if (remoteStateLoadedRef.current) {
         return true;
       }
 
-      const { signal, suppressToast } = options;
-
       for (let attempt = 1; attempt <= REMOTE_STATE_MACHINE_MAX_ATTEMPTS; attempt += 1) {
+        if (remoteStateRequestIdRef.current !== requestId) {
+          return false;
+        }
+
         try {
           const response = await fetch(REMOTE_STATE_MACHINE_ENDPOINT, {
             cache: 'no-store',
-            ...(signal ? { signal } : {}),
           });
+
+          if (remoteStateRequestIdRef.current !== requestId) {
+            return false;
+          }
 
           if (!response.ok) {
             const error = new Error(`Request failed with status ${response.status}`) as FetchError;
@@ -539,11 +545,15 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
             throw new Error('Missing stateMachine definition in fetched payload');
           }
 
-          if (signal?.aborted) {
+          if (remoteStateRequestIdRef.current !== requestId) {
             return false;
           }
 
           const processed = processStateMachine(file.stateMachine);
+
+          if (remoteStateRequestIdRef.current !== requestId) {
+            return false;
+          }
 
           setStateMachine(processed);
           remoteStateLoadedRef.current = true;
@@ -556,7 +566,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
           return true;
         } catch (error) {
-          if (isAbortError(error, signal ? { signal } : undefined)) {
+          if (remoteStateRequestIdRef.current !== requestId) {
             return false;
           }
 
@@ -574,11 +584,9 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
             continue;
           }
 
-          if (!signal?.aborted) {
-            console.error('Failed to fetch extended BRD state machine', error);
-          }
+          console.error('Failed to fetch extended BRD state machine', error);
 
-          if (!suppressToast && !signal?.aborted) {
+          if (!suppressToast) {
             toast.warning(
               createToastContent('warningTriangle', 'BRD workflow import failed; using default view'),
               {
@@ -601,11 +609,16 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       return;
     }
 
-    const controller = new AbortController();
+    const requestId = remoteStateRequestIdRef.current + 1;
+    remoteStateRequestIdRef.current = requestId;
 
-    void loadRemoteStateMachine({ signal: controller.signal, suppressToast: true });
+    void loadRemoteStateMachine({ requestId, suppressToast: true });
 
-    return () => controller.abort();
+    return () => {
+      if (remoteStateRequestIdRef.current === requestId) {
+        remoteStateRequestIdRef.current += 1;
+      }
+    };
   }, [loadRemoteStateMachine]);
 
   const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
