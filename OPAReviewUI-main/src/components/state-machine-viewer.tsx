@@ -818,7 +818,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         position: 'top-center',
       });
 
-      void loadRemoteStateMachine();
+      const requestId = remoteStateRequestIdRef.current + 1;
+      remoteStateRequestIdRef.current = requestId;
+
+      void loadRemoteStateMachine({ requestId });
     },
     [loadRemoteStateMachine, uploadPolicyDocument]
   );
