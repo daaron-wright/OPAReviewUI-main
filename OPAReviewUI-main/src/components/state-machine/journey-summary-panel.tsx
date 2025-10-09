@@ -119,42 +119,27 @@ export function JourneySummaryPanel({
     void onRefreshDocumentInfo();
   }, [onRefreshDocumentInfo]);
 
-  const [openSections, setOpenSections] = useState<Set<string>>(() => {
-    const defaults = new Set<string>(['workflow', 'automation', 'publication']);
-    if (policyDocument) {
-      defaults.add('document');
-      defaults.add('actors');
-    }
-    return defaults;
-  });
+  const tabs = useMemo<ReadonlyArray<{ id: SummaryTabId; label: string }>>(
+    () => [
+      { id: 'overview', label: 'Overview' },
+      { id: 'workflow', label: 'Workflow' },
+      { id: 'document', label: 'Document' },
+      { id: 'publication', label: 'Publication' },
+    ],
+    []
+  );
+
+  const [activeTab, setActiveTab] = useState<SummaryTabId>('overview');
 
   useEffect(() => {
-    setOpenSections((previous) => {
-      const next = new Set(previous);
-      if (policyDocument) {
-        next.add('document');
-        next.add('actors');
-      } else {
-        next.delete('document');
-        next.delete('actors');
-      }
-      return next;
-    });
-  }, [policyDocument]);
+    if (!tabs.some((tab) => tab.id === activeTab)) {
+      setActiveTab(tabs[0]?.id ?? 'overview');
+    }
+  }, [activeTab, tabs]);
 
-  const toggleSection = useCallback((sectionId: string) => {
-    setOpenSections((previous) => {
-      const next = new Set(previous);
-      if (next.has(sectionId)) {
-        next.delete(sectionId);
-      } else {
-        next.add(sectionId);
-      }
-      return next;
-    });
+  const handleTabSelect = useCallback((tabId: SummaryTabId) => {
+    setActiveTab(tabId);
   }, []);
-
-  const sectionIsOpen = useCallback((sectionId: string) => openSections.has(sectionId), [openSections]);
 
   const openNodeReviewButton = (
     <button
