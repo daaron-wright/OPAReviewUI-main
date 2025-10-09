@@ -1318,7 +1318,7 @@ export function NodeDetailModal({
                                   className="inline-flex items-center gap-2 rounded-full border border-[#b7e6d8] bg-white px-3 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:bg-[#effaf6]"
                                 >
                                   <Icon name="chatBubble" className="h-4 w-4 text-[#0f766e]" />
-                                  {language === 'ar' ? 'فتح محادثة الذكاء الاصطناعي' : 'Open AI Rework'}
+                                  {language === 'ar' ? 'إعادة العمل' : 'Rework'}
                                 </button>
                               </div>
 
