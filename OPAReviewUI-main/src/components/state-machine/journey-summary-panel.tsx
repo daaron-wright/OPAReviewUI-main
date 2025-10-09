@@ -286,23 +286,16 @@ export function JourneySummaryPanel({
           {openNodeReviewButton}
         </div>
 
-        <div
-          className={clsx(
-            'rounded-2xl px-4 py-3 text-sm transition-colors',
-            policyDocument
-              ? 'border border-[#dbe9e3] bg-[#f6faf8] text-slate-600'
-              : 'border border-dashed border-[#dbe9e3] bg-white text-slate-500'
-          )}
-        >
-          {policyDocument ? (
+        {policyDocument ? (
+          <div className="rounded-2xl border border-[#dbe9e3] bg-[#f6faf8] px-4 py-3 text-sm text-slate-600 transition-colors">
             <div className="flex flex-col">
               <span className="font-semibold text-slate-800">{policyDocument.fileName}</span>
               <span className="text-xs text-slate-500">
                 {formatFileSize(policyDocument.fileSize)} • Uploaded {formatUploadedAt(policyDocument.uploadedAt)}
               </span>
             </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
 
         {isWalkthroughMode ? (
           <>
