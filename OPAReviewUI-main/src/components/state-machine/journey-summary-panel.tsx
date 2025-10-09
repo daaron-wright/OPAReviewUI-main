@@ -424,142 +424,190 @@ export function JourneySummaryPanel({
   );
 
   const documentContent = policyDocument ? (
-    <div className="space-y-5">
-      <section className="space-y-4 rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Policy document</p>
-            <p className="text-xs text-slate-500">Metadata returned by BRD ingestion services.</p>
-          </div>
-          <button
-            type="button"
-            onClick={handleRefreshDocumentInfo}
-            disabled={isDocumentInfoLoading}
-            className={clsx(
-              'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition',
-              isDocumentInfoLoading
-                ? 'cursor-wait border-[#dbe9e3] bg-[#f6faf8] text-slate-400'
-                : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
-            )}
-          >
+    <div className="space-y-4">
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white">
+        <button
+          type="button"
+          onClick={() => toggleDocumentAccordion('metadata')}
+          aria-expanded={documentAccordion.metadata}
+          className="flex w-full items-center justify-between gap-4 rounded-2xl px-5 py-4 text-left transition hover:bg-[#f6faf8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30 focus-visible:ring-offset-2"
+        >
+          <span>
+            <span className="block text-sm font-semibold text-slate-900">Policy document</span>
+            <span className="mt-1 block text-xs text-slate-500">Metadata returned by BRD ingestion services.</span>
+          </span>
+          <span className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#dbe9e3] bg-white text-[#0f766e]">
+            <svg
+              className={clsx('h-4 w-4 transition-transform duration-200', documentAccordion.metadata ? 'rotate-180' : 'rotate-0')}
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.4}
+              aria-hidden
+            >
+              <path d="M4.5 6l3.5 4 3.5-4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </button>
+
+        {documentAccordion.metadata ? (
+          <div className="space-y-4 border-t border-[#e2ede8] px-5 py-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={handleRefreshDocumentInfo}
+                disabled={isDocumentInfoLoading}
+                className={clsx(
+                  'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition',
+                  isDocumentInfoLoading
+                    ? 'cursor-wait border-[#dbe9e3] bg-[#f6faf8] text-slate-400'
+                    : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
+                )}
+              >
+                {isDocumentInfoLoading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
+                    Refreshing…
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <span className="inline-flex h-3 w-3 items-center justify-center">
+                      <svg className="h-3 w-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden>
+                        <path d="M4.5 4.5l-1 3 3 1" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M11.5 11.5l1-3-3-1" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M4.5 4.5a5 5 0 0 1 7.5 0M4.5 11.5a5 5 0 0 0 7.5 0" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                    Refresh
+                  </span>
+                )}
+              </button>
+            </div>
+
             {isDocumentInfoLoading ? (
-              <span className="flex items-center gap-2">
-                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
-                Refreshing…
-              </span>
+              <div className="flex items-center gap-3 rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-600">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
+                <span>Loading document information…</span>
+              </div>
+            ) : documentInfoError ? (
+              <div className="space-y-3">
+                <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                  {documentInfoError}
+                </div>
+                <button
+                  type="button"
+                  onClick={handleRefreshDocumentInfo}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
+                >
+                  Try again
+                </button>
+              </div>
+            ) : documentInfo ? (
+              <DocumentInfoCard info={documentInfo} />
             ) : (
-              <span className="flex items-center gap-2">
-                <span className="inline-flex h-3 w-3 items-center justify-center">
-                  <svg className="h-3 w-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden>
-                    <path d="M4.5 4.5l-1 3 3 1" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M11.5 11.5l1-3-3-1" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M4.5 4.5a5 5 0 0 1 7.5 0M4.5 11.5a5 5 0 0 0 7.5 0" strokeLinecap="round" />
-                  </svg>
-                </span>
-                Refresh
-              </span>
+              <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-500">
+                No document metadata was returned.
+              </div>
             )}
-          </button>
-        </div>
-
-        {isDocumentInfoLoading ? (
-          <div className="flex items-center gap-3 rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-600">
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
-            <span>Loading document information…</span>
           </div>
-        ) : documentInfoError ? (
-          <div className="space-y-3">
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-              {documentInfoError}
-            </div>
-            <button
-              type="button"
-              onClick={handleRefreshDocumentInfo}
-              className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
+        ) : null}
+      </div>
+
+      <div className="rounded-2xl border border-[#dbe9e3] bg-white">
+        <button
+          type="button"
+          onClick={() => toggleDocumentAccordion('actors')}
+          aria-expanded={documentAccordion.actors}
+          className="flex w-full items-center justify-between gap-4 rounded-2xl px-5 py-4 text-left transition hover:bg-[#f6faf8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30 focus-visible:ring-offset-2"
+        >
+          <span>
+            <span className="block text-sm font-semibold text-slate-900">Policy actors</span>
+            <span className="mt-1 block text-xs text-slate-500">Live roster from BRD policy services.</span>
+          </span>
+          <span className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#dbe9e3] bg-white text-[#0f766e]">
+            <svg
+              className={clsx('h-4 w-4 transition-transform duration-200', documentAccordion.actors ? 'rotate-180' : 'rotate-0')}
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.4}
+              aria-hidden
             >
-              Try again
-            </button>
-          </div>
-        ) : documentInfo ? (
-          <DocumentInfoCard info={documentInfo} />
-        ) : (
-          <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-500">
-            No document metadata was returned.
-          </div>
-        )}
-      </section>
+              <path d="M4.5 6l3.5 4 3.5-4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </button>
 
-      <section className="space-y-4 rounded-2xl border border-[#dbe9e3] bg-white px-4 py-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Policy actors</p>
-            <p className="text-xs text-slate-500">Live roster from BRD policy services.</p>
-          </div>
-          <button
-            type="button"
-            onClick={handleRefreshActors}
-            disabled={isPolicyActorsLoading}
-            className={clsx(
-              'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition',
-              isPolicyActorsLoading
-                ? 'cursor-wait border-[#dbe9e3] bg-[#f6faf8] text-slate-400'
-                : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
-            )}
-          >
+        {documentAccordion.actors ? (
+          <div className="space-y-4 border-t border-[#e2ede8] px-5 py-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={handleRefreshActors}
+                disabled={isPolicyActorsLoading}
+                className={clsx(
+                  'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition',
+                  isPolicyActorsLoading
+                    ? 'cursor-wait border-[#dbe9e3] bg-[#f6faf8] text-slate-400'
+                    : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
+                )}
+              >
+                {isPolicyActorsLoading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
+                    Refreshing…
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <span className="inline-flex h-3 w-3 items-center justify-center">
+                      <svg className="h-3 w-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden>
+                        <path d="M4.5 4.5l-1 3 3 1" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M11.5 11.5l1-3-3-1" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M4.5 4.5a5 5 0 0 1 7.5 0M4.5 11.5a5 5 0 0 0 7.5 0" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                    Refresh
+                  </span>
+                )}
+              </button>
+            </div>
+
             {isPolicyActorsLoading ? (
-              <span className="flex items-center gap-2">
-                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
-                Refreshing…
-              </span>
+              <div className="flex items-center gap-3 rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-600">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
+                <span>Loading policy actors…</span>
+              </div>
+            ) : policyActorsError ? (
+              <div className="space-y-3">
+                <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                  {policyActorsError}
+                </div>
+                <button
+                  type="button"
+                  onClick={handleRefreshActors}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
+                >
+                  Try again
+                </button>
+              </div>
+            ) : policyActors.length > 0 ? (
+              <div className="space-y-3">
+                {policyActors.map((actor) => (
+                  <PolicyActorCard key={actor.id} actor={actor} />
+                ))}
+              </div>
             ) : (
-              <span className="flex items-center gap-2">
-                <span className="inline-flex h-3 w-3 items-center justify-center">
-                  <svg className="h-3 w-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.6} aria-hidden>
-                    <path d="M4.5 4.5l-1 3 3 1" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M11.5 11.5l1-3-3-1" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M4.5 4.5a5 5 0 0 1 7.5 0M4.5 11.5a5 5 0 0 0 7.5 0" strokeLinecap="round" />
-                  </svg>
-                </span>
-                Refresh
-              </span>
+              <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-500">
+                No policy actors were returned for this workflow.
+              </div>
             )}
-          </button>
-        </div>
-
-        {isPolicyActorsLoading ? (
-          <div className="flex items-center gap-3 rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-600">
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#0f766e] border-t-transparent" aria-hidden />
-            <span>Loading policy actors…</span>
           </div>
-        ) : policyActorsError ? (
-          <div className="space-y-3">
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-              {policyActorsError}
-            </div>
-            <button
-              type="button"
-              onClick={handleRefreshActors}
-              className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#0c5f59]"
-            >
-              Try again
-            </button>
-          </div>
-        ) : policyActors.length > 0 ? (
-          <div className="space-y-3">
-            {policyActors.map((actor) => (
-              <PolicyActorCard key={actor.id} actor={actor} />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-3 text-sm text-slate-500">
-            No policy actors were returned for this workflow.
-          </div>
-        )}
-      </section>
+        ) : null}
+      </div>
     </div>
   ) : (
     <div className="rounded-2xl border border-dashed border-[#dbe9e3] bg-white px-4 py-4 text-sm text-slate-500">
-      Upload the BRD policy PDF from the Workflow tab to load document metadata and policy actors.
+      Upload the BRD policy PDF from the Overview tab to load document metadata and policy actors.
     </div>
   );
 
