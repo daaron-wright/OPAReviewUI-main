@@ -847,7 +847,7 @@ export function JourneySummaryPanel({
           className={clsx(
             'relative w-full overflow-hidden transition-all duration-500 ease-out xl:fixed xl:right-6 xl:top-32 xl:z-30 xl:w-[min(90vw,420px)] xl:max-w-[420px]',
             isOpen
-              ? 'pointer-events-auto max-h-[3200px] opacity-100 xl:max-h-[calc(100vh-8rem)] xl:translate-y-0'
+              ? 'pointer-events-auto max-h-[calc(100vh-4rem)] opacity-100 xl:max-h-[calc(100vh-8rem)] xl:translate-y-0'
               : 'pointer-events-none max-h-0 opacity-0 xl:max-h-0 xl:translate-y-2'
           )}
           aria-hidden={!isOpen}
