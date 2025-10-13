@@ -854,7 +854,7 @@ export function JourneySummaryPanel({
         >
           <div
             className={clsx(
-              'flex h-full flex-col overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)] transition-transform duration-300 ease-out',
+              'flex h-full min-h-0 flex-col overflow-hidden rounded-[32px] border border-[#e2ede8] bg-white shadow-[0_24px_48px_-32px_rgba(11,64,55,0.25)] transition-transform duration-300 ease-out',
               isOpen ? 'scale-100' : 'scale-95'
             )}
           >
