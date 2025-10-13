@@ -858,85 +858,87 @@ export function JourneySummaryPanel({
               isOpen ? 'scale-100' : 'scale-95'
             )}
           >
-            <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 pt-6 pb-5">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#0f766e]">Overview</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-slate-900">
-                    {item?.node.label ?? 'Select a state'}
-                  </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                    {item?.node.description ?? 'Choose a state from the timeline to inspect its details.'}
-                  </p>
-                  {item?.node.metadata.controlAttribute && (
-                    <div className="mt-3 flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-[#c7e5f4] bg-[#f0f8fd] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1d7fb3]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#1d7fb3]" />
-                        Primary control
-                      </span>
-                      <span className="text-xs font-semibold text-slate-600">
-                        {formatControlAttribute(item.node.metadata.controlAttribute)}
-                      </span>
-                    </div>
-                  )}
+            <div className="flex max-h-full flex-col overflow-y-auto xl:max-h-[calc(100vh-8rem)]">
+              <div className="border-b border-[#e2ede8] bg-[#f6faf8] px-6 pt-6 pb-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#0f766e]">Overview</p>
+                    <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+                      {item?.node.label ?? 'Select a state'}
+                    </h2>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                      {item?.node.description ?? 'Choose a state from the timeline to inspect its details.'}
+                    </p>
+                    {item?.node.metadata.controlAttribute && (
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-[#c7e5f4] bg-[#f0f8fd] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#1d7fb3]">
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#1d7fb3]" />
+                          Primary control
+                        </span>
+                        <span className="text-xs font-semibold text-slate-600">
+                          {formatControlAttribute(item.node.metadata.controlAttribute)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <span
+                    className={clsx(
+                      'rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide',
+                      statusTone.container
+                    )}
+                  >
+                    {statusLabel}
+                  </span>
                 </div>
-                <span
-                  className={clsx(
-                    'rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide',
-                    statusTone.container
-                  )}
+              </div>
+
+              <div className="flex flex-1 min-h-0 flex-col">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="application/pdf"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <div className="border-b border-[#e2ede8] bg-white px-6 pt-4 pb-3">
+                  <ul role="tablist" className="flex flex-wrap gap-2">
+                    {tabs.map((tab) => {
+                      const isActive = tab.id === activeTab;
+                      const tabButtonId = `${panelId}-${tab.id}-tab`;
+                      const tabPanelId = `${panelId}-${tab.id}-panel`;
+                      return (
+                        <li key={tab.id}>
+                          <button
+                            type="button"
+                            id={tabButtonId}
+                            role="tab"
+                            aria-selected={isActive}
+                            aria-controls={tabPanelId}
+                            tabIndex={isActive ? 0 : -1}
+                            onClick={() => handleTabSelect(tab.id)}
+                            className={clsx(
+                              'inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+                              isActive
+                                ? 'bg-[#0f766e] text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)]'
+                                : 'border border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
+                            )}
+                          >
+                            {tab.label}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+
+                <div
+                  role="tabpanel"
+                  id={`${panelId}-${activeTab}-panel`}
+                  aria-labelledby={`${panelId}-${activeTab}-tab`}
+                  className="flex-1 min-h-0 overflow-y-auto px-6 py-6"
                 >
-                  {statusLabel}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex h-full flex-col overflow-hidden">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="application/pdf"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-              <div className="border-b border-[#e2ede8] bg-white px-6 pt-4 pb-3">
-                <ul role="tablist" className="flex flex-wrap gap-2">
-                  {tabs.map((tab) => {
-                    const isActive = tab.id === activeTab;
-                    const tabButtonId = `${panelId}-${tab.id}-tab`;
-                    const tabPanelId = `${panelId}-${tab.id}-panel`;
-                    return (
-                      <li key={tab.id}>
-                        <button
-                          type="button"
-                          id={tabButtonId}
-                          role="tab"
-                          aria-selected={isActive}
-                          aria-controls={tabPanelId}
-                          tabIndex={isActive ? 0 : -1}
-                          onClick={() => handleTabSelect(tab.id)}
-                          className={clsx(
-                            'inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
-                            isActive
-                              ? 'bg-[#0f766e] text-white shadow-[0_12px_24px_-18px_rgba(15,118,110,0.55)]'
-                              : 'border border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5]'
-                          )}
-                        >
-                          {tab.label}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-
-              <div
-                role="tabpanel"
-                id={`${panelId}-${activeTab}-panel`}
-                aria-labelledby={`${panelId}-${activeTab}-tab`}
-                className="flex-1 overflow-y-auto px-6 py-6"
-              >
-                {tabContent}
+                  {tabContent}
+                </div>
               </div>
             </div>
           </div>
