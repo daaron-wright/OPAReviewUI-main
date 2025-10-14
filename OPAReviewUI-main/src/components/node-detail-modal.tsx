@@ -83,6 +83,52 @@ function normalizeLanguageCode(language?: string | null): string {
   return typeof language === 'string' ? language.trim().toLowerCase() : '';
 }
 
+function decodeHtmlEntities(value: string): string {
+  if (!value) {
+    return '';
+  }
+
+  const basicDecoded = decodeBasicEntities(value);
+
+  const decodeNumeric = (input: string, pattern: RegExp, base: number): string =>
+    input.replace(pattern, (match, codePointValue) => {
+      const parsed = Number.parseInt(codePointValue, base);
+      if (Number.isNaN(parsed)) {
+        return match;
+      }
+      try {
+        return String.fromCodePoint(parsed);
+      } catch {
+        return match;
+      }
+    });
+
+  const decimalDecoded = decodeNumeric(basicDecoded, /&#(\d+);/g, 10);
+  const fullyDecoded = decodeNumeric(decimalDecoded, /&#x([0-9a-f]+);/gi, 16);
+
+  return fullyDecoded;
+}
+
+function unwrapHtmlScaffolding(html: string): string {
+  if (!html) {
+    return '';
+  }
+
+  let result = html
+    .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
+    .replace(/<head[\s\S]*?>[\s\S]*?<\/head>/gi, '')
+    .replace(/<\/?html[^>]*>/gi, '');
+
+  result = result.replace(/<body([^>]*)>/gi, (match, attrs) => {
+    const trimmedAttrs = typeof attrs === 'string' ? attrs.trim() : '';
+    return trimmedAttrs ? `<div ${trimmedAttrs}>` : '<div>';
+  });
+
+  result = result.replace(/<\/body>/gi, '</div>');
+
+  return result;
+}
+
 function normalizeDirectionalMarkup(html: string, language?: string | null): string {
   if (!html) {
     return '';
@@ -125,6 +171,17 @@ function normalizeDirectionalMarkup(html: string, language?: string | null): str
   });
 
   return result;
+}
+
+function sanitizeAndPrepareHtmlContent(html: string, language?: string | null): string {
+  if (!html) {
+    return '';
+  }
+
+  const sanitized = sanitizeHtmlContent(html);
+  const decoded = decodeHtmlEntities(sanitized);
+  const unwrapped = unwrapHtmlScaffolding(decoded);
+  return normalizeDirectionalMarkup(unwrapped, language);
 }
 
 function getTextAlignForLanguage(language?: string | null): 'left' | 'right' {
@@ -532,12 +589,11 @@ export function NodeDetailModal({
     () =>
       localizedRelevantChunks.map((chunk) => {
         if (chunk.isHtml) {
-          const sanitizedHtml = sanitizeHtmlContent(chunk.text);
-          const normalizedHtml = normalizeDirectionalMarkup(sanitizedHtml, chunk.language);
+          const preparedHtml = sanitizeAndPrepareHtmlContent(chunk.text, chunk.language);
           return {
             chunk,
-            sanitizedHtml: normalizedHtml,
-            previewText: convertSanitizedHtmlToPlainText(normalizedHtml),
+            sanitizedHtml: preparedHtml,
+            previewText: convertSanitizedHtmlToPlainText(preparedHtml),
           };
         }
 
@@ -1070,23 +1126,23 @@ export function NodeDetailModal({
                             <div
                               dir={dirValue}
                               className={clsx(
-                                'mt-3 text-sm leading-relaxed text-slate-700 [&_*]:leading-relaxed',
+                                'mt-3 rich-text',
                                 textAlign === 'right' ? 'text-right' : 'text-left'
                               )}
                               style={{ textAlign }}
                               dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
                             />
                           ) : (
-                            <p
+                            <div
                               dir={dirValue}
                               className={clsx(
-                                'mt-3 text-sm leading-relaxed text-slate-700',
+                                'mt-3 rich-text whitespace-pre-wrap',
                                 textAlign === 'right' ? 'text-right' : 'text-left'
                               )}
                               style={{ textAlign }}
                             >
                               {chunk.text}
-                            </p>
+                            </div>
                           )}
                         </div>
                       );
@@ -1185,20 +1241,24 @@ export function NodeDetailModal({
                                 {sanitizedHtml ? (
                                   <div
                                     dir={dirValue}
-                                    className={clsx('[&_*]:leading-relaxed', textAlign === 'right' ? 'text-right' : 'text-left')}
+                                    className={clsx(
+                                      'rich-text',
+                                      textAlign === 'right' ? 'text-right' : 'text-left'
+                                    )}
                                     style={{ textAlign }}
                                     dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
                                   />
                                 ) : (
-                                  <pre
+                                  <div
+                                    dir={dirValue}
                                     className={clsx(
-                                      'whitespace-pre-wrap font-sans text-xs leading-relaxed',
+                                      'rich-text whitespace-pre-wrap',
                                       textAlign === 'right' ? 'text-right' : 'text-left'
                                     )}
                                     style={{ textAlign }}
                                   >
                                     {chunk.text}
-                                  </pre>
+                                  </div>
                                 )}
                               </div>
                             </div>
