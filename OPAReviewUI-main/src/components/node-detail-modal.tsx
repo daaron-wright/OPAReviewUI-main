@@ -1054,9 +1054,10 @@ export function NodeDetailModal({
                     </p>
                   )}
 
-                  {localizedRelevantChunks.map((chunk, idx) => {
+                  {decoratedChunks.map(({ chunk, sanitizedHtml, previewText }, idx) => {
                     const chunkId = chunk.referenceId || `chunk_${idx}`;
                     const isExpanded = expandedBRDSection === chunkId;
+                    const previewValue = previewText.length > 120 ? `${previewText.slice(0, 120)}…` : previewText;
 
                     return (
                       <div
@@ -1086,7 +1087,7 @@ export function NodeDetailModal({
                                 )}
                               </div>
                               <h5 className="text-sm font-semibold text-slate-900 line-clamp-2">
-                                {chunk.text.substring(0, 100)}{chunk.text.length > 100 ? '...' : ''}
+                                {previewValue}
                               </h5>
                               {chunk.source && (
                                 <div className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
@@ -1110,9 +1111,16 @@ export function NodeDetailModal({
                           <div className="animate-slide-up border-t border-[#d8e4df] px-3 pb-3">
                             <div className="mt-3 rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-3">
                               <div className="prose prose-sm max-w-none text-slate-600">
-                                <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed">
-                                  {chunk.text}
-                                </pre>
+                                {sanitizedHtml ? (
+                                  <div
+                                    dir={chunk.language === 'ar' ? 'rtl' : 'ltr'}
+                                    dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+                                  />
+                                ) : (
+                                  <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed">
+                                    {chunk.text}
+                                  </pre>
+                                )}
                               </div>
                             </div>
                           </div>
