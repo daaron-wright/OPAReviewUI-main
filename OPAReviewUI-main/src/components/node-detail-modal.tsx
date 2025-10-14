@@ -747,6 +747,29 @@ export function NodeDetailModal({
           {/* Left Panel - BRD References - Independent scroll */}
           <div className="h-full min-h-0 overflow-y-auto p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="space-y-4">
+              {activeLogicalDescription && (
+                <div className="rounded-2xl border border-[#d8e4df] bg-white/95 p-4 shadow-sm">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        {language === 'ar' ? 'ملخص المنطق التشغيلي' : 'Policy logic summary'}
+                      </h3>
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {language === 'ar'
+                          ? 'عرض توجيه السياسة التشغيلي لهذه العقدة.'
+                          : 'Operational policy guidance for this node.'}
+                      </p>
+                    </div>
+                  </div>
+                  <p
+                    dir={activeLogicalDir}
+                    className="mt-3 whitespace-pre-line text-sm leading-relaxed text-slate-700"
+                  >
+                    {activeLogicalDescription}
+                  </p>
+                </div>
+              )}
+
               {(controlAttributes.length > 0 || transitions.length > 0) && (
                 <div className="rounded-2xl border border-[#d8e4df] bg-white/95 p-4 shadow-sm">
                   <div className="flex items-start justify-between gap-3">
