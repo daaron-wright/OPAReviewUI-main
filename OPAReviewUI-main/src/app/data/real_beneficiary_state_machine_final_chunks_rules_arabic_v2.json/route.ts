@@ -4,11 +4,11 @@ import path from 'path';
 
 const LOCAL_STATE_MACHINE_PATH = path.resolve(
   process.env.STATE_MACHINE_JSON_PATH ?? process.cwd(),
-  process.env.STATE_MACHINE_JSON_PATH ? '' : 'data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json'
+  process.env.STATE_MACHINE_JSON_PATH ? '' : 'data/FULL_state_machine_chunks_rules_no_disconnected_arabic_gpt.json'
 );
 
 const REMOTE_STATE_MACHINE_URL =
-  'https://raw.githubusercontent.com/daaron-wright/OPAReviewUI-main/main/data/real_beneficiary_state_machine_final_chunks_rules_arabic_v2.json';
+  'https://raw.githubusercontent.com/daaron-wright/OPAReviewUI-main/main/data/FULL_state_machine_chunks_rules_no_disconnected_arabic_gpt.json';
 
 const REMOTE_FETCH_TIMEOUT_MS = 15_000;
 const REMOTE_FETCH_RETRY_ATTEMPTS = 3;
