@@ -491,6 +491,7 @@ export function NodeDetailModal({
       ? arabicLogicalDescription ?? englishLogicalDescription ?? node.description
       : englishLogicalDescription ?? node.description;
   const activeLogicalDir = language === 'ar' ? 'rtl' : 'ltr';
+  const hasLocalizedNarrative = Boolean(arabicLogicalDescription ?? englishLogicalDescription);
 
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
