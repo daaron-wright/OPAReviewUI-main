@@ -167,6 +167,24 @@ function getRelevanceLabel(similarity: unknown): string | undefined {
   }
 }
 
+function extractLocalizedContent(state: State): ProcessedNodeLocalizedContent | undefined {
+  const arabicLogical = toNonEmptyString(state.markdownArabicLogical ?? state.markdown_arabic_logical);
+  const englishLogical = toNonEmptyString(state.markdownEnglishLogical ?? state.markdown_english_logical);
+  const arabicVisual = toNonEmptyString(state.markdownArabicVisual ?? state.markdown_arabic_visual);
+  const englishVisual = toNonEmptyString(state.markdownEnglishVisual ?? state.markdown_english_visual);
+
+  if (!arabicLogical && !englishLogical && !arabicVisual && !englishVisual) {
+    return undefined;
+  }
+
+  return Object.freeze({
+    ...(arabicLogical ? { arabicLogical } : {}),
+    ...(englishLogical ? { englishLogical } : {}),
+    ...(arabicVisual ? { arabicVisual } : {}),
+    ...(englishVisual ? { englishVisual } : {}),
+  });
+}
+
 function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantChunk> | undefined {
   const rawChunks = (state.relevantChunks ?? state.relevant_chunks) as unknown;
 
