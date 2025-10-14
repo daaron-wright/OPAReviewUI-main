@@ -748,7 +748,7 @@ export function NodeDetailModal({
           {/* Left Panel - BRD References - Independent scroll */}
           <div className="h-full min-h-0 overflow-y-auto p-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
             <div className="space-y-4">
-              {activeLogicalDescription && (
+              {hasLocalizedNarrative && (
                 <div className="rounded-2xl border border-[#d8e4df] bg-white/95 p-4 shadow-sm">
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -1069,7 +1069,7 @@ export function NodeDetailModal({
               <div className="flex items-center justify-between gap-3 border-b border-[#e2ede8] bg-[#f6faf8] px-6 py-4">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0f766e]">
-                    {language === 'ar' ? 'قواعد السياسة' : 'Policy rules'}
+                    {language === 'ar' ? 'قواعد ال��ياسة' : 'Policy rules'}
                   </p>
                   <h3 className="text-sm font-semibold text-slate-900">
                     {language === 'ar'
