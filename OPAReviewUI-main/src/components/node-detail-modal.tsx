@@ -1057,7 +1057,8 @@ export function NodeDetailModal({
                   {decoratedChunks.map(({ chunk, sanitizedHtml, previewText }, idx) => {
                     const chunkId = chunk.referenceId || `chunk_${idx}`;
                     const isExpanded = expandedBRDSection === chunkId;
-                    const previewValue = previewText.length > 120 ? `${previewText.slice(0, 120)}…` : previewText;
+                    const normalizedPreview = previewText.replace(/\s+/g, ' ').trim();
+                    const previewValue = normalizedPreview.length > 120 ? `${normalizedPreview.slice(0, 120)}…` : normalizedPreview;
 
                     return (
                       <div
