@@ -3,13 +3,7 @@
  */
 
 import { StateMachineViewer } from '@/components/state-machine-viewer';
-import { StartupNotification } from '@/components/startup-notification';
 
 export default function HomePage(): JSX.Element {
-  return (
-    <>
-      <StartupNotification />
-      <StateMachineViewer />
-    </>
-  );
+  return <StateMachineViewer />;
 }
