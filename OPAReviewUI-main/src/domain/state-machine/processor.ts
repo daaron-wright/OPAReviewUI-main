@@ -286,6 +286,7 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
                   source: pageInfo,
                   section: pageInfo,
                   tags: relevanceLabel ? [relevanceLabel] : undefined,
+                  isHtml: Boolean(arabicMarkdownLogical),
                 }
               );
             }
@@ -308,6 +309,7 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
                   source: pageInfo,
                   section: pageInfo,
                   tags: relevanceLabel ? [relevanceLabel] : undefined,
+                  isHtml: Boolean(englishMarkdownTranslation),
                 }
               );
             }
