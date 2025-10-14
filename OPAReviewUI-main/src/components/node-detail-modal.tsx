@@ -490,7 +490,7 @@ export function NodeDetailModal({
 
         return {
           chunk,
-          sanitizedHtml: null as string | null,
+          sanitizedHtml: null,
           previewText: chunk.text,
         };
       }),
