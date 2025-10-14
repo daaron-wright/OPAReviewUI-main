@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 /**
  * Modal component for displaying detailed node information
  * Now with side-by-side BRD and Rego rules because Master Jedi demands it
@@ -275,7 +277,7 @@ export function NodeDetailModal({
         case 'rejected':
           return language === 'ar' ? 'تم تعيينه للمراجعة من جديد' : 'Workflow marked for revision';
         default:
-          return language === 'ar' ? 'تمت إعادة الاختبار' : 'Workflow reset to testing';
+          return language === 'ar' ? 'تمت إعادة الاختب��ر' : 'Workflow reset to testing';
       }
     },
     [language]
@@ -787,7 +789,7 @@ export function NodeDetailModal({
                     <span className="inline-flex items-center gap-1 rounded-full bg-[#f0f8fd] px-3 py-1 text-[11px] font-semibold text-[#1d7fb3]">
                       {controlSummaryCount}
                       <span className="text-[10px] uppercase tracking-[0.14em] text-[#1d7fb3]/80">
-                        {language === 'ar' ? 'نقاط' : 'Touchpoints'}
+                        {language === 'ar' ? 'نق��ط' : 'Touchpoints'}
                       </span>
                     </span>
                   </div>
@@ -859,7 +861,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'قواعد التحقق من السيا��ة لهذه العقدة.'
+                          ? 'قواعد التحقق من السيا��ة لهذه ال��قدة.'
                           : 'Policy validation rules for this node.'}
                       </p>
                     </div>
