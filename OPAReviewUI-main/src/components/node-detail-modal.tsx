@@ -301,7 +301,7 @@ export function NodeDetailModal({
     (status: TestWorkflow['status']) => {
       switch (status) {
         case 'confirmed':
-          return language === 'ar' ? 'تم تأكيد حالة سير العمل' : 'Workflow marked confirmed';
+          return language === 'ar' ? 'تم ��أكيد حالة سير العمل' : 'Workflow marked confirmed';
         case 'reviewing':
           return language === 'ar' ? 'تم التعيين للمراجعة' : 'Workflow set to reviewing';
         case 'rejected':
@@ -338,7 +338,7 @@ export function NodeDetailModal({
         const result: TestResult = {
           ruleId,
           status: 'pass',
-          message: language === 'ar' ? 'تم اعتماد ال��اعدة' : 'Rule approved',
+          message: language === 'ar' ? 'تم اعتماد القاعدة' : 'Rule approved',
         };
         if (existing?.actual !== undefined) {
           result.actual = existing.actual;
@@ -475,6 +475,27 @@ export function NodeDetailModal({
 
     return { chunks, isFallback: true };
   }, [node, preferredLanguage]);
+
+  const decoratedChunks = useMemo(
+    () =>
+      localizedRelevantChunks.map((chunk) => {
+        if (chunk.isHtml) {
+          const sanitizedHtml = sanitizeHtmlContent(chunk.text);
+          return {
+            chunk,
+            sanitizedHtml,
+            previewText: convertSanitizedHtmlToPlainText(sanitizedHtml),
+          };
+        }
+
+        return {
+          chunk,
+          sanitizedHtml: null as string | null,
+          previewText: chunk.text,
+        };
+      }),
+    [localizedRelevantChunks]
+  );
 
   const nodeContextTokens = useMemo(() => {
     if (!node) {
@@ -944,7 +965,7 @@ export function NodeDetailModal({
                     </span>
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                        {language === 'ar' ? 'مقتطفات وثيقة ذات صلة' : 'Relevant document snippets'}
+                        {language === 'ar' ? 'مقتطفات ��ثيقة ذات صلة' : 'Relevant document snippets'}
                       </p>
                       <p className="text-sm font-semibold text-slate-900">
                         {language === 'ar' ? 'خلاصة السياسة بحسب المسار' : 'Policy guidance by journey path'}
@@ -971,7 +992,7 @@ export function NodeDetailModal({
                             <svg className="h-3 w-3 text-[#0f766e]" fill="none" stroke="currentColor" viewBox="0 0 16 16">
                               <path d="M3 3.5h10M3 8h10M3 12.5h6" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            {chunk.language === 'ar' ? '��لعربية' : 'English'}
+                            {chunk.language === 'ar' ? 'العربية' : 'English'}
                           </span>
                           {(chunk.section ?? chunk.source) && (
                             <span className="inline-flex items-center gap-1 rounded-full border border-[#d1e3dc] bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-600">
