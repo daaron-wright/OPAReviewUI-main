@@ -484,6 +484,14 @@ export function NodeDetailModal({
 
   if (!node) return null;
 
+  const arabicLogicalDescription = node.localizedContent?.arabicLogical ?? null;
+  const englishLogicalDescription = node.localizedContent?.englishLogical ?? null;
+  const activeLogicalDescription =
+    language === 'ar'
+      ? arabicLogicalDescription ?? englishLogicalDescription ?? node.description
+      : englishLogicalDescription ?? node.description;
+  const activeLogicalDir = language === 'ar' ? 'rtl' : 'ltr';
+
   const controlAttributes = node.metadata?.controlAttributes ?? (node.metadata?.controlAttribute ? [node.metadata.controlAttribute] : []);
   const transitions = node.metadata?.transitions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
