@@ -301,7 +301,7 @@ export function NodeDetailModal({
     (status: TestWorkflow['status']) => {
       switch (status) {
         case 'confirmed':
-          return language === 'ar' ? 'تم ��أكيد حالة سير العمل' : 'Workflow marked confirmed';
+          return language === 'ar' ? 'تم تأكيد حالة سير العمل' : 'Workflow marked confirmed';
         case 'reviewing':
           return language === 'ar' ? 'تم التعيين للمراجعة' : 'Workflow set to reviewing';
         case 'rejected':
@@ -550,7 +550,7 @@ export function NodeDetailModal({
   const transitions = node.metadata?.transitions ?? [];
   const controlSummaryCount = controlAttributes.length + transitions.length;
 
-  const hasRelevantChunks = localizedRelevantChunks.length > 0;
+  const hasRelevantChunks = decoratedChunks.length > 0;
   const isSplitView = viewMode === 'split';
   const contentLayoutClasses = clsx(
     'grid flex-1 min-h-0 overflow-hidden',
@@ -965,7 +965,7 @@ export function NodeDetailModal({
                     </span>
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                        {language === 'ar' ? 'مقتطفات ��ثيقة ذات صلة' : 'Relevant document snippets'}
+                        {language === 'ar' ? 'مقتطفات وثيقة ذات صلة' : 'Relevant document snippets'}
                       </p>
                       <p className="text-sm font-semibold text-slate-900">
                         {language === 'ar' ? 'خلاصة السياسة بحسب المسار' : 'Policy guidance by journey path'}
