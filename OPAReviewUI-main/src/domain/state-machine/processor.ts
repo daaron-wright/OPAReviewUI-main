@@ -14,6 +14,13 @@ export interface ProcessedRelevantChunk {
   readonly tags?: ReadonlyArray<string>;
 }
 
+export interface ProcessedNodeLocalizedContent {
+  readonly arabicLogical?: string;
+  readonly englishLogical?: string;
+  readonly arabicVisual?: string;
+  readonly englishVisual?: string;
+}
+
 export interface ProcessedJourneyDefinition {
   readonly id: string;
   readonly label: string;
@@ -36,6 +43,7 @@ export interface ProcessedNode {
   readonly isInitial: boolean;
   readonly journeyPaths: ReadonlyArray<string>;
   readonly relevantChunks?: ReadonlyArray<ProcessedRelevantChunk>;
+  readonly localizedContent?: ProcessedNodeLocalizedContent;
   readonly metadata: {
     readonly functions?: ReadonlyArray<string>;
     readonly nextState?: string;
@@ -119,6 +127,7 @@ function createNode(
   const transitions = state.transitions?.map((transition) => normalizeTransition(transition));
   const journeyPaths = normalizeJourneyPaths(id, state, journeys);
   const relevantChunks = normalizeRelevantChunks(state);
+  const localizedContent = extractLocalizedContent(state);
   const regoRules = state.rego_rules ?? state.regoRules;
 
   return {
@@ -130,6 +139,7 @@ function createNode(
     isInitial: machine.initialState === id,
     journeyPaths,
     ...(relevantChunks ? { relevantChunks } : {}),
+    ...(localizedContent ? { localizedContent } : {}),
     metadata: {
       functions: state.functions || (state.function ? [state.function] : undefined),
       nextState: state.nextState,
