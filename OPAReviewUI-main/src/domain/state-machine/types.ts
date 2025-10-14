@@ -76,6 +76,14 @@ export interface State {
   readonly journeyId?: number | string | null;
   readonly rego_rules?: Record<string, string>;
   readonly regoRules?: Record<string, string>;
+  readonly markdownArabicLogical?: string;
+  readonly markdown_arabic_logical?: string;
+  readonly markdownEnglishLogical?: string;
+  readonly markdown_english_logical?: string;
+  readonly markdownArabicVisual?: string | null;
+  readonly markdown_arabic_visual?: string | null;
+  readonly markdownEnglishVisual?: string | null;
+  readonly markdown_english_visual?: string | null;
 }
 
 export interface StateMachineMetadata {
