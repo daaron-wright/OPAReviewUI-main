@@ -55,14 +55,133 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
   }
-  
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
   }
-  
+
   body {
     @apply antialiased;
+  }
+}
+
+@layer components {
+  .rich-text {
+    @apply text-sm leading-relaxed text-slate-700 break-words;
+  }
+
+  .rich-text > *:first-child {
+    margin-top: 0;
+  }
+
+  .rich-text > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .rich-text p {
+    @apply my-3;
+  }
+
+  .rich-text p:first-of-type {
+    margin-top: 0;
+  }
+
+  .rich-text p:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .rich-text strong,
+  .rich-text b {
+    @apply font-semibold text-slate-900;
+  }
+
+  .rich-text em,
+  .rich-text i {
+    @apply italic text-slate-700;
+  }
+
+  .rich-text u {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .rich-text a {
+    @apply font-semibold text-emerald-700 underline underline-offset-2 transition-colors;
+  }
+
+  .rich-text a:hover {
+    @apply text-emerald-800;
+  }
+
+  .rich-text h1 {
+    @apply mt-6 mb-3 text-2xl font-semibold text-slate-900;
+  }
+
+  .rich-text h2 {
+    @apply mt-6 mb-3 text-xl font-semibold text-slate-900;
+  }
+
+  .rich-text h3 {
+    @apply mt-5 mb-3 text-lg font-semibold text-slate-900;
+  }
+
+  .rich-text h4 {
+    @apply mt-4 mb-2 text-base font-semibold text-slate-900;
+  }
+
+  .rich-text h5 {
+    @apply mt-4 mb-2 text-sm font-semibold uppercase tracking-wide text-slate-600;
+  }
+
+  .rich-text h6 {
+    @apply mt-3 mb-2 text-xs font-semibold uppercase tracking-widest text-slate-500;
+  }
+
+  .rich-text ul {
+    @apply my-3 list-disc space-y-1 pl-5;
+  }
+
+  .rich-text ol {
+    @apply my-3 list-decimal space-y-1 pl-5;
+  }
+
+  .rich-text[dir='rtl'] ul,
+  .rich-text[dir='rtl'] ol {
+    @apply pl-0 pr-5;
+  }
+
+  .rich-text li {
+    @apply leading-relaxed;
+  }
+
+  .rich-text blockquote {
+    @apply my-4 border-l-4 border-slate-200 pl-4 italic text-slate-600;
+  }
+
+  .rich-text[dir='rtl'] blockquote {
+    @apply border-l-0 border-r-4 pr-4;
+  }
+
+  .rich-text table {
+    @apply my-4 w-full table-auto border-collapse text-left;
+  }
+
+  .rich-text thead th {
+    @apply border-b border-slate-200 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500;
+  }
+
+  .rich-text tbody td {
+    @apply border-b border-slate-100 px-3 py-2 align-top text-sm text-slate-700;
+  }
+
+  .rich-text code {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-xs font-mono text-slate-800;
+  }
+
+  .rich-text hr {
+    @apply my-6 border-slate-200;
   }
 }
 
@@ -73,15 +192,15 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   .animation-delay-100 {
     animation-delay: 100ms;
   }
-  
+
   .animation-delay-200 {
     animation-delay: 200ms;
   }
-  
+
   .animation-delay-300 {
     animation-delay: 300ms;
   }
