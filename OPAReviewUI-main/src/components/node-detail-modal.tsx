@@ -79,6 +79,58 @@ function convertSanitizedHtmlToPlainText(html: string): string {
     .trim();
 }
 
+function normalizeLanguageCode(language?: string | null): string {
+  return typeof language === 'string' ? language.trim().toLowerCase() : '';
+}
+
+function normalizeDirectionalMarkup(html: string, language?: string | null): string {
+  if (!html) {
+    return '';
+  }
+
+  const normalizedLanguage = normalizeLanguageCode(language);
+
+  if (normalizedLanguage === 'ar') {
+    return html;
+  }
+
+  const filterStyles = (styles: string): string | null => {
+    const declarations = styles
+      .split(';')
+      .map((declaration) => declaration.trim())
+      .filter(Boolean)
+      .filter((declaration) => !/^text-align\s*:\s*(?:right|end)(?:\s*!important)?$/i);
+
+    if (declarations.length === 0) {
+      return null;
+    }
+
+    return declarations.join('; ');
+  };
+
+  let result = html
+    .replace(/\sdir\s*=\s*"(?:rtl)"/gi, '')
+    .replace(/\sdir\s*=\s*'(?:rtl)'/gi, '')
+    .replace(/\salign\s*=\s*"(?:right)"/gi, '')
+    .replace(/\salign\s*=\s*'(?:right)'/gi, '');
+
+  result = result.replace(/\sstyle\s*=\s*"([^"]*)"/gi, (fullMatch, styles) => {
+    const filtered = filterStyles(styles);
+    return filtered ? ` style="${filtered}"` : '';
+  });
+
+  result = result.replace(/\sstyle\s*=\s*'([^']*)'/gi, (fullMatch, styles) => {
+    const filtered = filterStyles(styles);
+    return filtered ? ` style='${filtered}'` : '';
+  });
+
+  return result;
+}
+
+function getTextAlignForLanguage(language?: string | null): 'left' | 'right' {
+  return normalizeLanguageCode(language) === 'ar' ? 'right' : 'left';
+}
+
 const JOURNEY_LABEL_MAP = {
   new_trade_name: {
     en: 'Path 1 · New Trade Name',
@@ -481,10 +533,11 @@ export function NodeDetailModal({
       localizedRelevantChunks.map((chunk) => {
         if (chunk.isHtml) {
           const sanitizedHtml = sanitizeHtmlContent(chunk.text);
+          const normalizedHtml = normalizeDirectionalMarkup(sanitizedHtml, chunk.language);
           return {
             chunk,
-            sanitizedHtml,
-            previewText: convertSanitizedHtmlToPlainText(sanitizedHtml),
+            sanitizedHtml: normalizedHtml,
+            previewText: convertSanitizedHtmlToPlainText(normalizedHtml),
           };
         }
 
@@ -982,48 +1035,62 @@ export function NodeDetailModal({
                   )}
 
                   <div className="space-y-3">
-                    {decoratedChunks.map(({ chunk, sanitizedHtml, previewText }, index) => (
-                      <div
-                        key={`${chunk.language}-${chunk.referenceId ?? index}-${index}`}
-                        className="rounded-2xl border border-[#d8e4df] bg-white/95 p-4 shadow-[0_12px_26px_-22px_rgba(11,64,55,0.35)]"
-                      >
-                        <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                          <span className="inline-flex items-center gap-1 rounded-full bg-[#f1f5f3] px-2.5 py-1 text-[10px] font-semibold text-[#0f766e]">
-                            <svg className="h-3 w-3 text-[#0f766e]" fill="none" stroke="currentColor" viewBox="0 0 16 16">
-                              <path d="M3 3.5h10M3 8h10M3 12.5h6" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            {chunk.language === 'ar' ? 'العربية' : 'English'}
-                          </span>
-                          {(chunk.section ?? chunk.source) && (
-                            <span className="inline-flex items-center gap-1 rounded-full border border-[#d1e3dc] bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-600">
-                              BRD • {chunk.section ?? chunk.source}
+                    {decoratedChunks.map(({ chunk, sanitizedHtml }, index) => {
+                      const normalizedChunkLanguage = normalizeLanguageCode(chunk.language);
+                      const dirValue = normalizedChunkLanguage === 'ar' ? 'rtl' : 'ltr';
+                      const textAlign = getTextAlignForLanguage(chunk.language);
+
+                      return (
+                        <div
+                          key={`${chunk.language}-${chunk.referenceId ?? index}-${index}`}
+                          className="rounded-2xl border border-[#d8e4df] bg-white/95 p-4 shadow-[0_12px_26px_-22px_rgba(11,64,55,0.35)]"
+                        >
+                          <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#f1f5f3] px-2.5 py-1 text-[10px] font-semibold text-[#0f766e]">
+                              <svg className="h-3 w-3 text-[#0f766e]" fill="none" stroke="currentColor" viewBox="0 0 16 16">
+                                <path d="M3 3.5h10M3 8h10M3 12.5h6" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                              {chunk.language === 'ar' ? 'العربية' : 'English'}
                             </span>
-                          )}
-                          {chunk.tags?.map((tag) => (
-                            <span
-                              key={tag}
-                              className="inline-flex items-center gap-1 rounded-full border border-[#c7e5f4] bg-[#f0f8fd] px-2.5 py-1 text-[10px] font-semibold text-[#1d7fb3]"
+                            {(chunk.section ?? chunk.source) && (
+                              <span className="inline-flex items-center gap-1 rounded-full border border-[#d1e3dc] bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-600">
+                                BRD • {chunk.section ?? chunk.source}
+                              </span>
+                            )}
+                            {chunk.tags?.map((tag) => (
+                              <span
+                                key={tag}
+                                className="inline-flex items-center gap-1 rounded-full border border-[#c7e5f4] bg-[#f0f8fd] px-2.5 py-1 text-[10px] font-semibold text-[#1d7fb3]"
+                              >
+                                #{formatAttributeName(tag)}
+                              </span>
+                            ))}
+                          </div>
+                          {sanitizedHtml ? (
+                            <div
+                              dir={dirValue}
+                              className={clsx(
+                                'mt-3 text-sm leading-relaxed text-slate-700 [&_*]:leading-relaxed',
+                                textAlign === 'right' ? 'text-right' : 'text-left'
+                              )}
+                              style={{ textAlign }}
+                              dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+                            />
+                          ) : (
+                            <p
+                              dir={dirValue}
+                              className={clsx(
+                                'mt-3 text-sm leading-relaxed text-slate-700',
+                                textAlign === 'right' ? 'text-right' : 'text-left'
+                              )}
+                              style={{ textAlign }}
                             >
-                              #{formatAttributeName(tag)}
-                            </span>
-                          ))}
+                              {chunk.text}
+                            </p>
+                          )}
                         </div>
-                        {sanitizedHtml ? (
-                          <div
-                            dir={chunk.language === 'ar' ? 'rtl' : 'ltr'}
-                            className="mt-3 text-sm leading-relaxed text-slate-700 [&_*]:leading-relaxed"
-                            dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
-                          />
-                        ) : (
-                          <p
-                            dir={chunk.language === 'ar' ? 'rtl' : 'ltr'}
-                            className="mt-3 text-sm leading-relaxed text-slate-700"
-                          >
-                            {chunk.text}
-                          </p>
-                        )}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -1059,6 +1126,9 @@ export function NodeDetailModal({
                     const isExpanded = expandedBRDSection === chunkId;
                     const normalizedPreview = previewText.replace(/\s+/g, ' ').trim();
                     const previewValue = normalizedPreview.length > 120 ? `${normalizedPreview.slice(0, 120)}…` : normalizedPreview;
+                    const normalizedChunkLanguage = normalizeLanguageCode(chunk.language);
+                    const dirValue = normalizedChunkLanguage === 'ar' ? 'rtl' : 'ltr';
+                    const textAlign = getTextAlignForLanguage(chunk.language);
 
                     return (
                       <div
@@ -1114,11 +1184,19 @@ export function NodeDetailModal({
                               <div className="prose prose-sm max-w-none text-slate-600">
                                 {sanitizedHtml ? (
                                   <div
-                                    dir={chunk.language === 'ar' ? 'rtl' : 'ltr'}
+                                    dir={dirValue}
+                                    className={clsx('[&_*]:leading-relaxed', textAlign === 'right' ? 'text-right' : 'text-left')}
+                                    style={{ textAlign }}
                                     dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
                                   />
                                 ) : (
-                                  <pre className="whitespace-pre-wrap font-sans text-xs leading-relaxed">
+                                  <pre
+                                    className={clsx(
+                                      'whitespace-pre-wrap font-sans text-xs leading-relaxed',
+                                      textAlign === 'right' ? 'text-right' : 'text-left'
+                                    )}
+                                    style={{ textAlign }}
+                                  >
                                     {chunk.text}
                                   </pre>
                                 )}
