@@ -12,6 +12,7 @@ export interface ProcessedRelevantChunk {
   readonly source?: string;
   readonly section?: string;
   readonly tags?: ReadonlyArray<string>;
+  readonly isHtml?: boolean;
 }
 
 export interface ProcessedNodeLocalizedContent {
