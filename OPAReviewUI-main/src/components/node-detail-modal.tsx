@@ -955,7 +955,7 @@ export function NodeDetailModal({
                 </div>
               )}
 
-              {localizedRelevantChunks.length > 0 && (
+              {decoratedChunks.length > 0 && (
                 <div className="rounded-2xl border border-[#d8e4df] bg-[#f9fbfa] p-4 shadow-sm">
                   <div className="mb-3 flex items-center gap-2">
                     <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#f3f8f6] text-[#0f766e]">
@@ -982,7 +982,7 @@ export function NodeDetailModal({
                   )}
 
                   <div className="space-y-3">
-                    {localizedRelevantChunks.map((chunk, index) => (
+                    {decoratedChunks.map(({ chunk, sanitizedHtml, previewText }, index) => (
                       <div
                         key={`${chunk.language}-${chunk.referenceId ?? index}-${index}`}
                         className="rounded-2xl border border-[#d8e4df] bg-white/95 p-4 shadow-[0_12px_26px_-22px_rgba(11,64,55,0.35)]"
@@ -1008,12 +1008,20 @@ export function NodeDetailModal({
                             </span>
                           ))}
                         </div>
-                        <p
-                          dir={chunk.language === 'ar' ? 'rtl' : 'ltr'}
-                          className="mt-3 text-sm leading-relaxed text-slate-700"
-                        >
-                          {chunk.text}
-                        </p>
+                        {sanitizedHtml ? (
+                          <div
+                            dir={chunk.language === 'ar' ? 'rtl' : 'ltr'}
+                            className="mt-3 text-sm leading-relaxed text-slate-700 [&_*]:leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+                          />
+                        ) : (
+                          <p
+                            dir={chunk.language === 'ar' ? 'rtl' : 'ltr'}
+                            className="mt-3 text-sm leading-relaxed text-slate-700"
+                          >
+                            {chunk.text}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
