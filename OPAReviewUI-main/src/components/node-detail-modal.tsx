@@ -839,6 +839,26 @@ export function NodeDetailModal({
             >
               {language === 'ar' ? 'نظرة عامة' : 'Overview'}
             </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                toast.info(
+                  language === 'ar'
+                    ? 'ميزة التلخيص ستتوفر قريباً.'
+                    : 'Summarise feature coming soon.'
+                )
+              }
+              className="inline-flex items-center gap-2 rounded-full border border-dashed border-[#dbe9e3] px-4 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:bg-[#f3f8f6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.6">
+                <path d="M4.5 6.75h11M4.5 10h11M4.5 13.25h6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              {language === 'ar' ? 'تلخيص' : 'Summarise'}
+              <span className="rounded-full bg-[#0f766e]/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
+                {language === 'ar' ? 'قريباً' : 'Mock'}
+              </span>
+            </button>
           </div>
 
           <div className="flex items-center gap-3">
