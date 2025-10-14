@@ -513,6 +513,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   );
   const remoteStateLoadedRef = useRef(Boolean(initialStateMachine));
   const remoteStateRequestIdRef = useRef(0);
+  const hasShownStartupToastRef = useRef(false);
 
   const loadRemoteStateMachine = useCallback(
     async ({ suppressToast = false, requestId }: { suppressToast?: boolean; requestId: number }) => {
@@ -620,6 +621,25 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       }
     };
   }, [loadRemoteStateMachine]);
+
+  useEffect(() => {
+    if (hasShownStartupToastRef.current) {
+      return;
+    }
+
+    hasShownStartupToastRef.current = true;
+
+    toast.info(
+      createToastContent(
+        'alarm',
+        "Based on a high number of similar recommendations exceeding a certain threshold, please review the 'New Trade Name' journey, and respond to feedback."
+      ),
+      {
+        position: 'top-right',
+        autoClose: 7000,
+      }
+    );
+  }, []);
 
   const journeyTabs = useMemo(() => deriveJourneyTabs(stateMachine), [stateMachine]);
   const journeyTotals = useMemo(
