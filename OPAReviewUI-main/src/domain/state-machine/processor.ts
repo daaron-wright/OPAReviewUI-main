@@ -253,9 +253,17 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
         const similarity = getRecordValue(entry, 'similarity');
 
         if (isRecord(arabicOriginal) || isRecord(englishTranslation)) {
+          const arabicMarkdownLogical = toNonEmptyString(
+            getRecordValue(entry, 'markdownArabicLogical', 'markdown_arabic_logical')
+          );
+          const englishMarkdownTranslation = toNonEmptyString(
+            getRecordValue(entry, 'markdownEnglishTranslation', 'markdown_english_translation')
+          );
+
           // Handle arabic_original
           if (isRecord(arabicOriginal)) {
-            const arabicText = getRecordValue(arabicOriginal, 'text');
+            const arabicFallback = toNonEmptyString(getRecordValue(arabicOriginal, 'text'));
+            const arabicText = arabicMarkdownLogical ?? arabicFallback;
             if (arabicText) {
               const pageInfo = Array.isArray(pagesArabic) && pagesArabic.length > 0
                 ? `Page ${pagesArabic.join(', ')}`
@@ -276,7 +284,8 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
 
           // Handle english_translation
           if (isRecord(englishTranslation)) {
-            const englishText = getRecordValue(englishTranslation, 'text');
+            const englishFallback = toNonEmptyString(getRecordValue(englishTranslation, 'text'));
+            const englishText = englishMarkdownTranslation ?? englishFallback;
             if (englishText) {
               const pageInfo = Array.isArray(pagesArabic) && pagesArabic.length > 0
                 ? `Page ${pagesArabic.join(', ')}`
