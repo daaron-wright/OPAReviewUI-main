@@ -851,13 +851,11 @@ export function NodeDetailModal({
               }
               className="inline-flex items-center gap-2 rounded-full border border-dashed border-[#dbe9e3] px-4 py-1.5 text-xs font-semibold text-[#0f766e] transition hover:bg-[#f3f8f6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
             >
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.6">
-                <path d="M4.5 6.75h11M4.5 10h11M4.5 13.25h6" strokeLinecap="round" strokeLinejoin="round" />
+              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M4 5h16M4 10h10M4 15h14" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M15.5 9.5l4.5 4.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               {language === 'ar' ? 'تلخيص' : 'Summarise'}
-              <span className="rounded-full bg-[#0f766e]/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#0f766e]">
-                {language === 'ar' ? 'قريباً' : 'Mock'}
-              </span>
             </button>
           </div>
 
@@ -1097,7 +1095,7 @@ export function NodeDetailModal({
                         {language === 'ar' ? 'مقتطفات وثيقة ذات صلة' : 'Relevant document snippets'}
                       </p>
                       <p className="text-sm font-semibold text-slate-900">
-                        {language === 'ar' ? 'خلاصة السياسة بحسب المسار' : 'Policy guidance by journey path'}
+                        {language === 'ar' ? 'خلاصة السياسة بحسب ا��مسار' : 'Policy guidance by journey path'}
                       </p>
                     </div>
                   </div>
@@ -1306,7 +1304,7 @@ export function NodeDetailModal({
                   </h3>
                 </div>
                 <span className="inline-flex items-center rounded-full border border-[#dbe9e3] bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  {language === 'ar' ? 'عرض مباشر' : 'Live view'}
+                  {language === 'ar' ? 'عرض م��اشر' : 'Live view'}
                 </span>
               </div>
 
@@ -1323,7 +1321,7 @@ export function NodeDetailModal({
                       </div>
                       <p className="mt-2 text-sm text-slate-600">
                         {language === 'ar'
-                          ? 'انقر على أي قاعدة لتشغيل حالات الاختبار ومزامنتها مع مرجع BRD.'
+                          ? 'انقر على أي قاعدة لتشغيل حالات الاختبار و��زامنتها مع مرجع BRD.'
                           : 'Click a rule to run test cases and sync with the BRD reference.'}
                       </p>
                     </div>
