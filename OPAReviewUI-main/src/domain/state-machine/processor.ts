@@ -203,6 +203,7 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
       source?: unknown;
       section?: unknown;
       tags?: unknown;
+      isHtml?: unknown;
     } = {}
   ): void => {
     const text = toNonEmptyString(textInput);
@@ -215,21 +216,27 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
     const source = toNonEmptyString(options.source);
     const section = toNonEmptyString(options.section);
     const tags = sanitizeTags(options.tags);
+    const isHtml = options.isHtml === true;
 
     const key = `${language}::${text}::${referenceId ?? ''}::${section ?? ''}::${source ?? ''}`;
     const existing = collected.get(key);
 
     if (existing) {
-      if (tags.length > 0) {
-        const merged = new Set<string>([
-          ...(existing.tags ?? []),
-          ...tags,
-        ]);
-        collected.set(key, {
-          ...existing,
-          tags: Array.from(merged),
-        });
-      }
+      const mergedChunk: ProcessedRelevantChunk = {
+        ...existing,
+        ...(tags.length > 0
+          ? {
+              tags: Array.from(
+                new Set<string>([
+                  ...(existing.tags ?? []),
+                  ...tags,
+                ])
+              ),
+            }
+          : {}),
+        ...(isHtml && !existing.isHtml ? { isHtml: true } : {}),
+      };
+      collected.set(key, mergedChunk);
       return;
     }
 
@@ -240,6 +247,7 @@ function normalizeRelevantChunks(state: State): ReadonlyArray<ProcessedRelevantC
       ...(source ? { source } : {}),
       ...(section ? { section } : {}),
       ...(tags.length > 0 ? { tags } : {}),
+      ...(isHtml ? { isHtml: true } : {}),
     });
   };
 
