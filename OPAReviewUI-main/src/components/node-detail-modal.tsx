@@ -37,17 +37,47 @@ interface RegoRule {
   keywords?: string[];
 }
 
-interface DisplayChunk {
-  id: string;
-  language: string;
-  text: string;
-  referenceId?: string;
-  source?: string;
-  section?: string;
-  tags?: string[];
+const REGO_PACKAGE_PREFIX = 'beneficiary';
+
+function sanitizeHtmlContent(html: string): string {
+  if (typeof html !== 'string') {
+    return '';
+  }
+
+  return html
+    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+    .replace(/javascript:/gi, '')
+    .trim();
 }
 
-const REGO_PACKAGE_PREFIX = 'beneficiary';
+function decodeBasicEntities(value: string): string {
+  return value
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'");
+}
+
+function convertSanitizedHtmlToPlainText(html: string): string {
+  if (!html) {
+    return '';
+  }
+
+  const normalized = html
+    .replace(/<br\s*\/?>(\s*)/gi, '\n')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<[^>]+>/g, ' ');
+
+  return decodeBasicEntities(normalized)
+    .replace(/\s+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
 
 const JOURNEY_LABEL_MAP = {
   new_trade_name: {
@@ -308,7 +338,7 @@ export function NodeDetailModal({
         const result: TestResult = {
           ruleId,
           status: 'pass',
-          message: language === 'ar' ? 'تم اعتماد القاعدة' : 'Rule approved',
+          message: language === 'ar' ? 'تم اعتماد ال��اعدة' : 'Rule approved',
         };
         if (existing?.actual !== undefined) {
           result.actual = existing.actual;
@@ -941,7 +971,7 @@ export function NodeDetailModal({
                             <svg className="h-3 w-3 text-[#0f766e]" fill="none" stroke="currentColor" viewBox="0 0 16 16">
                               <path d="M3 3.5h10M3 8h10M3 12.5h6" strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            {chunk.language === 'ar' ? 'العربية' : 'English'}
+                            {chunk.language === 'ar' ? '��لعربية' : 'English'}
                           </span>
                           {(chunk.section ?? chunk.source) && (
                             <span className="inline-flex items-center gap-1 rounded-full border border-[#d1e3dc] bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-600">
