@@ -779,10 +779,25 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         if (!normalized) {
           return false;
         }
-        return feedbackReferenceTerms.some((term) => normalized.includes(term));
+
+        if (normalizedPrimaryTerm && !normalized.includes(normalizedPrimaryTerm)) {
+          return false;
+        }
+
+        const hasSecondaryMatch = normalizedSecondaryTerms.some((term) => normalized.includes(term));
+        if (!hasSecondaryMatch) {
+          return false;
+        }
+
+        const hasContextMatch = normalizedContextTerms.some((term) => normalized.includes(term));
+        if (!hasContextMatch) {
+          return false;
+        }
+
+        return true;
       });
     },
-    [feedbackReferenceTerms]
+    [normalizedContextTerms, normalizedPrimaryTerm, normalizedSecondaryTerms]
   );
   const selectedJourneyConfig = useMemo(() => {
     if (!selectedJourney) {
