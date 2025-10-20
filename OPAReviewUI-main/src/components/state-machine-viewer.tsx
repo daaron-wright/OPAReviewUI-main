@@ -779,6 +779,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const [primaryView, setPrimaryView] = useState<'list' | 'graph'>('graph');
   const [isGraphExpanded, setIsGraphExpanded] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isFeedbackHighlightActive, setIsFeedbackHighlightActive] = useState(false);
 
   const {
     reviewStatus,
@@ -816,6 +817,12 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
   const hasUploadedDocument = Boolean(policyDocument);
   const canDisplayGraph = stateMachine.nodes.length > 0;
+
+  useEffect(() => {
+    if (selectedJourney !== FEEDBACK_JOURNEY_ID || !hasUploadedDocument) {
+      setIsFeedbackHighlightActive(false);
+    }
+  }, [hasUploadedDocument, selectedJourney]);
 
   const hasCompletedJourney = useMemo(() => {
     if (!hasUploadedDocument) {
