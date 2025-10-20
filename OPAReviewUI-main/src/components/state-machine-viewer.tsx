@@ -707,7 +707,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const journeyEdges = selectedJourneyGraph?.edges ?? [];
   const journeyNodeIds = useMemo(() => new Set(journeyNodes.map((node) => node.id)), [journeyNodes]);
   const journeyEdgeIds = useMemo(() => new Set(journeyEdges.map((edge) => edge.id)), [journeyEdges]);
-  const feedbackReferenceTerms = useMemo(() => FEEDBACK_REFERENCE_TERMS.map((term) => term.toLowerCase()), []);
+  const feedbackReferenceTerms = useMemo(
+    () => FEEDBACK_REFERENCE_TERMS.map((term) => normalizeFeedbackText(term)).filter(Boolean),
+    []
+  );
   const nodeReferencesFeedback = useCallback(
     (node: ProcessedNode) => {
       const haystacks: string[] = [];
@@ -768,7 +771,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       }
 
       return haystacks.some((value) => {
-        const normalized = value.toLowerCase();
+        const normalized = normalizeFeedbackText(value);
+        if (!normalized) {
+          return false;
+        }
         return feedbackReferenceTerms.some((term) => normalized.includes(term));
       });
     },
