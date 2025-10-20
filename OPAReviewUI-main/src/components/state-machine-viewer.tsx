@@ -788,6 +788,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
   const [hasPublishedToOpa, setHasPublishedToOpa] = useState(false);
+  const [hasMarkedDeployToOpaComplete, setHasMarkedDeployToOpaComplete] = useState(false);
+  const [hasMarkedAgentUseComplete, setHasMarkedAgentUseComplete] = useState(false);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [primaryView, setPrimaryView] = useState<'list' | 'graph'>('graph');
   const [isGraphExpanded, setIsGraphExpanded] = useState(false);
@@ -796,13 +798,15 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
   const handleImplementPolicyChanges = useCallback(() => {
     setIsFeedbackHighlightActive(false);
+    setHasMarkedDeployToOpaComplete(true);
+    setHasMarkedAgentUseComplete(true);
     toast.success(
       createToastContent('checkCircle', 'Policy changes implemented, Feedback sent to CN-7845126'),
       {
         position: 'top-center',
       }
     );
-  }, [setIsFeedbackHighlightActive]);
+  }, [setHasMarkedAgentUseComplete, setHasMarkedDeployToOpaComplete, setIsFeedbackHighlightActive]);
 
   const {
     reviewStatus,
@@ -877,6 +881,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   useEffect(() => {
     if (!hasUploadedDocument) {
       setHasPublishedToOpa(false);
+      setHasMarkedDeployToOpaComplete(false);
+      setHasMarkedAgentUseComplete(false);
     }
   }, [hasUploadedDocument]);
 
@@ -1613,7 +1619,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     let step5Status: JourneyProcessStepStatus;
     let step5Description: string;
 
-    if (!hasDocument || documentErrorMessage) {
+    if (hasMarkedDeployToOpaComplete) {
+      step5Status = 'complete';
+      step5Description = 'Deployment to OPA Server completed';
+    } else if (!hasDocument || documentErrorMessage) {
       step5Status = 'idle';
       step5Description = 'Awaiting policy extraction';
     } else if (!timelineReady) {
@@ -1640,7 +1649,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     let step6Status: JourneyProcessStepStatus;
     let step6Description: string;
 
-    if (!hasDocument) {
+    if (hasMarkedAgentUseComplete) {
+      step6Status = 'complete';
+      step6Description = 'Agents ready for operational use';
+    } else if (!hasDocument) {
       step6Status = 'idle';
       step6Description = 'Upload a BRD policy to enable agents';
     } else if (documentErrorMessage || actorsErrorMessage) {
@@ -1685,6 +1697,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     totalCount,
     hasPublishedToOpa,
     isWalkthroughMode,
+    hasMarkedDeployToOpaComplete,
+    hasMarkedAgentUseComplete,
   ]);
 
   const handleToggleGraphSize = useCallback(() => {
