@@ -942,6 +942,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       return [];
     }
 
+    const isFeedbackJourneyActive = selectedJourney === FEEDBACK_JOURNEY_ID;
+
     return stateMachine.nodes.map((node) => {
       const functions = node.metadata.functions ? [...node.metadata.functions] : undefined;
       const controlAttributes = node.metadata.controlAttributes
@@ -952,6 +954,13 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       const transitions = node.metadata.transitions ? [...node.metadata.transitions] : undefined;
       const isJourneyNode = journeyNodeIds.has(node.id);
       const nodeActors = nodeActorAssignments.get(node.id);
+      const referencesFeedback = nodeReferencesFeedback(node);
+      const isReviewed = Boolean(reviewStatus[node.id]?.reviewed);
+      const shouldFlagFeedback =
+        isFeedbackJourneyActive &&
+        isJourneyNode &&
+        referencesFeedback &&
+        !isReviewed;
 
       const data: CustomNodeData = {
         label: node.label,
@@ -965,6 +974,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         ...(controlAttributes ? { controlAttributes } : {}),
         ...(transitions ? { transitions } : {}),
         ...(nodeActors && nodeActors.length > 0 ? { actors: nodeActors } : {}),
+        ...(shouldFlagFeedback ? { feedbackAttention: true } : {}),
       };
 
       return {
@@ -974,7 +984,15 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         data,
       };
     });
-  }, [hasUploadedDocument, journeyNodeIds, nodeActorAssignments, stateMachine.nodes]);
+  }, [
+    hasUploadedDocument,
+    journeyNodeIds,
+    nodeActorAssignments,
+    nodeReferencesFeedback,
+    reviewStatus,
+    selectedJourney,
+    stateMachine.nodes,
+  ]);
 
   const initialEdges = useMemo(() => {
     if (!hasUploadedDocument) {
