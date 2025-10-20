@@ -66,7 +66,7 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
         className={clsx(
           styles.container,
           isCurrentNode && 'ring-2 ring-emerald-300 ring-offset-2 ring-offset-white',
-          feedbackAttention && 'outline outline-2 outline-offset-2 outline-[#f6b74a]'
+          feedbackAttention && 'outline outline-2 outline-offset-2 outline-[#53b6a2]'
         )}
       >
         <div className="flex items-start justify-between gap-3">
