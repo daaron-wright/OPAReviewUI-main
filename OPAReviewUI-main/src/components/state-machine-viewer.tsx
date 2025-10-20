@@ -691,6 +691,73 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const journeyEdges = selectedJourneyGraph?.edges ?? [];
   const journeyNodeIds = useMemo(() => new Set(journeyNodes.map((node) => node.id)), [journeyNodes]);
   const journeyEdgeIds = useMemo(() => new Set(journeyEdges.map((edge) => edge.id)), [journeyEdges]);
+  const feedbackReferenceTerms = useMemo(() => FEEDBACK_REFERENCE_TERMS.map((term) => term.toLowerCase()), []);
+  const nodeReferencesFeedback = useCallback(
+    (node: ProcessedNode) => {
+      const haystacks: string[] = [];
+
+      if (typeof node.description === 'string') {
+        haystacks.push(node.description);
+      }
+
+      if (node.localizedContent) {
+        const { arabicLogical, englishLogical, arabicVisual, englishVisual } = node.localizedContent;
+        [arabicLogical, englishLogical, arabicVisual, englishVisual].forEach((value) => {
+          if (typeof value === 'string') {
+            haystacks.push(value);
+          }
+        });
+      }
+
+      if (node.relevantChunks) {
+        node.relevantChunks.forEach((chunk) => {
+          if (typeof chunk.text === 'string') {
+            haystacks.push(chunk.text);
+          }
+        });
+      }
+
+      if (node.metadata.functions) {
+        node.metadata.functions.forEach((fn) => {
+          if (typeof fn === 'string') {
+            haystacks.push(fn);
+          }
+        });
+      }
+
+      if (node.metadata.regoRules) {
+        Object.values(node.metadata.regoRules).forEach((rule) => {
+          if (typeof rule === 'string') {
+            haystacks.push(rule);
+          }
+        });
+      }
+
+      if (node.metadata.transitions) {
+        node.metadata.transitions.forEach((transition) => {
+          if (typeof transition.action === 'string') {
+            haystacks.push(transition.action);
+          }
+          if (typeof transition.condition === 'string') {
+            haystacks.push(transition.condition);
+          }
+          if (typeof transition.target === 'string') {
+            haystacks.push(transition.target);
+          }
+        });
+      }
+
+      if (haystacks.length === 0) {
+        return false;
+      }
+
+      return haystacks.some((value) => {
+        const normalized = value.toLowerCase();
+        return feedbackReferenceTerms.some((term) => normalized.includes(term));
+      });
+    },
+    [feedbackReferenceTerms]
+  );
   const selectedJourneyConfig = useMemo(() => {
     if (!selectedJourney) {
       return journeyTabs[0];
