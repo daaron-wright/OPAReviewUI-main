@@ -808,20 +808,30 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     (file: File) => {
       const uploaded = uploadPolicyDocument(file);
       if (!uploaded) {
-        toast.error(createToastContent('infoCircle', 'Please select a PDF document'), {
-          position: 'top-center',
-        });
-        return;
-      }
-
-      toast.success(createToastContent('checkCircle', `${uploaded.fileName} uploaded successfully`), {
+      toast.error(createToastContent('infoCircle', 'Please select a PDF document'), {
         position: 'top-center',
       });
+      return;
+    }
 
-      const requestId = remoteStateRequestIdRef.current + 1;
-      remoteStateRequestIdRef.current = requestId;
+    toast.success(createToastContent('checkCircle', `${uploaded.fileName} uploaded successfully`), {
+      position: 'top-center',
+    });
 
-      void loadRemoteStateMachine({ requestId });
+    toast.warning(
+      createToastContent(
+        'warningTriangle',
+        "CN-7845126, has issued feedback stating the licensing process is 'high-risk economic licenses for restaurants' needs to be adjusted."
+      ),
+      {
+        position: 'top-center',
+      }
+    );
+
+    const requestId = remoteStateRequestIdRef.current + 1;
+    remoteStateRequestIdRef.current = requestId;
+
+    void loadRemoteStateMachine({ requestId });
     },
     [loadRemoteStateMachine, uploadPolicyDocument]
   );
