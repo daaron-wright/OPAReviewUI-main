@@ -797,7 +797,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const handleImplementPolicyChanges = useCallback(() => {
     setIsFeedbackHighlightActive(false);
     toast.success(
-      createToastContent('checkCircle', 'Policy changes implemented. Highlights cleared.'),
+      createToastContent('checkCircle', 'Policy changes implemented, Feedback sent to CN-7845126'),
       {
         position: 'top-center',
       }
