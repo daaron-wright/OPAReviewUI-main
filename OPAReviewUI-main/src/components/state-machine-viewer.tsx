@@ -1961,33 +1961,45 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
             </div>
             <div className="flex flex-wrap items-center gap-2">
               {selectedJourney === FEEDBACK_JOURNEY_ID && (
-                <button
-                  type="button"
-                  onClick={() => setIsFeedbackHighlightActive((previous) => !previous)}
-                  disabled={!hasUploadedDocument || !canDisplayGraph}
-                  aria-pressed={isFeedbackHighlightActive}
-                  className={clsx(
-                    'inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
-                    hasUploadedDocument && canDisplayGraph
-                      ? isFeedbackHighlightActive
-                        ? 'border-[#9ac7b7] bg-[#ecf6f3] text-[#0f534d] shadow-[0_16px_30px_-22px_rgba(15,83,77,0.35)] hover:border-[#83bbab] hover:bg-[#e2f1ed]'
-                        : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5] hover:bg-[#f3f8f6]'
-                      : 'cursor-not-allowed border-[#e7f0ec] bg-white text-slate-300'
-                  )}
-                >
-                  <Icon
-                    name="warningTriangle"
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setIsFeedbackHighlightActive((previous) => !previous)}
+                    disabled={!hasUploadedDocument || !canDisplayGraph}
+                    aria-pressed={isFeedbackHighlightActive}
                     className={clsx(
-                      'h-4 w-4',
+                      'inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
                       hasUploadedDocument && canDisplayGraph
                         ? isFeedbackHighlightActive
-                          ? 'text-[#0f534d]'
-                          : 'text-[#0f766e]'
-                        : 'text-slate-300'
+                          ? 'border-[#9ac7b7] bg-[#ecf6f3] text-[#0f534d] shadow-[0_16px_30px_-22px_rgba(15,83,77,0.35)] hover:border-[#83bbab] hover:bg-[#e2f1ed]'
+                          : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5] hover:bg-[#f3f8f6]'
+                        : 'cursor-not-allowed border-[#e7f0ec] bg-white text-slate-300'
                     )}
-                  />
-                  Review TAMM Customer Feedback
-                </button>
+                  >
+                    <Icon
+                      name="warningTriangle"
+                      className={clsx(
+                        'h-4 w-4',
+                        hasUploadedDocument && canDisplayGraph
+                          ? isFeedbackHighlightActive
+                            ? 'text-[#0f534d]'
+                            : 'text-[#0f766e]'
+                          : 'text-slate-300'
+                      )}
+                    />
+                    Review TAMM Customer Feedback
+                  </button>
+                  {isFeedbackHighlightActive && (
+                    <button
+                      type="button"
+                      onClick={handleImplementPolicyChanges}
+                      className="inline-flex items-center gap-2 rounded-full border border-[#0f766e] bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.65)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f766e]"
+                    >
+                      <Icon name="checkCircle" className="h-4 w-4" />
+                      Implement Policy Changes
+                    </button>
+                  )}
+                </>
               )}
               <button
                 type="button"
