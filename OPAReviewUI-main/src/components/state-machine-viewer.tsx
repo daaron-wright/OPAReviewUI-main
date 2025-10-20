@@ -794,6 +794,16 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isFeedbackHighlightActive, setIsFeedbackHighlightActive] = useState(false);
 
+  const handleImplementPolicyChanges = useCallback(() => {
+    setIsFeedbackHighlightActive(false);
+    toast.success(
+      createToastContent('checkCircle', 'Policy changes implemented. Highlights cleared.'),
+      {
+        position: 'top-center',
+      }
+    );
+  }, [setIsFeedbackHighlightActive]);
+
   const {
     reviewStatus,
     isWalkthroughMode,
