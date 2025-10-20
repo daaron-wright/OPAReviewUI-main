@@ -984,7 +984,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   }, [hasUploadedDocument, journeyNodeIds, nodeActorAssignments, stateMachine.nodes]);
 
   const feedbackAttentionNodeIds = useMemo(() => {
-    if (!hasUploadedDocument || selectedJourney !== FEEDBACK_JOURNEY_ID) {
+    if (!hasUploadedDocument || selectedJourney !== FEEDBACK_JOURNEY_ID || !isFeedbackHighlightActive) {
       return new Set<string>();
     }
 
@@ -1012,6 +1012,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     reviewStatus,
     selectedJourney,
     stateMachine.nodes,
+    isFeedbackHighlightActive,
   ]);
 
   const initialEdges = useMemo(() => {
