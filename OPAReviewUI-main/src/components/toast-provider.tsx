@@ -20,6 +20,9 @@ export function ToastProvider(): JSX.Element {
       draggable
       pauseOnHover
       theme="light"
+      toastOptions={{
+        icon: false,
+      }}
       style={{
         zIndex: 9999,
       }}
