@@ -66,7 +66,7 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
         className={clsx(
           styles.container,
           isCurrentNode && 'ring-2 ring-emerald-300 ring-offset-2 ring-offset-white',
-          feedbackAttention && clsx('node-feedback-highlight outline outline-2 outline-offset-2 outline-[#53b6a2]', styles.highlightedContainer)
+          feedbackAttention && clsx('node-feedback-highlight outline outline-[1.5px] outline-offset-[7px] outline-[#68c2b0]/70', styles.highlightedContainer)
         )}
       >
         <div className="flex items-start justify-between gap-3">
@@ -299,7 +299,7 @@ function getNodeStyles(
       reviewAccent,
       journeyAccent
     ),
-    highlightedContainer: 'bg-[#e6f5f2] shadow-[0_24px_48px_-32px_rgba(32,105,94,0.45)]',
+    highlightedContainer: 'bg-[#e9f7f3] shadow-[0_22px_40px_-30px_rgba(32,105,94,0.28)]',
     typeBadge: clsx(
       'inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em]',
       journeyVisibility === 'dimmed' ? 'border-[#e2e8f0] bg-white text-slate-400' : palette.badge
