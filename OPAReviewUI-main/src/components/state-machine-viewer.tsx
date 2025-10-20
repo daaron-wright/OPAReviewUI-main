@@ -706,8 +706,13 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const journeyEdges = selectedJourneyGraph?.edges ?? [];
   const journeyNodeIds = useMemo(() => new Set(journeyNodes.map((node) => node.id)), [journeyNodes]);
   const journeyEdgeIds = useMemo(() => new Set(journeyEdges.map((edge) => edge.id)), [journeyEdges]);
-  const feedbackReferenceTerms = useMemo(
-    () => FEEDBACK_REFERENCE_TERMS.map((term) => normalizeFeedbackText(term)).filter(Boolean),
+  const normalizedPrimaryTerm = useMemo(() => normalizeFeedbackText(FEEDBACK_PRIMARY_TERM), []);
+  const normalizedSecondaryTerms = useMemo(
+    () => FEEDBACK_SECONDARY_TERMS.map((term) => normalizeFeedbackText(term)).filter(Boolean),
+    []
+  );
+  const normalizedContextTerms = useMemo(
+    () => FEEDBACK_CONTEXT_TERMS.map((term) => normalizeFeedbackText(term)).filter(Boolean),
     []
   );
   const nodeReferencesFeedback = useCallback(
