@@ -29,6 +29,7 @@ export interface CustomNodeData {
   transitions?: ProcessedNodeTransition[];
   journeyVisibility?: 'highlight' | 'dimmed';
   actors?: ReadonlyArray<NodeActorSummary>;
+  feedbackAttention?: boolean;
 }
 
 /**
@@ -41,6 +42,7 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
   const isCurrentNode = currentNodeId === id && isWalkthroughMode;
   const journeyVisibility = data.journeyVisibility ?? 'highlight';
   const isDimmed = journeyVisibility === 'dimmed';
+  const feedbackAttention = Boolean(data.feedbackAttention);
   const styles = getNodeStyles(data, isReviewed, isApproved, journeyVisibility);
   const controlAttributes = data.controlAttributes ?? (data.controlAttribute ? [data.controlAttribute] : []);
   const transitions = data.transitions ?? [];
@@ -63,7 +65,8 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
       <div
         className={clsx(
           styles.container,
-          isCurrentNode && 'ring-2 ring-emerald-300 ring-offset-2 ring-offset-white'
+          isCurrentNode && 'ring-2 ring-emerald-300 ring-offset-2 ring-offset-white',
+          feedbackAttention && 'outline outline-2 outline-offset-2 outline-[#f6b74a]'
         )}
       >
         <div className="flex items-start justify-between gap-3">
