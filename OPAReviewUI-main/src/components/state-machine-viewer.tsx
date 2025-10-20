@@ -38,6 +38,10 @@ interface StateMachineFile {
 type JourneyTabId = string;
 
 const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
+const FEEDBACK_JOURNEY_ID = 'new_trade_name';
+const FEEDBACK_REFERENCE_TERMS = Object.freeze([
+  'high-risk economic licenses for restaurants',
+]);
 
 /*
  * Default workflow bundled locally as a fallback until the extended Arabic workflow is fetched at runtime.
