@@ -1829,7 +1829,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
                     : 'text-slate-300'
                 )}
               />
-              Review added customer feedback
+              Review TAMM Customer Feedback
             </button>
           )}
           <button
@@ -1964,7 +1964,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
                         : 'text-slate-300'
                     )}
                   />
-                  Review added customer feedback
+                  Review TAMM Customer Feedback
                 </button>
               )}
               <button
