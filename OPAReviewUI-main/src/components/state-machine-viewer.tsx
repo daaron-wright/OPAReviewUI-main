@@ -51,6 +51,14 @@ const FEEDBACK_REFERENCE_TERMS = Object.freeze([
   'high risk',
 ]);
 
+function normalizeFeedbackText(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^\p{L}\p{Nd}]+/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 /*
  * Default workflow bundled locally as a fallback until the extended Arabic workflow is fetched at runtime.
  */
