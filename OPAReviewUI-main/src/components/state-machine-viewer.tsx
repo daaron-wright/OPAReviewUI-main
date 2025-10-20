@@ -976,6 +976,37 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     });
   }, [hasUploadedDocument, journeyNodeIds, nodeActorAssignments, stateMachine.nodes]);
 
+  const feedbackAttentionNodeIds = useMemo(() => {
+    if (!hasUploadedDocument || selectedJourney !== FEEDBACK_JOURNEY_ID) {
+      return new Set<string>();
+    }
+
+    const ids = new Set<string>();
+
+    stateMachine.nodes.forEach((node) => {
+      if (!journeyNodeIds.has(node.id)) {
+        return;
+      }
+
+      if (reviewStatus[node.id]?.reviewed) {
+        return;
+      }
+
+      if (nodeReferencesFeedback(node)) {
+        ids.add(node.id);
+      }
+    });
+
+    return ids;
+  }, [
+    hasUploadedDocument,
+    journeyNodeIds,
+    nodeReferencesFeedback,
+    reviewStatus,
+    selectedJourney,
+    stateMachine.nodes,
+  ]);
+
   const initialEdges = useMemo(() => {
     if (!hasUploadedDocument) {
       return [];
@@ -1048,6 +1079,32 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     }
     lastViewportRef.current = reactFlowInstance.getViewport();
   }, [reactFlowInstance]);
+
+  useEffect(() => {
+    setNodes((current) => {
+      let updated = false;
+
+      const next = current.map((node) => {
+        const shouldFlag = feedbackAttentionNodeIds.has(node.id);
+        const currentFlag = Boolean((node.data as CustomNodeData).feedbackAttention);
+
+        if (shouldFlag === currentFlag) {
+          return node;
+        }
+
+        updated = true;
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            feedbackAttention: shouldFlag,
+          } as CustomNodeData,
+        };
+      });
+
+      return updated ? next : current;
+    });
+  }, [feedbackAttentionNodeIds, setNodes]);
 
   const scheduleFitView = useCallback(
     (options?: Partial<FitViewOptions>) => {
