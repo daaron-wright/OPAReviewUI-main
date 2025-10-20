@@ -39,17 +39,16 @@ type JourneyTabId = string;
 
 const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
 const FEEDBACK_JOURNEY_ID = 'new_trade_name';
-const FEEDBACK_REFERENCE_TERMS = Object.freeze([
-  'high-risk economic licenses for restaurants',
-  'high-risk applicants',
-  'high risk applicants',
-  'high-risk applicant',
-  'high risk applicant',
-  'high-risk economic',
-  'high risk economic',
-  'high-risk',
-  'high risk',
+const FEEDBACK_PRIMARY_TERM = 'high risk';
+const FEEDBACK_SECONDARY_TERMS = Object.freeze([
+  'restaurant',
+  'restaurants',
+  'economic license',
+  'economic licenses',
+  'economic activity',
+  'economic activities',
 ]);
+const FEEDBACK_CONTEXT_TERMS = Object.freeze(['applicant', 'applicants']);
 
 function normalizeFeedbackText(value: string): string {
   return value
