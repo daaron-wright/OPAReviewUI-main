@@ -14,6 +14,7 @@ export function ToastProvider(): JSX.Element {
       hideProgressBar={false}
       newestOnTop={true}
       closeOnClick
+      icon={false}
       rtl={false}
       pauseOnFocusLoss
       draggable
