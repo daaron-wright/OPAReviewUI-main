@@ -39,40 +39,7 @@ type JourneyTabId = string;
 
 const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type_selection']);
 const FEEDBACK_JOURNEY_ID = 'new_trade_name';
-const FEEDBACK_RULES = Object.freeze([
-  {
-    primary: 'high risk',
-    secondary: [
-      'restaurant',
-      'restaurants',
-      'economic license',
-      'economic licenses',
-      'economic activity',
-      'economic activities',
-      'due diligence',
-    ],
-    context: ['applicant', 'applicants', 'venue', 'venues'],
-  },
-  {
-    primary: 'low risk',
-    secondary: [
-      'assembly',
-      'baking',
-      'reheating',
-      'fast path',
-      'inspection',
-      'inspections',
-      'licensing',
-      'licence',
-      'licence fast',
-      'licensing fast',
-      'f b',
-      'f&b',
-      'food and beverage',
-    ],
-    context: ['concept', 'concepts', 'model', 'venue', 'venues'],
-  },
-]);
+const FEEDBACK_KEYWORDS = Object.freeze(['high risk']);
 
 function normalizeFeedbackText(value: string): string {
   return value
@@ -730,15 +697,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const journeyEdges = selectedJourneyGraph?.edges ?? [];
   const journeyNodeIds = useMemo(() => new Set(journeyNodes.map((node) => node.id)), [journeyNodes]);
   const journeyEdgeIds = useMemo(() => new Set(journeyEdges.map((edge) => edge.id)), [journeyEdges]);
-  const normalizedFeedbackRules = useMemo(
-    () =>
-      FEEDBACK_RULES.map((rule) => ({
-        primary: normalizeFeedbackText(rule.primary),
-        secondary: rule.secondary
-          .map((term) => normalizeFeedbackText(term))
-          .filter(Boolean),
-        context: rule.context?.map((term) => normalizeFeedbackText(term)).filter(Boolean) ?? [],
-      })).filter((rule) => Boolean(rule.primary)),
+  const normalizedKeywords = useMemo(
+    () => FEEDBACK_KEYWORDS.map((term) => normalizeFeedbackText(term)).filter(Boolean),
     []
   );
   const nodeReferencesFeedback = useCallback(
@@ -806,24 +766,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
           return false;
         }
 
-        return normalizedFeedbackRules.some((rule) => {
-          if (rule.primary && !normalized.includes(rule.primary)) {
-            return false;
-          }
-
-          if (rule.secondary.length > 0 && !rule.secondary.some((term) => normalized.includes(term))) {
-            return false;
-          }
-
-          if (rule.context.length > 0 && !rule.context.some((term) => normalized.includes(term))) {
-            return false;
-          }
-
-          return true;
-        });
+        return normalizedKeywords.some((keyword) => normalized.includes(keyword));
       });
     },
-    [normalizedFeedbackRules]
+    [normalizedKeywords]
   );
   const selectedJourneyConfig = useMemo(() => {
     if (!selectedJourney) {
@@ -1635,7 +1581,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       step4Description =
         totalStates === 1
           ? 'Walkthrough complete • 1 state reviewed'
-          : `Walkthrough complete �� ${Math.min(reviewedStates, totalStates)} states reviewed`;
+          : `Walkthrough complete • ${Math.min(reviewedStates, totalStates)} states reviewed`;
     } else if (isWalkthroughMode) {
       step4Status = 'active';
       step4Description =
