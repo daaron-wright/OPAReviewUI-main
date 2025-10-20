@@ -1925,6 +1925,35 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              {selectedJourney === FEEDBACK_JOURNEY_ID && (
+                <button
+                  type="button"
+                  onClick={() => setIsFeedbackHighlightActive((previous) => !previous)}
+                  disabled={!hasUploadedDocument || !canDisplayGraph}
+                  aria-pressed={isFeedbackHighlightActive}
+                  className={clsx(
+                    'inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2',
+                    hasUploadedDocument && canDisplayGraph
+                      ? isFeedbackHighlightActive
+                        ? 'border-[#f6b74a] bg-[#fff7e3] text-[#92400e] shadow-[0_16px_30px_-22px_rgba(146,64,14,0.45)] hover:border-[#f6b74a]/90 hover:bg-[#fff1d0]'
+                        : 'border-[#dbe9e3] bg-white text-slate-600 hover:border-[#c5ded5] hover:bg-[#f3f8f6]'
+                      : 'cursor-not-allowed border-[#e7f0ec] bg-white text-slate-300'
+                  )}
+                >
+                  <Icon
+                    name="warningTriangle"
+                    className={clsx(
+                      'h-4 w-4',
+                      hasUploadedDocument && canDisplayGraph
+                        ? isFeedbackHighlightActive
+                          ? 'text-[#c2410c]'
+                          : 'text-[#0f766e]'
+                        : 'text-slate-300'
+                    )}
+                  />
+                  Review added customer feedback
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleFocusFit}
