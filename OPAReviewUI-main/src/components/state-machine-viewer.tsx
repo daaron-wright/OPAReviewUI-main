@@ -41,6 +41,14 @@ const ALWAYS_INCLUDED_NODES = new Set(['entry_point', 'customer_application_type
 const FEEDBACK_JOURNEY_ID = 'new_trade_name';
 const FEEDBACK_REFERENCE_TERMS = Object.freeze([
   'high-risk economic licenses for restaurants',
+  'high-risk applicants',
+  'high risk applicants',
+  'high-risk applicant',
+  'high risk applicant',
+  'high-risk economic',
+  'high risk economic',
+  'high-risk',
+  'high risk',
 ]);
 
 /*
