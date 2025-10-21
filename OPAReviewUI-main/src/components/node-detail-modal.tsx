@@ -1039,7 +1039,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'قواعد التحقق من السيا��ة لهذه ال��قدة.'
+                          ? 'قواعد التحقق من السياسة لهذه العقدة.'
                           : 'Policy validation rules for this node.'}
                       </p>
                     </div>
@@ -1095,7 +1095,7 @@ export function NodeDetailModal({
                         {language === 'ar' ? 'مقتطفات وثيقة ذات صلة' : 'Relevant document snippets'}
                       </p>
                       <p className="text-sm font-semibold text-slate-900">
-                        {language === 'ar' ? 'خلاصة السياسة بحسب ا��مسار' : 'Policy guidance by journey path'}
+                        {language === 'ar' ? 'خلاصة السياسة بحسب المسار' : 'Policy guidance by journey path'}
                       </p>
                     </div>
                   </div>
