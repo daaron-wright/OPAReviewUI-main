@@ -796,40 +796,6 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isFeedbackHighlightActive, setIsFeedbackHighlightActive] = useState(false);
 
-  const handleReviewFeedbackToggle = useCallback(() => {
-    if (!hasUploadedDocument || !canDisplayGraph) {
-      return;
-    }
-
-    setIsFeedbackHighlightActive((previous) => {
-      const next = !previous;
-      if (!previous && next) {
-        toast.warning(
-          createToastContent(
-            'warningTriangle',
-            "CN-7845126, has issued feedback stating the licensing process is 'high-risk economic licenses for restaurants' needs to be adjusted."
-          ),
-          {
-            position: 'top-center',
-          }
-        );
-      }
-      return next;
-    });
-  }, [canDisplayGraph, hasUploadedDocument]);
-
-  const handleImplementPolicyChanges = useCallback(() => {
-    setIsFeedbackHighlightActive(false);
-    setHasMarkedDeployToOpaComplete(true);
-    setHasMarkedAgentUseComplete(true);
-    toast.success(
-      createToastContent('checkCircle', 'Policy changes implemented, Feedback sent to CN-7845126'),
-      {
-        position: 'top-center',
-      }
-    );
-  }, [setHasMarkedAgentUseComplete, setHasMarkedDeployToOpaComplete, setIsFeedbackHighlightActive]);
-
   const {
     reviewStatus,
     isWalkthroughMode,
@@ -866,6 +832,40 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
   const hasUploadedDocument = Boolean(policyDocument);
   const canDisplayGraph = stateMachine.nodes.length > 0;
+
+  const handleReviewFeedbackToggle = useCallback(() => {
+    if (!hasUploadedDocument || !canDisplayGraph) {
+      return;
+    }
+
+    setIsFeedbackHighlightActive((previous) => {
+      const next = !previous;
+      if (!previous && next) {
+        toast.warning(
+          createToastContent(
+            'warningTriangle',
+            "CN-7845126, has issued feedback stating the licensing process is 'high-risk economic licenses for restaurants' needs to be adjusted."
+          ),
+          {
+            position: 'top-center',
+          }
+        );
+      }
+      return next;
+    });
+  }, [canDisplayGraph, hasUploadedDocument]);
+
+  const handleImplementPolicyChanges = useCallback(() => {
+    setIsFeedbackHighlightActive(false);
+    setHasMarkedDeployToOpaComplete(true);
+    setHasMarkedAgentUseComplete(true);
+    toast.success(
+      createToastContent('checkCircle', 'Policy changes implemented, Feedback sent to CN-7845126'),
+      {
+        position: 'top-center',
+      }
+    );
+  }, [setHasMarkedAgentUseComplete, setHasMarkedDeployToOpaComplete, setIsFeedbackHighlightActive]);
 
   useEffect(() => {
     if (selectedJourney !== FEEDBACK_JOURNEY_ID || !hasUploadedDocument) {
