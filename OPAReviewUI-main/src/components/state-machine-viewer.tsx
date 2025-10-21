@@ -838,22 +838,22 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       return;
     }
 
-    setIsFeedbackHighlightActive((previous) => {
-      const next = !previous;
-      if (!previous && next) {
-        toast.warning(
-          createToastContent(
-            'warningTriangle',
-            "CN-7845126, has issued feedback stating the licensing process is 'high-risk economic licenses for restaurants' needs to be adjusted."
-          ),
-          {
-            position: 'top-center',
-          }
-        );
+    if (isFeedbackHighlightActive) {
+      setIsFeedbackHighlightActive(false);
+      return;
+    }
+
+    setIsFeedbackHighlightActive(true);
+    toast.warning(
+      createToastContent(
+        'warningTriangle',
+        "CN-7845126, has issued feedback stating the licensing process is 'high-risk economic licenses for restaurants' needs to be adjusted."
+      ),
+      {
+        position: 'top-center',
       }
-      return next;
-    });
-  }, [canDisplayGraph, hasUploadedDocument]);
+    );
+  }, [canDisplayGraph, hasUploadedDocument, isFeedbackHighlightActive]);
 
   const handleImplementPolicyChanges = useCallback(() => {
     setIsFeedbackHighlightActive(false);
