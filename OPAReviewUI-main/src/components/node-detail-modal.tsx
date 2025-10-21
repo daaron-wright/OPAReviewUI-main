@@ -79,6 +79,27 @@ function convertSanitizedHtmlToPlainText(html: string): string {
     .trim();
 }
 
+const ARABIC_CORRUPTION_FIXES: Array<[RegExp, string]> = [
+  [/خلاصة السياسة بحسب ا��مسار/g, 'خلاصة السياسة بحسب المسار'],
+  [/قواعد التحقق من السيا��ة لهذه ال��قدة\.?/g, 'قواعد التحقق من السياسة لهذه العقدة.'],
+  [/السيا��ة/g, 'السياسة'],
+  [/ال��قدة/g, 'العقدة'],
+  [/ا��مسار/g, 'المسار'],
+];
+
+function repairCorruptedArabicText(value: string | null | undefined): string {
+  if (typeof value !== 'string' || value.length === 0) {
+    return value ?? '';
+  }
+
+  let result = value;
+  for (const [pattern, replacement] of ARABIC_CORRUPTION_FIXES) {
+    result = result.replace(pattern, replacement);
+  }
+
+  return result.replace(/\uFFFD+/g, '');
+}
+
 function normalizeLanguageCode(language?: string | null): string {
   return typeof language === 'string' ? language.trim().toLowerCase() : '';
 }
@@ -181,7 +202,8 @@ function sanitizeAndPrepareHtmlContent(html: string, language?: string | null): 
   const sanitized = sanitizeHtmlContent(html);
   const decoded = decodeHtmlEntities(sanitized);
   const unwrapped = unwrapHtmlScaffolding(decoded);
-  return normalizeDirectionalMarkup(unwrapped, language);
+  const normalizedMarkup = normalizeDirectionalMarkup(unwrapped, language);
+  return repairCorruptedArabicText(normalizedMarkup);
 }
 
 function getTextAlignForLanguage(language?: string | null): 'left' | 'right' {
@@ -590,17 +612,25 @@ export function NodeDetailModal({
       localizedRelevantChunks.map((chunk) => {
         if (chunk.isHtml) {
           const preparedHtml = sanitizeAndPrepareHtmlContent(chunk.text, chunk.language);
+          const repairedPreview = repairCorruptedArabicText(convertSanitizedHtmlToPlainText(preparedHtml));
           return {
-            chunk,
+            chunk: {
+              ...chunk,
+              text: repairCorruptedArabicText(chunk.text),
+            },
             sanitizedHtml: preparedHtml,
-            previewText: convertSanitizedHtmlToPlainText(preparedHtml),
+            previewText: repairedPreview,
           };
         }
 
+        const repairedText = repairCorruptedArabicText(chunk.text);
         return {
-          chunk,
+          chunk: {
+            ...chunk,
+            text: repairedText,
+          },
           sanitizedHtml: null,
-          previewText: chunk.text,
+          previewText: repairedText,
         };
       }),
     [localizedRelevantChunks]
@@ -866,7 +896,7 @@ export function NodeDetailModal({
                   ? 'عرض قواعد السياسة'
                   : 'Policy rules view'
                 : language === 'ar'
-                  ? 'وضع النظرة العامة'
+                  ? 'وضع النظرة ا��عامة'
                   : 'Overview mode'}
             </span>
 
@@ -1039,7 +1069,7 @@ export function NodeDetailModal({
                       </h3>
                       <p className="mt-0.5 text-xs text-slate-500">
                         {language === 'ar'
-                          ? 'قواعد التحقق من السياسة لهذه العقدة.'
+                          ? 'قواعد التحقق من السياسة لهذه الع��دة.'
                           : 'Policy validation rules for this node.'}
                       </p>
                     </div>
@@ -1128,7 +1158,7 @@ export function NodeDetailModal({
                             </span>
                             {(chunk.section ?? chunk.source) && (
                               <span className="inline-flex items-center gap-1 rounded-full border border-[#d1e3dc] bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-600">
-                                BRD • {chunk.section ?? chunk.source}
+                                BRD ��� {chunk.section ?? chunk.source}
                               </span>
                             )}
                             {chunk.tags?.map((tag) => (
