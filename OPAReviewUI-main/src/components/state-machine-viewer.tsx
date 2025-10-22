@@ -833,28 +833,6 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const hasUploadedDocument = Boolean(policyDocument);
   const canDisplayGraph = stateMachine.nodes.length > 0;
 
-  const handleReviewFeedbackToggle = useCallback(() => {
-    if (!hasUploadedDocument || !canDisplayGraph) {
-      return;
-    }
-
-    if (isFeedbackHighlightActive) {
-      setIsFeedbackHighlightActive(false);
-      return;
-    }
-
-    setIsFeedbackHighlightActive(true);
-    toast.warning(
-      createToastContent(
-        'warningTriangle',
-        "CN-7845126, has issued feedback stating the licensing process is 'high-risk economic licenses for restaurants' needs to be adjusted."
-      ),
-      {
-        position: 'top-center',
-      }
-    );
-  }, [canDisplayGraph, hasUploadedDocument, isFeedbackHighlightActive]);
-
   const handleImplementPolicyChanges = useCallback(() => {
     setIsFeedbackHighlightActive(false);
     setHasMarkedDeployToOpaComplete(true);
@@ -1054,6 +1032,52 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     selectedJourney,
     stateMachine.nodes,
     isFeedbackHighlightActive,
+  ]);
+
+  const riskRatingNodeId = useMemo(() => {
+    if (!hasUploadedDocument || selectedJourney !== FEEDBACK_JOURNEY_ID) {
+      return null;
+    }
+
+    const normalize = (value?: string) => (typeof value === 'string' ? value.toLowerCase() : '');
+    const journeyNodesLower = journeyNodes.map((node) => ({
+      id: node.id,
+      label: normalize(node.label),
+      description: normalize(node.description),
+    }));
+
+    const directMatch = journeyNodesLower.find((node) => node.label.includes('risk rating calculation'));
+    if (directMatch) {
+      return directMatch.id;
+    }
+
+    const partialMatch = journeyNodesLower.find((node) =>
+      node.label.includes('risk rating') ||
+      (node.label.includes('risk') && node.label.includes('calc')) ||
+      node.description.includes('risk rating')
+    );
+    if (partialMatch) {
+      return partialMatch.id;
+    }
+
+    for (const node of journeyNodes) {
+      if (nodeReferencesFeedback(node)) {
+        return node.id;
+      }
+    }
+
+    const attentionIterator = feedbackAttentionNodeIds.values().next();
+    if (!attentionIterator.done) {
+      return attentionIterator.value;
+    }
+
+    return null;
+  }, [
+    feedbackAttentionNodeIds,
+    hasUploadedDocument,
+    journeyNodes,
+    nodeReferencesFeedback,
+    selectedJourney,
   ]);
 
   const initialEdges = useMemo(() => {
@@ -1387,6 +1411,38 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     },
     [openNodeDetailById]
   );
+
+  const handleReviewFeedbackToggle = useCallback(() => {
+    if (!hasUploadedDocument || !canDisplayGraph) {
+      return;
+    }
+
+    if (isFeedbackHighlightActive) {
+      setIsFeedbackHighlightActive(false);
+      return;
+    }
+
+    setIsFeedbackHighlightActive(true);
+    toast.warning(
+      createToastContent(
+        'warningTriangle',
+        "CN-7845126, has issued feedback stating the licensing process is 'high-risk economic licenses for restaurants' needs to be adjusted."
+      ),
+      {
+        position: 'top-center',
+      }
+    );
+
+    if (riskRatingNodeId) {
+      openNodeDetailById(riskRatingNodeId);
+    }
+  }, [
+    canDisplayGraph,
+    hasUploadedDocument,
+    isFeedbackHighlightActive,
+    openNodeDetailById,
+    riskRatingNodeId,
+  ]);
 
   const handleStartWalkthrough = useCallback(() => {
     if (!policyDocument) {
