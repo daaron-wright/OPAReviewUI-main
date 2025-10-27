@@ -704,7 +704,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
             return false;
           }
 
-          setStateMachine(processed);
+          setBaseStateMachine(processed);
           remoteStateLoadedRef.current = true;
 
           if (!suppressToast) {
@@ -750,7 +750,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
       return false;
     },
-    [setStateMachine]
+    [setBaseStateMachine]
   );
 
   useEffect(() => {
