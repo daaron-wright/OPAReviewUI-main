@@ -199,6 +199,21 @@ function isValidEditableEdgeDefinition(value: unknown): value is EditableEdgeDef
   );
 }
 
+function isValidEditableNodeOverride(value: unknown): value is EditableNodeOverride {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const override = value as EditableNodeOverride;
+  return (
+    typeof override.id === 'string' &&
+    (override.label === undefined || typeof override.label === 'string') &&
+    (override.description === undefined || typeof override.description === 'string') &&
+    (override.type === undefined || typeof override.type === 'string') &&
+    (override.journeyPaths === undefined || (Array.isArray(override.journeyPaths) && override.journeyPaths.every((path) => typeof path === 'string')))
+  );
+}
+
 function loadPersistedGraphState(): PersistedGraphState {
   if (typeof window === 'undefined') {
     return EMPTY_PERSISTED_GRAPH_STATE;
