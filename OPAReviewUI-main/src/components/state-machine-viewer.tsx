@@ -1614,6 +1614,17 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     [getNodeDOMPosition, isWalkthroughMode, nodesById, setCurrentNode]
   );
 
+  useEffect(() => {
+    const pendingId = pendingFocusNodeIdRef.current;
+    if (!pendingId) {
+      return;
+    }
+    if (stateMachine.nodes.some((node) => node.id === pendingId)) {
+      pendingFocusNodeIdRef.current = null;
+      openNodeDetailById(pendingId);
+    }
+  }, [openNodeDetailById, stateMachine.nodes]);
+
   const handleNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
       openNodeDetailById(node.id);
