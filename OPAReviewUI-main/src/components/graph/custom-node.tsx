@@ -80,12 +80,13 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
       <div
         className={clsx(
           styles.container,
+          'group',
           isCurrentNode && 'ring-2 ring-emerald-300 ring-offset-2 ring-offset-white',
           feedbackAttention && clsx('node-feedback-highlight outline outline-[1.5px] outline-offset-[7px] outline-[#68c2b0]/70', styles.highlightedContainer)
         )}
       >
         {hasActions && (
-          <div className="absolute right-3 top-3 flex items-center gap-1">
+          <div className="absolute right-3 top-3 flex items-center gap-1 opacity-0 pointer-events-none transition duration-150 ease-out group-hover:opacity-100 group-hover:pointer-events-auto">
             {onAdd && (
               <button
                 type="button"
