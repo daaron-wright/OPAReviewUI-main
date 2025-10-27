@@ -5,10 +5,11 @@
 'use client';
 
 import { Handle, NodeProps, Position } from 'reactflow';
-import { memo } from 'react';
+import { memo, MouseEvent } from 'react';
 import clsx from 'clsx';
 import { useReview } from '@/context/review-context';
 import { ProcessedNodeTransition } from '@/domain/state-machine/processor';
+import { Icon } from '../icon';
 
 export interface NodeActorSummary {
   readonly id: string;
