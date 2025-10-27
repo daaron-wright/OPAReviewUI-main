@@ -836,6 +836,16 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const journeyEdges = selectedJourneyGraph?.edges ?? [];
   const journeyNodeIds = useMemo(() => new Set(journeyNodes.map((node) => node.id)), [journeyNodes]);
   const journeyEdgeIds = useMemo(() => new Set(journeyEdges.map((edge) => edge.id)), [journeyEdges]);
+  const availableNodeTypes = useMemo(() => {
+    const types = new Set<string>();
+    stateMachine.nodes.forEach((node) => {
+      if (typeof node.type === 'string' && node.type.trim()) {
+        types.add(node.type);
+      }
+    });
+    types.add('process');
+    return Array.from(types).sort();
+  }, [stateMachine.nodes]);
   const normalizedKeywords = useMemo(
     () => FEEDBACK_KEYWORDS.map((term) => normalizeFeedbackText(term)).filter(Boolean),
     []
