@@ -1393,6 +1393,223 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     ]
   );
 
+  const handleEdgesChange = useCallback(
+    (changes: EdgeChange[]) => {
+      if (!changes.length) {
+        onEdgesChangeState(changes);
+        return;
+      }
+
+      const removedEdges = changes
+        .filter((change): change is EdgeChange & { id: string } => change.type === 'remove' && 'id' in change && typeof change.id === 'string')
+        .map((change) => {
+          const existingEdge = stateMachine.edges.find((edge) => edge.id === change.id);
+          if (!existingEdge) {
+            return null;
+          }
+          return {
+            id: change.id,
+            source: existingEdge.source,
+            target: existingEdge.target,
+          };
+        })
+        .filter((edgeInfo): edgeInfo is { id: string; source: string; target: string } => edgeInfo !== null);
+
+      onEdgesChangeState(changes);
+
+      if (!removedEdges.length) {
+        return;
+      }
+
+      setEditableGraphState((previous) => {
+        let nextAddedEdges = previous.addedEdges;
+        let addedEdgesChanged = false;
+        const nextRemovedEdgeIds = new Set(previous.removedEdgeIds);
+        let removedEdgeIdsChanged = false;
+
+        removedEdges.forEach((info) => {
+          const addedIndex = nextAddedEdges.findIndex((edge) => edge.id === info.id);
+          if (addedIndex >= 0) {
+            if (!addedEdgesChanged) {
+              nextAddedEdges = [...nextAddedEdges];
+              addedEdgesChanged = true;
+            }
+            nextAddedEdges.splice(addedIndex, 1);
+            if (nextRemovedEdgeIds.delete(info.id)) {
+              removedEdgeIdsChanged = true;
+            }
+            return;
+          }
+
+          if (baseEdgeIds.has(info.id) && !nextRemovedEdgeIds.has(info.id)) {
+            nextRemovedEdgeIds.add(info.id);
+            removedEdgeIdsChanged = true;
+          }
+        });
+
+        if (!addedEdgesChanged && !removedEdgeIdsChanged) {
+          return previous;
+        }
+
+        return {
+          addedNodes: previous.addedNodes,
+          removedNodeIds: previous.removedNodeIds,
+          addedEdges: addedEdgesChanged ? nextAddedEdges : previous.addedEdges,
+          removedEdgeIds: removedEdgeIdsChanged ? Array.from(nextRemovedEdgeIds) : previous.removedEdgeIds,
+          nodeOverrides: previous.nodeOverrides,
+        };
+      });
+
+      removedEdges.forEach((info) => {
+        const sourceLabel = nodesById.get(info.source)?.label ?? info.source;
+        const targetLabel = nodesById.get(info.target)?.label ?? info.target;
+        toast.info(createToastContent('xCircle', `Removed transition ${sourceLabel} → ${targetLabel}`), {
+          position: 'top-center',
+        });
+      });
+    },
+    [baseEdgeIds, nodesById, onEdgesChangeState, setEditableGraphState, stateMachine.edges]
+  );
+
+  const handleConnect = useCallback(
+    (connection: Connection) => {
+      const source = connection.source ?? null;
+      const target = connection.target ?? null;
+
+      if (!source || !target) {
+        toast.info(createToastContent('infoCircle', 'Select two states to create a transition'), {
+          position: 'top-center',
+        });
+        return;
+      }
+
+      if (source === target) {
+        toast.warning(createToastContent('warningTriangle', 'A state cannot transition to itself'), {
+          position: 'top-center',
+        });
+        return;
+      }
+
+      const sourceNode = nodesById.get(source);
+      const targetNode = nodesById.get(target);
+
+      if (!sourceNode || !targetNode) {
+        toast.error(createToastContent('warningTriangle', 'Unable to connect the selected states'), {
+          position: 'top-center',
+        });
+        return;
+      }
+
+      const activeEdge = stateMachine.edges.find((edge) => edge.source === source && edge.target === target);
+      const removedEdgeIds = new Set(editableGraphState.removedEdgeIds);
+
+      if (activeEdge && !removedEdgeIds.has(activeEdge.id)) {
+        toast.info(
+          createToastContent('infoCircle', `${sourceNode.label} is already connected to ${targetNode.label}`),
+          { position: 'top-center' }
+        );
+        return;
+      }
+
+      const baseEdge = baseStateMachine.edges.find((edge) => edge.source === source && edge.target === target);
+
+      if (baseEdge && removedEdgeIds.has(baseEdge.id)) {
+        setEditableGraphState((previous) => {
+          if (!previous.removedEdgeIds.includes(baseEdge.id)) {
+            return previous;
+          }
+
+          let nextAddedNodes = previous.addedNodes;
+          let nextNodeOverrides = previous.nodeOverrides;
+
+          if (selectedJourney) {
+            const journeyResult = ensureNodesHaveJourney(
+              [source, target],
+              selectedJourney,
+              nodesById,
+              nextAddedNodes,
+              nextNodeOverrides
+            );
+            nextAddedNodes = journeyResult.addedNodes;
+            nextNodeOverrides = journeyResult.nodeOverrides;
+          }
+
+          const nextRemovedEdgeIds = previous.removedEdgeIds.filter((id) => id !== baseEdge.id);
+
+          return {
+            addedNodes: nextAddedNodes,
+            removedNodeIds: previous.removedNodeIds,
+            addedEdges: previous.addedEdges,
+            removedEdgeIds: nextRemovedEdgeIds,
+            nodeOverrides: nextNodeOverrides,
+          };
+        });
+
+        toast.success(
+          createToastContent('checkCircle', `Restored transition ${sourceNode.label} → ${targetNode.label}`),
+          { position: 'top-center' }
+        );
+        return;
+      }
+
+      const usedEdgeIds = new Set(stateMachine.edges.map((edge) => edge.id));
+      const edgeId = generateEdgeId(source, target, usedEdgeIds);
+      const edgeDefinition: EditableEdgeDefinition = {
+        id: edgeId,
+        source,
+        target,
+        label: connection.label?.trim() || 'Manual transition',
+        action: 'manual_transition',
+      };
+
+      setEditableGraphState((previous) => {
+        if (previous.addedEdges.some((edge) => edge.source === source && edge.target === target)) {
+          return previous;
+        }
+
+        let nextAddedNodes = previous.addedNodes;
+        let nextNodeOverrides = previous.nodeOverrides;
+
+        if (selectedJourney) {
+          const journeyResult = ensureNodesHaveJourney(
+            [source, target],
+            selectedJourney,
+            nodesById,
+            nextAddedNodes,
+            nextNodeOverrides
+          );
+          nextAddedNodes = journeyResult.addedNodes;
+          nextNodeOverrides = journeyResult.nodeOverrides;
+        }
+
+        const filteredAddedEdges = previous.addedEdges.filter((edge) => edge.id !== edgeId);
+        const nextAddedEdges = [...filteredAddedEdges, edgeDefinition];
+        const nextRemovedEdgeIds = previous.removedEdgeIds.filter((id) => id !== edgeId);
+
+        return {
+          addedNodes: nextAddedNodes,
+          removedNodeIds: previous.removedNodeIds,
+          addedEdges: nextAddedEdges,
+          removedEdgeIds: nextRemovedEdgeIds,
+          nodeOverrides: nextNodeOverrides,
+        };
+      });
+
+      toast.success(
+        createToastContent('sparkle', `Connected ${sourceNode.label} → ${targetNode.label}`),
+        { position: 'top-center' }
+      );
+    },
+    [
+      baseStateMachine.edges,
+      editableGraphState.removedEdgeIds,
+      nodesById,
+      selectedJourney,
+      setEditableGraphState,
+      stateMachine.edges,
+    ]
+  );
+
   const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
   const transitionPanTimeoutRef = useRef<number | null>(null);
   const detailOpenTimeoutRef = useRef<number | null>(null);
