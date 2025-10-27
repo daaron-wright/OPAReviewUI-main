@@ -1134,6 +1134,14 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     }
   }, [hasUploadedDocument]);
 
+  const nodesById = useMemo(() => {
+    const map = new Map<string, ProcessedNode>();
+    stateMachine.nodes.forEach((node) => {
+      map.set(node.id, node);
+    });
+    return map;
+  }, [stateMachine.nodes]);
+
   const machineTitle = useMemo(() => formatMachineName(stateMachine.metadata.name), [stateMachine.metadata.name]);
   const transitionPanTimeoutRef = useRef<number | null>(null);
   const detailOpenTimeoutRef = useRef<number | null>(null);
@@ -1641,14 +1649,6 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isGraphExpanded]);
-
-  const nodesById = useMemo(() => {
-    const map = new Map<string, ProcessedNode>();
-    stateMachine.nodes.forEach((node) => {
-      map.set(node.id, node);
-    });
-    return map;
-  }, [stateMachine.nodes]);
 
   const handleDeleteFocusedNode = useCallback(() => {
     if (!focusedNodeId) {
