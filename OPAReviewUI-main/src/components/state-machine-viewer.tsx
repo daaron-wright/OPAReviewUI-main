@@ -1673,6 +1673,11 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       return;
     }
 
+    const connectedEdgeIds = stateMachine.edges
+      .filter((edge) => edge.source === focusedNodeId || edge.target === focusedNodeId)
+      .map((edge) => edge.id);
+    const connectedEdgeIdSet = new Set(connectedEdgeIds);
+
     setEditableGraphState((previous) => {
       const isAddedNode = previous.addedNodes.some((added) => added.id === focusedNodeId);
       const nextAddedNodes = isAddedNode
@@ -1684,9 +1689,20 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         ? previous.removedNodeIds
         : [...previous.removedNodeIds, focusedNodeId];
 
+      const nextAddedEdges = previous.addedEdges.filter((edge) => !connectedEdgeIdSet.has(edge.id));
+      const addedEdgeIdSet = new Set(previous.addedEdges.map((edge) => edge.id));
+      const removedEdgeIdsSet = new Set(previous.removedEdgeIds);
+      connectedEdgeIds.forEach((edgeId) => {
+        if (!addedEdgeIdSet.has(edgeId)) {
+          removedEdgeIdsSet.add(edgeId);
+        }
+      });
+
       return {
         addedNodes: nextAddedNodes,
         removedNodeIds: nextRemovedNodeIds,
+        addedEdges: nextAddedEdges,
+        removedEdgeIds: Array.from(removedEdgeIdsSet),
       };
     });
 
@@ -1709,6 +1725,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     nodesById,
     setCurrentNode,
     setEditableGraphState,
+    stateMachine.edges,
   ]);
 
   const timelineItems = useMemo(() => {
