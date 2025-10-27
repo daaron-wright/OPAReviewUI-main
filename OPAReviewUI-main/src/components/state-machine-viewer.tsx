@@ -1470,7 +1470,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
       pendingFocusNodeIdRef.current = nodeId;
       setNodeFormState(null);
-      toast.success(createToastContent('pen', `${trimmedLabel} updated`), {
+      toast.success(createToastContent('checkCircle', `${trimmedLabel} updated`), {
         position: 'top-center',
       });
     },
