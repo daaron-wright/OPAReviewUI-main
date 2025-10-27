@@ -2767,7 +2767,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+        onEdgesChange={handleEdgesChange}
+        onConnect={handleConnect}
         onNodeClick={handleNodeClick}
         onInit={handleGraphInit}
         onMoveStart={handleViewportMoveStart}
