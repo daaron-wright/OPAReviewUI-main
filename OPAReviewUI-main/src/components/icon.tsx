@@ -70,6 +70,18 @@ const ICONS: Record<IconName, IconRenderer> = {
       <path d="M6 6 18 18M18 6 6 18" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
+  plus: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M12 5v14" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M5 12h14" strokeWidth={strokeWidth} strokeLinecap="round" />
+    </svg>
+  ),
   checkCircle: ({ className, strokeWidth = 1.8 }) => (
     <svg
       className={clsx('h-5 w-5 stroke-current', className)}
