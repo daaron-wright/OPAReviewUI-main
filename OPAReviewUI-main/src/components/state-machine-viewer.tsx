@@ -1531,6 +1531,67 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     return map;
   }, [stateMachine.nodes]);
 
+  const handleDeleteFocusedNode = useCallback(() => {
+    if (!focusedNodeId) {
+      toast.info(createToastContent('infoCircle', 'Select a node before deleting'), {
+        position: 'top-center',
+      });
+      return;
+    }
+
+    if (ALWAYS_INCLUDED_NODES.has(focusedNodeId)) {
+      toast.warning(createToastContent('warningTriangle', 'This node is required and cannot be removed'), {
+        position: 'top-center',
+      });
+      return;
+    }
+
+    const node = nodesById.get(focusedNodeId);
+    if (!node) {
+      toast.info(createToastContent('infoCircle', 'Select a node before deleting'), {
+        position: 'top-center',
+      });
+      return;
+    }
+
+    setEditableGraphState((previous) => {
+      const isAddedNode = previous.addedNodes.some((added) => added.id === focusedNodeId);
+      const nextAddedNodes = isAddedNode
+        ? previous.addedNodes.filter((added) => added.id !== focusedNodeId)
+        : previous.addedNodes;
+      const nextRemovedNodeIds = isAddedNode
+        ? previous.removedNodeIds.filter((id) => id !== focusedNodeId)
+        : previous.removedNodeIds.includes(focusedNodeId)
+        ? previous.removedNodeIds
+        : [...previous.removedNodeIds, focusedNodeId];
+
+      return {
+        addedNodes: nextAddedNodes,
+        removedNodeIds: nextRemovedNodeIds,
+      };
+    });
+
+    if (isWalkthroughMode && currentNodeId === focusedNodeId) {
+      setCurrentNode(null);
+    }
+
+    setSelectedNode((current) => (current?.id === focusedNodeId ? null : current));
+    setFocusedNodeId(null);
+    setModalAnimation('none');
+    pendingFocusNodeIdRef.current = null;
+
+    toast.info(createToastContent('xCircle', `${node.label} removed from the journey graph`), {
+      position: 'top-center',
+    });
+  }, [
+    currentNodeId,
+    focusedNodeId,
+    isWalkthroughMode,
+    nodesById,
+    setCurrentNode,
+    setEditableGraphState,
+  ]);
+
   const timelineItems = useMemo(() => {
     if (!hasUploadedDocument) {
       return [] as TimelineNodeItem[];
