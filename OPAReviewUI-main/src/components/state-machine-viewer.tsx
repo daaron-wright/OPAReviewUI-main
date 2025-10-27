@@ -1748,11 +1748,14 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         }
       });
 
+      const nextNodeOverrides = previous.nodeOverrides.filter((override) => override.id !== focusedNodeId);
+
       return {
         addedNodes: nextAddedNodes,
         removedNodeIds: nextRemovedNodeIds,
         addedEdges: nextAddedEdges,
         removedEdgeIds: Array.from(removedEdgeIdsSet),
+        nodeOverrides: nextNodeOverrides,
       };
     });
 
