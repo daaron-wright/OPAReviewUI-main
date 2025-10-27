@@ -2709,6 +2709,28 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => openAddNodeForm()}
+                className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.35)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
+              >
+                <Icon name="sparkle" className="h-4 w-4" />
+                Add node
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteFocusedNode}
+                disabled={!canDeleteFocusedNode}
+                className={clsx(
+                  'inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-200 focus-visible:ring-offset-2',
+                  canDeleteFocusedNode
+                    ? 'border-rose-200 bg-white text-rose-600 hover:border-rose-300 hover:bg-rose-50'
+                    : 'cursor-not-allowed border-[#f2dcdc] bg-white text-[#e5c3c3]'
+                )}
+              >
+                <Icon name="trash" className="h-4 w-4" />
+                Delete node
+              </button>
               {selectedJourney === FEEDBACK_JOURNEY_ID && (
                 <>
                   <button
