@@ -40,7 +40,10 @@ export type IconName =
   | 'refresh'
   | 'ban'
   | 'alarm'
-  | 'shieldCheck';
+  | 'shieldCheck'
+  | 'plus'
+  | 'pencil'
+  | 'trash';
 
 type IconRenderer = (props: BaseIconProps) => JSX.Element;
 
