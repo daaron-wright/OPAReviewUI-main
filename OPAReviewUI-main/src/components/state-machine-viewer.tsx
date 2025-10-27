@@ -3004,7 +3004,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
                       />
                       <span>
                         {selectedJourney
-                          ? `${nodeFormState.mode === 'add' ? 'Add to' : 'Keep in'} the ${selectedJourneyLabel.toLowerCase()} journey`
+                          ? `${nodeFormState.mode === 'add' ? 'Add to' : 'Keep in'} ${selectedJourneyLabel.toLowerCase()} journey`
                           : 'Select a journey to assign'}
                       </span>
                     </label>
