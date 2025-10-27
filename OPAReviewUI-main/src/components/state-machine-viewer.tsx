@@ -141,11 +141,20 @@ interface EditableEdgeDefinition {
   readonly controlAttributeValue?: string;
 }
 
+interface EditableNodeOverride {
+  readonly id: string;
+  readonly label?: string;
+  readonly description?: string;
+  readonly type?: string;
+  readonly journeyPaths?: JourneyTabId[];
+}
+
 interface PersistedGraphState {
   readonly addedNodes: EditableNodeDefinition[];
   readonly removedNodeIds: string[];
   readonly addedEdges: EditableEdgeDefinition[];
   readonly removedEdgeIds: string[];
+  readonly nodeOverrides: EditableNodeOverride[];
 }
 
 const EMPTY_PERSISTED_GRAPH_STATE: PersistedGraphState = {
@@ -153,6 +162,7 @@ const EMPTY_PERSISTED_GRAPH_STATE: PersistedGraphState = {
   removedNodeIds: [],
   addedEdges: [],
   removedEdgeIds: [],
+  nodeOverrides: [],
 };
 
 function isValidEditableNodeDefinition(value: unknown): value is EditableNodeDefinition {
