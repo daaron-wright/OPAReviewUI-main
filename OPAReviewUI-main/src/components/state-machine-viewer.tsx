@@ -1261,7 +1261,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         let nextRemovedEdgeIds = previous.removedEdgeIds;
 
         if (edgeDefinition) {
-          const filteredAddedEdges = previous.addedEdges.filter((edge) => edge.id !== edgeDefinition!.id);
+          const filteredAddedEdges = previous.addedEdges.filter((edge) => edge.id !== edgeDefinition.id);
           nextAddedEdges = [...filteredAddedEdges, edgeDefinition];
           nextRemovedEdgeIds = previous.removedEdgeIds.filter((id) => id !== edgeDefinition.id);
         }
