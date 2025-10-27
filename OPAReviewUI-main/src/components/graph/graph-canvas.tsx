@@ -10,6 +10,7 @@ import ReactFlow, {
   Node,
   NodeMouseHandler,
   NodeTypes,
+  OnConnect,
   OnEdgesChange,
   OnMove,
   OnMoveEnd,
@@ -50,6 +51,7 @@ export interface GraphCanvasProps {
   edges: Edge[];
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
+  onConnect?: OnConnect;
   onNodeClick?: NodeMouseHandler;
   onInit?: (instance: ReactFlowInstance) => void;
   onMove?: OnMove;
@@ -79,6 +81,7 @@ export function GraphCanvas({
   edges,
   onNodesChange,
   onEdgesChange,
+  onConnect,
   onNodeClick,
   onInit,
   onMove,
@@ -118,6 +121,7 @@ export function GraphCanvas({
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
           onNodeClick={onNodeClick}
           nodeTypes={resolvedNodeTypes}
           onInit={onInit}
