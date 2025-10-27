@@ -137,6 +137,8 @@ interface EditableEdgeDefinition {
   readonly label?: string;
   readonly action?: string;
   readonly condition?: string;
+  readonly controlAttribute?: string;
+  readonly controlAttributeValue?: string;
 }
 
 interface PersistedGraphState {
