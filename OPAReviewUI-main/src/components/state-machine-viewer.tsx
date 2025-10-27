@@ -317,6 +317,18 @@ function generateNodeIdFromLabel(label: string, usedIds: Set<string>): string {
   return candidate;
 }
 
+function generateEdgeId(sourceId: string, targetId: string, usedIds: Set<string>): string {
+  const sanitize = (value: string) => value.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '');
+  const base = `edge_${sanitize(sourceId).toLowerCase()}__${sanitize(targetId).toLowerCase()}`;
+  let candidate = base;
+  let suffix = 1;
+  while (usedIds.has(candidate)) {
+    candidate = `${base}_${suffix}`;
+    suffix += 1;
+  }
+  return candidate;
+}
+
 function tokenizeToSet(value: string, target: Set<string>): void {
   value
     .toLowerCase()
