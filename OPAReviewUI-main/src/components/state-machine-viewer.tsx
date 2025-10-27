@@ -202,9 +202,17 @@ function loadPersistedGraphState(): PersistedGraphState {
     const removedNodeIds = Array.isArray(parsed.removedNodeIds)
       ? parsed.removedNodeIds.filter((value): value is string => typeof value === 'string')
       : [];
+    const addedEdges = Array.isArray(parsed.addedEdges)
+      ? parsed.addedEdges.filter(isValidEditableEdgeDefinition)
+      : [];
+    const removedEdgeIds = Array.isArray(parsed.removedEdgeIds)
+      ? parsed.removedEdgeIds.filter((value): value is string => typeof value === 'string')
+      : [];
     return {
       addedNodes,
       removedNodeIds,
+      addedEdges,
+      removedEdgeIds,
     };
   } catch {
     return EMPTY_PERSISTED_GRAPH_STATE;
