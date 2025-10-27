@@ -236,6 +236,19 @@ function createEditableProcessedNode(definition: EditableNodeDefinition): Proces
   };
 }
 
+function createEditableProcessedEdge(definition: EditableEdgeDefinition): ProcessedEdge {
+  return {
+    id: definition.id,
+    source: definition.source,
+    target: definition.target,
+    label: definition.label ?? '',
+    condition: definition.condition ?? '',
+    action: definition.action ?? '',
+    controlAttribute: definition.controlAttribute,
+    controlAttributeValue: definition.controlAttributeValue,
+  };
+}
+
 function applyGraphEdits(machine: ProcessedStateMachine, edits: PersistedGraphState): ProcessedStateMachine {
   if (!edits.addedNodes.length && !edits.removedNodeIds.length) {
     return machine;
