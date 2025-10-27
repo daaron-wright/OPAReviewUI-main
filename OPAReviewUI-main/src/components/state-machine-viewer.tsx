@@ -1120,6 +1120,58 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     endWalkthrough();
   }, [clearWalkthroughTimers, endWalkthrough]);
 
+  const handleOpenAddNodeModal = useCallback(() => {
+    setNewNodeForm({
+      label: '',
+      description: '',
+      type: availableNodeTypes[0] ?? 'process',
+      includeJourney: Boolean(selectedJourney),
+    });
+    setIsAddNodeModalOpen(true);
+  }, [availableNodeTypes, selectedJourney]);
+
+  const handleCloseAddNodeModal = useCallback(() => {
+    setIsAddNodeModalOpen(false);
+  }, []);
+
+  const handleAddNodeSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const trimmedLabel = newNodeForm.label.trim() || 'Untitled node';
+      const trimmedDescription = newNodeForm.description.trim() || 'Manually added state';
+      const type = newNodeForm.type.trim() || 'process';
+      const usedIds = new Set(stateMachine.nodes.map((node) => node.id));
+      const nodeId = generateNodeIdFromLabel(trimmedLabel, usedIds);
+
+      const journeyPaths = newNodeForm.includeJourney && selectedJourney ? [selectedJourney] : [];
+      const definition: EditableNodeDefinition = {
+        id: nodeId,
+        label: trimmedLabel,
+        description: trimmedDescription,
+        type,
+        journeyPaths,
+      };
+
+      setEditableGraphState((previous) => {
+        const filteredAdded = previous.addedNodes.filter((node) => node.id !== nodeId);
+        const nextAddedNodes = [...filteredAdded, definition];
+        const nextRemovedNodeIds = previous.removedNodeIds.filter((id) => id !== nodeId);
+        return {
+          addedNodes: nextAddedNodes,
+          removedNodeIds: nextRemovedNodeIds,
+        };
+      });
+
+      pendingFocusNodeIdRef.current = nodeId;
+      setIsAddNodeModalOpen(false);
+      toast.success(createToastContent('sparkle', `${trimmedLabel} added to the journey graph`), {
+        position: 'top-center',
+      });
+    },
+    [newNodeForm, selectedJourney, setEditableGraphState, stateMachine.nodes]
+  );
+
   const initialNodes = useMemo(() => {
     if (!hasUploadedDocument) {
       return [];
