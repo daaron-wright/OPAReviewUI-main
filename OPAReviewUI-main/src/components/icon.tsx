@@ -465,11 +465,43 @@ const ICONS: Record<IconName, IconRenderer> = {
       focusable="false"
     >
       <path
-        d="M20 6a4 4 0 0 1-5.4 3.7L9 15.3V19l-2 2-3-3 2-2h3.7l5.6-5.6A4 4 0 1 1 20 6Z"
+        d="M13.8 6.2a4.6 4.6 0 0 0-5.6 5.6L4.5 15.5a2 2 0 0 0 2.8 2.8l3.6-3.6a4.6 4.6 0 0 0 5.6-5.6l-2.2 2.2-3.2-3.1 2.2-2.2Z"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+      <circle cx="18" cy="6" r="1.5" fill="currentColor" />
+    </svg>
+  ),
+  pencil: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path
+        d="M5 19.5 6.5 14l8.8-8.8a1.6 1.6 0 0 1 2.3 0l1 1a1.6 1.6 0 0 1 0 2.3L10.8 17.3 5 19.5Z"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="m14 6 4 4" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  trash: ({ className, strokeWidth = 1.8 }) => (
+    <svg
+      className={clsx('h-5 w-5 stroke-current', className)}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      focusable="false"
+    >
+      <path d="M6 9.5h12" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M9 9.5v7c0 .8.6 1.5 1.4 1.5h3.2c.8 0 1.4-.7 1.4-1.5v-7" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M10 5.5h4" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M8 5.5h8" strokeWidth={strokeWidth} strokeLinecap="round" />
     </svg>
   ),
   fastForward: ({ className, strokeWidth = 1.8 }) => (
