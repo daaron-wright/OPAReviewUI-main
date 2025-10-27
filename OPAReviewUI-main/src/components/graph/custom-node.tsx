@@ -31,6 +31,10 @@ export interface CustomNodeData {
   journeyVisibility?: 'highlight' | 'dimmed';
   actors?: ReadonlyArray<NodeActorSummary>;
   feedbackAttention?: boolean;
+  onAdd?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  canDelete?: boolean;
 }
 
 /**
