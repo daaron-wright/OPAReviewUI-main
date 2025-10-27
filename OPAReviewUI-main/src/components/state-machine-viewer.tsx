@@ -1656,6 +1656,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
 
   const hasNext = activeIndex >= 0 && activeIndex < nodeSequence.length - 1;
   const hasPrevious = activeIndex > 0;
+  const canDeleteFocusedNode = Boolean(focusedNodeId && !ALWAYS_INCLUDED_NODES.has(focusedNodeId));
 
   const openNodeDetailById = useCallback(
     (nodeId: string) => {
