@@ -169,6 +169,22 @@ function isValidEditableNodeDefinition(value: unknown): value is EditableNodeDef
   );
 }
 
+function isValidEditableEdgeDefinition(value: unknown): value is EditableEdgeDefinition {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const edge = value as EditableEdgeDefinition;
+  return (
+    typeof edge.id === 'string' &&
+    typeof edge.source === 'string' &&
+    typeof edge.target === 'string' &&
+    (edge.label === undefined || typeof edge.label === 'string') &&
+    (edge.action === undefined || typeof edge.action === 'string') &&
+    (edge.condition === undefined || typeof edge.condition === 'string')
+  );
+}
+
 function loadPersistedGraphState(): PersistedGraphState {
   if (typeof window === 'undefined') {
     return EMPTY_PERSISTED_GRAPH_STATE;
