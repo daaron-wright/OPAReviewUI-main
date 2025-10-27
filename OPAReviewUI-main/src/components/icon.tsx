@@ -513,7 +513,7 @@ const ICONS: Record<IconName, IconRenderer> = {
       <path d="M6 9.5h12" strokeWidth={strokeWidth} strokeLinecap="round" />
       <path d="M9 9.5v7c0 .8.6 1.5 1.4 1.5h3.2c.8 0 1.4-.7 1.4-1.5v-7" strokeWidth={strokeWidth} strokeLinecap="round" />
       <path d="M10 5.5h4" strokeWidth={strokeWidth} strokeLinecap="round" />
-      <path d="M8 5.5h8" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <path d="M8 7h8" strokeWidth={strokeWidth} strokeLinecap="round" />
     </svg>
   ),
   fastForward: ({ className, strokeWidth = 1.8 }) => (
