@@ -2544,6 +2544,148 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     storeViewport,
   ]);
 
+  const addNodeModal = !isAddNodeModalOpen
+    ? null
+    : (
+        <div
+          className="fixed inset-0 z-[65] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="add-node-modal-title"
+        >
+          <div className="w-full max-w-md rounded-3xl border border-[#dbe9e3] bg-white p-6 shadow-[0_26px_60px_-30px_rgba(15,118,110,0.55)]">
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-1">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">Journey map</span>
+                <h2 id="add-node-modal-title" className="text-lg font-semibold text-slate-900">
+                  Add node to graph
+                </h2>
+                <p className="text-xs text-slate-600">
+                  Name the state and optionally assign it to the current journey.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCloseAddNodeModal}
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-[#e2ede8] text-slate-500 transition hover:border-[#cfe1da] hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
+                aria-label="Close add node modal"
+              >
+                <Icon name="x" className="h-4 w-4" />
+              </button>
+            </div>
+            <form onSubmit={handleAddNodeSubmit} className="mt-6 space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="new-node-label" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Label
+                </label>
+                <input
+                  id="new-node-label"
+                  name="label"
+                  type="text"
+                  required
+                  value={newNodeForm.label}
+                  onChange={(event) =>
+                    setNewNodeForm((previous) => ({
+                      ...previous,
+                      label: event.target.value,
+                    }))
+                  }
+                  autoFocus
+                  className="w-full rounded-xl border border-[#dbe9e3] bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition focus:border-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#0f766e]/25"
+                />
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label htmlFor="new-node-type" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    Type
+                  </label>
+                  <select
+                    id="new-node-type"
+                    name="type"
+                    value={newNodeForm.type}
+                    onChange={(event) =>
+                      setNewNodeForm((previous) => ({
+                        ...previous,
+                        type: event.target.value,
+                      }))
+                    }
+                    className="w-full rounded-xl border border-[#dbe9e3] bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition focus:border-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#0f766e]/25"
+                  >
+                    {availableNodeTypes.map((typeOption) => (
+                      <option key={typeOption} value={typeOption}>
+                        {typeOption}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    Journey assignment
+                  </span>
+                  <div className="rounded-xl border border-[#dbe9e3] bg-white px-3 py-2">
+                    <label className="flex items-center gap-2 text-xs font-semibold text-slate-600">
+                      <input
+                        id="new-node-journey"
+                        type="checkbox"
+                        checked={Boolean(selectedJourney) && newNodeForm.includeJourney}
+                        onChange={(event) =>
+                          setNewNodeForm((previous) => ({
+                            ...previous,
+                            includeJourney: event.target.checked,
+                          }))
+                        }
+                        disabled={!selectedJourney}
+                        className="h-4 w-4 rounded border-[#cde1da] text-[#0f766e] focus:ring-[#0f766e]/40 disabled:cursor-not-allowed disabled:border-[#e5efea] disabled:text-[#9fbab0]"
+                      />
+                      <span>
+                        {selectedJourney
+                          ? `Add to the ${selectedJourneyLabel.toLowerCase()} journey`
+                          : 'Select a journey to add this node'}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="new-node-description" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Description
+                </label>
+                <textarea
+                  id="new-node-description"
+                  name="description"
+                  rows={3}
+                  value={newNodeForm.description}
+                  onChange={(event) =>
+                    setNewNodeForm((previous) => ({
+                      ...previous,
+                      description: event.target.value,
+                    }))
+                  }
+                  className="w-full resize-none rounded-xl border border-[#dbe9e3] bg-white px-3 py-2 text-sm text-slate-700 shadow-sm transition focus:border-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#0f766e]/25"
+                  placeholder="Outline how this state behaves."
+                />
+              </div>
+              <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={handleCloseAddNodeModal}
+                  className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#c5ded5] hover:bg-[#f3f8f6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30 focus-visible:ring-offset-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/40 focus-visible:ring-offset-2"
+                >
+                  <Icon name="checkCircle" className="h-4 w-4" />
+                  Add node
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+
   return (
     <div className="min-h-screen bg-[#f4f8f6] py-10">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 lg:px-8 xl:flex-row xl:items-start">
