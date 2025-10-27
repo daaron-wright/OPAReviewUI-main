@@ -1502,6 +1502,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       const transitions = node.metadata.transitions ? [...node.metadata.transitions] : undefined;
       const isJourneyNode = journeyNodeIds.has(node.id);
       const nodeActors = nodeActorAssignments.get(node.id);
+      const canDeleteNode = !ALWAYS_INCLUDED_NODES.has(node.id);
 
       const data: CustomNodeData = {
         label: node.label,
@@ -1510,6 +1511,10 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         isFinal: node.isFinal,
         isInitial: node.isInitial,
         journeyVisibility: isJourneyNode ? 'highlight' : 'dimmed',
+        onAdd: () => openAddNodeForm(node.id),
+        onEdit: () => openEditNodeForm(node.id),
+        onDelete: () => deleteNodeById(node.id),
+        canDelete: canDeleteNode,
         ...(functions ? { functions } : {}),
         ...(node.metadata.controlAttribute ? { controlAttribute: node.metadata.controlAttribute } : {}),
         ...(controlAttributes ? { controlAttributes } : {}),
@@ -1524,7 +1529,15 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         data,
       };
     });
-  }, [hasUploadedDocument, journeyNodeIds, nodeActorAssignments, stateMachine.nodes]);
+  }, [
+    deleteNodeById,
+    hasUploadedDocument,
+    journeyNodeIds,
+    nodeActorAssignments,
+    openAddNodeForm,
+    openEditNodeForm,
+    stateMachine.nodes,
+  ]);
 
   const feedbackAttentionNodeIds = useMemo(() => {
     if (!hasUploadedDocument || selectedJourney !== FEEDBACK_JOURNEY_ID || !isFeedbackHighlightActive) {
