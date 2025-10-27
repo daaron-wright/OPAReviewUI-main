@@ -2871,48 +2871,50 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     storeViewport,
   ]);
 
-  const addNodeModal = !isAddNodeModalOpen
+  const nodeFormModal = !nodeFormState
     ? null
     : (
         <div
           className="fixed inset-0 z-[65] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="add-node-modal-title"
+          aria-labelledby="node-form-modal-title"
         >
           <div className="w-full max-w-md rounded-3xl border border-[#dbe9e3] bg-white p-6 shadow-[0_26px_60px_-30px_rgba(15,118,110,0.55)]">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0f766e]">Journey map</span>
-                <h2 id="add-node-modal-title" className="text-lg font-semibold text-slate-900">
-                  Add node to graph
+                <h2 id="node-form-modal-title" className="text-lg font-semibold text-slate-900">
+                  {nodeFormState.mode === 'add' ? 'Add node to graph' : 'Edit node details'}
                 </h2>
                 <p className="text-xs text-slate-600">
-                  Name the state and optionally assign it to the current journey.
+                  {nodeFormState.mode === 'add'
+                    ? 'Name the state and optionally assign it to the current journey.'
+                    : 'Update the state metadata and journey assignment for this node.'}
                 </p>
               </div>
               <button
                 type="button"
-                onClick={handleCloseAddNodeModal}
+                onClick={closeNodeForm}
                 className="flex h-8 w-8 items-center justify-center rounded-full border border-[#e2ede8] text-slate-500 transition hover:border-[#cfe1da] hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
-                aria-label="Close add node modal"
+                aria-label="Close node form"
               >
                 <Icon name="x" className="h-4 w-4" />
               </button>
             </div>
-            <form onSubmit={handleAddNodeSubmit} className="mt-6 space-y-4">
+            <form onSubmit={handleNodeFormSubmit} className="mt-6 space-y-4">
               <div className="space-y-2">
-                <label htmlFor="new-node-label" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <label htmlFor="node-form-label" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
                   Label
                 </label>
                 <input
-                  id="new-node-label"
+                  id="node-form-label"
                   name="label"
                   type="text"
                   required
-                  value={newNodeForm.label}
+                  value={nodeFormValues.label}
                   onChange={(event) =>
-                    setNewNodeForm((previous) => ({
+                    setNodeFormValues((previous) => ({
                       ...previous,
                       label: event.target.value,
                     }))
@@ -2923,15 +2925,15 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label htmlFor="new-node-type" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  <label htmlFor="node-form-type" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
                     Type
                   </label>
                   <select
-                    id="new-node-type"
+                    id="node-form-type"
                     name="type"
-                    value={newNodeForm.type}
+                    value={nodeFormValues.type}
                     onChange={(event) =>
-                      setNewNodeForm((previous) => ({
+                      setNodeFormValues((previous) => ({
                         ...previous,
                         type: event.target.value,
                       }))
@@ -2952,11 +2954,11 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
                   <div className="rounded-xl border border-[#dbe9e3] bg-white px-3 py-2">
                     <label className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                       <input
-                        id="new-node-journey"
+                        id="node-form-journey"
                         type="checkbox"
-                        checked={Boolean(selectedJourney) && newNodeForm.includeJourney}
+                        checked={Boolean(selectedJourney) && nodeFormValues.includeJourney}
                         onChange={(event) =>
-                          setNewNodeForm((previous) => ({
+                          setNodeFormValues((previous) => ({
                             ...previous,
                             includeJourney: event.target.checked,
                           }))
@@ -2966,24 +2968,24 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
                       />
                       <span>
                         {selectedJourney
-                          ? `Add to the ${selectedJourneyLabel.toLowerCase()} journey`
-                          : 'Select a journey to add this node'}
+                          ? `${nodeFormState.mode === 'add' ? 'Add to' : 'Keep in'} the ${selectedJourneyLabel.toLowerCase()} journey`
+                          : 'Select a journey to assign'}
                       </span>
                     </label>
                   </div>
                 </div>
               </div>
               <div className="space-y-2">
-                <label htmlFor="new-node-description" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <label htmlFor="node-form-description" className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
                   Description
                 </label>
                 <textarea
-                  id="new-node-description"
+                  id="node-form-description"
                   name="description"
                   rows={3}
-                  value={newNodeForm.description}
+                  value={nodeFormValues.description}
                   onChange={(event) =>
-                    setNewNodeForm((previous) => ({
+                    setNodeFormValues((previous) => ({
                       ...previous,
                       description: event.target.value,
                     }))
@@ -2995,7 +2997,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
               <div className="flex flex-wrap items-center justify-end gap-2 pt-2">
                 <button
                   type="button"
-                  onClick={handleCloseAddNodeModal}
+                  onClick={closeNodeForm}
                   className="inline-flex items-center gap-2 rounded-full border border-[#dbe9e3] bg-white px-4 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-[#c5ded5] hover:bg-[#f3f8f6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30 focus-visible:ring-offset-2"
                 >
                   Cancel
@@ -3005,7 +3007,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
                   className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_18px_32px_-24px_rgba(15,118,110,0.55)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/40 focus-visible:ring-offset-2"
                 >
                   <Icon name="checkCircle" className="h-4 w-4" />
-                  Add node
+                  {nodeFormState.mode === 'add' ? 'Add node' : 'Save changes'}
                 </button>
               </div>
             </form>
