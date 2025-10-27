@@ -130,14 +130,27 @@ interface EditableNodeDefinition {
   readonly isFinal?: boolean;
 }
 
+interface EditableEdgeDefinition {
+  readonly id: string;
+  readonly source: string;
+  readonly target: string;
+  readonly label?: string;
+  readonly action?: string;
+  readonly condition?: string;
+}
+
 interface PersistedGraphState {
   readonly addedNodes: EditableNodeDefinition[];
   readonly removedNodeIds: string[];
+  readonly addedEdges: EditableEdgeDefinition[];
+  readonly removedEdgeIds: string[];
 }
 
 const EMPTY_PERSISTED_GRAPH_STATE: PersistedGraphState = {
   addedNodes: [],
   removedNodeIds: [],
+  addedEdges: [],
+  removedEdgeIds: [],
 };
 
 function isValidEditableNodeDefinition(value: unknown): value is EditableNodeDefinition {
