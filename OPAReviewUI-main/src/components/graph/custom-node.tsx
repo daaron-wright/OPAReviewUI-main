@@ -52,6 +52,16 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
   const controlAttributes = data.controlAttributes ?? (data.controlAttribute ? [data.controlAttribute] : []);
   const transitions = data.transitions ?? [];
   const actors = data.actors ?? [];
+  const { onAdd, onEdit, onDelete, canDelete = true } = data;
+  const hasActions = Boolean(onAdd || onEdit || onDelete);
+
+  const handleActionClick = (callback?: () => void) => (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    event.preventDefault();
+    callback?.();
+  };
+
+  const actionButtonClass = 'flex h-6 w-6 items-center justify-center rounded-full border border-white/80 bg-white/90 text-slate-500 shadow-sm transition hover:text-[#0f766e] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-1';
 
   const badgeLabel = data.isInitial
     ? 'Initial state'
@@ -74,6 +84,44 @@ export const CustomNode = memo(({ data, targetPosition = Position.Top, sourcePos
           feedbackAttention && clsx('node-feedback-highlight outline outline-[1.5px] outline-offset-[7px] outline-[#68c2b0]/70', styles.highlightedContainer)
         )}
       >
+        {hasActions && (
+          <div className="absolute right-3 top-3 flex items-center gap-1">
+            {onAdd && (
+              <button
+                type="button"
+                onClick={handleActionClick(onAdd)}
+                className={clsx(actionButtonClass, 'hover:border-[#dbe9e3]')}
+                aria-label="Add connected node"
+                title="Add connected node"
+              >
+                <Icon name="plus" className="h-3.5 w-3.5" />
+              </button>
+            )}
+            {onEdit && (
+              <button
+                type="button"
+                onClick={handleActionClick(onEdit)}
+                className={clsx(actionButtonClass, 'hover:border-[#dbe9e3]')}
+                aria-label="Edit node"
+                title="Edit node"
+              >
+                <Icon name="pencil" className="h-3.5 w-3.5" />
+              </button>
+            )}
+            {onDelete && (
+              <button
+                type="button"
+                onClick={handleActionClick(onDelete)}
+                className={clsx(actionButtonClass, !canDelete && 'cursor-not-allowed opacity-45')}
+                disabled={!canDelete}
+                aria-label="Delete node"
+                title={canDelete ? 'Delete node' : 'Core nodes cannot be removed'}
+              >
+                <Icon name="trash" className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+        )}
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-2">
             <span className={styles.typeBadge}>{badgeLabel}</span>
