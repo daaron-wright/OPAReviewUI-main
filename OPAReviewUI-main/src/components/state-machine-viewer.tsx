@@ -378,6 +378,35 @@ function generateEdgeId(sourceId: string, targetId: string, usedIds: Set<string>
   return candidate;
 }
 
+function toggleJourneyAssignment(
+  existingPaths: ReadonlyArray<string>,
+  journeyId: JourneyTabId | '',
+  shouldInclude: boolean
+): JourneyTabId[] {
+  if (!journeyId) {
+    return existingPaths.slice() as JourneyTabId[];
+  }
+  const set = new Set(existingPaths);
+  if (shouldInclude) {
+    set.add(journeyId);
+  } else {
+    set.delete(journeyId);
+  }
+  return Array.from(set) as JourneyTabId[];
+}
+
+function areJourneyPathsEqual(a: ReadonlyArray<string>, b: ReadonlyArray<string>): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+  for (let index = 0; index < a.length; index += 1) {
+    if (a[index] !== b[index]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function tokenizeToSet(value: string, target: Set<string>): void {
   value
     .toLowerCase()
