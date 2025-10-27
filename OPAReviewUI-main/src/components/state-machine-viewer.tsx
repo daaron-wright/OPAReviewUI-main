@@ -118,6 +118,132 @@ const ALIAS_IGNORED_TOKENS = new Set([
   'user',
 ]);
 
+const EDITABLE_GRAPH_STORAGE_KEY = 'opa-state-machine-editable-graph';
+
+interface EditableNodeDefinition {
+  readonly id: string;
+  readonly label: string;
+  readonly type: string;
+  readonly description: string;
+  readonly journeyPaths: JourneyTabId[];
+  readonly isInitial?: boolean;
+  readonly isFinal?: boolean;
+}
+
+interface PersistedGraphState {
+  readonly addedNodes: EditableNodeDefinition[];
+  readonly removedNodeIds: string[];
+}
+
+const EMPTY_PERSISTED_GRAPH_STATE: PersistedGraphState = {
+  addedNodes: [],
+  removedNodeIds: [],
+};
+
+function isValidEditableNodeDefinition(value: unknown): value is EditableNodeDefinition {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const node = value as EditableNodeDefinition;
+  return (
+    typeof node.id === 'string' &&
+    typeof node.label === 'string' &&
+    typeof node.type === 'string' &&
+    typeof node.description === 'string' &&
+    Array.isArray(node.journeyPaths) &&
+    node.journeyPaths.every((path) => typeof path === 'string')
+  );
+}
+
+function loadPersistedGraphState(): PersistedGraphState {
+  if (typeof window === 'undefined') {
+    return EMPTY_PERSISTED_GRAPH_STATE;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(EDITABLE_GRAPH_STORAGE_KEY);
+    if (!raw) {
+      return EMPTY_PERSISTED_GRAPH_STATE;
+    }
+    const parsed = JSON.parse(raw) as Partial<PersistedGraphState>;
+    const addedNodes = Array.isArray(parsed.addedNodes)
+      ? parsed.addedNodes.filter(isValidEditableNodeDefinition)
+      : [];
+    const removedNodeIds = Array.isArray(parsed.removedNodeIds)
+      ? parsed.removedNodeIds.filter((value): value is string => typeof value === 'string')
+      : [];
+    return {
+      addedNodes,
+      removedNodeIds,
+    };
+  } catch {
+    return EMPTY_PERSISTED_GRAPH_STATE;
+  }
+}
+
+function createEditableProcessedNode(definition: EditableNodeDefinition): ProcessedNode {
+  return {
+    id: definition.id,
+    label: definition.label,
+    type: definition.type,
+    description: definition.description,
+    isFinal: Boolean(definition.isFinal),
+    isInitial: Boolean(definition.isInitial),
+    journeyPaths: definition.journeyPaths,
+    metadata: {},
+  };
+}
+
+function applyGraphEdits(machine: ProcessedStateMachine, edits: PersistedGraphState): ProcessedStateMachine {
+  if (!edits.addedNodes.length && !edits.removedNodeIds.length) {
+    return machine;
+  }
+
+  const removedSet = new Set(edits.removedNodeIds);
+  const addedNodesMap = new Map(edits.addedNodes.map((node) => [node.id, node] as const));
+
+  const filteredNodes = machine.nodes.filter(
+    (node) => !removedSet.has(node.id) && !addedNodesMap.has(node.id)
+  );
+  const filteredEdges = machine.edges.filter(
+    (edge) => !removedSet.has(edge.source) && !removedSet.has(edge.target)
+  );
+
+  const addedProcessedNodes = edits.addedNodes
+    .filter((node) => !removedSet.has(node.id))
+    .map((node) => createEditableProcessedNode(node));
+
+  const nextNodes = [...filteredNodes, ...addedProcessedNodes];
+
+  return {
+    nodes: nextNodes,
+    edges: filteredEdges,
+    metadata: {
+      ...machine.metadata,
+      totalStates: nextNodes.length,
+      totalTransitions: filteredEdges.length,
+    },
+  };
+}
+
+function generateNodeIdFromLabel(label: string, usedIds: Set<string>): string {
+  const base = label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 60);
+
+  const seed = base || 'state';
+  let candidate = seed;
+  let suffix = 1;
+  while (usedIds.has(candidate)) {
+    candidate = `${seed}_${suffix}`;
+    suffix += 1;
+  }
+  return candidate;
+}
+
 function tokenizeToSet(value: string, target: Set<string>): void {
   value
     .toLowerCase()
