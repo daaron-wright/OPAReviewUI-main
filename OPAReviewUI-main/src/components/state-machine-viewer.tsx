@@ -183,7 +183,9 @@ function isValidEditableEdgeDefinition(value: unknown): value is EditableEdgeDef
     typeof edge.target === 'string' &&
     (edge.label === undefined || typeof edge.label === 'string') &&
     (edge.action === undefined || typeof edge.action === 'string') &&
-    (edge.condition === undefined || typeof edge.condition === 'string')
+    (edge.condition === undefined || typeof edge.condition === 'string') &&
+    (edge.controlAttribute === undefined || typeof edge.controlAttribute === 'string') &&
+    (edge.controlAttributeValue === undefined || typeof edge.controlAttributeValue === 'string')
   );
 }
 
