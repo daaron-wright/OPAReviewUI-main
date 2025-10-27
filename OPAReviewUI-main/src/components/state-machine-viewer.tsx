@@ -1078,8 +1078,12 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const [isGraphExpanded, setIsGraphExpanded] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isFeedbackHighlightActive, setIsFeedbackHighlightActive] = useState(false);
-  const [isAddNodeModalOpen, setIsAddNodeModalOpen] = useState(false);
-  const [newNodeForm, setNewNodeForm] = useState({
+  const [nodeFormState, setNodeFormState] = useState<
+    | { mode: 'add'; parentNodeId: string | null }
+    | { mode: 'edit'; nodeId: string }
+    | null
+  >(null);
+  const [nodeFormValues, setNodeFormValues] = useState({
     label: '',
     description: '',
     type: 'process',
