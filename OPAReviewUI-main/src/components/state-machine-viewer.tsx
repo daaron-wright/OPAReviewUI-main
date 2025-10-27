@@ -250,33 +250,52 @@ function createEditableProcessedEdge(definition: EditableEdgeDefinition): Proces
 }
 
 function applyGraphEdits(machine: ProcessedStateMachine, edits: PersistedGraphState): ProcessedStateMachine {
-  if (!edits.addedNodes.length && !edits.removedNodeIds.length) {
+  if (
+    !edits.addedNodes.length &&
+    !edits.removedNodeIds.length &&
+    !edits.addedEdges.length &&
+    !edits.removedEdgeIds.length
+  ) {
     return machine;
   }
 
-  const removedSet = new Set(edits.removedNodeIds);
+  const removedNodeIds = new Set(edits.removedNodeIds);
+  const removedEdgeIds = new Set(edits.removedEdgeIds);
   const addedNodesMap = new Map(edits.addedNodes.map((node) => [node.id, node] as const));
 
-  const filteredNodes = machine.nodes.filter(
-    (node) => !removedSet.has(node.id) && !addedNodesMap.has(node.id)
-  );
-  const filteredEdges = machine.edges.filter(
-    (edge) => !removedSet.has(edge.source) && !removedSet.has(edge.target)
+  const preservedNodes = machine.nodes.filter(
+    (node) => !removedNodeIds.has(node.id) && !addedNodesMap.has(node.id)
   );
 
   const addedProcessedNodes = edits.addedNodes
-    .filter((node) => !removedSet.has(node.id))
+    .filter((node) => !removedNodeIds.has(node.id))
     .map((node) => createEditableProcessedNode(node));
 
-  const nextNodes = [...filteredNodes, ...addedProcessedNodes];
+  const nextNodes = [...preservedNodes, ...addedProcessedNodes];
+  const nextNodeIds = new Set(nextNodes.map((node) => node.id));
+
+  const addedProcessedEdges = edits.addedEdges
+    .filter((edge) => !removedEdgeIds.has(edge.id))
+    .map((edge) => createEditableProcessedEdge(edge))
+    .filter((edge) => nextNodeIds.has(edge.source) && nextNodeIds.has(edge.target));
+  const addedEdgeIds = new Set(addedProcessedEdges.map((edge) => edge.id));
+
+  const preservedEdges = machine.edges.filter((edge) => {
+    if (removedEdgeIds.has(edge.id) || addedEdgeIds.has(edge.id)) {
+      return false;
+    }
+    return nextNodeIds.has(edge.source) && nextNodeIds.has(edge.target);
+  });
+
+  const nextEdges = [...preservedEdges, ...addedProcessedEdges];
 
   return {
     nodes: nextNodes,
-    edges: filteredEdges,
+    edges: nextEdges,
     metadata: {
       ...machine.metadata,
       totalStates: nextNodes.length,
-      totalTransitions: filteredEdges.length,
+      totalTransitions: nextEdges.length,
     },
   };
 }
