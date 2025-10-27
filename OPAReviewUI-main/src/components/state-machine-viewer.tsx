@@ -1166,7 +1166,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const selectedJourneyLabel = selectedJourneyConfig?.label ?? 'Journey';
 
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChangeState] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState<ProcessedNode | null>(null);
   const [nodePosition, setNodePosition] = useState<{ x: number; y: number } | null>(null);
   const [modalAnimation, setModalAnimation] = useState<'entering' | 'exiting' | 'none'>('none');
