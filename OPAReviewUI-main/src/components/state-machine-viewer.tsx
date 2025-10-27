@@ -1333,68 +1333,155 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const handleNodeFormSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-
-      const trimmedLabel = newNodeForm.label.trim() || 'Untitled node';
-      const trimmedDescription = newNodeForm.description.trim() || 'Manually added state';
-      const type = newNodeForm.type.trim() || 'process';
-      const usedIds = new Set(stateMachine.nodes.map((node) => node.id));
-      const nodeId = generateNodeIdFromLabel(trimmedLabel, usedIds);
-
-      const journeyPaths = newNodeForm.includeJourney && selectedJourney ? [selectedJourney] : [];
-      const definition: EditableNodeDefinition = {
-        id: nodeId,
-        label: trimmedLabel,
-        description: trimmedDescription,
-        type,
-        journeyPaths,
-      };
-
-      const parentNodeId = focusedNodeId && nodesById.has(focusedNodeId) ? focusedNodeId : null;
-      let edgeDefinition: EditableEdgeDefinition | null = null;
-      if (parentNodeId) {
-        const usedEdgeIds = new Set(stateMachine.edges.map((edge) => edge.id));
-        const edgeId = generateEdgeId(parentNodeId, nodeId, usedEdgeIds);
-        edgeDefinition = {
-          id: edgeId,
-          source: parentNodeId,
-          target: nodeId,
-          label: 'Manual transition',
-          action: 'manual_transition',
-        };
+      if (!nodeFormState) {
+        return;
       }
 
-      setEditableGraphState((previous) => {
-        const filteredAddedNodes = previous.addedNodes.filter((node) => node.id !== nodeId);
-        const nextAddedNodes = [...filteredAddedNodes, definition];
-        const nextRemovedNodeIds = previous.removedNodeIds.filter((id) => id !== nodeId);
+      const trimmedLabel = nodeFormValues.label.trim() || 'Untitled node';
+      const trimmedDescription = nodeFormValues.description.trim() || 'Manually added state';
+      const type = nodeFormValues.type.trim() || 'process';
+      const shouldIncludeJourney = nodeFormValues.includeJourney;
+      const selectedJourneyId = selectedJourney ?? '';
 
-        let nextAddedEdges = previous.addedEdges;
-        let nextRemovedEdgeIds = previous.removedEdgeIds;
+      if (nodeFormState.mode === 'add') {
+        const usedIds = new Set(stateMachine.nodes.map((node) => node.id));
+        const nodeId = generateNodeIdFromLabel(trimmedLabel, usedIds);
+        const journeyPaths = shouldIncludeJourney && selectedJourneyId ? [selectedJourneyId] : [];
+        const definition: EditableNodeDefinition = {
+          id: nodeId,
+          label: trimmedLabel,
+          description: trimmedDescription,
+          type,
+          journeyPaths,
+        };
 
-        if (edgeDefinition) {
-          const filteredAddedEdges = previous.addedEdges.filter((edge) => edge.id !== edgeDefinition.id);
-          nextAddedEdges = [...filteredAddedEdges, edgeDefinition];
-          nextRemovedEdgeIds = previous.removedEdgeIds.filter((id) => id !== edgeDefinition.id);
+        const explicitParentId = nodeFormState.parentNodeId;
+        const fallbackParentId = focusedNodeId && nodesById.has(focusedNodeId) ? focusedNodeId : null;
+        const parentNodeId = explicitParentId ?? fallbackParentId;
+        let edgeDefinition: EditableEdgeDefinition | null = null;
+        if (parentNodeId) {
+          const usedEdgeIds = new Set(stateMachine.edges.map((edge) => edge.id));
+          const edgeId = generateEdgeId(parentNodeId, nodeId, usedEdgeIds);
+          edgeDefinition = {
+            id: edgeId,
+            source: parentNodeId,
+            target: nodeId,
+            label: 'Manual transition',
+            action: 'manual_transition',
+          };
         }
 
+        setEditableGraphState((previous) => {
+          const filteredAddedNodes = previous.addedNodes.filter((node) => node.id !== nodeId);
+          const nextAddedNodes = [...filteredAddedNodes, definition];
+          const nextRemovedNodeIds = previous.removedNodeIds.filter((id) => id !== nodeId);
+
+          let nextAddedEdges = previous.addedEdges;
+          let nextRemovedEdgeIds = previous.removedEdgeIds;
+
+          if (edgeDefinition) {
+            const filteredAddedEdges = previous.addedEdges.filter((edge) => edge.id !== edgeDefinition.id);
+            nextAddedEdges = [...filteredAddedEdges, edgeDefinition];
+            nextRemovedEdgeIds = previous.removedEdgeIds.filter((id) => id !== edgeDefinition.id);
+          }
+
+          return {
+            addedNodes: nextAddedNodes,
+            removedNodeIds: nextRemovedNodeIds,
+            addedEdges: nextAddedEdges,
+            removedEdgeIds: nextRemovedEdgeIds,
+            nodeOverrides: previous.nodeOverrides,
+          };
+        });
+
+        pendingFocusNodeIdRef.current = nodeId;
+        setNodeFormState(null);
+        toast.success(createToastContent('sparkle', `${trimmedLabel} added to the journey graph`), {
+          position: 'top-center',
+        });
+        return;
+      }
+
+      const nodeId = nodeFormState.nodeId;
+      const baseNode = baseStateMachine.nodes.find((node) => node.id === nodeId) ?? null;
+
+      setEditableGraphState((previous) => {
+        const addedIndex = previous.addedNodes.findIndex((node) => node.id === nodeId);
+        if (addedIndex >= 0) {
+          const existingPaths = previous.addedNodes[addedIndex].journeyPaths;
+          const updatedPaths = toggleJourneyAssignment(existingPaths, selectedJourneyId, shouldIncludeJourney);
+          const updatedNode: EditableNodeDefinition = {
+            ...previous.addedNodes[addedIndex],
+            label: trimmedLabel,
+            description: trimmedDescription,
+            type,
+            journeyPaths: updatedPaths,
+          };
+          const nextAddedNodes = [...previous.addedNodes];
+          nextAddedNodes[addedIndex] = updatedNode;
+          return {
+            addedNodes: nextAddedNodes,
+            removedNodeIds: previous.removedNodeIds,
+            addedEdges: previous.addedEdges,
+            removedEdgeIds: previous.removedEdgeIds,
+            nodeOverrides: previous.nodeOverrides.filter((override) => override.id !== nodeId),
+          };
+        }
+
+        const existingOverride = previous.nodeOverrides.find((override) => override.id === nodeId) ?? null;
+        const baseLabel = baseNode?.label ?? trimmedLabel;
+        const baseDescription = baseNode?.description ?? trimmedDescription;
+        const baseType = baseNode?.type ?? type;
+        const baseJourneyPaths = existingOverride?.journeyPaths ?? baseNode?.journeyPaths ?? [];
+        const effectivePaths = toggleJourneyAssignment(baseJourneyPaths, selectedJourneyId, shouldIncludeJourney);
+
+        const override: EditableNodeOverride = { id: nodeId };
+        let hasChanges = false;
+
+        if (!baseNode || trimmedLabel !== baseLabel) {
+          override.label = trimmedLabel;
+          hasChanges = true;
+        }
+        if (!baseNode || trimmedDescription !== baseDescription) {
+          override.description = trimmedDescription;
+          hasChanges = true;
+        }
+        if (!baseNode || type !== baseType) {
+          override.type = type;
+          hasChanges = true;
+        }
+        const basePathsComparison = baseNode?.journeyPaths ?? [];
+        if (!areJourneyPathsEqual(effectivePaths, basePathsComparison)) {
+          override.journeyPaths = effectivePaths;
+          hasChanges = true;
+        }
+
+        const filteredOverrides = previous.nodeOverrides.filter((entry) => entry.id !== nodeId);
+        const nextOverrides = hasChanges ? [...filteredOverrides, override] : filteredOverrides;
+
         return {
-          addedNodes: nextAddedNodes,
-          removedNodeIds: nextRemovedNodeIds,
-          addedEdges: nextAddedEdges,
-          removedEdgeIds: nextRemovedEdgeIds,
-          nodeOverrides: previous.nodeOverrides,
+          addedNodes: previous.addedNodes,
+          removedNodeIds: previous.removedNodeIds,
+          addedEdges: previous.addedEdges,
+          removedEdgeIds: previous.removedEdgeIds,
+          nodeOverrides: nextOverrides,
         };
       });
 
       pendingFocusNodeIdRef.current = nodeId;
-      setIsAddNodeModalOpen(false);
-      toast.success(createToastContent('sparkle', `${trimmedLabel} added to the journey graph`), {
+      setNodeFormState(null);
+      toast.success(createToastContent('pen', `${trimmedLabel} updated`), {
         position: 'top-center',
       });
     },
     [
+      baseStateMachine.nodes,
       focusedNodeId,
-      newNodeForm,
+      nodeFormState,
+      nodeFormValues.includeJourney,
+      nodeFormValues.description,
+      nodeFormValues.label,
+      nodeFormValues.type,
       nodesById,
       selectedJourney,
       setEditableGraphState,
