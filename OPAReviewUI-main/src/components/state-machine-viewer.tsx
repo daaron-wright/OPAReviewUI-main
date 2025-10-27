@@ -1838,6 +1838,96 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     };
   }, [isGraphExpanded]);
 
+  const deleteNodeById = useCallback(
+    (nodeId: string | null) => {
+      if (!nodeId) {
+        toast.info(createToastContent('infoCircle', 'Select a node before deleting'), {
+          position: 'top-center',
+        });
+        return false;
+      }
+
+      if (ALWAYS_INCLUDED_NODES.has(nodeId)) {
+        toast.warning(createToastContent('warningTriangle', 'This node is required and cannot be removed'), {
+          position: 'top-center',
+        });
+        return false;
+      }
+
+      const node = nodesById.get(nodeId);
+      if (!node) {
+        toast.info(createToastContent('infoCircle', 'Unable to locate the selected node'), {
+          position: 'top-center',
+        });
+        return false;
+      }
+
+      const connectedEdgeIds = stateMachine.edges
+        .filter((edge) => edge.source === nodeId || edge.target === nodeId)
+        .map((edge) => edge.id);
+      const connectedEdgeIdSet = new Set(connectedEdgeIds);
+
+      setEditableGraphState((previous) => {
+        const isAddedNode = previous.addedNodes.some((added) => added.id === nodeId);
+        const nextAddedNodes = isAddedNode
+          ? previous.addedNodes.filter((added) => added.id !== nodeId)
+          : previous.addedNodes;
+        const nextRemovedNodeIds = isAddedNode
+          ? previous.removedNodeIds.filter((id) => id !== nodeId)
+          : previous.removedNodeIds.includes(nodeId)
+          ? previous.removedNodeIds
+          : [...previous.removedNodeIds, nodeId];
+
+        const nextAddedEdges = previous.addedEdges.filter((edge) => !connectedEdgeIdSet.has(edge.id));
+        const addedEdgeIdSet = new Set(previous.addedEdges.map((edge) => edge.id));
+        const removedEdgeIdsSet = new Set(previous.removedEdgeIds);
+        connectedEdgeIds.forEach((edgeId) => {
+          if (!addedEdgeIdSet.has(edgeId)) {
+            removedEdgeIdsSet.add(edgeId);
+          }
+        });
+
+        const nextNodeOverrides = previous.nodeOverrides.filter((override) => override.id !== nodeId);
+
+        return {
+          addedNodes: nextAddedNodes,
+          removedNodeIds: nextRemovedNodeIds,
+          addedEdges: nextAddedEdges,
+          removedEdgeIds: Array.from(removedEdgeIdsSet),
+          nodeOverrides: nextNodeOverrides,
+        };
+      });
+
+      if (isWalkthroughMode && currentNodeId === nodeId) {
+        setCurrentNode(null);
+      }
+
+      setSelectedNode((current) => (current?.id === nodeId ? null : current));
+      if (focusedNodeId === nodeId) {
+        setFocusedNodeId(null);
+        setModalAnimation('none');
+      }
+      pendingFocusNodeIdRef.current = null;
+
+      toast.info(createToastContent('xCircle', `${node.label} removed from the journey graph`), {
+        position: 'top-center',
+      });
+
+      return true;
+    },
+    [
+      currentNodeId,
+      focusedNodeId,
+      isWalkthroughMode,
+      nodesById,
+      setCurrentNode,
+      setEditableGraphState,
+      setFocusedNodeId,
+      setSelectedNode,
+      stateMachine.edges,
+    ]
+  );
+
   const handleDeleteFocusedNode = useCallback(() => {
     if (!focusedNodeId) {
       toast.info(createToastContent('infoCircle', 'Select a node before deleting'), {
@@ -1846,78 +1936,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       return;
     }
 
-    if (ALWAYS_INCLUDED_NODES.has(focusedNodeId)) {
-      toast.warning(createToastContent('warningTriangle', 'This node is required and cannot be removed'), {
-        position: 'top-center',
-      });
-      return;
-    }
-
-    const node = nodesById.get(focusedNodeId);
-    if (!node) {
-      toast.info(createToastContent('infoCircle', 'Select a node before deleting'), {
-        position: 'top-center',
-      });
-      return;
-    }
-
-    const connectedEdgeIds = stateMachine.edges
-      .filter((edge) => edge.source === focusedNodeId || edge.target === focusedNodeId)
-      .map((edge) => edge.id);
-    const connectedEdgeIdSet = new Set(connectedEdgeIds);
-
-    setEditableGraphState((previous) => {
-      const isAddedNode = previous.addedNodes.some((added) => added.id === focusedNodeId);
-      const nextAddedNodes = isAddedNode
-        ? previous.addedNodes.filter((added) => added.id !== focusedNodeId)
-        : previous.addedNodes;
-      const nextRemovedNodeIds = isAddedNode
-        ? previous.removedNodeIds.filter((id) => id !== focusedNodeId)
-        : previous.removedNodeIds.includes(focusedNodeId)
-        ? previous.removedNodeIds
-        : [...previous.removedNodeIds, focusedNodeId];
-
-      const nextAddedEdges = previous.addedEdges.filter((edge) => !connectedEdgeIdSet.has(edge.id));
-      const addedEdgeIdSet = new Set(previous.addedEdges.map((edge) => edge.id));
-      const removedEdgeIdsSet = new Set(previous.removedEdgeIds);
-      connectedEdgeIds.forEach((edgeId) => {
-        if (!addedEdgeIdSet.has(edgeId)) {
-          removedEdgeIdsSet.add(edgeId);
-        }
-      });
-
-      const nextNodeOverrides = previous.nodeOverrides.filter((override) => override.id !== focusedNodeId);
-
-      return {
-        addedNodes: nextAddedNodes,
-        removedNodeIds: nextRemovedNodeIds,
-        addedEdges: nextAddedEdges,
-        removedEdgeIds: Array.from(removedEdgeIdsSet),
-        nodeOverrides: nextNodeOverrides,
-      };
-    });
-
-    if (isWalkthroughMode && currentNodeId === focusedNodeId) {
-      setCurrentNode(null);
-    }
-
-    setSelectedNode((current) => (current?.id === focusedNodeId ? null : current));
-    setFocusedNodeId(null);
-    setModalAnimation('none');
-    pendingFocusNodeIdRef.current = null;
-
-    toast.info(createToastContent('xCircle', `${node.label} removed from the journey graph`), {
-      position: 'top-center',
-    });
-  }, [
-    currentNodeId,
-    focusedNodeId,
-    isWalkthroughMode,
-    nodesById,
-    setCurrentNode,
-    setEditableGraphState,
-    stateMachine.edges,
-  ]);
+    void deleteNodeById(focusedNodeId);
+  }, [deleteNodeById, focusedNodeId]);
 
   const timelineItems = useMemo(() => {
     if (!hasUploadedDocument) {
