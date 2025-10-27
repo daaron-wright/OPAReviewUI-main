@@ -1298,6 +1298,8 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     return map;
   }, [stateMachine.nodes]);
 
+  const baseEdgeIds = useMemo(() => new Set(baseStateMachine.edges.map((edge) => edge.id)), [baseStateMachine.edges]);
+
   const deleteNodeById = useCallback(
     (nodeId: string | null) => {
       if (!nodeId) {
