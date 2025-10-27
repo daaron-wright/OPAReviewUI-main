@@ -1238,13 +1238,39 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         journeyPaths,
       };
 
+      const parentNodeId = focusedNodeId && nodesById.has(focusedNodeId) ? focusedNodeId : null;
+      let edgeDefinition: EditableEdgeDefinition | null = null;
+      if (parentNodeId) {
+        const usedEdgeIds = new Set(stateMachine.edges.map((edge) => edge.id));
+        const edgeId = generateEdgeId(parentNodeId, nodeId, usedEdgeIds);
+        edgeDefinition = {
+          id: edgeId,
+          source: parentNodeId,
+          target: nodeId,
+          label: 'Manual transition',
+          action: 'manual_transition',
+        };
+      }
+
       setEditableGraphState((previous) => {
-        const filteredAdded = previous.addedNodes.filter((node) => node.id !== nodeId);
-        const nextAddedNodes = [...filteredAdded, definition];
+        const filteredAddedNodes = previous.addedNodes.filter((node) => node.id !== nodeId);
+        const nextAddedNodes = [...filteredAddedNodes, definition];
         const nextRemovedNodeIds = previous.removedNodeIds.filter((id) => id !== nodeId);
+
+        let nextAddedEdges = previous.addedEdges;
+        let nextRemovedEdgeIds = previous.removedEdgeIds;
+
+        if (edgeDefinition) {
+          const filteredAddedEdges = previous.addedEdges.filter((edge) => edge.id !== edgeDefinition!.id);
+          nextAddedEdges = [...filteredAddedEdges, edgeDefinition];
+          nextRemovedEdgeIds = previous.removedEdgeIds.filter((id) => id !== edgeDefinition.id);
+        }
+
         return {
           addedNodes: nextAddedNodes,
           removedNodeIds: nextRemovedNodeIds,
+          addedEdges: nextAddedEdges,
+          removedEdgeIds: nextRemovedEdgeIds,
         };
       });
 
@@ -1254,7 +1280,15 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         position: 'top-center',
       });
     },
-    [newNodeForm, selectedJourney, setEditableGraphState, stateMachine.nodes]
+    [
+      focusedNodeId,
+      newNodeForm,
+      nodesById,
+      selectedJourney,
+      setEditableGraphState,
+      stateMachine.edges,
+      stateMachine.nodes,
+    ]
   );
 
   const initialNodes = useMemo(() => {
