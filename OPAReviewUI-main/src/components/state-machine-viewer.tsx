@@ -934,6 +934,14 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
   const [isGraphExpanded, setIsGraphExpanded] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isFeedbackHighlightActive, setIsFeedbackHighlightActive] = useState(false);
+  const [isAddNodeModalOpen, setIsAddNodeModalOpen] = useState(false);
+  const [newNodeForm, setNewNodeForm] = useState({
+    label: '',
+    description: '',
+    type: 'process',
+    includeJourney: true,
+  });
+  const pendingFocusNodeIdRef = useRef<string | null>(null);
 
   const {
     reviewStatus,
