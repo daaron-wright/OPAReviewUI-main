@@ -1289,10 +1289,13 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
       }
 
       setSelectedNode((current) => (current?.id === nodeId ? null : current));
-      if (focusedNodeId === nodeId) {
-        setFocusedNodeId(null);
-        setModalAnimation('none');
-      }
+      setFocusedNodeId((current) => {
+        if (current === nodeId) {
+          setModalAnimation('none');
+          return null;
+        }
+        return current;
+      });
       pendingFocusNodeIdRef.current = null;
 
       toast.info(createToastContent('xCircle', `${node.label} removed from the journey graph`), {
@@ -1303,7 +1306,6 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     },
     [
       currentNodeId,
-      focusedNodeId,
       isWalkthroughMode,
       nodesById,
       setCurrentNode,
