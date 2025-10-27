@@ -1328,6 +1328,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
           removedNodeIds: nextRemovedNodeIds,
           addedEdges: nextAddedEdges,
           removedEdgeIds: nextRemovedEdgeIds,
+          nodeOverrides: previous.nodeOverrides,
         };
       });
 
