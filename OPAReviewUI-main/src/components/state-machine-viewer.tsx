@@ -407,6 +407,80 @@ function areJourneyPathsEqual(a: ReadonlyArray<string>, b: ReadonlyArray<string>
   return true;
 }
 
+function ensureNodesHaveJourney(
+  nodeIds: ReadonlyArray<string>,
+  journeyId: JourneyTabId,
+  nodesById: Map<string, ProcessedNode>,
+  addedNodes: EditableNodeDefinition[],
+  nodeOverrides: EditableNodeOverride[]
+): { addedNodes: EditableNodeDefinition[]; nodeOverrides: EditableNodeOverride[] } {
+  let updatedAddedNodes = addedNodes;
+  let updatedNodeOverrides = nodeOverrides;
+  let addedNodesChanged = false;
+  let overridesChanged = false;
+
+  nodeIds.forEach((nodeId) => {
+    if (!nodeId) {
+      return;
+    }
+
+    const addedIndex = updatedAddedNodes.findIndex((node) => node.id === nodeId);
+    if (addedIndex >= 0) {
+      const node = updatedAddedNodes[addedIndex];
+      if (!node.journeyPaths.includes(journeyId)) {
+        if (!addedNodesChanged) {
+          updatedAddedNodes = [...updatedAddedNodes];
+          addedNodesChanged = true;
+        }
+        updatedAddedNodes[addedIndex] = {
+          ...node,
+          journeyPaths: [...node.journeyPaths, journeyId],
+        };
+      }
+      return;
+    }
+
+    const baseNode = nodesById.get(nodeId);
+    if (!baseNode) {
+      return;
+    }
+
+    const overrideIndex = updatedNodeOverrides.findIndex((override) => override.id === nodeId);
+    const currentPaths = overrideIndex >= 0
+      ? updatedNodeOverrides[overrideIndex].journeyPaths ?? baseNode.journeyPaths
+      : baseNode.journeyPaths;
+
+    if (currentPaths.includes(journeyId)) {
+      return;
+    }
+
+    const nextPaths = Array.from(new Set([...currentPaths, journeyId]));
+
+    if (overrideIndex >= 0) {
+      if (!overridesChanged) {
+        updatedNodeOverrides = [...updatedNodeOverrides];
+        overridesChanged = true;
+      }
+      updatedNodeOverrides[overrideIndex] = {
+        ...updatedNodeOverrides[overrideIndex],
+        journeyPaths: nextPaths,
+      };
+      return;
+    }
+
+    if (!overridesChanged) {
+      updatedNodeOverrides = [...updatedNodeOverrides];
+      overridesChanged = true;
+    }
+    updatedNodeOverrides.push({ id: nodeId, journeyPaths: nextPaths });
+  });
+
+  return {
+    addedNodes: addedNodesChanged ? updatedAddedNodes : addedNodes,
+    nodeOverrides: overridesChanged ? updatedNodeOverrides : nodeOverrides,
+  };
+}
+
 function tokenizeToSet(value: string, target: Set<string>): void {
   value
     .toLowerCase()
