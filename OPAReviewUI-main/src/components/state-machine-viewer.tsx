@@ -2506,7 +2506,7 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
         <div className="flex flex-wrap items-center gap-2 sm:ml-auto sm:justify-end">
           <button
             type="button"
-            onClick={handleOpenAddNodeModal}
+            onClick={() => openAddNodeForm()}
             className="inline-flex items-center gap-2 rounded-full bg-[#0f766e] px-4 py-1.5 text-xs font-semibold text-white shadow-[0_14px_28px_-20px_rgba(15,118,110,0.35)] transition hover:bg-[#0c5f59] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35 focus-visible:ring-offset-2"
           >
             <Icon name="sparkle" className="h-4 w-4" />
