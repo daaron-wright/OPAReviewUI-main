@@ -316,14 +316,34 @@ function applyGraphEdits(machine: ProcessedStateMachine, edits: PersistedGraphSt
     return nextNodeIds.has(edge.source) && nextNodeIds.has(edge.target);
   });
 
+  const overrideMap = new Map(edits.nodeOverrides.map((override) => [override.id, override] as const));
+  const finalNodes = nextNodes.map((node) => {
+    const override = overrideMap.get(node.id);
+    if (!override) {
+      return node;
+    }
+
+    const nextJourneyPaths = override.journeyPaths
+      ? Object.freeze([...override.journeyPaths])
+      : node.journeyPaths;
+
+    return {
+      ...node,
+      label: override.label ?? node.label,
+      description: override.description ?? node.description,
+      type: override.type ?? node.type,
+      journeyPaths: nextJourneyPaths,
+    };
+  });
+
   const nextEdges = [...preservedEdges, ...addedProcessedEdges];
 
   return {
-    nodes: nextNodes,
+    nodes: finalNodes,
     edges: nextEdges,
     metadata: {
       ...machine.metadata,
-      totalStates: nextNodes.length,
+      totalStates: finalNodes.length,
       totalTransitions: nextEdges.length,
     },
   };
