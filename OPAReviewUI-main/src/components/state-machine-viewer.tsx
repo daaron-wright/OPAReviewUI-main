@@ -644,11 +644,24 @@ interface StateMachineViewerProps {
 export function StateMachineViewer({ stateMachine: initialStateMachine }: StateMachineViewerProps = {}): JSX.Element {
   const router = useRouter();
 
-  const [stateMachine, setStateMachine] = useState<ProcessedStateMachine>(
+  const [baseStateMachine, setBaseStateMachine] = useState<ProcessedStateMachine>(
     initialStateMachine ?? defaultProcessedStateMachine
+  );
+  const [editableGraphState, setEditableGraphState] = useState<PersistedGraphState>(() => loadPersistedGraphState());
+  const editableGraphStateRef = useRef(editableGraphState);
+  const stateMachine = useMemo(
+    () => applyGraphEdits(baseStateMachine, editableGraphState),
+    [baseStateMachine, editableGraphState]
   );
   const remoteStateLoadedRef = useRef(Boolean(initialStateMachine));
   const remoteStateRequestIdRef = useRef(0);
+
+  useEffect(() => {
+    editableGraphStateRef.current = editableGraphState;
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(EDITABLE_GRAPH_STORAGE_KEY, JSON.stringify(editableGraphState));
+    }
+  }, [editableGraphState]);
 
   const loadRemoteStateMachine = useCallback(
     async ({ suppressToast = false, requestId }: { suppressToast?: boolean; requestId: number }) => {
