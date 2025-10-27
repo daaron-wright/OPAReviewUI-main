@@ -1266,21 +1266,42 @@ export function StateMachineViewer({ stateMachine: initialStateMachine }: StateM
     endWalkthrough();
   }, [clearWalkthroughTimers, endWalkthrough]);
 
-  const handleOpenAddNodeModal = useCallback(() => {
-    setNewNodeForm({
-      label: '',
-      description: '',
-      type: availableNodeTypes[0] ?? 'process',
-      includeJourney: Boolean(selectedJourney),
-    });
-    setIsAddNodeModalOpen(true);
-  }, [availableNodeTypes, selectedJourney]);
+  const openAddNodeForm = useCallback(
+    (parentNodeId: string | null = null) => {
+      setNodeFormValues({
+        label: '',
+        description: '',
+        type: availableNodeTypes[0] ?? 'process',
+        includeJourney: Boolean(selectedJourney),
+      });
+      setNodeFormState({ mode: 'add', parentNodeId });
+    },
+    [availableNodeTypes, selectedJourney]
+  );
 
-  const handleCloseAddNodeModal = useCallback(() => {
-    setIsAddNodeModalOpen(false);
+  const openEditNodeForm = useCallback(
+    (nodeId: string) => {
+      const node = nodesById.get(nodeId);
+      if (!node) {
+        return;
+      }
+      const includeJourney = selectedJourney ? node.journeyPaths.includes(selectedJourney) : false;
+      setNodeFormValues({
+        label: node.label,
+        description: node.description,
+        type: node.type,
+        includeJourney,
+      });
+      setNodeFormState({ mode: 'edit', nodeId });
+    },
+    [nodesById, selectedJourney]
+  );
+
+  const closeNodeForm = useCallback(() => {
+    setNodeFormState(null);
   }, []);
 
-  const handleAddNodeSubmit = useCallback(
+  const handleNodeFormSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
